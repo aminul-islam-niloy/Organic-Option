@@ -1,0 +1,40 @@
+﻿@{
+    Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+
+    // Layout = "/Areas/Customer/Views/UserProfile/Deshboard.cshtml";
+
+}
+
+﻿@using OnlineShop.Models;
+@* @model IEnumerable<ApplicationUser> *@
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+@using Microsoft.AspNetCore.Identity
+
+@{
+    ViewData["Title"] = "Dashboard";
+    IdentityUser currentUser = await UserManager.GetUserAsync(User);
+    string userId = UserManager.GetUserId(User);
+
+    var curren = await UserManager.GetUserAsync(User);
+}
+    <div>
+
+        <hr />
+        <h5> User Information  Edit</h5>
+        <div class="row">
+            <div class="col-md-3">
+            <partial name="_ManageNav" /> 
+            </div>
+            <div class="col-md-9">
+                  @RenderBody() 
+            </div>
+        </div>
+
+
+    </div>
+
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}

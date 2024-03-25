@@ -1,0 +1,174 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+@model OnlineShop.Models.ApplicationUser
+﻿@using System.Net.Http
+@using OnlineShop.Session
+@using Microsoft.AspNetCore.Http
+
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var userRole = HttpContextAccessor.HttpContext.Session.GetString("roleName");
+    int count = 0;
+    List<Products> products = HttpContextAccessor.HttpContext.Session.Get<List<Products>>("products");
+    if (products == null)
+    {
+        products = new List<Products>();
+    }
+    count = products.Count();
+}
+
+@{
+    string userId = UserManager.GetUserId(User);
+    string UserRole = " ";
+
+
+    if (User.IsInRole("Admin"))
+    {
+        UserRole = "Admin";
+    }
+    if (User.IsInRole("SuperAdmin"))
+    {
+        UserRole = "Super Adimin";
+    }
+    if (User.IsInRole("Customer"))
+    {
+        UserRole = "Customer";
+    }
+
+}
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<h3>User Dashboard</h3>
+
+<p>Welcome to your dashboard! Here you can manage your profile:</p>
+
+<br />
+
+
+
+<div class="container">
+ 
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    @if (Model.ProfilePicture != null)
+                    {
+                        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.ProfilePicture))" class="img-fluid rounded-circle mb-3" alt="Profile Picture" style="width: 200px; height: 200px;">
+                    }
+                    else
+                    {
+                        <img src="~/images/—Pngtree—online shopping logo design concept_6291755.jpg" class="img-fluid rounded-circle mb-3" alt="Default Profile Picture" style="width: 200px; height: 200px;">
+                    }
+                    <br />
+                    <br />
+                    <h4 class="card-title">@UserManager.GetUserName(User)</h4>
+                  <br />
+                  <br />
+
+                    <a asp-area="Customer" style="margin-left:10px; margin-bottom :10px ;" asp-controller="UserProfile" class="btn btn-info" asp-action="Edit" asp-route-id="@userId">Edit Profile</a>
+                    <br />
+                </div>
+
+                <a asp-area="Customer" style="margin:15px; " asp-controller="UserProfile" class="btn btn-warning" asp-action="Lockout" asp-route-id="@userId">Lock Profile</a>
+                <a asp-area="Customer" style="margin:15px" asp-controller="UserProfile" class="btn btn-danger" asp-action="Delete" asp-route-id="@userId">Delete Profile</a>
+                <a asp-area="Customer" style="margin:15px; " asp-controller="UserProfile" class="btn btn-success" asp-action="Active" asp-route-id="@userId">Active Profile</a>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">User Information: ( @UserRole ) </h3>
+
+                    <hr>
+                    <dl class="row " style="border:10px;">
+                        <dt class="col-sm-4">Name:</dt>
+                        <dd class="col-sm-8">@Model.FirstName    @Model.LastName</dd>
+
+                        <dt class="col-sm-4">Email:</dt>
+                        <dd class="col-sm-8">@Model.Email</dd>
+
+                        <dt class="col-sm-4">Phone Number:</dt>
+                        <dd class="col-sm-8">@Model.PhoneNumber</dd>
+
+                        <dt class="col-sm-4">Address:</dt>
+                        <dd class="col-sm-8">@Model.Address</dd>
+
+                        <dt class="col-sm-4">Date of Birth:</dt>
+                        <dd class="col-sm-8">@Model.DateOfBirth?.ToString("dd-MM-yyyy")</dd>
+                    </dl>
+                </div>
+            </div>
+
+
+   
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Manage Information</h3>
+                    <hr>
+                    <dl class="row">
+                        @if (User.IsInRole("Admin"))
+                        {
+                         
+
+                            <dt class="col-sm-4">Manage Orders:</dt>
+                            <dd class="col-sm-8"> <a asp-area="Admin" style="margin-left:10px" asp-controller="Products" asp-action="Index" class="btn btn-success">Manage Products</a></dd>
+
+                            <dt class="col-sm-4">Manage Catagory:</dt>
+                            <dd class="col-sm-8"> <a asp-area="Admin" style="margin-left:10px" asp-controller="ProductTypes" asp-action="Index" class="btn btn-success">Manage Catagory</a></dd>
+
+                            <dt class="col-sm-4">Manage Tag:</dt>
+                            <dd class="col-sm-8"> <a asp-area="Admin" style="margin-left:10px" asp-controller="SpecialTag" asp-action="Index" class="btn btn-success">Manage Tags</a></dd>
+                            
+                            <dt class="col-sm-4">Manage Orders:</dt>
+                            <dd class="col-sm-8"> <a asp-area="Customer" style="margin-left:10px" asp-controller="Order" asp-action="Index" class="btn btn-success"><i class="fa-solid fa-bag-shopping"></i>Manage Orders</a></dd>
+                            <dt class="col-sm-4">Manage Users:</dt>
+                            <dd class="col-sm-8"> <a asp-area="Customer" style="margin-left:10px" class="btn btn-info" asp-controller="User" asp-action="Index" class="nav-link">Manage User</a> </dd>
+                            
+                            
+                            <dt class="col-sm-4">Other Setting:</dt>
+                            <dd class="col-sm-8">   <a asp-area="Identity" class="btn btn-danger" style="margin-left:10px" asp-page="/Account/Manage/ChangePassword" title="Manage"> Password Section</a> </dd>
+                        }
+                        @if (User.IsInRole("SuperAdmin"))
+                        {
+                         
+                            <dt class="col-sm-4">Manage Role:</dt>
+                            <dd class="col-sm-8"> <a asp-area="Admin" style="margin-left:10px" asp-controller="Role" asp-action="Index" class="btn btn-success"> Manage Role</a></dd>
+                            <dt class="col-sm-4">Manage Users:</dt>
+                            <dd class="col-sm-8"> <a asp-area="Customer" style="margin-left:10px" class="btn btn-info" asp-controller="User" asp-action="Index" class="nav-link">Manage User</a> </dd>
+                            <dt class="col-sm-4">Other Setting:</dt>
+                            <dd class="col-sm-8">   <a asp-area="Identity" class="btn btn-danger" style="margin-left:10px" asp-page="/Account/Manage/ChangePassword" title="Manage"> Password Section</a> </dd>
+                        }
+                        else if (User.IsInRole("Customer"))
+                        {
+                         
+                            <dt class="col-sm-4">Go to Cart:</dt>
+                            <dd class="col-sm-8">
+                                <a asp-area="Customer" style="margin-left:10px" asp-controller="Home" class="btn btn-success width:20px;padding:2px;" asp-action="Cart" class="nav-link"><i class="fas fa-shopping-cart"></i> (@count) Cart</a>
+                            </dd>
+                            <dt class="col-sm-4">Order History:</dt>
+                            <dd class="col-sm-8"> <a asp-area="Customer" style="margin-left:10px" asp-controller="Order" class="btn btn-info width:20px;padding:2px;" asp-action="UserOrders" class="nav-link"><i class="fa-solid fa-suitcase"></i> My Orders</a></dd>
+                            <dt class="col-sm-4">Other Setting:</dt>
+                            <dd class="col-sm-8">   <a asp-area="Identity" class="btn btn-danger width:20px;padding:2px;" style="margin-left:10px" asp-page="/Account/Manage/ChangePassword" title="Manage"> Password Section</a> </dd>
+                        }
+                    </dl>
+
+
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+  
+</div>
+
+<br />
+<br />
+<br />
