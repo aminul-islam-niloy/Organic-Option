@@ -34,10 +34,21 @@
             <p><strong>Location:</strong> Latitude: @Model.Latitude, Longitude: @Model.Longitude</p>
 
         </div>
-
+     
 
         <div>
-            <table class=" display table table-striped border" style="margin-top:40px" id="myTable">
+            <div class="row mt-30">
+                <div class="col-lg-8">
+                   <h4> Farmer Product Management</h4>
+                </div>
+                <div class="col-lg-4 text-right">
+                   
+                    <a asp-action="AddProduct" class="btn btn-info"><i class="fas fa-plus"></i>&nbsp; Add New Product</a>
+                </div>
+            </div>
+
+
+            <table class=" display table table-striped border" style="margin-top:15px" id="myTable">
                 <thead>
                     <tr class="table-info">
                         <th>
@@ -61,10 +72,18 @@
                         </th>
 
                         <th>
-                            <label>Need Preservation</label>
+                            <label> Preservation ?</label>
                         </th>
                         <th>
                             <label>Quantity</label>
+                        </th>
+
+                        <th>
+                            <label>ExpairOn</label>
+                        </th>
+
+                        <th>
+                            <label>Action</label>
                         </th>
                     </tr>
                 </thead>
@@ -81,9 +100,26 @@
                                 <td>@item.IsAvailable</td>
                                 <td>@item.ProductTypes.ProductType</td>
                                 <td>@item.PreservationRequired</td>
-                                <td>@item.Quantity</td>
-                                <td>
-                                    <partial name="_ButtonPartial" model="@item.Id" />
+                                <td>@item.Quantity @item.QuantityType</td>
+
+                                @{
+                                    TimeSpan difference = item.ExpirationTime - DateTime.Now;
+                                    int d = (int)difference.TotalDays;
+                                    int hours = difference.Hours;
+                                    int minutes = difference.Minutes;
+                                    int seconds = difference.Seconds;
+                                }
+                                <td>@d D @hours H @minutes Min</td>
+
+
+
+                                <td style="width: 150px">
+                                    <div class="btn-group">
+                                        <a asp-action="EditProduct" class="btn btn-primary" asp-controller="FarmerShop" asp-route-id="@item.Id"><i class="fa-solid fa-pen-to-square"></i></a>
+                                        <a asp-action="ProductDetails" class="btn btn-success" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info"></i></a>
+                                        <a asp-action="ProductDelete" class="btn btn-danger" asp-route-id="@item.Id"><i class="fa-solid fa-trash"></i></a>
+                                    </div>
+
                                 </td>
                             </tr>
                         }
@@ -104,6 +140,7 @@
 
     </div>
 </div>
+
 
 
 

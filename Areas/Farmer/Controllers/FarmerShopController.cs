@@ -238,6 +238,18 @@ namespace OrganicOption.Areas.Farmer.Controllers
                     product.FarmerShopId = currentShop.Id;
                 }
 
+                product.CreationTime = DateTime.Now;
+                //product.ExpirationTime = product.ExpirationTime.Date + product.ExpirationTime.TimeOfDay;
+
+             //   DateTime combinedExpirationTime = ExpirationTime.Date + ExpirationTime.TimeOfDay;
+
+                // Handle the ExpirationTime
+                if (product.ExpirationTime < DateTime.Now)
+                {
+                    ModelState.AddModelError(nameof(product.ExpirationTime), "Expiration time cannot be in the past.");
+                    // Return the view with the validation error
+                    return View(product);
+                } 
 
                 //Product add Section
 
@@ -303,6 +315,188 @@ namespace OrganicOption.Areas.Farmer.Controllers
             // If ModelState is not valid, return the view with the model
             return View(product);
         }
+
+
+
+        public IActionResult EditProduct(int Id)
+        {
+            ViewData["productTypeId"] = new SelectList(_context.ProductTypes.ToList(), "Id", "ProductType");
+            ViewData["TagId"] = new SelectList(_context.SpecialTag.ToList(), "Id", "Name");
+
+         
+
+            var product = _context.Products.Include(c => c.ProductTypes).Include(c => c.SpecialTag)
+                .FirstOrDefault(c => c.Id == Id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
+
+
+
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> EditProduct(Products product, List<IFormFile> ImagesSmall)
+        {
+            if (ModelState.IsValid)
+            {
+
+
+                var currentUser = await _userManager.GetUserAsync(User);
+
+             
+                var currentShop = await _context.FarmerShop.FirstOrDefaultAsync(shop => shop.FarmerUserId == currentUser.Id);
+                if (currentShop != null)
+                {
+    
+                    product.FarmerShopId = currentShop.Id;
+                }
+
+                product.CreationTime = DateTime.Now;
+              
+     
+                if (product.ExpirationTime < DateTime.Now)
+                {
+                    ModelState.AddModelError(nameof(product.ExpirationTime), "Expiration time cannot be in the past.");
+                    // Return the view with the validation error
+                    return View(product);
+                }
+
+            
+
+                //var searchProduct = _context.Products.FirstOrDefault(c => c.Name == product.Name);
+                //if (searchProduct != null)
+                //{
+                //    ViewBag.message = "This product already exists";
+                //    ViewData["productTypeId"] = new SelectList(_context.ProductTypes.ToList(), "Id", "ProductType");
+                //    ViewData["TagId"] = new SelectList(_context.SpecialTag.ToList(), "Id", "Name");
+                //    return View(product);
+                //}
+
+                if (ImagesSmall != null && ImagesSmall.Count > 0)
+                {
+                    product.ImagesSmall = new List<ProductImage>();
+
+                    foreach (var image in ImagesSmall)
+                    {
+                        try
+                        {
+                            var imagePath = Path.Combine(_webHostEnvironment.WebRootPath + "/Images", Path.GetFileName(image.FileName));
+
+                            Directory.CreateDirectory(Path.GetDirectoryName(imagePath));
+
+                            using (var fileStream = new FileStream(imagePath, FileMode.Create))
+                            {
+                                await image.CopyToAsync(fileStream);
+                            }
+
+                            product.ImagesSmall.Add(new ProductImage { ImagePath = "Images/" + image.FileName });
+                        }
+                        catch (Exception ex)
+                        {
+                      
+                            Console.WriteLine($"Error copying image: {ex.Message}");
+                        }
+                    }
+                }
+                else
+                {
+                    product.ImagesSmall = new List<ProductImage>(); 
+                }
+
+            
+                if (product.ImagesSmall != null && product.ImagesSmall.Any())
+                {
+    
+                    product.Image = product.ImagesSmall.First().ImagePath;
+                }
+
+
+                _context.Products.Update(product);
+                await _context.SaveChangesAsync();
+
+                TempData["save"] = "Product has been Updated";
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(product);
+        }
+
+
+
+
+
+        //GET Details Action Method
+        public ActionResult ProductDetails(int? id)
+        {
+            ViewData["productTypeId"] = new SelectList(_context.ProductTypes.ToList(), "Id", "ProductType");
+            ViewData["TagId"] = new SelectList(_context.SpecialTag.ToList(), "Id", "Name");
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var product = _context.Products
+                .Include(p => p.ProductTypes)
+                .Include(p => p.SpecialTag)
+                .Include(p => p.ImagesSmall) // Include the collection of images
+                .FirstOrDefault(p => p.Id == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
+        }
+
+
+        //GET Delete Action Method
+
+        public ActionResult ProductDelete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var product = _context.Products.Include(c => c.SpecialTag).Include(c => c.ProductTypes).Where(c => c.Id == id).FirstOrDefault();
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
+        }
+
+        //POST Delete Action Method
+
+        [HttpPost]
+        [ActionName("ProductDelete")]
+        public async Task<IActionResult> DeleteConfirm(int? Id)
+        {
+            if (Id == null)
+            {
+                return NotFound();
+            }
+
+            var product = _context.Products.FirstOrDefault(c => c.Id == Id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+            TempData["save"] = "Product has been Deleted";
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
 
 
         private int GetFarmerShopId(ApplicationUser currentUser)

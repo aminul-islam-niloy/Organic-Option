@@ -53,6 +53,7 @@ namespace OnlineShop.Areas.Admin.Controllers
 
 
         //Get Create method
+        [Authorize(Roles = "Farmer")]
         public IActionResult Create()
         {
             ViewData["productTypeId"] = new SelectList(_db.ProductTypes.ToList(), "Id", "ProductType");
@@ -61,6 +62,7 @@ namespace OnlineShop.Areas.Admin.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Farmer")]
         [HttpPost]
         public async Task<IActionResult> Create(Products product, List<IFormFile> ImagesSmall)
         {
@@ -130,7 +132,7 @@ namespace OnlineShop.Areas.Admin.Controllers
 
 
         //GET Edit Action Method
-
+        [Authorize(Roles = "Farmer")]
         public ActionResult Edit(int? id)
         {
             ViewData["productTypeId"] = new SelectList(_db.ProductTypes.ToList(), "Id", "ProductType");
@@ -150,6 +152,8 @@ namespace OnlineShop.Areas.Admin.Controllers
             return View(product);
         }
 
+
+        [Authorize(Roles = "Farmer")]
         [HttpPost]
         public async Task<IActionResult> Edit(Products product, List<IFormFile> ImagesSmall)
         {

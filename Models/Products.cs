@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using OrganicOption.Models;
+using System;
 
 namespace OnlineShop.Models
 {
@@ -48,15 +49,23 @@ namespace OnlineShop.Models
         public ICollection<ProductImage> ImagesSmall { get; set; }
 
 
- 
-        [Display(Name = "Preservation Required")]
+        [Required]
+    
+        [Display(Name = "Preservation Required ?")]
         public bool PreservationRequired { get; set; } // Indicates if preservation is required
 
-
+        [Required]
         [Display(Name = "Quantity Type")]
         public QuantityType QuantityType { get; set; } // Quantity type: Item, Kg, Liter, etc.
 
-       
+        [Display(Name = "Creation Time")]
+        public DateTime CreationTime { get; set; }
+
+
+        [Required]
+        [Display(Name = "Expiration Time")]
+        public DateTime ExpirationTime { get; set; }
+
 
         [Display(Name = "Sold Quantity")]
         public int SoldQuantity { get; set; } // Tracks the quantity sold

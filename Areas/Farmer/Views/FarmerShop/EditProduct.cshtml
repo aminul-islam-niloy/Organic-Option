@@ -1,17 +1,15 @@
 ﻿@model OnlineShop.Models.Products
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 <br />
 
-<h3 class="text-info">Add New Product</h3>
-<form asp-action="AddProduct" method="post" enctype="multipart/form-data">
+<h3 class="text-info">Edit Product</h3>
+<form asp-action="EditProduct" method="post" enctype="multipart/form-data">
 
     <div class="p-4 rounded border">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-
-        <h3>@ViewBag.message</h3>
+        <input type="hidden" asp-for="Id" />
 
         <div class="form-group row">
             <div class="col-lg-2">
@@ -82,7 +80,7 @@
             <div class="col-lg-5">
                 <input asp-for="ExpirationTime" class="form-control" type="date" />
             </div>
-         
+           
             <span asp-validation-for="ExpirationTime" class="text-danger"></span>
         </div>
 
@@ -134,7 +132,7 @@
 
 
         <div class="form-group">
-            <input type="submit" class="btn btn-primary" value="Save" />
+            <input type="submit" class="btn btn-primary" value="Update" />
             <a asp-action="Index" class="btn btn-success">Back to List</a>
         </div>
 

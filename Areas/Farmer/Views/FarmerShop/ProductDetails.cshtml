@@ -1,0 +1,181 @@
+﻿@model OnlineShop.Models.Products
+@{
+    ViewData["Title"] = "Details";
+}
+<br />
+
+
+<h4 class="text-info">Product Details</h4>
+
+<br />
+
+<form asp-action="" method="post" enctype="multipart/form-data">
+    <div class="p-4 rounded border row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+        <div class="col-lg-6">
+
+          
+            <div class="container my-6">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="main-img">
+                            @if (Model.ImagesSmall != null && Model.ImagesSmall.Any())
+                            {
+                                <img class="img-fluid main-image" src="~/@Model.ImagesSmall.FirstOrDefault()?.ImagePath" style="height:280px  ;width:100%; border-radius: 2px;border: 1px solid #efefef" alt="ProductS">
+                            }
+
+                            <div class="row my-6 previews">
+                                @foreach (var image in Model.ImagesSmall.Skip(1))
+                                {
+                                    <div class="col-md-3">
+                                        <img class="w-100 preview-image" src="~/@image.ImagePath" style="border-radius: 2px;border: 1px solid #efefef" alt="Preview">
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-lg-2">
+                                <label asp-for="Name"></label>
+                            </div>
+                            <div class="col-lg-6">
+                                <input type="hidden" asp-for="Id" />
+                                <input asp-for="Name" readonly="readonly" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-2">
+                                <label asp-for="Price"></label>
+                            </div>
+                            <div class="col-lg-6">
+                                <input asp-for="Price" readonly="readonly" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <div class="col-lg-2">
+                                <label asp-for="Description"></label>
+                            </div>
+                            <div class="col-lg-6">
+                                <input asp-for="Description" readonly="readonly" readonly="readonly" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <div class="col-lg-2">
+                                <label asp-for="Quantity"></label>
+                            </div>
+                            <div class="col-lg-6">
+                                <input asp-for="Quantity" readonly="readonly" readonly="readonly" class="form-control" />
+                            </div>
+                            <span asp-validation-for="Quantity" class="text-danger"></span>
+                        </div>
+
+
+
+                        <div class="form-group row">
+                            <div class="col-lg-2">
+                                <label asp-for="ProductTypeId"></label>
+                            </div>
+                            <div class="col-lg-6">
+                                <select asp-for="ProductTypeId" asp-items="ViewBag.productTypeId" readonly="readonly" class="form-control"></select>
+
+                            </div>
+                            <span asp-validation-for="ProductTypeId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-2">
+                                <label asp-for="SpecialTagId"></label>
+                            </div>
+                            <div class="col-lg-6">
+                                <select asp-for="SpecialTagId" asp-items="ViewBag.TagId" readonly="readonly" class="form-control"></select>
+
+                            </div>
+                            <span asp-validation-for="SpecialTagId" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <div class="col-lg-2">
+                                <label asp-for="IsAvailable"></label>
+                            </div>
+                            <div class="col-lg-6">
+                                <input asp-for="IsAvailable" disabled="disabled" class="" type="checkbox" />
+                            </div>
+                            <span asp-validation-for="IsAvailable" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+
+
+                            <div class="col-lg-2">
+                                <label>Expair On</label>
+                            </div>
+                            <div class="col-lg-6">
+
+                                @{
+                                    TimeSpan difference = Model.ExpirationTime - DateTime.Now;
+                                    int d = (int)difference.TotalDays;
+                                    int hours = difference.Hours;
+                                    int minutes = difference.Minutes;
+                                    int seconds = difference.Seconds;
+                                }
+                                <td>@d D @hours H @minutes Min</td>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <br />
+
+    </div>
+    <div>
+        <div class="form-group">
+            <a type="button" asp-action="EditProduct" asp-route-id="@Model.Id" class="btn btn-primary">Edit Product</a>
+            <a asp-action="Index" class="btn btn-success">Back to Shop</a>
+        </div>
+    </div>
+
+
+
+
+</form>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $('.preview-image').click(function () {
+            var newSrc = $(this).attr(''); // Get the src attribute of the clicked preview image
+            $('.main-image').attr('', newSrc); // Set the src attribute of the main image to the new src
+        });
+    });
+</script>
+
+
+
+
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
