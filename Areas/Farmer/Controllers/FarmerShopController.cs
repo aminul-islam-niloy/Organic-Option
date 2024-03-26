@@ -1,10 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data;
+using OnlineShop.Models;
 using OrganicOption.Models;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,11 +22,12 @@ namespace OrganicOption.Areas.Farmer.Controllers
     {
         private readonly ApplicationDbContext _context;
         UserManager<IdentityUser> _userManager;
-        public FarmerShopController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public FarmerShopController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _userManager = userManager;
-
+            _webHostEnvironment = webHostEnvironment;
         }
 
 
@@ -39,6 +45,9 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
         public async Task<IActionResult> Index()
         {
+            ViewBag.message = "This product already exists";
+            ViewData["productTypeId"] = new SelectList(_context.ProductTypes.ToList(), "Id", "ProductType");
+            ViewData["TagId"] = new SelectList(_context.SpecialTag.ToList(), "Id", "Name");
             // Get the current user
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
@@ -202,7 +211,105 @@ namespace OrganicOption.Areas.Farmer.Controllers
             return View();
         }
 
+        public  IActionResult AddProduct()
+        {
+            ViewData["productTypeId"] = new SelectList(_context.ProductTypes.ToList(), "Id", "ProductType");
+            ViewData["TagId"] = new SelectList(_context.SpecialTag.ToList(), "Id", "Name");
 
+
+            return View();
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddProduct(Products product, List<IFormFile> ImagesSmall)
+        {
+            if (ModelState.IsValid)
+            {
+               
+
+                var currentUser = await _userManager.GetUserAsync(User);
+
+                // Retrieve the FarmerShopId associated with the current user
+                var currentShop = await _context.FarmerShop.FirstOrDefaultAsync(shop => shop.FarmerUserId == currentUser.Id);
+                if (currentShop != null)
+                {
+                    // FarmerShop found, set its ID for the product being created
+                    product.FarmerShopId = currentShop.Id;
+                }
+
+
+                //Product add Section
+
+                var searchProduct = _context.Products.FirstOrDefault(c => c.Name == product.Name);
+                if (searchProduct != null)
+                {
+                    ViewBag.message = "This product already exists";
+                    ViewData["productTypeId"] = new SelectList(_context.ProductTypes.ToList(), "Id", "ProductType");
+                    ViewData["TagId"] = new SelectList(_context.SpecialTag.ToList(), "Id", "Name");
+                    return View(product);
+                }
+
+                if (ImagesSmall != null && ImagesSmall.Count > 0)
+                {
+                    product.ImagesSmall = new List<ProductImage>(); // Initialize the collection
+
+                    foreach (var image in ImagesSmall)
+                    {
+                        try
+                        {
+                            var imagePath = Path.Combine(_webHostEnvironment.WebRootPath + "/Images", Path.GetFileName(image.FileName));
+
+                            // Ensure the directory exists
+                            Directory.CreateDirectory(Path.GetDirectoryName(imagePath));
+
+                            using (var fileStream = new FileStream(imagePath, FileMode.Create))
+                            {
+                                await image.CopyToAsync(fileStream);
+                            }
+
+                            // Add the image path to the product's images collection
+                            product.ImagesSmall.Add(new ProductImage { ImagePath = "Images/" + image.FileName });
+                        }
+                        catch (Exception ex)
+                        {
+                            // Log any exceptions that occur
+                            // This can help diagnose the issue further
+                            Console.WriteLine($"Error copying image: {ex.Message}");
+                        }
+                    }
+                }
+                else
+                {
+                    product.ImagesSmall = new List<ProductImage>(); // Ensure collection is initialized
+                }
+
+                // Check if there are any images in ImagesSmall collection
+                if (product.ImagesSmall != null && product.ImagesSmall.Any())
+                {
+                    // Set the Image property to the path of the first image
+                    product.Image = product.ImagesSmall.First().ImagePath;
+                }
+
+
+                // Add the product to the database
+                _context.Products.Add(product);
+                await _context.SaveChangesAsync();
+
+                TempData["save"] = "Product has been added";
+                return RedirectToAction(nameof(Index));
+            }
+
+            // If ModelState is not valid, return the view with the model
+            return View(product);
+        }
+
+
+        private int GetFarmerShopId(ApplicationUser currentUser)
+        {
+            var farmerShop = _context.FarmerShop.FirstOrDefault(shop => shop.FarmerUserId == currentUser.Id);
+            return farmerShop?.Id ?? 0;
+        }
 
 
 
