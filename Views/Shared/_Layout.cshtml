@@ -114,6 +114,13 @@
                                     </li>
 
                                 }
+                                 @if (userRole == "Farmer")
+                                {
+                                      <li>
+                                        <a asp-area="Farmer"   asp-controller="FarmerShop" asp-action="Index" class="nav-link">Manage Shop</a>
+                                    </li>
+                                
+                                }
 
                                 @if (userRole == "Customer")
                                 {

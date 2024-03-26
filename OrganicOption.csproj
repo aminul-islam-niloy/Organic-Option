@@ -40,11 +40,15 @@
     
     <PackageReference Include="Microsoft.IdentityModel.Validators" Version="7.4.1" />
     
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
+    
     <PackageReference Include="Stripe.net" Version="43.19.0" />
     <PackageReference Include="X.PagedList.Mvc.Core" Version="9.1.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Farmer\Data\" />
+    <Folder Include="Areas\Farmer\Models\" />
     <Folder Include="Areas\Identity\Services\" />
     <Folder Include="Controllers\" />
     <Folder Include="wwwroot\Image\" />
