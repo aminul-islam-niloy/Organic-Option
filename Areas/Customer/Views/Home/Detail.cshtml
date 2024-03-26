@@ -392,12 +392,17 @@
                             </ul>
                         </div>
 
-                     
+
+                        <div class="product_variant quantity">
+                            <label>Preservation Need? : </label>
+                            <label> @(Model.SpecificProduct.PreservationRequired? "Yes":"No") </label>
+                        
+
+                        </div>
 
                         <div class="product_variant quantity">
                             <label>quantity : </label>
-                            <label>@Model.SpecificProduct.Quantity</label>
-                        
+                            <label>@Model.SpecificProduct.Quantity  @Model.SpecificProduct.QuantityType</label>
                         
                         </div>
 
