@@ -11,6 +11,7 @@ using OnlineShop.Payment;
 using OnlineShop.Service;
 using Stripe;
 using System;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,8 @@ builder.Services.Configure<SMTPConfigModel>(builder.Configuration.GetSection("SM
 
 // Configure Stripe
 StripeConfiguration.SetApiKey(builder.Configuration.GetSection("Stripe")["SecretKey"]);
+
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 
 // Register EmailService
 builder.Services.AddTransient<IEmailService, EmailService>();

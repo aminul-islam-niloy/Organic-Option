@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using OnlineShop.Data;
 using OnlineShop.Models;
 using OrganicOption.Models;
@@ -17,35 +18,27 @@ using System.Threading.Tasks;
 namespace OrganicOption.Areas.Farmer.Controllers
 {
     [Area("Farmer")]
-    [Authorize]
+    [Authorize(Roles = "Customer")]
     public class FarmerShopController : Controller
     {
         private readonly ApplicationDbContext _context;
         UserManager<IdentityUser> _userManager;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public FarmerShopController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IWebHostEnvironment webHostEnvironment)
+        private readonly IMemoryCache _cache;
+        public FarmerShopController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IWebHostEnvironment webHostEnvironment, IMemoryCache memoryCache)
         {
             _context = context;
             _userManager = userManager;
             _webHostEnvironment = webHostEnvironment;
+            _cache = memoryCache;
         }
 
 
-        //public async Task< IActionResult >Index()
-        //{
-        //    var farmerShop = await _context.FarmerShop
-        //        .Include(fs => fs.Products) // Eager loading to include products
-        //        .ToListAsync();
-
-        //    return View(farmerShop);
-
-
-        //}
-
+ 
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.message = "This product already exists";
+            
             ViewData["productTypeId"] = new SelectList(_context.ProductTypes.ToList(), "Id", "ProductType");
             ViewData["TagId"] = new SelectList(_context.SpecialTag.ToList(), "Id", "Name");
             // Get the current user
@@ -285,8 +278,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
                         }
                         catch (Exception ex)
                         {
-                            // Log any exceptions that occur
-                            // This can help diagnose the issue further
+                           
                             Console.WriteLine($"Error copying image: {ex.Message}");
                         }
                     }
@@ -334,7 +326,6 @@ namespace OrganicOption.Areas.Farmer.Controllers
             return View(product);
 
 
-
         }
 
 
@@ -367,14 +358,6 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             
 
-                //var searchProduct = _context.Products.FirstOrDefault(c => c.Name == product.Name);
-                //if (searchProduct != null)
-                //{
-                //    ViewBag.message = "This product already exists";
-                //    ViewData["productTypeId"] = new SelectList(_context.ProductTypes.ToList(), "Id", "ProductType");
-                //    ViewData["TagId"] = new SelectList(_context.SpecialTag.ToList(), "Id", "Name");
-                //    return View(product);
-                //}
 
                 if (ImagesSmall != null && ImagesSmall.Count > 0)
                 {
@@ -496,6 +479,64 @@ namespace OrganicOption.Areas.Farmer.Controllers
         }
 
 
+
+        [AllowAnonymous]
+        public async Task<IActionResult> Shop(int shopId)
+        {
+            // Check if the data is already cached
+            if (!_cache.TryGetValue($"farmerShop_{shopId}", out FarmerShop farmerShop))
+            {
+                // Data is not in cache, so retrieve it from the database
+                farmerShop = await _context.FarmerShop
+                    .Include(fs => fs.Products)
+                    .FirstOrDefaultAsync(fs => fs.Id == shopId);
+                if (farmerShop == null)
+                {
+                    return NotFound(); // Shop not found
+                }
+
+                // Cache the data for 5 minutes
+                _cache.Set($"farmerShop_{shopId}", farmerShop, TimeSpan.FromMinutes(5));
+            }
+
+            // Now retrieve products for the specific shop and categorize them
+            var viewModel = new ShopViewModel
+            {
+                FarmerShop = farmerShop,
+                Fruits = (List<Products>)GetCachedProductsByCategoryAndShop("Fruits", shopId),
+                Vegetable = (List<Products>)GetCachedProductsByCategoryAndShop("Vegetable", shopId),
+                Dairy = (List<Products>)GetCachedProductsByCategoryAndShop("Dairy", shopId),
+                Pets = (List<Products>)GetCachedProductsByCategoryAndShop("Pets", shopId),
+                Fish = (List<Products>)GetCachedProductsByCategoryAndShop("Fish", shopId),
+                Meat = (List<Products>)GetCachedProductsByCategoryAndShop("Meat", shopId),
+                Crops = (List<Products>)GetCachedProductsByCategoryAndShop("Crops", shopId),
+                Cattle = (List<Products>)GetCachedProductsByCategoryAndShop("Cattle", shopId),
+                Bird = (List<Products>)GetCachedProductsByCategoryAndShop("Bird", shopId),
+                Honey = (List<Products>)GetCachedProductsByCategoryAndShop("Honey", shopId),
+            };
+
+            return View(viewModel);
+        }
+
+        private IEnumerable<Products> GetCachedProductsByCategoryAndShop(string category, int shopId)
+        {
+            string cacheKey = $"{category}_{shopId}";
+
+            if (!_cache.TryGetValue(cacheKey, out IEnumerable<Products> cachedProducts))
+            {
+                // Data is not in cache, so retrieve it from the database
+                cachedProducts = _context.Products
+                    .Where(p => p.ProductTypes.ProductType == category && p.FarmerShopId == shopId) // Filter by category and shop ID
+                    .Include(p => p.ProductTypes)
+                    .Include(p => p.SpecialTag)
+                    .ToList();
+
+                // Cache the data for 5 minutes
+                _cache.Set(cacheKey, cachedProducts, TimeSpan.FromMinutes(5));
+            }
+
+            return cachedProducts;
+        }
 
 
 
