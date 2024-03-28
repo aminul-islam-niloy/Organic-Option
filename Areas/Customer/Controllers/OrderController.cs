@@ -67,13 +67,34 @@ namespace OnlineShop.Areas.Customer.Controllers
             {
                 foreach (var product in products)
                 {
-                    OrderDetails orderDetails = new OrderDetails
+                    if(product.Discount > 0)
                     {
-                        PorductId = product.Id,
-                        Price = product.Price,  // Assuming product.Price represents the unit price
-                        Quantity = product.QuantityInCart
-                    };
-                    anOrder.OrderDetails.Add(orderDetails);
+                        OrderDetails orderDetails = new OrderDetails
+                        {
+                            PorductId = product.Id,
+                            Price = product.Price + product.DiscountPrice,  // Assuming product.Price represents the unit price
+                            Quantity = product.QuantityInCart
+                        };
+
+                        anOrder.OrderDetails.Add(orderDetails);
+
+                    }
+                    else
+                    {
+                        OrderDetails orderDetails = new OrderDetails
+                        {
+                            PorductId = product.Id,
+                            Price = product.Price,  // Assuming product.Price represents the unit price
+                            Quantity = product.QuantityInCart
+                        };
+
+                        anOrder.OrderDetails.Add(orderDetails);
+
+                    }
+
+
+
+
                 }
             }
 

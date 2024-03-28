@@ -335,7 +335,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                     _db.SaveChanges(); // Save changes to the database
                 }
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Cart));
         }
 
         [HttpPost]

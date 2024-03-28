@@ -337,7 +337,20 @@
                                                 <img src="~/@item.Image" style="height:100px; width:100px" />
                                             </td>
                                             <td>@item.Name</td>
-                                            <td>@item.Price</td>
+
+                                            @if (item.Discount > 0)
+                                            {
+                                                decimal OldPrice = @item.Price;
+                                                decimal DiscoundPrice = item.DiscountPrice;
+                                                decimal newPrice = OldPrice + DiscoundPrice;
+                                                <td>@newPrice</td>
+                                            }
+                                            else
+                                            {
+                                                <td>@item.Price</td>
+                                            }
+
+                                          
                                             <td>@item.ProductTypes.ProductType</td>
                                          
                                             <td>@item.QuantityInCart</td>
@@ -376,16 +389,43 @@
                             <div class="coupon_code right">
                                 <h3>Cart Totals</h3>
                                 <div class="coupon_inner">
-
+                                    @* 
                                     <div class="cart_subtotal ">
                                         <p>Shipping</p>
-                                        <p class="cart_amount"><span>Flat Rate:</span> 00 tk</p>
+                                        <p class="cart_amount"><span>Flat Rate:</span> tk</p>
                                     </div>
-                                    <a href="#">Calculate shipping</a>
+                                    <a href="#">Calculate shipping</a> *@
 
                                     <div class="cart_subtotal">
                                         <p>Total </p>
-                                        <p class="cart_amount">@Model.Sum(c => c.Price * c.QuantityInCart) ৳</p>
+                                      
+                                        @{
+                                            bool HasDiscount = false;
+                                            decimal total = 0;
+
+                                            @foreach(var item in Model)
+                                            {
+                                                if (item.Discount > 0)
+                                                {
+                                                    HasDiscount = true;
+                                                }
+                                            }
+
+                                            @if (HasDiscount)
+                                            {
+                                              decimal  totalSumInCart = @Model.Sum(c => c.Price * c.QuantityInCart);
+                                              decimal totalDisSumInCart = @Model.Sum(c => c.DiscountPrice * c.QuantityInCart);
+                                                total = totalSumInCart + totalDisSumInCart;
+
+                                            }
+                                            else
+                                            {
+                                                total = @Model.Sum(c => c.Price * c.QuantityInCart);
+                                            }
+                                            <p class="cart_amount">@total ৳</p>
+                                        }
+
+                                       
                                     </div>
                                     <div class="checkout_btn">
 

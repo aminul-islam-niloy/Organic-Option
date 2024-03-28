@@ -24,6 +24,10 @@ namespace OnlineShop.Models
         public PaymentMethods PaymentMethods { get; set; }
         public decimal Price { get; set; }
         public decimal TotalPrice { get; set; }
+        public decimal DiscountedPrice { get; set; }
+        public decimal TotalDiscount { get; set; }
+        public decimal DelivaryCharge { get; set; }
+        public decimal TotalDelivaryCharge { get; set; }
 
     }
 }

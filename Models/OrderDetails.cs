@@ -55,6 +55,8 @@ namespace OnlineShop.Models
 
         // Price of the product in this order detail
         public decimal Price { get; set; }
+        public decimal DiscountedPrice { get; set; }
+        public decimal TotalDelivaryCharge { get; set; }
 
 
         // Indicates if preservation is needed for organic products

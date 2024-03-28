@@ -28,11 +28,8 @@
 
 }
 
-@* @{
-    // Convert the discount percentage to a decimal value
-    decimal discountPercentage = 0.95m;
-}
- *@
+
+ 
 
 <!--header center area start-->
 <div class="header_middle">
@@ -378,8 +375,25 @@
                         <div class="price_box">
                             
 
-                            <span class="current_price">@Model.SpecificProduct.Price ৳‎</span>
-                           @*  <span class="old_price">asp-for="Price"</span> *@
+                            @if(Model.SpecificProduct.Discount > 0)
+                            {
+                                decimal discountPercentage = @Model.SpecificProduct.Discount;
+                                decimal currentPrice = @Model.SpecificProduct.Price;
+                                decimal disPrice = currentPrice * discountPercentage / 100;
+                                decimal totalNewPrice = currentPrice - disPrice;
+
+                                <span class="current_price"> New Price  @totalNewPrice ৳‎</span>
+                                <br />
+
+                                <span class="old_price">Old Price @Model.SpecificProduct.Price ৳‎</span>
+                            }
+                            else
+                            {
+                                <span class="current_price"> Price @Model.SpecificProduct.Price ৳‎</span>
+                            }
+
+                          
+
 
                         </div>
                         <div class="product_desc">

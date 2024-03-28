@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineShop.Data;
 
@@ -11,9 +12,10 @@ using OnlineShop.Data;
 namespace OrganicOption.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240328180738_DiscountNotMapped")]
+    partial class DiscountNotMapped
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -369,9 +371,6 @@ namespace OrganicOption.Migrations
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("DiscountPrice")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<DateTime>("ExpirationTime")
                         .HasColumnType("datetime2");
 
@@ -382,12 +381,6 @@ namespace OrganicOption.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsAvailable")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsEid")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsRamadan")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -417,9 +410,6 @@ namespace OrganicOption.Migrations
 
                     b.Property<int>("SpecialTagId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("isNewCusotmer")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

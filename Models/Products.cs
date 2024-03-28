@@ -71,51 +71,12 @@ namespace OnlineShop.Models
         public int SoldQuantity { get; set; } // Tracks the quantity sold
 
 
-        [NotMapped] // Not mapped to database
-        public decimal DiscountedPrice
-        {
-            get
-            {
-                decimal discountedPrice = Price; // Default to original price
+        public decimal Discount { get; set;}
+        public decimal DiscountPrice { get; set;}
 
-                // Apply discounts based on conditions
-                if (IsRegularCustomer)
-                {
-                    // Apply 5% discount for regular customers for at least 7 days
-                    if (OrderDayCont >= 7)
-                    {
-                        discountedPrice -= 0.05M * Price; // 5% off
-                    }
-                }
-
-                // Check if it's Ramadan and apply discount
-                if (IsRamadan)
-                {
-                    discountedPrice -= 0.15M * Price; // 15% off during Ramadan
-                }
-
-                // Check if it's Eid and apply discount
-                if (IsEid)
-                {
-                    discountedPrice -= 0.10M * Price; // 10% off during Eid
-                }
-
-                return discountedPrice;
-            }
-        }
-
-        // Additional properties to track customer status
-        [NotMapped] // Not mapped to database
-        public bool IsRegularCustomer { get; set; }
-
-        [NotMapped] // Not mapped to database
-        public int OrderDayCont { get; set; }
-
-        [NotMapped] // Not mapped to database
         public bool IsRamadan { get; set; }
-
-        [NotMapped] // Not mapped to database
         public bool IsEid { get; set; }
+        public bool isNewCusotmer { get; set; } 
 
         public int FarmerShopId { get; set; }
         [ForeignKey("FarmerShopId")]

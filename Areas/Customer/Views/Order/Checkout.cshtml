@@ -402,7 +402,17 @@
                                                 <img src="~/@item.Image" style="height:100px; width:100px" />
                                             </td>
                                             <td>@item.Name</td>
-                                            <td>@item.Price</td>
+                                            @if (item.Discount > 0)
+                                            {
+                                                decimal OldPrice = @item.Price;
+                                                decimal DiscoundPrice = item.DiscountPrice;
+                                                decimal newPrice = OldPrice + DiscoundPrice;
+                                                <td>@newPrice</td>
+                                            }
+                                            else
+                                            {
+                                                <td>@item.Price</td>
+                                            }
                                             <td>@item.QuantityInCart</td>
 
                                         </tr>
@@ -417,14 +427,24 @@
                     </div>
 
                     <div class="row  mt-10 text-center">
-                        <div class="col-lg-4 md-8"></div>
+                        <div class="col-lg-4 md-8">
+
+                            <div class="cart_subtotal ">
+                                <p>Shipping</p>
+
+                            </div>
+
+                        </div>
                         <div class="col-lg-4 md-8">
 
                             <div>
-                                <h4>Total Price : @products.Sum(c => c.Price * c.QuantityInCart) Tk</h4>
+
+                                     
+
+                                <h4>Total Price : @products.Sum(c => c.Price + c.DiscountPrice * c.QuantityInCart) Tk</h4>
                             </div>
                             <div >
-                                <input type="submit" value="Place Order" class="btn btn-info" style="background:-o-linear-gradient(6)" />
+                                <input type="submit" value="Place Order" class="btn btn-info" />
                             </div>
 
                         </div>

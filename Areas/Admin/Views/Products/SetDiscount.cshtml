@@ -1,0 +1,17 @@
+﻿@model OnlineShop.Models.Products
+
+<h4>Set Discount</h4>
+
+<form asp-action="SetDiscount" method="post">
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" asp-for="IsRamadan" />
+        <label class="form-check-label" asp-for="IsRamadan">Is Ramadan</label>
+    </div>
+
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" asp-for="IsEid" />
+        <label class="form-check-label" asp-for="IsEid">Is Eid</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

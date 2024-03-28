@@ -27,7 +27,7 @@ namespace OnlineShop.Areas.Admin.Controllers
         public ProductsController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
         {
             _db = db;
-            _webHostEnvironment= webHostEnvironment;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -45,7 +45,7 @@ namespace OnlineShop.Areas.Admin.Controllers
                 products = _db.Products.Include(c => c.ProductTypes).Include(c => c.SpecialTag).ToList();
             }
 
-          
+
 
 
             return View(products);
@@ -294,6 +294,45 @@ namespace OnlineShop.Areas.Admin.Controllers
         }
 
 
+        public IActionResult SetDiscount()
+        {
 
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult SetDiscount(Products product, bool isRamadan, bool isEid)
+        {
+            var products = _db.Products.Include(c => c.ProductTypes).Include(f => f.SpecialTag).ToList();
+    
+
+            foreach (var pro in products)
+            {
+
+                if (isRamadan)
+                {
+                    pro.Discount = 15;
+                    pro.DiscountPrice -= 0.15M * pro.Price;
+                }
+               else if (isEid)
+                {
+                    pro.Discount = 10;
+                    pro.DiscountPrice -= 0.10M * pro.Price;
+                }
+                else
+                {
+                    pro.Discount = 0;
+                    pro.DiscountPrice = 0;
+                }
+
+            }
+
+            _db.Products.UpdateRange(products);
+            _db.SaveChanges(); // Removed await here
+
+            TempData["Discount"] = "Discount Has been Set";
+            return RedirectToAction(nameof(Index));
+
+        }
     }
 }

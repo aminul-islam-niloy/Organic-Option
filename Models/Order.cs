@@ -22,10 +22,15 @@ namespace OnlineShop.Models
         public string PhoneNo { get; set; }
         [Required]
         [EmailAddress]
+        public double Latitude { get; set; } // Latitude of the Customer location
+        public double Longitude { get; set; } // Longitude of the Customer location
         public string Email { get; set; }
         [Required]
         public string Address { get; set; }
-        
+        public bool FreeDelevary { get; set; }
+        public decimal DelivaryCharge { get; set; }
+
+
         public DateTime OrderDate { get; set; }
         public string UserId { get; set; } // Representing the user who placed the order
         public virtual ApplicationUser User { get; set; }
