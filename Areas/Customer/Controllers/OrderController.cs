@@ -15,6 +15,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
+using OrganicOption.Models;
 
 namespace OnlineShop.Areas.Customer.Controllers
 {
@@ -92,7 +93,7 @@ namespace OnlineShop.Areas.Customer.Controllers
 
                     }
 
-
+                    UpdateFarmerStore(product.Id, product.QuantityInCart);
 
 
                 }
@@ -113,6 +114,33 @@ namespace OnlineShop.Areas.Customer.Controllers
             // Redirect the user to the order confirmation page
             return RedirectToAction("PaymentPage", new { orderId = anOrder.Id });
         }
+
+        //Tracking Product Sold in Shop
+        private void UpdateFarmerStore(int id, int quantitySold)
+        {
+            Products product = _db.Products.FirstOrDefault(p => p.Id == id);
+
+            if (product != null)
+            {
+                // Update the sold quantity and last sold date for the product
+                product.SoldQuantity += quantitySold;
+                product.LastSoldDate = DateTime.Now;
+
+                // Retrieve the farmer store associated with the product
+                FarmerShop farmerStore = _db.FarmerShop.FirstOrDefault(fs => fs.Id == product.FarmerShopId);
+
+                // Update the sold quantity and last sold date for the product in the farmer's store
+                if (farmerStore != null)
+                {
+                    farmerStore.SoldQuantity += quantitySold;
+                    farmerStore.LastSoldDate = DateTime.Now;
+                }
+
+                // Save changes to the database
+                _db.SaveChanges();
+            }
+        }
+
         public IActionResult OrderConfirmation()
         {
             return View();

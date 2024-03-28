@@ -439,9 +439,10 @@
 
                             <div>
 
-                                     
 
-                                <h4>Total Price : @products.Sum(c => c.Price + c.DiscountPrice * c.QuantityInCart) Tk</h4>
+
+                                <h4>Total Price : @products.Sum(c => c.DiscountPrice != 0 ? (c.Price + c.DiscountPrice) * c.QuantityInCart : c.Price * c.QuantityInCart) Tk</h4>
+
                             </div>
                             <div >
                                 <input type="submit" value="Place Order" class="btn btn-info" />

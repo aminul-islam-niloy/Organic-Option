@@ -70,7 +70,7 @@ namespace OnlineShop.Models
         [Display(Name = "Sold Quantity")]
         public int SoldQuantity { get; set; } // Tracks the quantity sold
 
-
+      public DateTime LastSoldDate { get; set; }    
         public decimal Discount { get; set;}
         public decimal DiscountPrice { get; set;}
 

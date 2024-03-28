@@ -20,6 +20,10 @@ namespace OrganicOption.Models
         [Display(Name = "Contract")]
         public string ContractInfo { get; set; }
 
+        public int SoldQuantity { get; set; }  
+        public Decimal ShopRevenue { get; set; }
+        public DateTime LastSoldDate { get; set; }  
+
         public double Latitude { get; set; } // Latitude of the shop's location
         public double Longitude { get; set; } // Longitude of the shop's location
 
