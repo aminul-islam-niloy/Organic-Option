@@ -548,5 +548,96 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
 
 
+
+
+        //Inventory
+
+        // Action method to show all products in the shop
+        public IActionResult ShowAllProducts(int farmerShopId)
+        {
+            var farmerShop = _context.FarmerShop.Find(farmerShopId);
+            if (farmerShop == null)
+            {
+                return NotFound();
+            }
+
+            var productsInShop = farmerShop.GetAllProductsInShop();
+            return View(productsInShop);
+        }
+
+        // Action method to show sold products
+        public IActionResult ShowSoldProducts(int farmerShopId)
+        {
+            var farmerShop = _context.FarmerShop.Find(farmerShopId);
+            if (farmerShop == null)
+            {
+                return NotFound();
+            }
+
+            var soldProducts = farmerShop.GetSoldProducts();
+            return View(soldProducts);
+        }
+
+        // Action method to calculate and show total revenue
+        public IActionResult ShowTotalRevenue(int farmerShopId)
+        {
+            var farmerShop = _context.FarmerShop.Find(farmerShopId);
+            if (farmerShop == null)
+            {
+                return NotFound();
+            }
+
+            var totalRevenue = farmerShop.CalculateTotalRevenue();
+            return View(totalRevenue);
+        }
+
+        // Action method to find and show the most sold product
+        public IActionResult ShowMostSoldProduct(int farmerShopId)
+        {
+            var farmerShop = _context.FarmerShop.Find(farmerShopId);
+            if (farmerShop == null)
+            {
+                return NotFound();
+            }
+
+            var mostSoldProduct = farmerShop.FindMostSoldProduct();
+            return View(mostSoldProduct);
+        }
+
+        // Action method to show daily sales
+        public IActionResult ShowDailySales(int farmerShopId)
+        {
+            var farmerShop = _context.FarmerShop.Find(farmerShopId);
+            if (farmerShop == null)
+            {
+                return NotFound();
+            }
+
+            int dailySales = farmerShop.GetDailySales();
+            return View(dailySales);
+        }
+
+
+        public IActionResult CashoutRevenue(int farmerShopId, CashoutInterval interval)
+        {
+            var farmerShop = _context.FarmerShop.Find(farmerShopId);
+            if (farmerShop == null)
+            {
+                return NotFound();
+            }
+
+            // Calculate revenue for the specified interval
+            decimal revenue = farmerShop.CalculateAndCashoutRevenue(interval);
+
+            // Award bonuses for best-selling shops
+            farmerShop.AwardBonusesForBestSellingShops();
+
+            // Return the remaining revenue after platform fee deduction
+            return View(revenue);
+        }
+
+
+
+
     }
 }

@@ -116,6 +116,34 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
         //Tracking Product Sold in Shop
+        //private void UpdateFarmerStore(int id, int quantitySold)
+        //{
+        //    Products product = _db.Products.FirstOrDefault(p => p.Id == id);
+
+        //    if (product != null)
+        //    {
+        //        // Update the sold quantity and last sold date for the product
+        //        product.SoldQuantity += quantitySold;
+        //        product.LastSoldDate = DateTime.Now;
+
+        //        // Retrieve the farmer store associated with the product
+        //        FarmerShop farmerStore = _db.FarmerShop.FirstOrDefault(fs => fs.Id == product.FarmerShopId);
+
+        //        // Update the sold quantity and last sold date for the product in the farmer's store
+        //        if (farmerStore != null)
+        //        {
+        //            farmerStore.SoldQuantity += quantitySold;
+        //            farmerStore.LastSoldDate = DateTime.Now;
+        //        }
+
+        //        // Save changes to the database
+        //        _db.SaveChanges();
+        //    }
+        //}
+
+
+
+
         private void UpdateFarmerStore(int id, int quantitySold)
         {
             Products product = _db.Products.FirstOrDefault(p => p.Id == id);
@@ -134,12 +162,29 @@ namespace OnlineShop.Areas.Customer.Controllers
                 {
                     farmerStore.SoldQuantity += quantitySold;
                     farmerStore.LastSoldDate = DateTime.Now;
+
+                    // Mark products as sold in the inventory
+                    var inventoryItem = farmerStore.Inventory.FirstOrDefault(i => i.ProductId == id);
+                    if (inventoryItem != null)
+                    {
+                        inventoryItem.Quantity -= quantitySold;
+                        inventoryItem.LastSoldDate = DateTime.Now;
+                    }
                 }
 
                 // Save changes to the database
                 _db.SaveChanges();
             }
         }
+
+
+
+
+
+
+
+
+
 
         public IActionResult OrderConfirmation()
         {

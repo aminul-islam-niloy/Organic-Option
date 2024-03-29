@@ -82,6 +82,8 @@ namespace OnlineShop.Models
         [ForeignKey("FarmerShopId")]
         public virtual FarmerShop FarmerShop { get; set; }
 
+        public ICollection<InventoryItem> InventoryItems { get; set; }
+
 
     }
 }
