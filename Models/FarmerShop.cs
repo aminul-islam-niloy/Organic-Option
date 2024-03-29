@@ -38,36 +38,10 @@ namespace OrganicOption.Models
 
         public ICollection<InventoryItem> Inventory { get; set; }
 
-
-        // Method to get all products in the shop
-        public IEnumerable<Products> GetAllProductsInShop()
-        {
-            return Inventory.Select(i => i.Product);
-        }
-
-        // Method to get sold products
-        public IEnumerable<Products> GetSoldProducts()
-        {
-            return Inventory.Where(i => i.Quantity == 0).Select(i => i.Product);
-        }
-
-        // Method to get the last sold product
-        public Products GetLastSoldProduct()
-        {
-            var lastSoldItem = Inventory.OrderByDescending(i => i.LastSoldDate).FirstOrDefault();
-            return lastSoldItem?.Product;
-        }
-
-        // Method to get products prepared for delivery (sold products)
-        public IEnumerable<Products> GetProductsPreparedForDelivery()
-        {
-            return GetSoldProducts();
-        }
-
         // Method to get unsold products
         public IEnumerable<Products> GetUnsoldProducts()
         {
-            return Inventory.Where(i => i.Quantity > 0).Select(i => i.Product);
+            return Products.Where(p => p.Quantity > 0);
         }
 
         // Method to calculate remaining time in product (assuming ExpirationTime property exists in Product)
@@ -79,7 +53,7 @@ namespace OrganicOption.Models
         // Method to calculate total revenue from products
         public decimal CalculateTotalRevenue()
         {
-            return Inventory.Sum(i => i.Quantity * i.Product.Price);
+            return Products.Sum(p => p.Quantity * p.Price);
         }
 
         // Method to calculate daily, weekly, monthly, and total sold products
@@ -92,10 +66,10 @@ namespace OrganicOption.Models
             var weeklyStartDate = today.AddDays(-7);
             var monthlyStartDate = today.AddDays(-30);
 
-            salesStatistics.Add("Daily", Inventory.Count(i => i.LastSoldDate.Date == today));
-            salesStatistics.Add("Weekly", Inventory.Count(i => i.LastSoldDate >= weeklyStartDate));
-            salesStatistics.Add("Monthly", Inventory.Count(i => i.LastSoldDate >= monthlyStartDate));
-            salesStatistics.Add("Total", Inventory.Sum(i => i.Quantity));
+            salesStatistics.Add("Daily", Products.Count(p => p.LastSoldDate.Date == today));
+            salesStatistics.Add("Weekly", Products.Count(p => p.LastSoldDate >= weeklyStartDate));
+            salesStatistics.Add("Monthly", Products.Count(p => p.LastSoldDate >= monthlyStartDate));
+            salesStatistics.Add("Total", Products.Sum(p => p.Quantity));
 
             return salesStatistics;
         }
@@ -103,31 +77,29 @@ namespace OrganicOption.Models
         // Method to find the most sold product
         public Products FindMostSoldProduct()
         {
-            var mostSoldItem = Inventory.OrderByDescending(i => i.Quantity).FirstOrDefault();
-            return mostSoldItem?.Product;
+            return Products.OrderByDescending(p => p.Quantity).FirstOrDefault();
         }
 
         // Method to calculate daily sales
         public int GetDailySales()
         {
             var today = DateTime.Today;
-            return Inventory.Count(i => i.LastSoldDate.Date == today);
+            return Products.Count(p => p.LastSoldDate.Date == today);
         }
 
         // Helper method to calculate weekly sales
         private int GetWeeklySales()
         {
             var weeklyStartDate = DateTime.Today.AddDays(-7);
-            return Inventory.Count(i => i.LastSoldDate >= weeklyStartDate);
+            return Products.Count(p => p.LastSoldDate >= weeklyStartDate);
         }
 
         // Helper method to calculate monthly sales
         private int GetMonthlySales()
         {
             var monthlyStartDate = DateTime.Today.AddDays(-30);
-            return Inventory.Count(i => i.LastSoldDate >= monthlyStartDate);
+            return Products.Count(p => p.LastSoldDate >= monthlyStartDate);
         }
-
 
         public decimal CalculateAndCashoutRevenue(CashoutInterval interval)
         {
@@ -143,7 +115,6 @@ namespace OrganicOption.Models
             // Return remaining revenue after platform fee deduction
             return remainingRevenue;
         }
-
 
         // Method to calculate revenue for the specified interval
         private decimal CalculateRevenueForInterval(CashoutInterval interval)
@@ -165,9 +136,9 @@ namespace OrganicOption.Models
             }
 
             // Calculate revenue based on the specified interval
-            decimal revenue = Inventory
-                .Where(item => item.LastSoldDate >= startDate)
-                .Sum(item => item.Quantity * item.Product.Price);
+            decimal revenue = Products
+                .Where(p => p.LastSoldDate >= startDate)
+                .Sum(p => p.Quantity * p.Price);
 
             return revenue;
         }
@@ -175,13 +146,13 @@ namespace OrganicOption.Models
         // Method to determine best-selling shops and award bonuses
         public void AwardBonusesForBestSellingShops()
         {
-            // Group inventory items by farmer shop
-            var shopSales = Inventory
-                .GroupBy(item => item.FarmerShopId)
+            // Group products by farmer shop
+            var shopSales = Products
+                .GroupBy(p => p.FarmerShopId)
                 .Select(group => new
                 {
                     ShopId = group.Key,
-                    TotalSales = group.Sum(item => item.Quantity * item.Product.Price)
+                    TotalSales = group.Sum(p => p.Quantity * p.Price)
                 });
 
             // Determine the shop with the highest sales
@@ -202,8 +173,7 @@ namespace OrganicOption.Models
         Weekly,
         Biweekly,
         Monthly
-        // A
-
-
     }
+
+
 }

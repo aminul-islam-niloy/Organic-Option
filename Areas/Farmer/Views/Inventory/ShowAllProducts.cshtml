@@ -1,0 +1,111 @@
+﻿@model OrganicOption.Models.FarmerShop
+<br />
+
+<div class="container">
+
+
+    <div class="row">
+
+
+        <div>
+            <table class=" display table table-striped border" style="margin-top:15px" id="myTable">
+                <thead>
+                    <tr class="table-info">
+                        <th>
+                            <label>Image</label>
+                        </th>
+
+                        <th>
+                            <label>Name</label>
+                        </th>
+
+
+                        <th>
+                            <label>Price</label>
+                        </th>
+
+                        <th>
+                            <label>Avalable</label>
+                        </th>
+                        <th>
+                            <label>Catagory</label>
+                        </th>
+
+                        <th>
+                            <label> Preservation ?</label>
+                        </th>
+                        <th>
+                            <label>Quantity</label>
+                        </th>
+
+                        <th>
+                            <label>ExpairOn</label>
+                        </th>
+
+                        <th>
+                            <label>Action</label>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model.Products != null)
+                    {
+                        @foreach (var item in Model.Products)
+                        {
+                            <tr>
+                                <td><img src="~/@item.Image" style="max-width: 50px; max-height: 50px;" /></td>
+                                <td>@item.Name</td>
+                                <td>@item.Price</td>
+                                <td>@item.IsAvailable</td>
+                                <td>@item.ProductTypes.ProductType</td>
+                                <td>@item.PreservationRequired</td>
+                                <td>@item.Quantity @item.QuantityType</td>
+
+                                @{
+                                    TimeSpan difference = item.ExpirationTime - DateTime.Now;
+                                    int d = (int)difference.TotalDays;
+                                    int hours = difference.Hours;
+                                    int minutes = difference.Minutes;
+                                    int seconds = difference.Seconds;
+                                }
+                                <td>@d D @hours H @minutes Min</td>
+
+
+
+                                <td style="width: 150px">
+                                    <div class="btn-group">
+                                        <a asp-action="EditProduct" class="btn btn-primary" asp-controller="FarmerShop" asp-route-id="@item.Id"><i class="fa-solid fa-pen-to-square"></i></a>
+                                        <a asp-action="ProductDetails" class="btn btn-success" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info"></i></a>
+                                        <a asp-action="ProductDelete" class="btn btn-danger" asp-route-id="@item.Id"><i class="fa-solid fa-trash"></i></a>
+                                    </div>
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7">No products available</td>
+                        </tr>
+                    }
+                </tbody>
+
+
+
+            </table>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+

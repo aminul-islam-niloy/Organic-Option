@@ -115,35 +115,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             return RedirectToAction("PaymentPage", new { orderId = anOrder.Id });
         }
 
-        //Tracking Product Sold in Shop
-        //private void UpdateFarmerStore(int id, int quantitySold)
-        //{
-        //    Products product = _db.Products.FirstOrDefault(p => p.Id == id);
-
-        //    if (product != null)
-        //    {
-        //        // Update the sold quantity and last sold date for the product
-        //        product.SoldQuantity += quantitySold;
-        //        product.LastSoldDate = DateTime.Now;
-
-        //        // Retrieve the farmer store associated with the product
-        //        FarmerShop farmerStore = _db.FarmerShop.FirstOrDefault(fs => fs.Id == product.FarmerShopId);
-
-        //        // Update the sold quantity and last sold date for the product in the farmer's store
-        //        if (farmerStore != null)
-        //        {
-        //            farmerStore.SoldQuantity += quantitySold;
-        //            farmerStore.LastSoldDate = DateTime.Now;
-        //        }
-
-        //        // Save changes to the database
-        //        _db.SaveChanges();
-        //    }
-        //}
-
-
-
-
+  
         private void UpdateFarmerStore(int id, int quantitySold)
         {
             Products product = _db.Products.FirstOrDefault(p => p.Id == id);
@@ -155,13 +127,27 @@ namespace OnlineShop.Areas.Customer.Controllers
                 product.LastSoldDate = DateTime.Now;
 
                 // Retrieve the farmer store associated with the product
-                FarmerShop farmerStore = _db.FarmerShop.FirstOrDefault(fs => fs.Id == product.FarmerShopId);
+                FarmerShop farmerStore = _db.FarmerShop
+                    .Include(fs => fs.Inventory) // Include Inventory to access inventory items
+                    .FirstOrDefault(fs => fs.Id == product.FarmerShopId);
 
                 // Update the sold quantity and last sold date for the product in the farmer's store
                 if (farmerStore != null)
                 {
                     farmerStore.SoldQuantity += quantitySold;
                     farmerStore.LastSoldDate = DateTime.Now;
+
+                    // Ensure that Inventory is not null
+                    if (farmerStore.Inventory == null)
+                    {
+                        farmerStore.Inventory = new List<InventoryItem>(); // Initialize if null
+                    }
+                    else
+                    {
+                        // Get all products in the inventory of the farmer's store
+                        var productsInInventory = farmerStore.Inventory.Select(item => item.Product);
+
+                    }
 
                     // Mark products as sold in the inventory
                     var inventoryItem = farmerStore.Inventory.FirstOrDefault(i => i.ProductId == id);

@@ -1,0 +1,38 @@
+﻿@model OrganicOption.Models.FarmerShop
+<br />
+<h4>Products Sold Today</h4>
+
+@if (ViewBag.SoldProductsToday != null && ViewBag.SoldProductsToday.Count > 0)
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Quantity Sold</th>
+                <th>Total Price</th>
+                <th>Customer Name</th>
+                <th>Customer Phone</th>
+                <th>Customer Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var soldProduct in ViewBag.SoldProductsToday)
+            {
+                <tr>
+                    <td>@soldProduct.ProductId</td>
+                    <td>@soldProduct.ProductName</td>
+                    <td>@soldProduct.QuantitySold</td>
+                    <td>@soldProduct.TotalPrice</td>
+                    <td>@soldProduct.CustomerName</td>
+                    <td>@soldProduct.CustomerPhone</td>
+                    <td>@soldProduct.CustomerAddress</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No products were sold today.</p>
+}
