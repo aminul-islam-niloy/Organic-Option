@@ -98,8 +98,42 @@ namespace OrganicOption.Areas.Farmer.Controllers
             return View();
         }
 
-        // Action method to calculate and show total revenue
-        public IActionResult ShowTotalRevenue(int farmerShopId)
+
+        public async Task<IActionResult> DailyGetOrder()
+        {
+            ViewData["productTypeId"] = new SelectList(_context.ProductTypes.ToList(), "Id", "ProductType");
+            ViewData["TagId"] = new SelectList(_context.SpecialTag.ToList(), "Id", "Name");
+            // Get the current user
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+                // Retrieve the farmer shop ID for the current user
+                var farmerShopId = _context.FarmerShop
+                    .Where(fs => fs.FarmerUserId == currentUser.Id)
+                    .Select(fs => fs.Id)
+                    .FirstOrDefault();
+
+                // Retrieve the inventory items for the current farmer's shop for today
+                var inventoryItems = await _context.InventoryItem
+                    .Include(ii => ii.Order)
+                        .ThenInclude(o => o.OrderDetails)
+                            .ThenInclude(od => od.Product)
+                    .Include(ii => ii.Products)
+                    .Where(ii => ii.FarmerShopId == farmerShopId && ii.LastSoldDate.Date == DateTime.Today)
+                    .ToListAsync();
+           
+
+            // Pass the inventory items to the view for further processing
+            return View(inventoryItems);
+        }
+
+
+
+            // Action method to calculate and show total revenue
+            public IActionResult ShowTotalRevenue(int farmerShopId)
         {
             var farmerShop = _context.FarmerShop.Find(farmerShopId);
             if (farmerShop == null)

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineShop.Data;
 
@@ -11,9 +12,10 @@ using OnlineShop.Data;
 namespace OrganicOption.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240330000227_InventoryUpdate")]
+    partial class InventoryUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -542,12 +544,6 @@ namespace OrganicOption.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ProductsId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -556,8 +552,6 @@ namespace OrganicOption.Migrations
                     b.HasIndex("FarmerShopId");
 
                     b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductsId");
 
                     b.ToTable("InventoryItem");
                 });
@@ -763,15 +757,9 @@ namespace OrganicOption.Migrations
                         .WithMany("InventoryItems")
                         .HasForeignKey("OrderId");
 
-                    b.HasOne("OnlineShop.Models.Products", "Products")
-                        .WithMany("InventoryItems")
-                        .HasForeignKey("ProductsId");
-
                     b.Navigation("FarmerShop");
 
                     b.Navigation("Order");
-
-                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("OrganicOption.Models.ShopReview", b =>
@@ -799,8 +787,6 @@ namespace OrganicOption.Migrations
             modelBuilder.Entity("OnlineShop.Models.Products", b =>
                 {
                     b.Navigation("ImagesSmall");
-
-                    b.Navigation("InventoryItems");
                 });
 
             modelBuilder.Entity("OrganicOption.Models.FarmerShop", b =>

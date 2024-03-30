@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using OrganicOption.Models;
 
 namespace OnlineShop.Models
 {
@@ -35,6 +36,6 @@ namespace OnlineShop.Models
         public string UserId { get; set; } // Representing the user who placed the order
         public virtual ApplicationUser User { get; set; }
         public virtual List<OrderDetails> OrderDetails { get; set; }
-
+        public virtual List<InventoryItem> InventoryItems { get; set; }
     }
 }

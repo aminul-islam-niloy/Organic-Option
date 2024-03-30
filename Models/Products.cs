@@ -82,7 +82,7 @@ namespace OnlineShop.Models
         [ForeignKey("FarmerShopId")]
         public virtual FarmerShop FarmerShop { get; set; }
 
-
+        public virtual List<InventoryItem> InventoryItems { get; set; }
 
     }
 }

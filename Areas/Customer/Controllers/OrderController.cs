@@ -93,7 +93,7 @@ namespace OnlineShop.Areas.Customer.Controllers
 
                     }
 
-                    UpdateFarmerStore(product.Id, product.QuantityInCart);
+                   
 
 
                 }
@@ -105,8 +105,20 @@ namespace OnlineShop.Areas.Customer.Controllers
             // Add the order to the database context
             _db.Orders.Add(anOrder);
 
+
+
             // Save changes to the database
             await _db.SaveChangesAsync();
+
+            List<Products> Sesproducts = HttpContext.Session.Get<List<Products>>("products");
+            if (Sesproducts != null)
+            {
+                foreach (var product in Sesproducts)
+                {
+                    // Update the inventory for each product
+                    UpdateFarmerStore(product.Id, product.QuantityInCart, product.Price, anOrder.Id,product.FarmerShopId);
+                }
+            }
 
             // Clear the session data
             HttpContext.Session.Set("products", new List<Products>());
@@ -115,55 +127,90 @@ namespace OnlineShop.Areas.Customer.Controllers
             return RedirectToAction("PaymentPage", new { orderId = anOrder.Id });
         }
 
-  
-        private void UpdateFarmerStore(int id, int quantitySold)
-        {
-            Products product = _db.Products.FirstOrDefault(p => p.Id == id);
 
+        //private void UpdateFarmerStore(int id, int quantitySold)
+        //{
+        //    Products product = _db.Products.FirstOrDefault(p => p.Id == id);
+
+        //    if (product != null)
+        //    {
+        //        // Update the sold quantity and last sold date for the product
+        //        product.SoldQuantity += quantitySold;
+        //        product.LastSoldDate = DateTime.Now;
+
+        //        // Retrieve the farmer store associated with the product
+        //        FarmerShop farmerStore = _db.FarmerShop
+        //            .Include(fs => fs.Inventory) // Include Inventory to access inventory items
+        //            .FirstOrDefault(fs => fs.Id == product.FarmerShopId);
+
+        //        // Update the sold quantity and last sold date for the product in the farmer's store
+        //        if (farmerStore != null)
+        //        {
+        //            farmerStore.SoldQuantity += quantitySold;
+        //            farmerStore.LastSoldDate = DateTime.Now;
+
+        //            // Ensure that Inventory is not null
+        //            if (farmerStore.Inventory == null)
+        //            {
+        //                farmerStore.Inventory = new List<InventoryItem>(); // Initialize if null
+        //            }
+        //            else
+        //            {
+        //                // Get all products in the inventory of the farmer's store
+        //                var productsInInventory = farmerStore.Inventory.Select(item => item.Product);
+
+        //            }
+
+        //            // Mark products as sold in the inventory
+        //            var inventoryItem = farmerStore.Inventory.FirstOrDefault(i => i.ProductId == id);
+        //            if (inventoryItem != null)
+        //            {
+        //                inventoryItem.Quantity -= quantitySold;
+        //                inventoryItem.LastSoldDate = DateTime.Now;
+        //            }
+        //        }
+
+        //        // Save changes to the database
+        //        _db.SaveChanges();
+        //    }
+        //}
+
+
+        private void UpdateFarmerStore(int id, int quantitySold, decimal price, int orderId,int FarmerShopId)
+        {
+            // Retrieve the product and update its sold quantity and last sold date
+            var product = _db.Products.FirstOrDefault(p => p.Id == id);
             if (product != null)
             {
-                // Update the sold quantity and last sold date for the product
                 product.SoldQuantity += quantitySold;
                 product.LastSoldDate = DateTime.Now;
-
-                // Retrieve the farmer store associated with the product
-                FarmerShop farmerStore = _db.FarmerShop
-                    .Include(fs => fs.Inventory) // Include Inventory to access inventory items
-                    .FirstOrDefault(fs => fs.Id == product.FarmerShopId);
-
-                // Update the sold quantity and last sold date for the product in the farmer's store
-                if (farmerStore != null)
-                {
-                    farmerStore.SoldQuantity += quantitySold;
-                    farmerStore.LastSoldDate = DateTime.Now;
-
-                    // Ensure that Inventory is not null
-                    if (farmerStore.Inventory == null)
-                    {
-                        farmerStore.Inventory = new List<InventoryItem>(); // Initialize if null
-                    }
-                    else
-                    {
-                        // Get all products in the inventory of the farmer's store
-                        var productsInInventory = farmerStore.Inventory.Select(item => item.Product);
-
-                    }
-
-                    // Mark products as sold in the inventory
-                    var inventoryItem = farmerStore.Inventory.FirstOrDefault(i => i.ProductId == id);
-                    if (inventoryItem != null)
-                    {
-                        inventoryItem.Quantity -= quantitySold;
-                        inventoryItem.LastSoldDate = DateTime.Now;
-                    }
-                }
-
-                // Save changes to the database
-                _db.SaveChanges();
             }
+
+            // Retrieve the farmer store associated with the product
+            FarmerShop farmerStore = _db.FarmerShop
+                            .Include(fs => fs.Inventory) // Include Inventory to access inventory items
+                            .FirstOrDefault(fs => fs.Id == product.FarmerShopId);
+
+            // Update the sold quantity and last sold date for the product in the farmer's store
+            if (farmerStore != null)
+            {
+                farmerStore.SoldQuantity += quantitySold;
+                farmerStore.LastSoldDate = DateTime.Now;
+
+                // Create a new inventory item 
+                farmerStore.Inventory.Add(new InventoryItem
+                {
+                    ProductId = id,
+                    Quantity = quantitySold, // Negative quantity indicates sold
+                    LastSoldDate = DateTime.Now,
+                    Price= price,
+                    OrderId = orderId // Set the OrderId for the inventory item
+                });
+            }
+
+            // Save changes to the database
+            _db.SaveChanges();
         }
-
-
 
 
 
