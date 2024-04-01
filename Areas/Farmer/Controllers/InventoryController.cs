@@ -1,16 +1,22 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Caching.Memory;
 using OnlineShop.Data;
+using OnlineShop.Models;
 using OrganicOption.Models;
+using OrganicOption.Models.Farmer_Section;
 using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using ProductInfo = OrganicOption.Models.Farmer_Section.ProductInfo;
 
 namespace OrganicOption.Areas.Farmer.Controllers
 {
@@ -99,41 +105,206 @@ namespace OrganicOption.Areas.Farmer.Controllers
         }
 
 
-        public async Task<IActionResult> DailyGetOrder()
+        public async Task<IActionResult> MyDailyOrders()
         {
-            ViewData["productTypeId"] = new SelectList(_context.ProductTypes.ToList(), "Id", "ProductType");
-            ViewData["TagId"] = new SelectList(_context.SpecialTag.ToList(), "Id", "Name");
-            // Get the current user
+            // Retrieve the current user
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
                 return NotFound();
             }
 
-                // Retrieve the farmer shop ID for the current user
-                var farmerShopId = _context.FarmerShop
-                    .Where(fs => fs.FarmerUserId == currentUser.Id)
-                    .Select(fs => fs.Id)
-                    .FirstOrDefault();
+            // Retrieve the farmer shop for the current user
+            var farmerShop = await _context.FarmerShop
+                .Include(fs => fs.Products)
+                .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
 
-                // Retrieve the inventory items for the current farmer's shop for today
-                var inventoryItems = await _context.InventoryItem
-                    .Include(ii => ii.Order)
-                        .ThenInclude(o => o.OrderDetails)
-                            .ThenInclude(od => od.Product)
-                    .Include(ii => ii.Products)
-                    .Where(ii => ii.FarmerShopId == farmerShopId && ii.LastSoldDate.Date == DateTime.Today)
-                    .ToListAsync();
-           
+            if (farmerShop == null)
+            {
+                return NotFound(); // Handle if farmer shop not found
+            }
 
-            // Pass the inventory items to the view for further processing
-            return View(inventoryItems);
+  
+
+            var orders = await _context.Orders
+                       .Include(o => o.OrderDetails.Where(od => od.Product.FarmerShopId == farmerShop.Id))
+                       .ThenInclude(od => od.Product)
+                       .Where(o => o.OrderDate.Date == DateTime.Today && o.InventoryItems.Any(ii => ii.FarmerShopId == farmerShop.Id))
+                         .ToListAsync();
+
+
+            var dailyOrderInfo = orders.Select(o => new DailyOrderInfoViewModel
+            {
+                OrderId = o.Id,
+                CustomerName = o.Name,
+                Address = o.Address,
+                Phone = o.PhoneNo,
+                OrderTme= o.OrderDate,
+                Products = o.OrderDetails.Select(od => new ProductInfo
+                {
+                    Name = od.Product.Name,
+                    Quantity = od.Quantity,
+                    Price = od.Product.Price
+                }).ToList(),
+                TotalPrice = o.OrderDetails.Sum(od => od.Quantity * od.Product.Price)
+            }).ToList();
+
+            return View(dailyOrderInfo);
         }
 
 
 
-            // Action method to calculate and show total revenue
-            public IActionResult ShowTotalRevenue(int farmerShopId)
+        //public async Task<IActionResult> WeeklyOrders()
+        //{
+        //    // Retrieve the current user
+        //    var currentUser = await _userManager.GetUserAsync(User);
+        //    if (currentUser == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    // Retrieve the farmer shop for the current user
+        //    var farmerShop = await _context.FarmerShop
+        //        .Include(fs => fs.Products)
+        //        .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
+
+        //    if (farmerShop == null)
+        //    {
+        //        return NotFound(); // Handle if farmer shop not found
+        //    }
+
+        //    DateTime startDate = DateTime.Today.AddDays(-7);
+        //    DateTime endDate = DateTime.Today;
+
+        //    var ordersThisWeek = await _context.Orders
+        //        .Include(o => o.OrderDetails.Where(od => od.Product.FarmerShopId == farmerShop.Id))
+        //            .ThenInclude(od => od.Product)
+        //        .Where(o => o.OrderDate >= startDate && o.OrderDate <= endDate && o.InventoryItems.Any(ii => ii.FarmerShopId == farmerShop.Id))
+        //        .ToListAsync();
+
+        //    var dailyOrderInfo = ordersThisWeek.Select(o => new DailyOrderInfoViewModel
+        //    {
+        //        OrderId = o.Id,
+        //        CustomerName = o.Name,
+        //        Address = o.Address,
+        //        Phone = o.PhoneNo,
+        //        OrderTme = o.OrderDate,
+        //        Products = o.OrderDetails.Select(od => new ProductInfo
+        //        {
+        //            Name = od.Product.Name,
+        //            Quantity = od.Quantity,
+        //            Price = od.Product.Price
+        //        }).ToList(),
+        //        TotalPrice = o.OrderDetails.Sum(od => od.Quantity * od.Product.Price)
+        //    }).ToList();
+
+        //    return View(dailyOrderInfo);
+        //}
+
+
+        public async Task<IActionResult> WeeklyOrders()
+        {
+            // Retrieve the current user
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            // Retrieve the farmer shop for the current user
+            var farmerShop = await _context.FarmerShop
+                .Include(fs => fs.Products)
+                .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
+
+            if (farmerShop == null)
+            {
+                return NotFound(); // Handle if farmer shop not found
+            }
+
+            DateTime startDate = DateTime.Today.AddDays(-7);
+            DateTime endDate = DateTime.Today;
+
+            var ordersThisWeek = await _context.Orders
+                .Include(o => o.OrderDetails.Where(od => od.Product.FarmerShopId == farmerShop.Id))
+                .ThenInclude(od => od.Product)
+                .Where(o => o.OrderDate >= startDate && o.OrderDate <= endDate && o.InventoryItems.Any(ii => ii.FarmerShopId == farmerShop.Id))
+                .ToListAsync();
+
+            var dailyOrderInfo = ordersThisWeek.Select(o => new DailyOrderInfoViewModel
+            {
+                OrderId = o.Id,
+                CustomerName = o.Name,
+                Address = o.Address,
+                Phone = o.PhoneNo,
+                OrderTme = o.OrderDate,
+                Products = o.OrderDetails.Select(od => new ProductInfo
+                {
+                    Name = od.Product.Name,
+                    Quantity = od.Quantity,
+                    Price = od.Product.Price
+                }).ToList(),
+                TotalPrice = o.OrderDetails.Sum(od => od.Quantity * od.Product.Price)
+            }).ToList();
+
+            var groupedOrders = dailyOrderInfo.GroupBy(o => o.OrderTme.Date).ToList();
+
+            return View(groupedOrders);
+        }
+
+
+
+
+        public async Task<IActionResult> MonthlyOrders()
+        {
+            // Retrieve the current user
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            // Retrieve the farmer shop for the current user
+            var farmerShop = await _context.FarmerShop
+                .Include(fs => fs.Products)
+                .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
+
+            if (farmerShop == null)
+            {
+                return NotFound(); // Handle if farmer shop not found
+            }
+
+            DateTime startDate = DateTime.Today.AddDays(-30);
+            DateTime endDate = DateTime.Today;
+
+            var ordersThisWeek = await _context.Orders
+                .Include(o => o.OrderDetails.Where(od => od.Product.FarmerShopId == farmerShop.Id))
+                    .ThenInclude(od => od.Product)
+                .Where(o => o.OrderDate >= startDate && o.OrderDate <= endDate && o.InventoryItems.Any(ii => ii.FarmerShopId == farmerShop.Id))
+                .ToListAsync();
+
+            var dailyOrderInfo = ordersThisWeek.Select(o => new DailyOrderInfoViewModel
+            {
+                OrderId = o.Id,
+                CustomerName = o.Name,
+                Address = o.Address,
+                Phone = o.PhoneNo,
+                OrderTme = o.OrderDate,
+                Products = o.OrderDetails.Select(od => new ProductInfo
+                {
+                    Name = od.Product.Name,
+                    Quantity = od.Quantity,
+                    Price = od.Product.Price
+                }).ToList(),
+                TotalPrice = o.OrderDetails.Sum(od => od.Quantity * od.Product.Price)
+            }).ToList();
+
+            return View(dailyOrderInfo);
+        }
+
+
+
+
+        public IActionResult ShowTotalRevenue(int farmerShopId)
         {
             var farmerShop = _context.FarmerShop.Find(farmerShopId);
             if (farmerShop == null)
