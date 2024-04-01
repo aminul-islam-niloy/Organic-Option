@@ -301,6 +301,61 @@ namespace OrganicOption.Areas.Farmer.Controllers
             return View(dailyOrderInfo);
         }
 
+        public async Task<IActionResult> AllOrdersGroupedByDate()
+        {
+            // Retrieve the current user
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            // Retrieve the farmer shop for the current user
+            var farmerShop = await _context.FarmerShop
+                .Include(fs => fs.Products)
+                .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
+
+            if (farmerShop == null)
+            {
+                return NotFound(); // Handle if farmer shop not found
+            }
+
+            // Define the date range for past days and the present day
+            DateTime startDate = DateTime.Today.AddDays(-30); // Change the number of days as needed
+            DateTime endDate = DateTime.Today.AddDays(1).AddTicks(-1);
+
+            // Retrieve orders for the specified date range
+            var allOrders = await _context.Orders
+                .Include(o => o.OrderDetails.Where(od => od.Product.FarmerShopId == farmerShop.Id))
+                .ThenInclude(od => od.Product)
+                .Where(o => o.OrderDate >= startDate && o.OrderDate <= endDate && o.InventoryItems.Any(ii => ii.FarmerShopId == farmerShop.Id))
+                .ToListAsync();
+
+            // Convert orders to DailyOrderInfoViewModel
+            var dailyOrderInfo = allOrders.Select(o => new DailyOrderInfoViewModel
+            {
+                OrderId = o.Id,
+                CustomerName = o.Name,
+                Address = o.Address,
+                Phone = o.PhoneNo,
+                OrderTme = o.OrderDate,
+                Products = o.OrderDetails.Select(od => new ProductInfo
+                {
+                    Name = od.Product.Name,
+                    Quantity = od.Quantity,
+                    Price = od.Product.Price
+                }).ToList(),
+                TotalPrice = o.OrderDetails.Sum(od => od.Quantity * od.Product.Price)
+            }).ToList();
+
+            // Group dailyOrderInfo by date
+            var groupedOrders = dailyOrderInfo.GroupBy(o => o.OrderTme.Date).ToList();
+
+            return View(groupedOrders);
+        }
+
+
+
 
 
 
