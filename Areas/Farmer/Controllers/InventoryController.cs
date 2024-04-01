@@ -11,6 +11,7 @@ using OnlineShop.Models;
 using OrganicOption.Models;
 using OrganicOption.Models.Farmer_Section;
 using Stripe;
+using Stripe.Climate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,8 +37,53 @@ namespace OrganicOption.Areas.Farmer.Controllers
             _cache = memoryCache;
         }
 
-        public IActionResult Index()
+        //public IActionResult Index()
+        //{
+
+
+        //    var salesInfo = _context.InventoryItem
+        //        .Where(item => item.OrderId != null)
+        //        .GroupBy(item => item.FarmerShopId)
+        //        .Select(group => new
+        //        {
+        //            FarmerShopId = group.Key,
+        //            TotalProductsSold = group.Count(),
+        //            TotalQuantitySold = group.Sum(item => item.Quantity),
+        //            TotalPriceSold = group.Sum(item => item.Price * item.Quantity)
+        //        })
+        //        .ToList();
+
+        //    ViewBag.SalesInfo = salesInfo;
+
+        //    return View();
+        //}
+
+        public async Task<IActionResult> Index()
         {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            var currentShop = await _context.FarmerShop.FirstOrDefaultAsync(shop => shop.FarmerUserId == currentUser.Id);
+       
+               int farmerShopId = currentShop.Id;
+
+
+            var salesInfo = _context.InventoryItem
+       .Where(item => item.FarmerShopId == farmerShopId && item.OrderId != null)
+       .GroupBy(item => item.ProductId)
+       .Select(group => new
+       {
+           ProductId = group.Key,
+           TotalItemsSold = group.Count(), // Count each ID even if it appears multiple times
+           TotalQuantitySold = group.Sum(item => item.Quantity),
+           TotalPriceSold = group.Sum(item => item.Price * item.Quantity)
+       })
+       .ToList();
+
+            var totalSumPriceSold = salesInfo.Sum(item => item.TotalPriceSold);
+
+            ViewBag.SalesInfo = salesInfo;
+            ViewBag.TotalSumPriceSold = totalSumPriceSold;
+
             return View();
         }
 
@@ -353,8 +399,6 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             return View(groupedOrders);
         }
-
-
 
 
 
