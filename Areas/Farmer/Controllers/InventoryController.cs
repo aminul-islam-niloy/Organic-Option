@@ -37,26 +37,6 @@ namespace OrganicOption.Areas.Farmer.Controllers
             _cache = memoryCache;
         }
 
-        //public IActionResult Index()
-        //{
-
-
-        //    var salesInfo = _context.InventoryItem
-        //        .Where(item => item.OrderId != null)
-        //        .GroupBy(item => item.FarmerShopId)
-        //        .Select(group => new
-        //        {
-        //            FarmerShopId = group.Key,
-        //            TotalProductsSold = group.Count(),
-        //            TotalQuantitySold = group.Sum(item => item.Quantity),
-        //            TotalPriceSold = group.Sum(item => item.Price * item.Quantity)
-        //        })
-        //        .ToList();
-
-        //    ViewBag.SalesInfo = salesInfo;
-
-        //    return View();
-        //}
 
         public async Task<IActionResult> Index()
         {
@@ -83,6 +63,38 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             ViewBag.SalesInfo = salesInfo;
             ViewBag.TotalSumPriceSold = totalSumPriceSold;
+
+
+            // Retrieve the shop for the current user
+            var farmerShop = await _context.FarmerShop
+                .Include(fs => fs.Products)
+                .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
+
+            if (farmerShop != null)
+            {
+                // Find the unsold products for the farmer
+                var TotalsoldProducts = farmerShop.Products
+                    .Where(p => _context.InventoryItem.Any(item => item.ProductId == p.Id))
+                    .ToList();
+                ViewBag.TotalSoldProduct = TotalsoldProducts;
+                // Do something with unsoldProducts
+            }
+
+
+            if (farmerShop != null)
+            {
+                // Find the unsold products for the farmer
+                var unsoldProducts = farmerShop.Products
+                    .Where(p => !_context.InventoryItem.Any(item => item.ProductId == p.Id))
+                    .ToList();
+                ViewBag.UnsoldProduct = unsoldProducts;
+                // Do something with unsoldProducts
+            }
+
+
+
+
+
 
             return View();
         }
@@ -112,6 +124,32 @@ namespace OrganicOption.Areas.Farmer.Controllers
             return View(farmerShop);
 
         }
+
+        public async Task<IActionResult> ShowAllProductsByTime()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            var farmerShop = await _context.FarmerShop
+                .Include(fs => fs.Products)
+                .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
+
+            if (farmerShop == null)
+            {
+                return NotFound();
+            }
+
+            // Sort the products based on expiration time
+            var sortedProducts = farmerShop.Products.OrderBy(p => p.ExpirationTime);
+
+            return View(sortedProducts);
+        }
+
+
+
 
         // Action method to show sold products
         public async Task<IActionResult> ShowSoldProducts()
@@ -200,54 +238,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
 
 
-        //public async Task<IActionResult> WeeklyOrders()
-        //{
-        //    // Retrieve the current user
-        //    var currentUser = await _userManager.GetUserAsync(User);
-        //    if (currentUser == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    // Retrieve the farmer shop for the current user
-        //    var farmerShop = await _context.FarmerShop
-        //        .Include(fs => fs.Products)
-        //        .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
-
-        //    if (farmerShop == null)
-        //    {
-        //        return NotFound(); // Handle if farmer shop not found
-        //    }
-
-        //    DateTime startDate = DateTime.Today.AddDays(-7);
-        //    DateTime endDate = DateTime.Today;
-
-        //    var ordersThisWeek = await _context.Orders
-        //        .Include(o => o.OrderDetails.Where(od => od.Product.FarmerShopId == farmerShop.Id))
-        //            .ThenInclude(od => od.Product)
-        //        .Where(o => o.OrderDate >= startDate && o.OrderDate <= endDate && o.InventoryItems.Any(ii => ii.FarmerShopId == farmerShop.Id))
-        //        .ToListAsync();
-
-        //    var dailyOrderInfo = ordersThisWeek.Select(o => new DailyOrderInfoViewModel
-        //    {
-        //        OrderId = o.Id,
-        //        CustomerName = o.Name,
-        //        Address = o.Address,
-        //        Phone = o.PhoneNo,
-        //        OrderTme = o.OrderDate,
-        //        Products = o.OrderDetails.Select(od => new ProductInfo
-        //        {
-        //            Name = od.Product.Name,
-        //            Quantity = od.Quantity,
-        //            Price = od.Product.Price
-        //        }).ToList(),
-        //        TotalPrice = o.OrderDetails.Sum(od => od.Quantity * od.Product.Price)
-        //    }).ToList();
-
-        //    return View(dailyOrderInfo);
-        //}
-
-
+ 
         public async Task<IActionResult> WeeklyOrders()
         {
             // Retrieve the current user
@@ -429,17 +420,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
         }
 
         // Action method to show daily sales
-        public IActionResult ShowDailySales(int farmerShopId)
-        {
-            var farmerShop = _context.FarmerShop.Find(farmerShopId);
-            if (farmerShop == null)
-            {
-                return NotFound();
-            }
-
-            int dailySales = farmerShop.GetDailySales();
-            return View(dailySales);
-        }
+    
 
 
         public IActionResult CashoutRevenue(int farmerShopId, CashoutInterval interval)

@@ -1,5 +1,10 @@
 ﻿@model List<IGrouping<DateTime, OrganicOption.Models.Farmer_Section.DailyOrderInfoViewModel>>
 
+
+    <br />
+<a asp-action="MyDailyOrders" asp-area="Farmer" asp-controller="Inventory" class="btn btn-info"> Daily Order</a>
+<a asp-action="WeeklyOrders" asp-area="Farmer" asp-controller="Inventory" class="btn btn-info"> Weekly Order</a>
+<br />
 @foreach (var group in Model)
 {
     <h4>@group.Key.ToShortDateString()</h4>

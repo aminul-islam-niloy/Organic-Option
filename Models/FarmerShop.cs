@@ -25,6 +25,8 @@ namespace OrganicOption.Models
         public Decimal ShopRevenue { get; set; }
         public DateTime LastSoldDate { get; set; }  
 
+        //public  Address  Address {get;set;}
+
         public double Latitude { get; set; } // Latitude of the shop's location
         public double Longitude { get; set; } // Longitude of the shop's location
 
@@ -39,10 +41,7 @@ namespace OrganicOption.Models
         public ICollection<InventoryItem> Inventory { get; set; }
 
         // Method to get unsold products
-        public IEnumerable<Products> GetUnsoldProducts()
-        {
-            return Products.Where(p => p.Quantity > 0);
-        }
+      
 
         // Method to calculate remaining time in product (assuming ExpirationTime property exists in Product)
         public TimeSpan GetRemainingTimeInProduct(Products product)
@@ -57,22 +56,7 @@ namespace OrganicOption.Models
         }
 
         // Method to calculate daily, weekly, monthly, and total sold products
-        public IDictionary<string, int> CalculateSalesStatistics()
-        {
-            var salesStatistics = new Dictionary<string, int>();
-
-            // Sample implementation, you may need to adjust based on your requirements
-            var today = DateTime.Today;
-            var weeklyStartDate = today.AddDays(-7);
-            var monthlyStartDate = today.AddDays(-30);
-
-            salesStatistics.Add("Daily", Products.Count(p => p.LastSoldDate.Date == today));
-            salesStatistics.Add("Weekly", Products.Count(p => p.LastSoldDate >= weeklyStartDate));
-            salesStatistics.Add("Monthly", Products.Count(p => p.LastSoldDate >= monthlyStartDate));
-            salesStatistics.Add("Total", Products.Sum(p => p.Quantity));
-
-            return salesStatistics;
-        }
+   
 
         // Method to find the most sold product
         public Products FindMostSoldProduct()
@@ -80,26 +64,7 @@ namespace OrganicOption.Models
             return Products.OrderByDescending(p => p.Quantity).FirstOrDefault();
         }
 
-        // Method to calculate daily sales
-        public int GetDailySales()
-        {
-            var today = DateTime.Today;
-            return Products.Count(p => p.LastSoldDate.Date == today);
-        }
-
-        // Helper method to calculate weekly sales
-        private int GetWeeklySales()
-        {
-            var weeklyStartDate = DateTime.Today.AddDays(-7);
-            return Products.Count(p => p.LastSoldDate >= weeklyStartDate);
-        }
-
-        // Helper method to calculate monthly sales
-        private int GetMonthlySales()
-        {
-            var monthlyStartDate = DateTime.Today.AddDays(-30);
-            return Products.Count(p => p.LastSoldDate >= monthlyStartDate);
-        }
+    
 
         public decimal CalculateAndCashoutRevenue(CashoutInterval interval)
         {

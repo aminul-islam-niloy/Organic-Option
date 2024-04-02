@@ -13,7 +13,10 @@
         <h4>Total  Sold Price : @ViewBag.TotalSumPriceSold.ToString("F2")</h4>
         <br />
     </div>
-    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <a asp-action="ShowAllProductsByTime" asp-area="Farmer" asp-controller="Inventory" class="btn btn-info"> All Products</a>
+        <a asp-action="ShowSoldProducts" asp-area="Farmer" asp-controller="Inventory" class="btn btn-info"> Show Sold Products</a>
+    </div>
 </div>
 
 
@@ -48,5 +51,90 @@
 else
 {
     <p>No sales information available.</p>
+}
+
+
+
+@if (ViewBag.TotalSoldProduct != null && ViewBag.TotalSoldProduct.Count > 0)
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Image</th>
+                    <th>Product Price</th>
+                    <th>Remainng Quantity </th>
+                   
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in ViewBag.TotalSoldProduct)
+                {
+                    <tr>
+                        <td>@product.Name</td>
+                        <td><img src="~/@product.Image" style="max-width: 50px; max-height: 50px;" /></td>
+                        <td>@product.Price</td>
+                        <td>@product.Quantity</td>
+                       
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<br />
+
+
+@{
+    ViewData["Title"] = "Unsold Products";
+}
+
+<h5>@ViewData["Title"]</h5>
+<br />
+
+@if (ViewBag.UnsoldProduct != null && ViewBag.UnsoldProduct.Count > 0)
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Image</th>
+                    <th>Product Quantity</th>
+                    <th>Product Price</th>
+                    <th>Sum of Price</th>
+                  
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in ViewBag.UnsoldProduct)
+                {
+                    <tr>
+                        <td>@product.Name</td>
+
+                        <td><img src="~/@product.Image" style="max-width: 50px; max-height: 50px;" /></td>
+
+                        <td>@product.Quantity</td>
+                        <td>@product.Price</td>
+                        @{
+                            Decimal Price = @product.Price;
+                            Decimal Quantity = @product.Quantity;
+                            Decimal TotalPrice = Price * Quantity;
+                            <td>@TotalPrice</td>
+                        }
+               
+                        
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p>No unsold products available.</p>
 }
 

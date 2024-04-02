@@ -20,7 +20,7 @@
 
             <h2>@Model.ShopName</h2>
 
-            <div class="mt-15">
+            <div class="mt-15 col-md-6">
 
                 <a asp-action="Edit" asp-controller="FarmerShop" class="btn btn-warning" asp-route-id="@Model.Id">Edit</a>
 
@@ -31,8 +31,12 @@
 
                 <a class="btn btn-warning" href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = @Model.Id })"> Product in Shop</a>
 
+               
             
             </div>
+
+          
+
         </div>
         <div class="col-md-6 mt-30">
             <h4>@Model.ContractInfo</h4>
@@ -40,6 +44,11 @@
 
             <p><strong>Location:</strong> Latitude: @Model.Latitude, Longitude: @Model.Longitude</p>
 
+        </div>
+        <div class="mt-15 col-md-6 btn d-flex">
+            <a asp-action="Index" asp-area="Farmer" asp-controller="Inventory" class="btn btn-info">Manage Inventory</a>
+            <a asp-action="AllOrdersGroupedByDate" asp-area="Farmer" asp-controller="Inventory" class="btn btn-success">Manage Order</a>
+            <a asp-action="ShowAllProductsByTime" asp-area="Farmer" asp-controller="Inventory" class="btn btn-warning"> Products by Time</a>
         </div>
      
 

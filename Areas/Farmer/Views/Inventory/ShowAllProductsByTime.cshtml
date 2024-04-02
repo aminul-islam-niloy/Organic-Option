@@ -1,0 +1,103 @@
+﻿@model IEnumerable<OnlineShop.Models.Products>
+
+@{
+    ViewData["Title"] = "All Products";
+}
+
+<div class="container">
+    <div class="row">
+        <div>
+            <table class="display table table-striped border" style="margin-top:15px">
+                <thead>
+                    <tr class="table-info">
+                        <th><label>Image</label></th>
+                        <th><label>Name</label></th>
+                        <th><label>Price</label></th>
+                        <th><label>Available</label></th>
+                        <th><label>Preservation</label></th>
+                        <th><label>Quantity</label></th>
+                        <th><label>Expires In</label></th>
+                        <th><label>Action</label></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td><img src="~/@item.Image" style="max-width: 50px; max-height: 50px;" /></td>
+                                <td>@item.Name</td>
+                                <td>@item.Price</td>
+                                <td>@(item.IsAvailable ? "Yes" : "No")</td>
+
+                                <td>@(item.PreservationRequired ? "Yes" : "No")</td>
+                                <td>@item.Quantity @item.QuantityType</td>
+                                @{
+                                    TimeSpan difference = item.ExpirationTime - DateTime.Now;
+                                    string expirationStatus = difference.TotalMilliseconds <= 0 ? "Expired" : $"{(int)difference.TotalDays} days {difference.Hours} hours {difference.Minutes} minutes";
+                                    <td>@expirationStatus</td>
+                                }
+@* 
+                                @{
+                                    TimeSpan difference = item.ExpirationTime - DateTime.Now;
+                                    string expirationStatus;
+                                    string progressColor;
+                                    double progressPercentage;
+
+                                    if (difference.TotalMilliseconds <= 0)
+                                    {
+                                        expirationStatus = "Expired";
+                                        progressColor = "bg-danger";
+                                        progressPercentage = 100; // Full progress bar for expired items
+                                        item.Quantity = 0; // Set quantity to zero if expired
+                                    }
+                                    else
+                                    {
+                                        expirationStatus = $"{(int)difference.TotalDays} days {difference.Hours} hours {difference.Minutes} minutes";
+                                        double totalHours = difference.TotalHours;
+                                        double totalHoursUntilExpiration = (item.ExpirationTime - item.CreationTime).TotalHours;
+                                        progressPercentage = (totalHours - totalHoursUntilExpiration) / totalHours * 100;
+
+                                        if (progressPercentage <= 30)
+                                        {
+                                            progressColor = "bg-danger";
+                                        }
+                                        else if (progressPercentage <= 50)
+                                        {
+                                            progressColor = "bg-warning";
+                                        }
+                                        else
+                                        {
+                                            progressColor = "bg-success";
+                                        }
+                                    }
+                                }
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar @progressColor" role="progressbar" style="width: @(progressPercentage)%;" aria-valuenow="@(progressPercentage)" aria-valuemin="0" aria-valuemax="100">@expirationStatus</div>
+                                    </div>
+                                </td>
+ *@
+                         
+                                <td style="width: 150px">
+                                    <div class="btn-group">
+                                        <a asp-action="EditProduct" class="btn btn-primary" asp-controller="FarmerShop" asp-route-id="@item.Id"><i class="fa-solid fa-pen-to-square"></i></a>
+                                        <a asp-action="ProductDetails" class="btn btn-success" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info"></i></a>
+                                        <a asp-action="ProductDelete" class="btn btn-danger" asp-route-id="@item.Id"><i class="fa-solid fa-trash"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="9">No products available</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
