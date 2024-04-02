@@ -1,0 +1,25 @@
+﻿@model List<OrganicOption.Models.FarmerShop>
+<br />
+<br />
+<div class="row">
+    @foreach (var shop in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                @if (shop.CoverPhoto != null)
+                {
+                    <img src="data:image;base64,@Convert.ToBase64String(shop.CoverPhoto)" class="card-img-top" style="width:100%; height:200px" alt="Shop Image">
+                }
+                else
+                {
+                    <p>No cover photo available</p>
+                }
+                <div class="card-body">
+                    <h5 class="card-title">@shop.ShopName</h5>
+                    <p>@(shop.IsShopOpen ? "Shop is open" : "Shop is closed")</p>
+                    <a href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = shop.Id })" class="btn btn-warning">Visit Shop</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

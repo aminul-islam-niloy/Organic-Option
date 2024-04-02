@@ -33,6 +33,17 @@ namespace OrganicOption.Areas.Farmer.Controllers
             _cache = memoryCache;
         }
 
+        [AllowAnonymous]
+        public async Task<IActionResult> AllShop()
+        {
+       
+            // Retrieve all shops in FarmerShop
+            var farmerShops = await _context.FarmerShop.ToListAsync();
+
+            return View(farmerShops);
+        }
+
+
 
         public async Task<IActionResult> Index()
         {
