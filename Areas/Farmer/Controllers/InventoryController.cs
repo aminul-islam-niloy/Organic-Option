@@ -22,6 +22,7 @@ using ProductInfo = OrganicOption.Models.Farmer_Section.ProductInfo;
 namespace OrganicOption.Areas.Farmer.Controllers
 {
     [Area("Farmer")]
+    [Authorize(Roles = "Farmer")]
     public class InventoryController : Controller
     {
 
