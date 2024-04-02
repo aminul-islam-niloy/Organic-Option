@@ -220,11 +220,11 @@
                <nav>
                   <ul>
                      <li class="mega_items">
-                                <a asp-area="" asp-controller="Home" asp-action="Products" ><i class="zmdi zmdi-shopping-basket"></i> shop <i class="zmdi zmdi-caret-down"></i></a>
+                                <a asp-area="" asp-controller="Home" asp-action="Products" ><i class="zmdi zmdi-shopping-basket"></i> Products <i class="zmdi zmdi-caret-down"></i></a>
                         <div class="mega_menu">
                            <ul class="mega_menu_inner">
                               <li>
-                                 <a href="#">Shop Layouts</a>
+                                 <a href="#">Products Layouts</a>
                                  <ul>
                                     <li><a href="shop-fullwidth.html">Full Width</a></li>
                                     <li><a href="shop-fullwidth-list.html">Full Width list</a></li>
@@ -253,7 +253,9 @@
                         </div>
                      </li>
                      <li>
-                        <a href="blog.html"><i class="zmdi zmdi-collection-music"></i> blog <i class="zmdi zmdi-caret-down"></i></a>
+
+
+                                <a asp-action="AllShop" asp-area="Farmer" asp-controller="FarmerShop"><i class="zmdi zmdi-collection-music"></i> Shop <i class="zmdi zmdi-caret-down"></i></a>
                         <ul class="sub_menu pages">
                            <li><a href="blog-details.html">blog details</a></li>
                            <li><a href="blog-fullwidth.html">blog fullwidth</a></li>
@@ -359,7 +361,7 @@
                <div id="menu" class="text-left">
                   <ul class="offcanvas_main_menu">
                      <li class="menu-item-has-children">
-                                <a asp-area="" asp-controller="Home" asp-action="Products">Shop</a>
+                                <a asp-area="" asp-controller="Home" asp-action="Products">Products</a>
                         <ul class="sub-menu">
                           
                            @if (userId != null)
@@ -398,7 +400,8 @@
                         </ul>
                      </li>
                      <li class="menu-item-has-children">
-                        <a href="#">blog</a>
+                                <a asp-action="AllShop" asp-area="Farmer" asp-controller="FarmerShop"> Shop </a>
+                 
                         <ul class="sub-menu">
                            <li><a href="blog.html">blog</a></li>
                            <li><a href="blog-details.html">blog details</a></li>
@@ -604,8 +607,8 @@
                                  </div>
                                  <div class="action_links">
                                     <ul>
-                                       <li class="wishlist"><a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id" title="Add to Wishlist"><i class="fa fa-heart-o" aria-hidden="true"></i></a></li>
-                                       <li class="add_to_cart"><a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id" title="add to cart"><i class="zmdi zmdi-shopping-cart-plus"></i> add to cart</a></li>
+                                       <li class="wishlist"><a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id" title=" Wishlist"><i class="fa fa-heart-o" aria-hidden="true"></i></a></li>
+                                       <li class="add_to_cart"><a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id" title="add to cart"><i class="zmdi zmdi-shopping-cart-plus"></i> Buy Now</a></li>
                                      
                                     </ul>
                                  </div>
@@ -948,8 +951,8 @@
                         </div>
                         <div class="action_links">
                            <ul>
-                              <li class="wishlist"><a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id" title="Add to Wishlist"><i class="fa fa-heart-o" aria-hidden="true"></i></a></li>
-                              <li class="add_to_cart"><a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id" title="add to cart"><i class="zmdi zmdi-shopping-cart-plus"></i> add to cart</a></li>
+                              <li class="wishlist"><a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id" title=" Wishlist"><i class="fa fa-heart-o" aria-hidden="true"></i></a></li>
+                              <li class="add_to_cart"><a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id" title="add to cart"><i class="zmdi zmdi-shopping-cart-plus"></i> Buy Now</a></li>
                              
                            </ul>
                         </div>
