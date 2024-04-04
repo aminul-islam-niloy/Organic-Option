@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using OrganicOption.Models;
+using OrganicOption.Models.Rider_Section;
 
 namespace OnlineShop.Models
 {
@@ -28,6 +29,8 @@ namespace OnlineShop.Models
         public string Email { get; set; }
         [Required]
         public string Address { get; set; }
+        public Address CustomerAddress { get; set; }
+
         public bool FreeDelevary { get; set; }
         public decimal DelivaryCharge { get; set; }
 
@@ -37,5 +40,7 @@ namespace OnlineShop.Models
         public virtual ApplicationUser User { get; set; }
         public virtual List<OrderDetails> OrderDetails { get; set; }
         public virtual List<InventoryItem> InventoryItems { get; set; }
+
+        public ICollection<Delivery> Deliveries { get; set; }
     }
 }

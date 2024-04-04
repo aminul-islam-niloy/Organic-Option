@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineShop.Data;
 
@@ -11,9 +12,10 @@ using OnlineShop.Data;
 namespace OrganicOption.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240404174242_RiderModule")]
+    partial class RiderModule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -242,9 +244,6 @@ namespace OrganicOption.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CustomerAddressId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("DelivaryCharge")
                         .HasColumnType("decimal(18,2)");
 
@@ -281,8 +280,6 @@ namespace OrganicOption.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CustomerAddressId");
 
                     b.HasIndex("FarmerShopId");
 
@@ -546,15 +543,6 @@ namespace OrganicOption.Migrations
                     b.Property<double>("Longitude")
                         .HasColumnType("float");
 
-                    b.Property<string>("NID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ShopAddressId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ShopCatagoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ShopName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -568,10 +556,6 @@ namespace OrganicOption.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("FarmerUserId");
-
-                    b.HasIndex("ShopAddressId");
-
-                    b.HasIndex("ShopCatagoryId");
 
                     b.ToTable("FarmerShop");
                 });
@@ -856,10 +840,6 @@ namespace OrganicOption.Migrations
 
             modelBuilder.Entity("OnlineShop.Models.Order", b =>
                 {
-                    b.HasOne("OrganicOption.Models.Address", "CustomerAddress")
-                        .WithMany()
-                        .HasForeignKey("CustomerAddressId");
-
                     b.HasOne("OrganicOption.Models.FarmerShop", null)
                         .WithMany("Orders")
                         .HasForeignKey("FarmerShopId");
@@ -867,8 +847,6 @@ namespace OrganicOption.Migrations
                     b.HasOne("OnlineShop.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
-
-                    b.Navigation("CustomerAddress");
 
                     b.Navigation("User");
                 });
@@ -936,19 +914,7 @@ namespace OrganicOption.Migrations
                         .WithMany()
                         .HasForeignKey("FarmerUserId");
 
-                    b.HasOne("OrganicOption.Models.Address", "ShopAddress")
-                        .WithMany()
-                        .HasForeignKey("ShopAddressId");
-
-                    b.HasOne("OnlineShop.Models.ProductTypes", "ShopCatagory")
-                        .WithMany()
-                        .HasForeignKey("ShopCatagoryId");
-
                     b.Navigation("FarmerUser");
-
-                    b.Navigation("ShopAddress");
-
-                    b.Navigation("ShopCatagory");
                 });
 
             modelBuilder.Entity("OrganicOption.Models.InventoryItem", b =>

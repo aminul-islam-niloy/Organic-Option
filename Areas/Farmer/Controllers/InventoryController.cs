@@ -395,51 +395,21 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
 
 
-        public IActionResult ShowTotalRevenue(int farmerShopId)
-        {
-            var farmerShop = _context.FarmerShop.Find(farmerShopId);
-            if (farmerShop == null)
-            {
-                return NotFound();
-            }
-
-            var totalRevenue = farmerShop.CalculateTotalRevenue();
-            return View(totalRevenue);
-        }
+   
 
         // Action method to find and show the most sold product
-        public IActionResult ShowMostSoldProduct(int farmerShopId)
+        public IActionResult ShowMostSoldProduct()
         {
-            var farmerShop = _context.FarmerShop.Find(farmerShopId);
-            if (farmerShop == null)
-            {
-                return NotFound();
-            }
-
-            var mostSoldProduct = farmerShop.FindMostSoldProduct();
-            return View(mostSoldProduct);
+            return View();
         }
 
         // Action method to show daily sales
     
 
 
-        public IActionResult CashoutRevenue(int farmerShopId, CashoutInterval interval)
+        public IActionResult CashoutRevenue()
         {
-            var farmerShop = _context.FarmerShop.Find(farmerShopId);
-            if (farmerShop == null)
-            {
-                return NotFound();
-            }
-
-            // Calculate revenue for the specified interval
-            decimal revenue = farmerShop.CalculateAndCashoutRevenue(interval);
-
-            // Award bonuses for best-selling shops
-            farmerShop.AwardBonusesForBestSellingShops();
-
-            // Return the remaining revenue after platform fee deduction
-            return View(revenue);
+            return View();
         }
 
 
