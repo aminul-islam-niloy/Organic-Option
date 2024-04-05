@@ -1,37 +1,70 @@
 ﻿@model IEnumerable<OrganicOption.Models.Rider_Section.RiderModel>
+<br />
+<br />
+    <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6">
 
-<h4>My Information</h4>
+        <div class="container-fluid">
+            <div class="row">
+                @foreach (OrganicOption.Models.Rider_Section.RiderModel rider in Model)
+                {
+                    <div class=" mb-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="card-title">@rider.Name</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    <strong>Age:</strong> @rider.Age<br />
+                                    <strong>Phone Number:</strong> @rider.PhoneNumber<br />
+                                    <strong>NID:</strong> @rider.NID<br />
+                                    <strong>Licence:</strong> @rider.DrivingLicense<br />
 
-<div class="row">
-    @foreach (var rider in Model)
-    {
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">@rider.Name</h5>
-                    <p class="card-text">
-                        <strong>Age:</strong> @rider.Age<br />
-                        <strong>Phone Number:</strong> @rider.PhoneNumber<br />
-                        <strong>NID:</strong> @rider.NID<br />
-                        <strong>Licence:</strong> @rider.DrivingLicense<br />
-                        <strong>Address:</strong>
-                        @if (rider.RiderAddress != null)
-                        {
-                            @Html.DisplayFor(modelItem => rider.RiderAddress.House)
+                                    <strong >Address:</strong>
+                                    @if (rider.RiderAddress != null)
+                                    {
+                                        <div style="margin-left:40px">
+                                            <label for="House">House</label>
+                                            <span id="House">@Html.DisplayFor(modelItem => rider.RiderAddress.House)</span><br />
 
-                            @Html.DisplayFor(modelItem => rider.RiderAddress.StreetNo)
-                            @Html.DisplayFor(modelItem => rider.RiderAddress.WardNo)
-                            @Html.DisplayFor(modelItem => rider.RiderAddress.Thana)
-                            @Html.DisplayFor(modelItem => rider.RiderAddress.District)
-                            @Html.DisplayFor(modelItem => rider.RiderAddress.Division)
-                            }
-                        else
-                        {
-                            <div>No address available</div>
-                            }
-                    </p>
-                </div>
+                                            <label for="StreetNo">Street No</label>
+                                            <span id="StreetNo">@Html.DisplayFor(modelItem => rider.RiderAddress.StreetNo)</span><br />
+
+                                            <label for="WardNo">Ward No</label>
+                                            <span id="WardNo">@Html.DisplayFor(modelItem => rider.RiderAddress.WardNo)</span><br />
+
+                                            <label for="Thana">Thana</label>
+                                            <span id="Thana">@Html.DisplayFor(modelItem => rider.RiderAddress.Thana)</span><br />
+
+                                            <label for="District">District</label>
+                                            <span id="District">@Html.DisplayFor(modelItem => rider.RiderAddress.District)</span><br />
+
+                                            <label for="Division">Division</label>
+                                            <span id="Division">@Html.DisplayFor(modelItem => rider.RiderAddress.Division)</span><br />
+                                        </div>
+                                    }
+
+                                    else
+                                    {
+                                        <div>No address available</div>
+                                    }
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <a asp-action="EditRider" asp-area="Rider" asp-controller="Rider" class="btn btn-warning">Edit Rider</a>
+                                <a asp-action="EditShift" asp-area="Rider" asp-controller="Rider" class="btn btn-warning">Active Shift</a>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
-    }
-</div>
+
+
+        </div>
+        <div class="col-lg-3"></div>
+
+
+    </div>
+

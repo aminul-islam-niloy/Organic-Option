@@ -96,7 +96,117 @@ namespace OrganicOption.Areas.Rider.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-      
+
+
+        [HttpGet]
+        public async Task<IActionResult> EditRider()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            var existingRider = await _context.RiderModel
+                   .Include(r => r.RiderAddress)
+                .FirstOrDefaultAsync(r => r.RiderUserId == currentUser.Id);
+
+            if (existingRider == null)
+            {
+                return NotFound();
+            }
+
+            return View(existingRider);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditRider(RiderModel rider)
+        {
+           
+
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            var existingRider = await _context.RiderModel.FirstOrDefaultAsync(r => r.RiderUserId == currentUser.Id);
+
+            if (existingRider == null)
+            {
+                return NotFound();
+            }
+
+            existingRider.Name = rider.Name;
+            existingRider.Age = rider.Age;
+            existingRider.DrivingLicense = rider.DrivingLicense;
+            existingRider.NID = rider.NID;
+            existingRider.PhoneNumber = rider.PhoneNumber;
+            existingRider.RiderAddress = rider.RiderAddress; 
+
+            _context.RiderModel.Update(existingRider);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> EditShift()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            var existingRider = await _context.RiderModel
+                   .Include(r => r.RiderAddress)
+                .FirstOrDefaultAsync(r => r.RiderUserId == currentUser.Id);
+
+            if (existingRider == null)
+            {
+                return NotFound();
+            }
+
+            return View(existingRider);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditShift(RiderModel rider)
+        {
+
+
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            var existingRider = await _context.RiderModel.FirstOrDefaultAsync(r => r.RiderUserId == currentUser.Id);
+
+            if (existingRider == null)
+            {
+                return NotFound();
+            }
+
+            existingRider.Name = rider.Name;
+           
+
+            _context.RiderModel.Update(existingRider);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
+
+
 
         public IActionResult RiderExist()
         {

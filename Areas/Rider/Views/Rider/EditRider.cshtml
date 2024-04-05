@@ -1,0 +1,85 @@
+﻿@model OrganicOption.Models.Rider_Section.RiderModel
+<br />
+<br />
+<div class="row">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
+
+
+<h3>Edit Rider Profile</h3>
+
+<form asp-action="EditRider" method="post" enctype="multipart/form-data">
+    <div class="p-4 rounded border">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Name">Name</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Age">Age</label>
+            <input asp-for="Age" class="form-control" />
+            <span asp-validation-for="Age" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DrivingLicense">Driving License</label>
+            <input asp-for="DrivingLicense" class="form-control" />
+            <span asp-validation-for="DrivingLicense" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="NID">NID</label>
+            <input asp-for="NID" class="form-control" />
+            <span asp-validation-for="NID" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PhoneNumber">Phone Number</label>
+            <input asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+
+                <div class="form-group">
+                    <label>Address</label>
+                    <div>
+                        <label for="RiderAddress_Division">Division</label>
+                        <input type="text" id="RiderAddress_Division" asp-for="RiderAddress.Division" class="form-control" />
+                        <span asp-validation-for="RiderAddress.Division" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <label for="RiderAddress_District">District</label>
+                        <input type="text" id="RiderAddress_District" asp-for="RiderAddress.District" class="form-control" />
+                        <span asp-validation-for="RiderAddress.District" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <label for="RiderAddress_Thana">Thana</label>
+                        <input type="text" id="RiderAddress_Thana" asp-for="RiderAddress.Thana" class="form-control" />
+                        <span asp-validation-for="RiderAddress.Thana" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <label for="RiderAddress_WardNo">Ward No</label>
+                        <input type="text" id="RiderAddress_WardNo" asp-for="RiderAddress.WardNo" class="form-control" />
+                        <span asp-validation-for="RiderAddress.WardNo" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <label for="RiderAddress_StreetNo">Street No</label>
+                        <input type="text" id="RiderAddress_StreetNo" asp-for="RiderAddress.StreetNo" class="form-control" />
+                        <span asp-validation-for="RiderAddress.StreetNo" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <label for="RiderAddress_House">House</label>
+                        <input type="text" id="RiderAddress_House" asp-for="RiderAddress.House" class="form-control" />
+                        <span asp-validation-for="RiderAddress.House" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+        <input type="submit" class="btn btn-primary" value="Save" />
+    </div>
+</form>
+
+    </div>
+</div>
