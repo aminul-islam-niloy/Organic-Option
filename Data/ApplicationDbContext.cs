@@ -30,7 +30,7 @@ namespace OnlineShop.Data
         public DbSet<InventoryItem> InventoryItem { get; set; }
 
         public DbSet<Address> Addresses { get; set; }
-        public DbSet<Rider> Riders { get; set; }
+        public DbSet<RiderModel> RiderModel { get; set; }
         public DbSet<Shift> Shifts { get; set; }
         public DbSet<Delivery> Deliveries { get; set; }
 

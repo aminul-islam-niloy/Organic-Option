@@ -1,0 +1,37 @@
+﻿@model IEnumerable<OrganicOption.Models.Rider_Section.RiderModel>
+
+<h4>My Information</h4>
+
+<div class="row">
+    @foreach (var rider in Model)
+    {
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@rider.Name</h5>
+                    <p class="card-text">
+                        <strong>Age:</strong> @rider.Age<br />
+                        <strong>Phone Number:</strong> @rider.PhoneNumber<br />
+                        <strong>NID:</strong> @rider.NID<br />
+                        <strong>Licence:</strong> @rider.DrivingLicense<br />
+                        <strong>Address:</strong>
+                        @if (rider.RiderAddress != null)
+                        {
+                            @Html.DisplayFor(modelItem => rider.RiderAddress.House)
+
+                            @Html.DisplayFor(modelItem => rider.RiderAddress.StreetNo)
+                            @Html.DisplayFor(modelItem => rider.RiderAddress.WardNo)
+                            @Html.DisplayFor(modelItem => rider.RiderAddress.Thana)
+                            @Html.DisplayFor(modelItem => rider.RiderAddress.District)
+                            @Html.DisplayFor(modelItem => rider.RiderAddress.Division)
+                            }
+                        else
+                        {
+                            <div>No address available</div>
+                            }
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+</div>

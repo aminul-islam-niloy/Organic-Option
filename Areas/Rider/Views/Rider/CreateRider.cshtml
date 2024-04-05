@@ -1,0 +1,138 @@
+﻿@model OrganicOption.Models.Rider_Section.RiderModel
+
+<h3 class="text-info">Create Rider Profile</h3>
+
+<div class="row">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
+        <form asp-action="CreateRider" method="post" enctype="multipart/form-data">
+
+            <div class="p-4 rounded border">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label asp-for="Name"></label>
+                    </div>
+                    <div class="col-lg-5">
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label asp-for="Age"></label>
+                    </div>
+                    <div class="col-lg-5">
+                        <input asp-for="Age" class="form-control" />
+                        <span asp-validation-for="Age" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label asp-for="DrivingLicense"></label>
+                    </div>
+                    <div class="col-lg-5">
+                        <input asp-for="DrivingLicense" class="form-control" />
+                        <span asp-validation-for="DrivingLicense" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label asp-for="NID"></label>
+                    </div>
+                    <div class="col-lg-5">
+                        <input asp-for="NID" class="form-control" />
+                        <span asp-validation-for="NID" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label asp-for="PhoneNumber"></label>
+                    </div>
+                    <div class="col-lg-5">
+                        <input asp-for="PhoneNumber" class="form-control" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" asp-for="RiderAddress.Division" placeholder="Division" class="form-control" />
+                    <input type="text" asp-for="RiderAddress.District" placeholder="District" class="form-control" />
+                    <input type="text" asp-for="RiderAddress.Thana" placeholder="Thana" class="form-control" />
+                    <input type="text" asp-for="RiderAddress.WardNo" placeholder="Ward No" class="form-control" />
+                    <input type="text" asp-for="RiderAddress.StreetNo" placeholder="Street No" class="form-control" />
+                    <input type="text" asp-for="RiderAddress.House" placeholder="House" class="form-control" />
+                    <span asp-validation-for="RiderAddress.Division" class="text-danger"></span>
+                    <span asp-validation-for="RiderAddress.District" class="text-danger"></span>
+                    <span asp-validation-for="RiderAddress.Thana" class="text-danger"></span>
+                    <span asp-validation-for="RiderAddress.WardNo" class="text-danger"></span>
+                    <span asp-validation-for="RiderAddress.StreetNo" class="text-danger"></span>
+                    <span asp-validation-for="RiderAddress.House" class="text-danger"></span>
+                </div>
+@* 
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label asp-for="VehicleType"></label>
+                    </div>
+                    <div class="col-lg-5">
+                        <select asp-for="VehicleType" class="form-control">
+                            <option value="">Select Vehicle Type</option>
+                            @foreach (var item in Enum.GetValues(typeof(OrganicOption.Models.Rider_Section.VehicleType)))
+                            {
+                                <option value="@item">@item</option>
+                            }
+                        </select>
+                        <span asp-validation-for="VehicleType" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label asp-for="BagType"></label>
+                    </div>
+                    <div class="col-lg-5">
+                        <select asp-for="BagType" class="form-control">
+                            <option value="">Select Bag Type</option>
+                            @foreach (var item in Enum.GetValues(typeof(OrganicOption.Models.Rider_Section.BagType)))
+                            {
+                                <option value="@item">@item</option>
+                            }
+                        </select>
+                        <span asp-validation-for="BagType" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label asp-for="RiderStatus"></label>
+                    </div>
+                    <div class="col-lg-5">
+                        <input type="checkbox" asp-for="RiderStatus" />
+                    </div>
+                </div> *@
+
+                <input type="hidden" asp-for="RiderUserId" value="@User.Identity.Name" />
+
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Save" />
+                </div>
+
+            </div>
+            <div class="col-lg-2"></div>
+        </form>
+    </div>
+    <div class="col-lg-3"></div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

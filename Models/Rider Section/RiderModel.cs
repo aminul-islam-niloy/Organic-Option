@@ -1,19 +1,24 @@
-﻿using Stripe;
+﻿using OnlineShop.Models;
+using Stripe;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace OrganicOption.Models.Rider_Section
 {
-    public class Rider
+    public class RiderModel
     {
         public int Id { get; set; }
         [Required]
         [DisplayName("Rider Name")]
+
+        public string RiderUserId { get; set; } // Foreign key to the ApplicationUser
+        public ApplicationUser RiderUser { get; set; } // Navigation property
         public string Name { get; set; }
         [Required]
         [DisplayName("Rider Age")]
         public int Age { get; set; }
+        public bool RiderStatus { get; set; }   
         public string DrivingLicense { get; set; }
         [Required]
         [DisplayName("Rider NID")]
@@ -21,8 +26,6 @@ namespace OrganicOption.Models.Rider_Section
         public int RiderAddressId { get; set; } // Foreign key to RiderAddress
         public Address RiderAddress { get; set; } // Rider's address
         public string Location { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
         [Required]
         [DisplayName("Rider Phone Number")]
         public string PhoneNumber { get; set; }
@@ -36,17 +39,20 @@ namespace OrganicOption.Models.Rider_Section
     public enum VehicleType
     {
         Motorcycle,
-        Car,
         Bicycle,
         Van,
         Truck,
+        Car,
+        Boat,
+        Ship,
         Others
     }
 
     public enum BagType
     {
         MediumCarry,
-        Large
+        Large,
+        Container
     }
 
 }

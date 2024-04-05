@@ -40,6 +40,12 @@
         UserRole = "Farmer";
     }
 
+
+    if (User.IsInRole("Rider"))
+    {
+        UserRole = "Rider";
+    }
+
 }
 
 @inject SignInManager<IdentityUser> SignInManager

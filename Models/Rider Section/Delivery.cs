@@ -13,7 +13,7 @@ namespace OrganicOption.Models.Rider_Section
 
         public OrderCondition OrderCondition { get; set; }
         public int RiderId { get; set; }
-        public Rider Rider { get; set; }
+        public RiderModel Rider { get; set; }
 
         public int OrderId { get; set; }
         public Order Order { get; set; }

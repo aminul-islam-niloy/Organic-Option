@@ -50,6 +50,8 @@
     <Folder Include="Areas\Farmer\Data\" />
     <Folder Include="Areas\Farmer\Models\" />
     <Folder Include="Areas\Identity\Services\" />
+    <Folder Include="Areas\Rider\Data\" />
+    <Folder Include="Areas\Rider\Models\" />
     <Folder Include="Controllers\" />
     <Folder Include="wwwroot\Image\" />
   </ItemGroup>
