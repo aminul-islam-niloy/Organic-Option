@@ -1,0 +1,51 @@
+﻿@model OrganicOption.Models.Rider_Section.RiderModel
+
+<h3>Edit Rider Profile</h3>
+
+<form asp-action="EditShift" method="post" enctype="multipart/form-data">
+    <div class="p-4 rounded border">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        @if (ViewBag.IsInShift)
+        {
+            <div class="form-group row">
+                <div class="col-lg-2">
+                    <label asp-for="VehicleType"></label>
+                </div>
+                <div class="col-lg-5">
+                    <select asp-for="VehicleType" class="form-control">
+                        <option value="">Select Vehicle Type</option>
+                        @foreach (var item in Enum.GetValues(typeof(OrganicOption.Models.Rider_Section.VehicleType)))
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
+                    <span asp-validation-for="VehicleType" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-lg-2">
+                    <label asp-for="BagType"></label>
+                </div>
+                <div class="col-lg-5">
+                    <select asp-for="BagType" class="form-control">
+                        <option value="">Select Bag Type</option>
+                        @foreach (var item in Enum.GetValues(typeof(OrganicOption.Models.Rider_Section.BagType)))
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </select>
+                    <span asp-validation-for="BagType" class="text-danger"></span>
+                </div>
+            </div>
+        }
+        else
+        {
+            <button type="submit" class="btn btn-primary" name="startShift" value="start">Start Shift</button>
+        }
+
+        <input type="hidden" asp-for="RiderUserId" value="@User.Identity.Name" />
+        <input type="submit" class="btn btn-primary" value="Save" />
+    </div>
+</form>

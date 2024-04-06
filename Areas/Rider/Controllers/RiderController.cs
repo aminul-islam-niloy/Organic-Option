@@ -9,6 +9,7 @@ using Microsoft.Extensions.Caching.Memory;
 using OnlineShop.Data;
 using OrganicOption.Models;
 using OrganicOption.Models.Rider_Section;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -164,7 +165,7 @@ namespace OrganicOption.Areas.Rider.Controllers
             }
 
             var existingRider = await _context.RiderModel
-                   .Include(r => r.RiderAddress)
+                .Include(r => r.RiderAddress)
                 .FirstOrDefaultAsync(r => r.RiderUserId == currentUser.Id);
 
             if (existingRider == null)
@@ -172,14 +173,17 @@ namespace OrganicOption.Areas.Rider.Controllers
                 return NotFound();
             }
 
+            // Check if the rider is currently in a shift
+            var currentShift = await _context.Shifts.FirstOrDefaultAsync(s => s.RiderId == existingRider.Id && s.RiderStatus);
+
+            ViewBag.IsInShift = currentShift != null;
+
             return View(existingRider);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditShift(RiderModel rider)
+        public async Task<IActionResult> EditShift(RiderModel rider, string startShift)
         {
-
-
             var currentUser = await _userManager.GetUserAsync(User);
 
             if (currentUser == null)
@@ -194,14 +198,41 @@ namespace OrganicOption.Areas.Rider.Controllers
                 return NotFound();
             }
 
-            existingRider.Name = rider.Name;
-           
+            if (!string.IsNullOrEmpty(startShift))
+            {
+                // Start a new shift
+                var newShift = new Shift
+                {
+                    StartTime = DateTime.Now,
+                    RiderId = existingRider.Id,
+                    RiderStatus = true
+                };
+
+                _context.Shifts.Add(newShift);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                // End the current shift
+                var currentShift = await _context.Shifts.FirstOrDefaultAsync(s => s.RiderId == existingRider.Id && s.RiderStatus);
+
+                if (currentShift != null)
+                {
+                    currentShift.EndTime = DateTime.Now;
+                    currentShift.RiderStatus = true;
+                    _context.Shifts.Update(currentShift);
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+      
 
             _context.RiderModel.Update(existingRider);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
+
 
 
 
