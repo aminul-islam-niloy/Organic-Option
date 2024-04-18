@@ -38,6 +38,13 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+var configuration = builder.Configuration;
+builder.Services.AddAuthentication().AddGoogle(options =>
+{
+    options.ClientId = configuration["Authentication:Google:ClientId"];
+    options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+});
+
 // Configure SMTP settings
 builder.Services.Configure<SMTPConfigModel>(builder.Configuration.GetSection("SMTPConfig"));
 

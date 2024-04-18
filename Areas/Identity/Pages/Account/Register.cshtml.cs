@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -47,6 +48,8 @@ namespace OnlineShop.Areas.Identity.Pages.Account
 
         public string ReturnUrl { get; set; }
 
+        public IList<AuthenticationScheme> ExternalLogins { get; set; }
+
         public class InputModel
         {
             [Required]
@@ -71,6 +74,8 @@ namespace OnlineShop.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+
         }
 
         public void OnGet(string returnUrl = null)
