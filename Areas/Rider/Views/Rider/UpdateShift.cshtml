@@ -1,0 +1,11 @@
+﻿@model OrganicOption.Models.Rider_Section.RiderModel
+
+<h3>Edit Rider Profile</h3>
+
+<form asp-action="UpdateShift" method="post" enctype="multipart/form-data">
+    <div class="p-4 rounded border">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="RiderUserId" value="@User.Identity.Name" />
+        <input type="submit" class="btn btn-primary" value="Finish Session" />
+    </div>
+</form>

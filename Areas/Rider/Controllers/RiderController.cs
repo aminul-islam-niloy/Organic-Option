@@ -181,46 +181,6 @@ namespace OrganicOption.Areas.Rider.Controllers
             return View(existingRider);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> EditShift(RiderModel rider, string startShift)
-        //{
-        //    var currentUser = await _userManager.GetUserAsync(User);
-
-        //    if (currentUser == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var existingRider = await _context.RiderModel.FirstOrDefaultAsync(r => r.RiderUserId == currentUser.Id);
-
-        //    if (existingRider == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //        // Start a new shift
-        //        var newShift = new Shift
-        //        {
-        //            StartTime = DateTime.Now,
-        //            RiderId = existingRider.Id,
-        //            RiderStatus = true
-        //        };
-
-
-        //        existingRider.RiderStatus = true;
-        //        existingRider.BagType = rider.BagType;
-        //        existingRider.VehicleType = rider.VehicleType;
-
-        //        _context.Shifts.Add(newShift);
-        //        await _context.SaveChangesAsync();
-
-
-        //            _context.RiderModel.Update(existingRider);
-        //              await _context.SaveChangesAsync();
-
-        //    return RedirectToAction(nameof(Index));
-        //}
-
 
         [HttpPost]
         public async Task<IActionResult> EditShift(RiderModel rider)
@@ -260,19 +220,17 @@ namespace OrganicOption.Areas.Rider.Controllers
                     _context.Shifts.Add(newShift);
                     await _context.SaveChangesAsync();
 
-                    // Update rider details after saving shift
                     _context.RiderModel.Update(existingRider);
                     await _context.SaveChangesAsync();
 
-                    // Commit transaction if everything is successful
+          
                     await transaction.CommitAsync();
                 }
                 catch (Exception)
                 {
-                    // Rollback the transaction if there is an exception
+                  
                     await transaction.RollbackAsync();
-                    // You may want to log the exception or handle it appropriately
-                    // For simplicity, I'm returning a generic error message here
+                    
                     ModelState.AddModelError(string.Empty, "Failed to start shift. Please try again.");
                     return View(existingRider); // Return to the view to display the error
                 }
@@ -281,7 +239,94 @@ namespace OrganicOption.Areas.Rider.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+    
 
+    [HttpGet]
+        public async Task<IActionResult> UpdateShift()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            var existingRider = await _context.RiderModel
+                .Include(r => r.RiderAddress)
+                .FirstOrDefaultAsync(r => r.RiderUserId == currentUser.Id);
+
+            if (existingRider == null)
+            {
+                return NotFound();
+            }
+
+            // Check if the rider is currently in a shift
+            var currentShift = await _context.Shifts.FirstOrDefaultAsync(s => s.RiderId == existingRider.Id && s.RiderStatus);
+
+            ViewBag.IsInShift = currentShift != null;
+
+            return View(existingRider);
+        }
+
+    
+
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateShift(RiderModel rider)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            var existingRider = await _context.RiderModel.FirstOrDefaultAsync(r => r.RiderUserId == currentUser.Id);
+
+            if (existingRider == null)
+            {
+                return NotFound();
+            }
+
+            // Start a new shift
+            var endShift = new Shift
+            {
+                EndTime = DateTime.Now,
+                RiderId = existingRider.Id,
+                RiderStatus = false
+            };
+
+            // Update rider details
+            existingRider.RiderStatus = false;
+            existingRider.BagType = rider.BagType;
+            existingRider.VehicleType = rider.VehicleType;
+
+            // Save changes to shift and rider
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    _context.Shifts.Add(endShift);
+                    await _context.SaveChangesAsync();
+
+                    _context.RiderModel.Update(existingRider);
+                    await _context.SaveChangesAsync();
+
+        
+                    await transaction.CommitAsync();
+                }
+                catch (Exception)
+                {
+                    // Rollback the transaction if there is an exception
+                    await transaction.RollbackAsync();
+
+                    ModelState.AddModelError(string.Empty, "Failed to start shift. Please try again.");
+                    return View(existingRider); 
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
 
 
 
