@@ -31,10 +31,12 @@ namespace OnlineShop.Models
 
     public enum OrderCondition
     {
-        Delivered,
+        Onlist,
+        OrderTaken,
         Processing,
-        OrderTaken
-        // Add more order conditions as needed
+        OnDelivary,
+        Delivered,
+
     }
 
     public class OrderDetails
