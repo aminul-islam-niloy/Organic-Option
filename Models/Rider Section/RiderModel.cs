@@ -19,6 +19,7 @@ namespace OrganicOption.Models.Rider_Section
         [DisplayName("Rider Age")]
         public int Age { get; set; }
         public bool RiderStatus { get; set; }   
+        public bool OnDeliaryByOffer { get; set; }   
         public string DrivingLicense { get; set; }
         [Required]
         [DisplayName("Rider NID")]

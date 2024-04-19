@@ -11,7 +11,10 @@ namespace OrganicOption.Models.Rider_Section
         public string CustomerAddress { get; set; }
         public string DelivyAddress { get; set; }
 
+
         public OrderCondition OrderCondition { get; set; }
+        public PaymentCondition PaymentCondition { get; set; }
+        public decimal PayableMoney { get; set; }
         public int RiderId { get; set; }
         public RiderModel Rider { get; set; }
 

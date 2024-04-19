@@ -1,0 +1,36 @@
+﻿@model List<OnlineShop.Models.Order>
+
+<h2>Orders On List</h2>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Order No</th>
+                <th>Name</th>
+                <th>Phone No</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Order Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.OrderNo</td>
+                    <td>@order.Name</td>
+                    <td>@order.PhoneNo</td>
+                    <td>@order.Email</td>
+                    <td>@order.Address</td>
+                    <td>@order.OrderDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No orders are currently on the list.</p>
+}

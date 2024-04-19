@@ -33,7 +33,9 @@ namespace OnlineShop.Models
 
         public bool FreeDelevary { get; set; }
         public decimal DelivaryCharge { get; set; }
-
+        public bool IsOfferedToRider { get; set; }
+        public PaymentCondition PaymentCondition { get; set; }
+        public OrderCondition OrderCondition { get; set; }
 
         public DateTime OrderDate { get; set; }
         public string UserId { get; set; } // Representing the user who placed the order
