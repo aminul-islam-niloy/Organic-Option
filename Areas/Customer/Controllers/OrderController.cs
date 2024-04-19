@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 using OrganicOption.Models;
 using OrganicOption.Models.Rider_Section;
+using OnlineShop.Service;
 
 namespace OnlineShop.Areas.Customer.Controllers
 {
@@ -522,43 +523,7 @@ namespace OnlineShop.Areas.Customer.Controllers
 
 
 
-        //[AllowAnonymous]
-        //public async Task<IActionResult> MyOffer()
-        //{
-        //    var offer = await GetOfferForRider();
-
-        //    if (offer != null)
-        //    {
-        //        // Check if the offer has expired
-        //        if (offer.OfferStartTime.AddMinutes(1) < DateTime.Now)
-        //        {
-        //            // If expired, move to the next offer
-        //            await MoveToNextOffer();
-        //            // Wait for 1 second to ensure the next offer becomes visible
-        //            await Task.Delay(1000);
-        //            // Redirect to the same action after moving to the next offer
-        //            return RedirectToAction(nameof(MyOffer));
-        //        }
-
-        //        var viewModel = new RiderOfferViewModel
-        //        {
-        //            OrderId = offer.OrderId,
-        //            ProductDetails = offer.ProductDetails,
-        //            CustomerAddress = offer.CustomerAddress,
-        //            DeliveryTime = offer.DeliveryTime,
-        //            Revenue = offer.Revenue,
-        //            TimeRemaining = (offer.OfferStartTime.AddMinutes(1) - DateTime.Now)
-        //        };
-
-        //        return View(viewModel);
-        //    }
-        //    else
-        //    {
-        //        return Content("No offer available.");
-        //    }
-        //}
-
-
+    
 
         [AllowAnonymous]
         public async Task<IActionResult> MyOffer()
@@ -591,53 +556,7 @@ namespace OnlineShop.Areas.Customer.Controllers
         // Define a static variable to keep track of the index of the next order
         private static int nextOrderIndex = 0;
 
-        //[AllowAnonymous]
-        //private async Task<RiderOfferViewModel> GetOfferForRider()
-        //{
-        //    var availableRider = await FindAvailableRider();
-
-        //    if (availableRider != null)
-        //    {
-        //        var ordersOnList = await _db.Orders
-        //            .Include(o => o.OrderDetails)
-        //            .Where(o => o.OrderDetails.Any(od => od.OrderCondition == OrderCondition.Onlist) && !o.IsOfferedToRider)
-        //            .OrderBy(o => o.Id) // Ensure order is fetched in ascending order of ID
-        //            .ToListAsync();
-
-        //        // Check if there are any orders available
-        //        if (ordersOnList.Count > 0)
-        //        {
-        //            // Get the order based on the nextOrderIndex
-        //            var order = ordersOnList.ElementAtOrDefault(nextOrderIndex);
-
-        //            if (order != null)
-        //            {
-        //                var productDetails = order.OrderDetails
-        //                    ?.Where(od => od.Product != null)
-        //                    .Select(od => od.Product.Name)
-        //                    .FirstOrDefault();
-
-        //                var offerViewModel = new RiderOfferViewModel
-        //                {
-        //                    OrderId = order.Id,
-        //                    ProductDetails = productDetails,
-        //                    CustomerAddress = order.Address,
-        //                    DeliveryTime = EstimateDeliveryTime(order),
-        //                    Revenue = CalculateEarnings(order),
-        //                    OfferStartTime = DateTime.Now // Store the offer start time
-        //                };
-
-        //                // Increment the nextOrderIndex for the next call
-        //                nextOrderIndex = (nextOrderIndex + 1) % ordersOnList.Count;
-
-        //                return offerViewModel;
-        //            }
-        //        }
-        //    }
-
-        //    return null;
-        //}
-
+        
 
 
         [AllowAnonymous]
@@ -698,7 +617,7 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
 
-        private async Task CreateDeliveryForAcceptedOrder(Order order, RiderModel rider)
+        private async Task AcceptedOrder(Order order, RiderModel rider)
         {
             decimal totalOrderAmount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
 
@@ -719,6 +638,94 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             order.IsOfferedToRider = true;
             await _db.SaveChangesAsync();
+        }
+
+
+        //private async Task CreateDeliveryForAcceptedOrder(RiderOfferViewModel offer, Order order)
+        //{
+        //    // Get the current user's ID (rider's ID)
+        //    var riderId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        //    // Check if the rider already exists in the database
+        //    var existingRider = await _db.RiderModel.FirstOrDefaultAsync(rider => rider.RiderUserId == riderId);
+
+        //    decimal totalOrderAmount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
+
+        //    var delivery = new Delivery
+        //    {
+        //        OrderId = offer.OrderId,
+        //        RiderId = existingRider.Id, // Assign the rider's ID from the existing rider record
+        //        OrderCondition = OrderCondition.OrderTaken,
+
+        //        PayableMoney = order.PaymentCondition == PaymentCondition.Paid ? 0 : totalOrderAmount,
+        //        ProductDetails = string.Join(", ", offer.ProductDetails.Select(product => product.ProductName)),
+        //        DelivyAddress = offer.CustomerAddress,
+
+        //        ShopAddress = offer.ShopAddress,
+
+        //        ShopName = offer.ShopName,
+        //        ShopContract = offer.ShopContract
+        //    };
+
+        //    _db.Deliveries.Add(delivery);
+        //    await _db.SaveChangesAsync();
+
+        //    //return View("DeliveryDetails", delivery);
+        //}
+
+        [AllowAnonymous]
+        public async Task<IActionResult> CreateDeliveryForAcceptedOrder(RiderOfferViewModel offer, Order order)
+        {
+            // Get the current user's ID (rider's ID)
+            var riderId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Check if the rider already exists in the database
+            var existingRider = await _db.RiderModel.FirstOrDefaultAsync(rider => rider.RiderUserId == riderId);
+
+            decimal totalOrderAmount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
+
+            if (offer.ProductDetails != null && offer.ProductDetails.Any())
+            {
+                var delivery = new Delivery
+                {
+                    OrderId = offer.OrderId,
+                    RiderId = existingRider.Id, // Assign the rider's ID from the existing rider record
+                    OrderCondition = OrderCondition.OrderTaken,
+                    PayableMoney = order.PaymentCondition == PaymentCondition.Paid ? 0 : totalOrderAmount,
+                    ProductDetails = string.Join(", ", offer.ProductDetails.Select(product => product.ProductName)),
+                    DelivyAddress = offer.CustomerAddress,
+                    ShopAddress = offer.ShopAddress,
+                    ShopName = offer.ShopName,
+                    ShopContract = offer.ShopContract
+                };
+
+                _db.Deliveries.Add(delivery);
+                await _db.SaveChangesAsync();
+
+                // Return the view with the delivery details
+                return View("DeliveryDetails", delivery);
+            }
+            else
+            {
+                
+                return View("Error"); 
+            }
+           
+        }
+
+
+
+
+
+
+
+
+        private async Task<RiderModel> FindAvailableRider()
+        {
+            var availableRider = await _db.RiderModel
+                .FirstOrDefaultAsync(r => r.RiderStatus && !r.OnDeliaryByOffer);
+
+            return availableRider;
         }
 
 
@@ -757,134 +764,62 @@ namespace OnlineShop.Areas.Customer.Controllers
 
 
 
+        //FarmerShop
 
-
-        //public async Task<IActionResult> OfferOrdersToRider()
-        //{
-        //    var ordersOnList = await _db.Orders
-        //             .Include(o => o.OrderDetails)
-        //             .Where(o => o.OrderDetails.Any(od => od.OrderCondition == OrderCondition.Onlist))
-        //             .OrderBy(o => o.OrderDate)
-        //             .ToListAsync();
-
-
-        //    // Logic to offer orders to available riders
-        //    foreach (var order in ordersOnList)
-        //    {
-        //        // Offer the order to a rider (you need to implement this logic)
-        //        bool isOfferAccepted = await OfferOrderToRider(order);
-
-        //        // If the offer is accepted, mark the order as offered and exit the loop
-        //        if (isOfferAccepted)
-        //        {
-        //            order.IsOfferedToRider = true;
-
-
-        //            await _db.SaveChangesAsync();
-        //            break;
-        //        }
-        //    }
-
-        //    return RedirectToAction(nameof(DisplayOrdersOnList));
-        //}
-
-        //private async Task<bool> OfferOrderToRider(Order order)
-        //{
-        //    var availableRider = await FindAvailableRider();
-
-        //    if (availableRider != null)
-
-
-        //    {
-
-        //        decimal totalOrderAmount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
-        //        // Create a new delivery entry to associate the order with the rider
-        //        var delivery = new Delivery
-        //        {
-        //            OrderId = order.Id,
-        //            RiderId = availableRider.Id,
-        //            OrderCondition = OrderCondition.OrderTaken,
-        //            ProductDetails = order.OrderDetails.Select(od => od.Product.Name).FirstOrDefault(),
-        //            CustomerAddress = order.Address,
-        //            DelivyAddress = availableRider.Location,
-        //            FarmerShopId = order.FarmerShopId,
-        //            PayableMoney = order.PaymentCondition == PaymentCondition.Paid ? 0 : totalOrderAmount,
-
-
-        //        };
-
-        //        // Add the delivery to the database
-        //        _db.Deliveries.Add(delivery);
-        //        await _db.SaveChangesAsync();
-
-        //        // Mark the order as offered to a rider
-        //        order.IsOfferedToRider = true;
-        //        await _db.SaveChangesAsync();
-
-        //        return true; // Offer accepted by the rider
-        //    }
-        //    else
-        //    {
-        //        return false; // No available rider found
-        //    }
-        //}
-
-
-        private async Task<RiderModel> FindAvailableRider()
+        // Method to notify FarmerShop when Rider accepts an offer
+        private async Task NotifyFarmerShop(RiderOfferViewModel offer, Order order)
         {
-            var availableRider = await _db.RiderModel
-                .FirstOrDefaultAsync(r => r.RiderStatus && !r.OnDeliaryByOffer);
+            
 
-            return availableRider;
+            if (order != null)
+            {
+                // Implement notification logic here to notify the FarmerShop
+                // You can use email, SMS, or push notifications to inform the FarmerShop
+                // Example: Send an email to the FarmerShop's contact email address
+                //var emailService = new EmailService();
+                //var message = $"Order {orderId} has been accepted by a rider. Please prepare the products for delivery.";
+                //await emailService.SendEmailAsync(order.FarmerShop.ContactEmail, "Order Accepted Notification", message);
+            }
+        }
+
+        // Method to update FarmerShop revenue when products are released
+        private async Task UpdateFarmerShopRevenue(int orderId)
+        {
+            var order = await _db.Orders
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+
+            if (order != null)
+            {
+                decimal totalOrderPrice = order.OrderDetails.Sum(od => od.Price * od.Quantity);
+
+                // Retrieve the FarmerShop associated with the order
+                var farmerShop = order.OrderDetails.FirstOrDefault()?.Product?.FarmerShop;
+
+                if (farmerShop != null)
+                {
+                    // Update FarmerShop's revenue
+                    farmerShop.ShopRevenue += totalOrderPrice;
+
+                    // Save changes to the database
+                    await _db.SaveChangesAsync();
+                }
+                else
+                {
+                    // Handle the case where FarmerShop is not found
+                }
+            }
+            else
+            {
+                // Handle the case where the order is not found
+            }
         }
 
 
-        //public async Task<IActionResult> RiderAcceptOrder(int orderId)
-        //{
-        //    var order = await _db.Orders
-        //        .Include(o => o.OrderDetails)
-        //        .FirstOrDefaultAsync(o => o.Id == orderId && o.OrderCondition == OrderCondition.Onlist && o.IsOfferedToRider);
 
-        //    if (order != null)
-        //    {
-        //        // Calculate earnings and time for the rider to deliver the order
-        //        decimal earnings = CalculateEarnings(order);
-        //        TimeSpan deliveryTime = EstimateDeliveryTime(order);
-
-        //        // Proceed with preparing the products for release to the rider
-        //        await PrepareProductsForRelease(order);
-
-        //        // Return view showing earnings and delivery time to the rider
-        //        return View("RiderAcceptOrder", new RiderAcceptOrderViewModel { Order = order, Earnings = earnings, DeliveryTime = deliveryTime });
-        //    }
-        //    else
-        //    {
-        //        return NotFound();
-        //    }
-        //}
-
-        //private decimal CalculateEarnings(Order order)
-        //{
-        //    // Logic to calculate earnings based on order details
-        //    // You need to implement this logic according to your system's requirements
-        //}
-
-        //private TimeSpan EstimateDeliveryTime(Order order)
-        //{
-        //    // Logic to estimate delivery time based on order details and rider's location
-        //    // You need to implement this logic according to your system's requirements
-        //}
-
-        //private async Task PrepareProductsForRelease(Order order)
-        //{
-        //    // Logic to prepare products for release to the rider
-        //    // You need to implement this logic according to your system's requirements
-        //}
-
-
-
-
-
+     
+     
 
 
     }

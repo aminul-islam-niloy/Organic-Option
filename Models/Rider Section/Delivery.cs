@@ -23,5 +23,10 @@ namespace OrganicOption.Models.Rider_Section
 
         public int FarmerShopId { get; set; }
         public FarmerShop FarmerShop { get; set; }
+
+        public string ShopAddress { get; set; }    
+        public string ShopName { get; set; }    
+        public string ShopContract { get; set; }
+       
     }
 }

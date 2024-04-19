@@ -31,6 +31,7 @@ namespace OrganicOption.Models.Rider_Section
         [DisplayName("Rider Phone Number")]
         public string PhoneNumber { get; set; }
         public decimal Revenue { get; set; }
+        public decimal RiderDue { get; set; }
         public VehicleType VehicleType { get; set; }
         public BagType BagType { get; set; }
         public ICollection<Shift> Shifts { get; set; }

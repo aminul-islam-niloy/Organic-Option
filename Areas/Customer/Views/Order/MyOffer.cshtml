@@ -32,7 +32,8 @@
                 <p><strong>Time Remaining:</strong> @Model.TimeRemaining.ToString("mm':'ss")</p>
                 <hr />
                 <div class="text-center">
-                    <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("AcceptOffer", "Order")'">Accept Offer</button>
+@*                     <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("CreateDeliveryForAcceptedOrder", "Order")'">Accept Offer</button> *@
+                    <a asp-area="Customer" asp-controller="Order" asp-action="CreateDeliveryForAcceptedOrder" class="btn btn-primary">Accept Offer</a>
                     <button type="button" class="btn btn-secondary" onclick="window.location.reload(true)">Next Offer</button>
                 </div>
             </div>
