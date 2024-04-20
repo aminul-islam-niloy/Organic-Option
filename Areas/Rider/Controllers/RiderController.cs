@@ -225,6 +225,9 @@ namespace OrganicOption.Areas.Rider.Controllers
 
           
                     await transaction.CommitAsync();
+
+                    //return RedirectToAction(nameof(MyOffer));
+
                 }
                 catch (Exception)
                 {
