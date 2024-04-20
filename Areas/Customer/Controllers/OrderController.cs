@@ -523,12 +523,14 @@ namespace OnlineShop.Areas.Customer.Controllers
 
 
 
-    
+
 
         [AllowAnonymous]
         public async Task<IActionResult> MyOffer()
         {
             var offer = await GetOfferForRider();
+
+            //HttpContext.Session.Set("OfferData", offer);
 
             if (offer != null)
             {
@@ -544,6 +546,8 @@ namespace OnlineShop.Areas.Customer.Controllers
                     TimeRemaining = (offer.OfferStartTime.AddMinutes(1) - DateTime.Now)
                 };
 
+                HttpContext.Session.Set("OfferData", viewModel);
+
                 return View(viewModel);
             }
             else
@@ -556,7 +560,7 @@ namespace OnlineShop.Areas.Customer.Controllers
         // Define a static variable to keep track of the index of the next order
         private static int nextOrderIndex = 0;
 
-        
+
 
 
         [AllowAnonymous]
@@ -590,17 +594,17 @@ namespace OnlineShop.Areas.Customer.Controllers
                             ShopName = od.Product.FarmerShop.ShopName,
                             ShopContact = od.Product.FarmerShop.ContractInfo,
                             Quantity = od.Quantity,
-                          
+
                             ShopAddress = od.Product.FarmerShop.ShopAddress,
-                            
+
                         }).ToList();
 
                         var offerViewModel = new RiderOfferViewModel
                         {
                             OrderId = order.Id,
                             CustomerAddress = order.Address,
-                             DeliveryTime = EstimateDeliveryTime(order),
-                             Revenue = CalculateEarnings(order),
+                            DeliveryTime = EstimateDeliveryTime(order),
+                            Revenue = CalculateEarnings(order),
                             ProductDetails = productDetails,
                             OfferStartTime = DateTime.Now // Store the offer start time
                         };
@@ -630,7 +634,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                 ProductDetails = order.OrderDetails.Select(od => od.Product.Name).FirstOrDefault(),
                 CustomerAddress = order.Address,
                 DelivyAddress = rider.Location,
-               
+
             };
 
             _db.Deliveries.Add(delivery);
@@ -674,7 +678,7 @@ namespace OnlineShop.Areas.Customer.Controllers
         //}
 
         [AllowAnonymous]
-        public async Task<IActionResult> CreateDeliveryForAcceptedOrder(RiderOfferViewModel offer, Order order)
+        public async Task<IActionResult> CreateDeliveryForAcceptedOrder()
         {
             // Get the current user's ID (rider's ID)
             var riderId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -682,36 +686,59 @@ namespace OnlineShop.Areas.Customer.Controllers
             // Check if the rider already exists in the database
             var existingRider = await _db.RiderModel.FirstOrDefaultAsync(rider => rider.RiderUserId == riderId);
 
-            decimal totalOrderAmount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
+            // Retrieve offer data from session
+            var offer = HttpContext.Session.Get<RiderOfferViewModel>("OfferData");
 
-            if (offer.ProductDetails != null && offer.ProductDetails.Any())
+            if (offer != null)
             {
+                var order = await _db.Orders
+    .Include(o => o.OrderDetails)
+        .ThenInclude(od => od.Product) // Include product information
+            .ThenInclude(p => p.FarmerShop) // Include shop information
+    .FirstOrDefaultAsync(o => o.Id == offer.OrderId);
+
+
+
+                decimal totalOrderAmount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
                 var delivery = new Delivery
                 {
                     OrderId = offer.OrderId,
-                    RiderId = existingRider.Id, // Assign the rider's ID from the existing rider record
+                    RiderId = existingRider.Id,
                     OrderCondition = OrderCondition.OrderTaken,
                     PayableMoney = order.PaymentCondition == PaymentCondition.Paid ? 0 : totalOrderAmount,
                     ProductDetails = string.Join(", ", offer.ProductDetails.Select(product => product.ProductName)),
-                    DelivyAddress = offer.CustomerAddress,
+                    CustomerAddress = offer.CustomerAddress, // Use offer.CustomerAddress for delivery address
+                    DelivyAddress = offer.CustomerAddress,   // Use offer.CustomerAddress for delivery address
                     ShopAddress = offer.ShopAddress,
                     ShopName = offer.ShopName,
                     ShopContract = offer.ShopContract
                 };
 
-                _db.Deliveries.Add(delivery);
-                await _db.SaveChangesAsync();
 
-                // Return the view with the delivery details
-                return View("DeliveryDetails", delivery);
+                try
+                {
+                    _db.Deliveries.Add(delivery);
+                    await _db.SaveChangesAsync();
+
+                    // Remove offer data from session after successful delivery creation
+                    HttpContext.Session.Remove("OfferData");
+
+                    // Return the view with the delivery details
+                    return View("DeliveryDetails", delivery);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                    return View("Error");
+                }
             }
             else
             {
-                
-                return View("Error"); 
+                // Handle case when offer data is not available
+                return View("Error");
             }
-           
         }
+
 
 
 
@@ -747,7 +774,8 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             decimal deliveryCharge = order.DelivaryCharge; // Assuming DelivaryCharge is the delivery charge for the order
 
-            if (deliveryCharge < 50) {
+            if (deliveryCharge < 50)
+            {
                 deliveryCharge = 70;
             }
 
@@ -769,7 +797,7 @@ namespace OnlineShop.Areas.Customer.Controllers
         // Method to notify FarmerShop when Rider accepts an offer
         private async Task NotifyFarmerShop(RiderOfferViewModel offer, Order order)
         {
-            
+
 
             if (order != null)
             {
@@ -818,8 +846,8 @@ namespace OnlineShop.Areas.Customer.Controllers
 
 
 
-     
-     
+
+
 
 
     }

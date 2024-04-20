@@ -16,13 +16,13 @@ namespace OrganicOption.Models.Rider_Section
         public PaymentCondition PaymentCondition { get; set; }
         public decimal PayableMoney { get; set; }
         public int RiderId { get; set; }
-        public RiderModel Rider { get; set; }
+        //public RiderModel Rider { get; set; }
 
         public int OrderId { get; set; }
         public Order Order { get; set; }
 
-        public int FarmerShopId { get; set; }
-        public FarmerShop FarmerShop { get; set; }
+        //public int FarmerShopId { get; set; }
+        //public FarmerShop FarmerShop { get; set; }
 
         public string ShopAddress { get; set; }    
         public string ShopName { get; set; }    
