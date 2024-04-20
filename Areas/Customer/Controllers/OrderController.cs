@@ -508,7 +508,7 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
 
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DisplayOrdersOnList()
         {
 
@@ -525,7 +525,7 @@ namespace OnlineShop.Areas.Customer.Controllers
 
 
 
-        [AllowAnonymous]
+        [Authorize(Roles = "Rider")]
         public async Task<IActionResult> MyOffer()
         {
             var offer = await GetOfferForRider();
@@ -563,7 +563,7 @@ namespace OnlineShop.Areas.Customer.Controllers
 
 
 
-        [AllowAnonymous]
+        [Authorize(Roles = "Rider")]
         private async Task<RiderOfferViewModel> GetOfferForRider()
         {
             var availableRider = await FindAvailableRider();
@@ -620,7 +620,9 @@ namespace OnlineShop.Areas.Customer.Controllers
             return null;
         }
 
+        //not used
 
+        [Authorize(Roles = "Rider")]
         private async Task AcceptedOrder(Order order, RiderModel rider)
         {
             decimal totalOrderAmount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
@@ -645,39 +647,8 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
 
-        //private async Task CreateDeliveryForAcceptedOrder(RiderOfferViewModel offer, Order order)
-        //{
-        //    // Get the current user's ID (rider's ID)
-        //    var riderId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        //    // Check if the rider already exists in the database
-        //    var existingRider = await _db.RiderModel.FirstOrDefaultAsync(rider => rider.RiderUserId == riderId);
-
-        //    decimal totalOrderAmount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
-
-        //    var delivery = new Delivery
-        //    {
-        //        OrderId = offer.OrderId,
-        //        RiderId = existingRider.Id, // Assign the rider's ID from the existing rider record
-        //        OrderCondition = OrderCondition.OrderTaken,
-
-        //        PayableMoney = order.PaymentCondition == PaymentCondition.Paid ? 0 : totalOrderAmount,
-        //        ProductDetails = string.Join(", ", offer.ProductDetails.Select(product => product.ProductName)),
-        //        DelivyAddress = offer.CustomerAddress,
-
-        //        ShopAddress = offer.ShopAddress,
-
-        //        ShopName = offer.ShopName,
-        //        ShopContract = offer.ShopContract
-        //    };
-
-        //    _db.Deliveries.Add(delivery);
-        //    await _db.SaveChangesAsync();
-
-        //    //return View("DeliveryDetails", delivery);
-        //}
-
-        [AllowAnonymous]
+        [Authorize(Roles = "Rider")]
         public async Task<IActionResult> CreateDeliveryForAcceptedOrder()
         {
             // Get the current user's ID (rider's ID)
@@ -742,11 +713,6 @@ namespace OnlineShop.Areas.Customer.Controllers
 
 
 
-
-
-
-
-
         private async Task<RiderModel> FindAvailableRider()
         {
             var availableRider = await _db.RiderModel
@@ -754,7 +720,6 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             return availableRider;
         }
-
 
 
 
