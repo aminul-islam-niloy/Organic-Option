@@ -1,4 +1,4 @@
-﻿﻿@using System.Net.Http
+﻿@using System.Net.Http
 @using OnlineShop.Session
 @using Microsoft.AspNetCore.Http
 
@@ -12,126 +12,64 @@
         products = new List<Products>();
     }
     count = products.Count();
-
 }
-
 
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
-
 @inject UserManager<IdentityUser> UserManager
 
 @{
     string userId = UserManager.GetUserId(User);
 }
 
-
 <!DOCTYPE html>
 <html>
 <head>
-
     <meta charset="utf-8" />
-    @*     <meta name="viewport" content="width=device-width, initial-scale=1.0" /> *@
     <title>@ViewData["Title"] - Organic Option</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" integrity="sha384-XxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css" />
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
-
-
-
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Favicon -->
-    @*     <link rel="shortcut icon" type="image/x-icon" href="~/img/favicon.ico"> *@
-
-    <!-- CSS
-    ========================= -->
-    <!-- Plugins CSS -->
-    <link rel="stylesheet" href="~/css/plugins.css">
-
-    <!-- Main Style CSS -->
-    <link rel="stylesheet" href="~/css/style.css">
-
-
-
-    <environment include="Development">
-        <link rel="stylesheet" href="~/css/plugins.css">
-
-        <!-- Main Style CSS -->
-        <link rel="stylesheet" href="~/css/style.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css" />
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/style.css" />
-        <script src="https://kit.fontawesome.com/238e4a8eca.js" crossorigin="anonymous"></script>
-    </environment>
-
-    <environment exclude="Development">
-        <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css" />
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css" *@
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/css/plugins.css">
-
-        <!-- Main Style CSS -->
-        <link rel="stylesheet" href="~/css/style.css">
-        <script src="https://kit.fontawesome.com/238e4a8eca.js" crossorigin="anonymous"></script>
-    </environment>
-
+    <link rel="stylesheet" href="~/css/plugins.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <script src="https://kit.fontawesome.com/238e4a8eca.js" crossorigin="anonymous"></script>
     <style>
         .error {
             color: red;
         }
     </style>
-
 </head>
 <body>
 
     <header class="header_area">
         <div class="header_top">
             <div class="container">
-                <div class="row ">
+                <div class="row">
                     <div class="col-lg-4">
-
                         <div class="top_right text-right">
                             <ul>
-                                <li><a asp-area="" asp-controller="Home" asp-action="Index">  Organic Option </a></li>
+                                <li><a asp-area="" asp-controller="Home" asp-action="Index">Organic Option</a></li>
                                 @if (userRole == "SuperAdmin")
                                 {
-
                                     <li><a asp-area="Admin" asp-controller="Role" asp-action="Index" class="nav-link">Role User</a></li>
                                 }
                                 @if (userRole == "Admin")
                                 {
-
-                                    <li>
-                                        <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="nav-link">Products</a>
-                                    </li>
-
+                                    <li><a asp-area="Admin" asp-controller="Products" asp-action="Index" class="nav-link">Products</a></li>
                                 }
-                                 @if (userRole == "Farmer")
+                                @if (userRole == "Farmer")
                                 {
-                                      <li>
-                                        <a asp-area="Farmer"   asp-controller="FarmerShop" asp-action="Index" class="nav-link">Manage Shop</a>
-                                    </li>
-                                
+                                    <li><a asp-area="Farmer" asp-controller="FarmerShop" asp-action="Index" class="nav-link">Manage Shop</a></li>
                                 }
-
                                 @if (userRole == "Customer")
                                 {
                                     <li><a asp-area="Customer" asp-controller="Order" asp-action="UserOrders"><i class="fa-solid fa-suitcase"></i> My Orders</a></li>
                                 }
-
-                                <li class="nav-item"> <a asp-area="Customer" asp-controller="Home" asp-action="Cart"><i class="fas fa-shopping-cart "></i> (@count) Cart</a></li>
-
+                                <li class="nav-item"> <a asp-area="Customer" asp-controller="Home" asp-action="Cart"><i class="fas fa-shopping-cart"></i> (@count) Cart</a></li>
                             </ul>
                         </div>
-
                     </div>
                     <div class="col-lg-2"></div>
                     <div class="col-lg-6">
@@ -147,7 +85,6 @@
                                         <li><a href="#">Bangla</a></li>
                                     </ul>
                                 </li>
-
                                 @if (SignInManager.IsSignedIn(User))
                                 {
                                     <li class="top_links">
@@ -162,10 +99,9 @@
                                             <li><a asp-area="Customer" asp-controller="Home" asp-action="Cart">Wishlist</a></li>
                                         </ul>
                                     </li>
-
                                     <li>
                                         <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
-                                            <button type="submit" class=" btn">Logout</button>
+                                            <button type="submit" class="btn">Logout</button>
                                         </form>
                                     </li>
                                 }
@@ -180,15 +116,7 @@
                 </div>
             </div>
         </div>
-
-
-        <!--header middel end-->
-
     </header>
-
-
-
-
 
     <partial name="_CookieConsentPartial" />
 
@@ -196,19 +124,17 @@
         @RenderBody()
         <hr />
 
-        <!--footer area start-->
         <footer class="footer_widgets">
             <div class="container">
                 <div class="footer_top">
                     <div class="row">
                         <div class="col-lg-4 col-md-5">
                             <div class="widgets_container contact_us">
-
                                 <div class="footer_contact">
                                     <ul>
-                                        <li><i class="zmdi zmdi-home"></i><span>Addresss:</span> Gazipur Dhaka</li>
-                                        <li><i class="zmdi zmdi-phone-setting"></i><span>Phone:</span><a href="tel:(+88) 01568105212">(+88) 1985119290</a> </li>
-                                        <li><i class="zmdi zmdi-email"></i><span>Email:</span>  OrganicOption@gmail.com</li>
+                                        <li><i class="zmdi zmdi-home"></i><span>Address:</span> Gazipur Dhaka</li>
+                                        <li><i class="zmdi zmdi-phone-setting"></i><span>Phone:</span><a href="tel:(+88) 01568105212">(+88) 1985119290</a></li>
+                                        <li><i class="zmdi zmdi-email"></i><span>Email:</span> OrganicOption@gmail.com</li>
                                     </ul>
                                 </div>
                                 <div class="social_icone">
@@ -217,12 +143,12 @@
                                             <a href="https://www.instagram.com/aminul_islam_122/?hl=en" title="youtube"><i class="fa fa-share-alt"></i></a>
                                             <div class="social_title">
                                                 <p>Subscribe</p>
-                                                <h3> </h3>
+                                                <h3></h3>
                                             </div>
                                         </li>
                                         <li>
                                             <i class="fa fa-instagram fs-2"></i>
-                                            <a href="https://www.instagram.com/aminul_islam_122/?hl=en" title="instagram"> Instagram <i class="fa fa-instagram"></i> </a>
+                                            <a href="https://www.instagram.com/aminul_islam_122/?hl=en" title="instagram"> Instagram <i class="fa fa-instagram"></i></a>
                                             <div class="social_title">
                                                 <p>Follow Us</p>
                                                 <h3>Instagram</h3>
@@ -259,121 +185,69 @@
                                                 <li><a>International Shipping</a></li>
                                                 <li><a> Affiliates</a></li>
                                                 <li><a> Contact</a></li>
-                                                <li><a> Travel</a></li>
-                                                <li><a>ecommerce</a></li>
-                                                <li><a> Creative</a></li>
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="col-lg-6 col-md-6">
                                     <div class="widgets_container widget_menu">
-                                        <h3>Information</h3>
+                                        <h3>INFORMATION</h3>
                                         <div class="footer_menu">
                                             <ul>
-                                                <li><a>About Us</a></li>
-                                                <li><a href="#">Delivery infomation</a></li>
+                                                <li><a href="#">Our Stores</a></li>
                                                 <li><a href="#">Privacy Policy</a></li>
-                                                <li><a href="#"> Travel</a></li>
-                                                <li><a> Blog</a></li>
-                                                <li><a href="#">Portfolio</a></li>
-                                                <li><a href="#">Conditions</a></li>
-                                                <li><a href="#"> Frequently Questions</a></li>
+                                                <li><a href="#">Orders & Returns</a></li>
+                                                <li><a href="#">Terms & Conditions</a></li>
+                                                <li><a href="#"> Careers</a></li>
+                                                <li><a href="#"> FAQ & Information</a></li>
+                                                <li><a href="#"> About Us</a></li>
+                                                <li><a href="#"> Corporate Sales</a></li>
                                             </ul>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-                        <div class="col-lg-3 col-md-12">
-                            <div class="widgets_container">
-                                <h3>Plan and Goal</h3>
-                                <div class="footer_menu">
+                        <div class="col-lg-3">
+                            <div class="widgets_container newsletter">
+                                <h3>Follow Us</h3>
+                                <div class="footer_social_link">
                                     <ul>
-                                        <li><a href="about.html">About Us</a></li>
-                                        <li><a href="#">Delivery infomation</a></li>
-                                        <li><a href="#">Privacy Policy</a></li>
-                                        <li><a href="#"> Travel</a></li>
-                                        <li><a>Blog</a></li>
-                                        <li><a href="#">Portfolio</a></li>
-                                        <li><a href="#">Conditions</a></li>
-                                 
-
+                                        <li><a href="https://www.facebook.com/aminulislamniloy122/" title="Facebook"><i class="fa fa-facebook"></i></a></li>
+                                        <li><a href="https://twitter.com" title="Twitter"><i class="fa fa-twitter"></i></a></li>
+                                        <li><a href="https://www.instagram.com/aminul_islam_122/?hl=en" title="Instagram"><i class="fa fa-instagram"></i></a></li>
+                                        <li><a href="https://youtube.com" title="Youtube"><i class="fa fa-youtube"></i></a></li>
+                                        <li><a href="https://pinterest.com" title="Pinterest"><i class="fa fa-pinterest"></i></a></li>
+                                        <li><a href="https://vimeo.com" title="Vimeo"><i class="fa fa-vimeo"></i></a></li>
                                     </ul>
                                 </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="footer_tag">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="footer_tag_container">
-                                <div class="footer_tag_menu">
-                                    <h3>fruits :</h3>
-                                    <ul>
-                                        <li><a href="#">Sesonal</a></li>
-                                        <li><a href="#">Import</a></li>
-                                        <li><a href="#">Organic</a></li>
-                                        <li><a href="#">Indian</a></li>
-                                        <li><a href="#">Authentic</a></li>
-                                        <li><a href="#">Hybrid</a></li>
-                                        <li><a href="#">Local</a></li>
-                                    </ul>
+                                <div class="subscribe_form">
+                                    <h3>Subscribe</h3>
+                                    <form id="mc-form" class="mc-form footer-newsletter" method="post" action="#">
+                                        <input type="email" name="EMAIL" id="mc-email" placeholder="Your email address..." />
+                                        <button type="submit" class="btn">Subscribe</button>
+                                        <div class="mailchimp-alerts">
+                                            <div class="mailchimp-submitting"></div>
+                                            <div class="mailchimp-success"></div>
+                                            <div class="mailchimp-error"></div>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div class="footer_tag_menu">
-                                    <h3>Fish :</h3>
-                                    <ul>
-                                        <li><a href="#">Project</a></li>
-                                        <li><a href="#">Sea</a></li>
-                                        <li><a href="#">River</a></li>
-                                        <li><a href="#">Kannel</a></li>
-                                        <li><a href="#">Gher</a></li>
-                                    </ul>
+                                <div class="download-app">
+                                    <h3>Payment Method</h3>
+                                    <img src="~/img/icon/payment.png" alt="image" />
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="footer">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-7">
-                            <div class="copyright_area">
-                                <p>Copyright &copy; 2024 <a href="#"> Organic Option  </a>  All Right Reserved.</p>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-5">
-                            <div class="footer_payment text-right">
-
-                                <p><img src="~/img/icon/payment.png" alt=""></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!--footer area end-->
-            <br />
-            <br />
         </footer>
-
-        <br />
     </div>
-
 
     <environment include="Development">
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
         <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
 
@@ -386,7 +260,6 @@
                 integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
         </script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
                 crossorigin="anonymous"
                 integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd">
@@ -395,16 +268,24 @@
     </environment>
 
     <script src="~/js/plugins.js"></script>
-
-    <!-- Main JS -->
     <script src="~/js/main.js"></script>
 
     <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    @*  <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
     <script src="~/js/main.js" asp-append-version="true"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+
+    @section Scripts {
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js" integrity="sha384-XxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+        <script src="https://cdn.datatables.net/2.0.1/js/jquery.dataTables.min.js"></script>
+        <script src="~/js/plugins.js" asp-append-version="true"></script>
+        <script src="~/js/main.js" asp-append-version="true"></script>
+    }
 
     @RenderSection("Scripts", required: false)
 </body>
