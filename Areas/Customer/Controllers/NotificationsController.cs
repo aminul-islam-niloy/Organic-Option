@@ -51,7 +51,6 @@ namespace OrganicOption.Areas.Customer.Controllers
             return Json(count);
         }
 
-        [HttpPost]
         public IActionResult ClearAllNotifications()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

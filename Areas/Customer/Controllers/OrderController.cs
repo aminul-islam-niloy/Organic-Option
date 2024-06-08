@@ -575,8 +575,84 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             order.IsOfferedToRider = true;
             await _db.SaveChangesAsync();
+
+            // Notify farmers for each product in the order
+            foreach (var orderDetail in order.OrderDetails)
+            {
+                var product = orderDetail.Product;
+                var farmerShop = _db.FarmerShop.Include(f => f.FarmerUser)
+                                                .FirstOrDefault(f => f.Id == product.FarmerShopId);
+                if (farmerShop != null)
+                {
+                    string farmerUserId = farmerShop.FarmerUserId;
+                    _notificationService.AddNotification(farmerUserId, $"Order #{order.Id} has been accepted by a rider :  {delivery.RiderId}.for  Product: '{product.Name}'", product.Id);
+                }
+            }
         }
 
+
+
+        //    [Authorize(Roles = "Rider")]
+        //    public async Task<IActionResult> CreateDeliveryForAcceptedOrder()
+        //    {
+        //        // Get the current user's ID (rider's ID)
+        //        var riderId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        //        // Check if the rider already exists in the database
+        //        var existingRider = await _db.RiderModel.FirstOrDefaultAsync(rider => rider.RiderUserId == riderId);
+
+        //        // Retrieve offer data from session
+        //        var offer = HttpContext.Session.Get<RiderOfferViewModel>("OfferData");
+
+        //        if (offer != null)
+        //        {
+        //            var order = await _db.Orders
+        //.Include(o => o.OrderDetails)
+        //    .ThenInclude(od => od.Product) // Include product information
+        //        .ThenInclude(p => p.FarmerShop) // Include shop information
+        //.FirstOrDefaultAsync(o => o.Id == offer.OrderId);
+
+
+
+        //            decimal totalOrderAmount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
+        //            var delivery = new Delivery
+        //            {
+        //                OrderId = offer.OrderId,
+        //                RiderId = existingRider.Id,
+        //                OrderCondition = OrderCondition.OrderTaken,
+        //                PayableMoney = order.PaymentCondition == PaymentCondition.Paid ? 0 : totalOrderAmount,
+        //                ProductDetails = string.Join(", ", offer.ProductDetails.Select(product => product.ProductName)),
+        //                CustomerAddress = offer.CustomerAddress, // Use offer.CustomerAddress for delivery address
+        //                DelivyAddress = offer.CustomerAddress,   // Use offer.CustomerAddress for delivery address
+        //                ShopAddress = offer.ShopAddress,
+        //                ShopName = offer.ShopName,
+        //                ShopContract = offer.ShopContract
+        //            };
+
+
+        //            try
+        //            {
+        //                _db.Deliveries.Add(delivery);
+        //                await _db.SaveChangesAsync();
+
+        //                // Remove offer data from session after successful delivery creation
+        //                HttpContext.Session.Remove("OfferData");
+
+        //                // Return the view with the delivery details
+        //                return View("DeliveryDetails", delivery);
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                Console.WriteLine(ex.ToString());
+        //                return View("Error");
+        //            }
+        //        }
+        //        else
+        //        {
+        //            // Handle case when offer data is not available
+        //            return View("Error");
+        //        }
+        //    }
 
 
         [Authorize(Roles = "Rider")]
@@ -594,12 +670,16 @@ namespace OnlineShop.Areas.Customer.Controllers
             if (offer != null)
             {
                 var order = await _db.Orders
-    .Include(o => o.OrderDetails)
-        .ThenInclude(od => od.Product) // Include product information
-            .ThenInclude(p => p.FarmerShop) // Include shop information
-    .FirstOrDefaultAsync(o => o.Id == offer.OrderId);
+                    .Include(o => o.OrderDetails)
+                        .ThenInclude(od => od.Product) // Include product information
+                            .ThenInclude(p => p.FarmerShop) // Include shop information
+                    .FirstOrDefaultAsync(o => o.Id == offer.OrderId);
 
-
+                if (order == null)
+                {
+                    // Handle case when the order is not found
+                    return View("Error");
+                }
 
                 decimal totalOrderAmount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
                 var delivery = new Delivery
@@ -616,11 +696,23 @@ namespace OnlineShop.Areas.Customer.Controllers
                     ShopContract = offer.ShopContract
                 };
 
-
                 try
                 {
                     _db.Deliveries.Add(delivery);
                     await _db.SaveChangesAsync();
+
+                    // Notify farmers for each product in the order
+                    foreach (var orderDetail in order.OrderDetails)
+                    {
+                        var product = orderDetail.Product;
+                        var farmerShop = _db.FarmerShop.Include(f => f.FarmerUser)
+                                                        .FirstOrDefault(f => f.Id == product.FarmerShopId);
+                        if (farmerShop != null)
+                        {
+                            string farmerUserId = farmerShop.FarmerUserId;
+                            _notificationService.AddNotification(farmerUserId, $"Order #{order.Id} has been accepted by a rider {existingRider.Id}. Product: '{product.Name}'", product.Id);
+                        }
+                    }
 
                     // Remove offer data from session after successful delivery creation
                     HttpContext.Session.Remove("OfferData");
@@ -640,6 +732,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                 return View("Error");
             }
         }
+
 
 
 
