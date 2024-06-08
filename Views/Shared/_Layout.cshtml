@@ -86,7 +86,8 @@
                                
 
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" href="Customer/Notifications/Latest">
+                                    <a class="nav-link text-dark" 
+                                       asp-area="Customer" asp-controller="Notifications" asp-action="Latest">
                                         <i class="fas fa-bell"></i>
                                         <span class="notification-icon">
                                             @if (unreadCount > 0)

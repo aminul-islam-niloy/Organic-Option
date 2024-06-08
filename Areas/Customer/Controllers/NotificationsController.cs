@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OrganicOption.Service;
 using System.Linq;
 using System.Security.Claims;
@@ -6,6 +7,7 @@ using System.Security.Claims;
 namespace OrganicOption.Areas.Customer.Controllers
 {
     [Area("Customer")]
+    [Authorize]
     public class NotificationsController : Controller
     {
         private readonly NotificationService _notificationService;
