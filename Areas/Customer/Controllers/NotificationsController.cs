@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OrganicOption.Service;
 using System.Linq;
+using System.Security.Claims;
 
 namespace OrganicOption.Areas.Customer.Controllers
 {
@@ -16,9 +17,10 @@ namespace OrganicOption.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
-            var notifications = _notificationService.GetAllNotifications();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var notifications = _notificationService.GetAllNotifications(userId);
 
-            if (notifications == null || notifications.Count() == 0)
+            if (notifications == null || !notifications.Any())
             {
                 ViewBag.Message = "No notifications available.";
             }
@@ -26,10 +28,10 @@ namespace OrganicOption.Areas.Customer.Controllers
             return View(notifications);
         }
 
-
         public IActionResult Latest()
         {
-            var notifications = _notificationService.GetUnreadNotifications();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var notifications = _notificationService.GetUnreadNotifications(userId);
             return View(notifications);
         }
 
@@ -42,14 +44,16 @@ namespace OrganicOption.Areas.Customer.Controllers
         [HttpGet]
         public IActionResult GetUnreadNotificationCount()
         {
-            var count = _notificationService.GetUnreadNotifications().Count();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var count = _notificationService.GetUnreadNotifications(userId).Count();
             return Json(count);
         }
 
         [HttpPost]
         public IActionResult ClearAllNotifications()
         {
-            _notificationService.ClearAllNotifications();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            _notificationService.ClearAllNotifications(userId);
             return RedirectToAction("Index");
         }
     }

@@ -15,14 +15,20 @@ namespace OrganicOption.Service
             _context = context;
         }
 
-        public IEnumerable<Notification> GetAllNotifications()
+        public IEnumerable<Notification> GetAllNotifications(string userId)
         {
-            return _context.Notifications.OrderByDescending(n => n.DateCreated).ToList();
+            return _context.Notifications
+                           .Where(n => n.UserId == userId)
+                           .OrderByDescending(n => n.DateCreated)
+                           .ToList();
         }
 
-        public IEnumerable<Notification> GetUnreadNotifications()
+        public IEnumerable<Notification> GetUnreadNotifications(string userId)
         {
-            return _context.Notifications.Where(n => !n.IsRead).OrderByDescending(n => n.DateCreated).ToList();
+            return _context.Notifications
+                           .Where(n => n.UserId == userId && !n.IsRead)
+                           .OrderByDescending(n => n.DateCreated)
+                           .ToList();
         }
 
         public void MarkAsRead(int id)
@@ -35,23 +41,28 @@ namespace OrganicOption.Service
             }
         }
 
-        public void AddNotification(string message)
+        public void AddNotification(string userId, string message, int? productId = null)
         {
             var notification = new Notification
             {
+                UserId = userId,
                 Message = message,
                 DateCreated = DateTime.Now,
-                IsRead = false
+                IsRead = false,
+                ProductId = productId
             };
             _context.Notifications.Add(notification);
             _context.SaveChanges();
         }
 
-        public void ClearAllNotifications()
+        public void ClearAllNotifications(string userId)
         {
-            var notifications = _context.Notifications.ToList();
+            var notifications = _context.Notifications
+                                        .Where(n => n.UserId == userId)
+                                        .ToList();
             _context.Notifications.RemoveRange(notifications);
             _context.SaveChanges();
         }
     }
+
 }
