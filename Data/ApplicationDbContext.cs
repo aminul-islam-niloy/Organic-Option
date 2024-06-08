@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Models;
 using OrganicOption.Models;
+using OrganicOption.Models.Notifications;
 using OrganicOption.Models.Rider_Section;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,7 @@ namespace OnlineShop.Data
         public DbSet<RiderModel> RiderModel { get; set; }
         public DbSet<Shift> Shifts { get; set; }
         public DbSet<Delivery> Deliveries { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
 
 

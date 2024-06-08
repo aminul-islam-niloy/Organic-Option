@@ -18,6 +18,7 @@ using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 using OrganicOption.Models;
 using OrganicOption.Models.Rider_Section;
 using OnlineShop.Service;
+using OrganicOption.Service;
 
 namespace OnlineShop.Areas.Customer.Controllers
 {
@@ -27,7 +28,7 @@ namespace OnlineShop.Areas.Customer.Controllers
 
 
     {
-
+        private readonly NotificationService _notificationService;
         private readonly StripeSettings _stripeSettings;
 
         public string SessionId { get; set; }
@@ -35,11 +36,12 @@ namespace OnlineShop.Areas.Customer.Controllers
         private ApplicationDbContext _db;
         UserManager<IdentityUser> _userManager;
 
-        public OrderController(ApplicationDbContext db, UserManager<IdentityUser> userManager, IOptions<StripeSettings> stripeSettings)
+        public OrderController(ApplicationDbContext db, UserManager<IdentityUser> userManager, IOptions<StripeSettings> stripeSettings, NotificationService notificationService)
         {
             _db = db;
             _userManager = userManager;
             _stripeSettings = stripeSettings.Value;
+            _notificationService = notificationService;
         }
 
 
@@ -121,6 +123,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                     UpdateFarmerStore(product.Id, product.QuantityInCart, product.Price, anOrder.Id, product.FarmerShopId);
                 }
             }
+            _notificationService.AddNotification("An Product has been Ordred From Your Store");
 
             // Clear the session data
             HttpContext.Session.Set("products", new List<Products>());

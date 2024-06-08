@@ -22,6 +22,13 @@
     string userId = UserManager.GetUserId(User);
 }
 
+@inject OrganicOption.Service.NotificationService notificationService 
+
+@{
+    var unreadCount = notificationService.GetUnreadNotifications().Count();
+}
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -68,6 +75,20 @@
                                     <li><a asp-area="Customer" asp-controller="Order" asp-action="UserOrders"><i class="fa-solid fa-suitcase"></i> My Orders</a></li>
                                 }
                                 <li class="nav-item"> <a asp-area="Customer" asp-controller="Home" asp-action="Cart"><i class="fas fa-shopping-cart"></i> (@count) Cart</a></li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="Customer/Notifications/Latest">
+                                        <i class="fas fa-bell"></i>
+                                        <span class="notification-icon">
+                                            @if (unreadCount > 0)
+                                            {
+                                                <span class="badge" id="notification-count">@unreadCount</span>
+                                            }
+                                        </span>
+                                    </a>
+                                </li>
+                            
+                            
                             </ul>
                         </div>
                     </div>
@@ -266,6 +287,56 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
+
+
+
+    <script>
+        $(document).ready(function () {
+            console.log("Document is ready");
+
+            let userInteracted = false;
+
+            function enableSound() {
+                console.log("User interaction detected");
+                userInteracted = true;
+                document.removeEventListener('click', enableSound);
+                document.removeEventListener('keypress', enableSound);
+            }
+
+            document.addEventListener('click', enableSound);
+            document.addEventListener('keypress', enableSound);
+
+
+            function checkForNewNotifications() {
+                console.log("Checking for new notifications");
+                if (!userInteracted) {
+                    console.log("Waiting for user interaction to enable sound");
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("GetUnreadNotificationCount", "Notifications")',
+                    method: 'GET',
+                    success: function (data) {
+                        console.log("Successfully fetched unread notification count:", data);
+                        var currentCount = parseInt($("#notification-count").text());
+                        if (data > currentCount) {
+                            $("#notification-count").text(data);
+                            var audio = $("#notification-sound")[0];
+                            audio.play().then(() => {
+                                console.log("Sound played successfully");
+                            }).catch(function (error) {
+                                console.log("Error playing sound:", error);
+                            });
+                        }
+                    },
+                    error: function (error) {
+                        console.log("Error fetching notifications:", error);
+                    }
+                });
+            }
+        });
+    </script>
 
     <script src="~/js/plugins.js"></script>
     <script src="~/js/main.js"></script>

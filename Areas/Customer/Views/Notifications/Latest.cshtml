@@ -1,0 +1,17 @@
+﻿@model IEnumerable<OrganicOption.Models.Notifications.Notification>
+
+<h4>Latest Notifications</h4>
+<ul>
+    @foreach (var notification in Model)
+    {
+        <li>
+            @notification.Message - @notification.DateCreated
+            <a href="@Url.Action("MarkAsRead", "Notifications", new { id = notification.Id })">Mark as read</a>
+        </li>
+    }
+</ul>
+
+
+<form method="post" action="/Notifications">
+    <button type="submit" class="btn btn-danger">Sell All Notification</button>
+</form>

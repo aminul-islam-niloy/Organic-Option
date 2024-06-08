@@ -9,6 +9,7 @@ using OnlineShop.Data;
 using OnlineShop.Models;
 using OnlineShop.Payment;
 using OnlineShop.Service;
+using OrganicOption.Service;
 using Stripe;
 using System;
 using System.Configuration;
@@ -55,6 +56,7 @@ builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Str
 
 // Register EmailService
 builder.Services.AddTransient<IEmailService, EmailService>();
+builder.Services.AddScoped<NotificationService>();
 
 var app = builder.Build();
 
