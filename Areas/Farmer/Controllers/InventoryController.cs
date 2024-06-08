@@ -10,6 +10,7 @@ using OnlineShop.Data;
 using OnlineShop.Models;
 using OrganicOption.Models;
 using OrganicOption.Models.Farmer_Section;
+using OrganicOption.Service;
 using Stripe;
 using Stripe.Climate;
 using System;
@@ -25,17 +26,18 @@ namespace OrganicOption.Areas.Farmer.Controllers
     [Authorize(Roles = "Farmer")]
     public class InventoryController : Controller
     {
-
+        private readonly NotificationService _notificationService;
         private readonly ApplicationDbContext _context;
         UserManager<IdentityUser> _userManager;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IMemoryCache _cache;
-        public InventoryController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IWebHostEnvironment webHostEnvironment, IMemoryCache memoryCache)
+        public InventoryController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IWebHostEnvironment webHostEnvironment, IMemoryCache memoryCache, NotificationService notificationService)
         {
             _context = context;
             _userManager = userManager;
             _webHostEnvironment = webHostEnvironment;
             _cache = memoryCache;
+            _notificationService = notificationService;
         }
 
 
@@ -339,6 +341,61 @@ namespace OrganicOption.Areas.Farmer.Controllers
             return View(dailyOrderInfo);
         }
 
+        //public async Task<IActionResult> AllOrdersGroupedByDate()
+        //{
+        //    // Retrieve the current user
+        //    var currentUser = await _userManager.GetUserAsync(User);
+        //    if (currentUser == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    // Retrieve the farmer shop for the current user
+        //    var farmerShop = await _context.FarmerShop
+        //        .Include(fs => fs.Products)
+        //        .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
+
+        //    if (farmerShop == null)
+        //    {
+        //        return NotFound(); // Handle if farmer shop not found
+        //    }
+
+        //    // Define the date range for past days and the present day
+        //    DateTime startDate = DateTime.Today.AddDays(-30); // Change the number of days as needed
+        //    DateTime endDate = DateTime.Today.AddDays(1).AddTicks(-1);
+
+        //    // Retrieve orders for the specified date range
+        //    var allOrders = await _context.Orders
+        //        .Include(o => o.OrderDetails.Where(od => od.Product.FarmerShopId == farmerShop.Id))
+        //        .ThenInclude(od => od.Product)
+        //        .Where(o => o.OrderDate >= startDate && o.OrderDate <= endDate && o.InventoryItems.Any(ii => ii.FarmerShopId == farmerShop.Id))
+        //        .ToListAsync();
+
+        //    // Convert orders to DailyOrderInfoViewModel
+        //    var dailyOrderInfo = allOrders.Select(o => new DailyOrderInfoViewModel
+        //    {
+        //        OrderId = o.Id,
+        //        CustomerName = o.Name,
+        //        Address = o.Address,
+        //        Phone = o.PhoneNo,
+        //        OrderTme = o.OrderDate,
+        //        Products = o.OrderDetails.Select(od => new ProductInfo
+        //        {
+        //            Name = od.Product.Name,
+        //            Quantity = od.Quantity,
+        //            Price = od.Product.Price
+        //        }).ToList(),
+        //        TotalPrice = o.OrderDetails.Sum(od => od.Quantity * od.Product.Price)
+        //    }).ToList();
+
+        //    // Group dailyOrderInfo by date
+        //    var groupedOrders = dailyOrderInfo.GroupBy(o => o.OrderTme.Date).ToList();
+
+        //    return View(groupedOrders);
+        //}
+
+
+
         public async Task<IActionResult> AllOrdersGroupedByDate()
         {
             // Retrieve the current user
@@ -366,10 +423,15 @@ namespace OrganicOption.Areas.Farmer.Controllers
             var allOrders = await _context.Orders
                 .Include(o => o.OrderDetails.Where(od => od.Product.FarmerShopId == farmerShop.Id))
                 .ThenInclude(od => od.Product)
-                .Where(o => o.OrderDate >= startDate && o.OrderDate <= endDate && o.InventoryItems.Any(ii => ii.FarmerShopId == farmerShop.Id))
+                .Where(o => o.OrderDate >= startDate && o.OrderDate <= endDate && o.OrderDetails.Any(od => od.Product.FarmerShopId == farmerShop.Id))
                 .ToListAsync();
 
-            // Convert orders to DailyOrderInfoViewModel
+            // Retrieve deliveries for the specified date range
+            var allDeliveries = await _context.Deliveries
+                .Where(d => allOrders.Select(o => o.Id).Contains(d.OrderId))
+                .ToListAsync();
+
+            // Convert orders to DailyOrderInfoViewModel and map deliveries
             var dailyOrderInfo = allOrders.Select(o => new DailyOrderInfoViewModel
             {
                 OrderId = o.Id,
@@ -383,7 +445,8 @@ namespace OrganicOption.Areas.Farmer.Controllers
                     Quantity = od.Quantity,
                     Price = od.Product.Price
                 }).ToList(),
-                TotalPrice = o.OrderDetails.Sum(od => od.Quantity * od.Product.Price)
+                TotalPrice = o.OrderDetails.Sum(od => od.Quantity * od.Product.Price),
+                OrderCondition = allDeliveries.FirstOrDefault(d => d.OrderId == o.Id)?.OrderCondition ?? OrderCondition.Onlist // Get the OrderCondition from Delivery
             }).ToList();
 
             // Group dailyOrderInfo by date
@@ -394,8 +457,71 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
 
 
+        [Authorize(Roles = "Farmer")]
+        [HttpPost]
+        public async Task<IActionResult> ReleaseOrder(int orderId)
+        {
+            // Retrieve the current user
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
 
-   
+            // Retrieve the farmer shop for the current user
+            var farmerShop = await _context.FarmerShop
+                .Include(fs => fs.Products)
+                .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
+
+            if (farmerShop == null)
+            {
+                return NotFound(); // Handle if farmer shop not found
+            }
+
+            // Get the order and its details
+            var order = await _context.Orders
+                .Include(o => o.OrderDetails)
+                    .ThenInclude(od => od.Product)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            // Update the order condition in the Order table
+            order.OrderCondition = OrderCondition.OnDelivary;
+
+            // Get the delivery associated with this order
+            var delivery = await _context.Deliveries.FirstOrDefaultAsync(d => d.OrderId == orderId);
+
+            if (delivery != null)
+            {
+                // Update the order condition in the Delivery table
+                delivery.OrderCondition = OrderCondition.OnDelivary;
+            }
+
+            // Notify the customer
+            var customerUserId = order.UserId; // Assuming UserId is the customer's Id
+            _notificationService.AddNotification(customerUserId, $"Your order #{order.Id} is on the way. You can track it.", order.Id);
+
+            // Update the farmer's total revenue for the specific shop
+            foreach (var orderDetail in order.OrderDetails)
+            {
+                var product = orderDetail.Product;
+                if (product.FarmerShopId == farmerShop.Id)
+                {
+                    farmerShop.ShopRevenue += orderDetail.Price * orderDetail.Quantity;
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            // Optionally, return to a relevant view or action
+            return RedirectToAction("AllOrdersGroupedByDate");
+        }
+
+
 
         // Action method to find and show the most sold product
         public IActionResult ShowMostSoldProduct()

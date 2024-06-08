@@ -43,6 +43,9 @@
             <p><strong>Open Status:</strong> @(Model.IsShopOpen ? "Open" : "Closed")</p>
 
             <p><strong>Location:</strong> Latitude: @Model.Latitude, Longitude: @Model.Longitude</p>
+           
+            <h4>Total Revenue: @Model.ShopRevenue</h4>
+            <a class="btn btn-success" asp-area="Farmer" asp-controller="FarmerShop" asp-action="MoneyWithdraw"> Dithdraw Money </a>
 
         </div>
         <div class="mt-15 col-md-6 btn d-flex">

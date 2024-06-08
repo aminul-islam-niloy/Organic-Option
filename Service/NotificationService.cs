@@ -41,7 +41,7 @@ namespace OrganicOption.Service
             }
         }
 
-        public void AddNotification(string userId, string message, int? productId = null)
+        public void AddNotification(string userId, string message, int orderId, int? productId = null)
         {
             var notification = new Notification
             {
@@ -49,6 +49,7 @@ namespace OrganicOption.Service
                 Message = message,
                 DateCreated = DateTime.Now,
                 IsRead = false,
+                OrderId = orderId,
                 ProductId = productId
             };
             _context.Notifications.Add(notification);

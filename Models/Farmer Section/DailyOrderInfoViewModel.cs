@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+using OnlineShop.Models;
 using System;
 using System.Collections.Generic;
 
@@ -13,5 +14,7 @@ namespace OrganicOption.Models.Farmer_Section
         public List<ProductInfo> Products { get; set; }
         public decimal TotalPrice { get; set; }
         public DateTime OrderTme { get; set; }
+
+        public OrderCondition OrderCondition { get; set; }
     }
 }

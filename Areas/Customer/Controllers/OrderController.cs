@@ -95,7 +95,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                     if (farmerShop != null)
                     {
                         string farmerUserId = farmerShop.FarmerUserId;
-                        _notificationService.AddNotification(farmerUserId, $"Product '{product.Name}' has been ordered from your store.", product.Id);
+                        _notificationService.AddNotification(farmerUserId, $"{anOrder.OrderNo} that '{product.Name}'  has been ordered from your Shop.", product.Id);
                     }
                 }
             }
@@ -574,6 +574,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             await _db.SaveChangesAsync();
 
             order.IsOfferedToRider = true;
+            order.OrderCondition = OrderCondition.OrderTaken;
             await _db.SaveChangesAsync();
 
             // Notify farmers for each product in the order
@@ -592,67 +593,6 @@ namespace OnlineShop.Areas.Customer.Controllers
 
 
 
-        //    [Authorize(Roles = "Rider")]
-        //    public async Task<IActionResult> CreateDeliveryForAcceptedOrder()
-        //    {
-        //        // Get the current user's ID (rider's ID)
-        //        var riderId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        //        // Check if the rider already exists in the database
-        //        var existingRider = await _db.RiderModel.FirstOrDefaultAsync(rider => rider.RiderUserId == riderId);
-
-        //        // Retrieve offer data from session
-        //        var offer = HttpContext.Session.Get<RiderOfferViewModel>("OfferData");
-
-        //        if (offer != null)
-        //        {
-        //            var order = await _db.Orders
-        //.Include(o => o.OrderDetails)
-        //    .ThenInclude(od => od.Product) // Include product information
-        //        .ThenInclude(p => p.FarmerShop) // Include shop information
-        //.FirstOrDefaultAsync(o => o.Id == offer.OrderId);
-
-
-
-        //            decimal totalOrderAmount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
-        //            var delivery = new Delivery
-        //            {
-        //                OrderId = offer.OrderId,
-        //                RiderId = existingRider.Id,
-        //                OrderCondition = OrderCondition.OrderTaken,
-        //                PayableMoney = order.PaymentCondition == PaymentCondition.Paid ? 0 : totalOrderAmount,
-        //                ProductDetails = string.Join(", ", offer.ProductDetails.Select(product => product.ProductName)),
-        //                CustomerAddress = offer.CustomerAddress, // Use offer.CustomerAddress for delivery address
-        //                DelivyAddress = offer.CustomerAddress,   // Use offer.CustomerAddress for delivery address
-        //                ShopAddress = offer.ShopAddress,
-        //                ShopName = offer.ShopName,
-        //                ShopContract = offer.ShopContract
-        //            };
-
-
-        //            try
-        //            {
-        //                _db.Deliveries.Add(delivery);
-        //                await _db.SaveChangesAsync();
-
-        //                // Remove offer data from session after successful delivery creation
-        //                HttpContext.Session.Remove("OfferData");
-
-        //                // Return the view with the delivery details
-        //                return View("DeliveryDetails", delivery);
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                Console.WriteLine(ex.ToString());
-        //                return View("Error");
-        //            }
-        //        }
-        //        else
-        //        {
-        //            // Handle case when offer data is not available
-        //            return View("Error");
-        //        }
-        //    }
 
 
         [Authorize(Roles = "Rider")]
@@ -781,23 +721,7 @@ namespace OnlineShop.Areas.Customer.Controllers
 
 
 
-        //FarmerShop
 
-        // Method to notify FarmerShop when Rider accepts an offer
-        private async Task NotifyFarmerShop(RiderOfferViewModel offer, Order order)
-        {
-
-
-            if (order != null)
-            {
-                // Implement notification logic here to notify the FarmerShop
-                // You can use email, SMS, or push notifications to inform the FarmerShop
-                // Example: Send an email to the FarmerShop's contact email address
-                //var emailService = new EmailService();
-                //var message = $"Order {orderId} has been accepted by a rider. Please prepare the products for delivery.";
-                //await emailService.SendEmailAsync(order.FarmerShop.ContactEmail, "Order Accepted Notification", message);
-            }
-        }
 
         // Method to update FarmerShop revenue when products are released
         private async Task UpdateFarmerShopRevenue(int orderId)

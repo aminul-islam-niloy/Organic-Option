@@ -11,5 +11,6 @@ namespace OrganicOption.Models.Notifications
 
         public string UserId { get; set; } // Add UserId to link to a specific user
         public int? ProductId { get; set; }
+        public int OrderId { get; set; }
     }
 }
