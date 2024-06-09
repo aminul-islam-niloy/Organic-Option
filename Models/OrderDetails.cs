@@ -24,8 +24,8 @@ namespace OnlineShop.Models
 
     public enum PaymentCondition
     {
-        Paid,
-        Pending,
+        UnPaid,
+        Paid
     
     }
 

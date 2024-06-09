@@ -60,6 +60,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
             // Retrieve the shop for the current user
             var farmerShop = await _context.FarmerShop
                 .Include(fs => fs.Products)
+                .Include(fs=> fs.ShopAddress)
                 .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
 
             if (farmerShop == null)
@@ -113,15 +114,77 @@ namespace OrganicOption.Areas.Farmer.Controllers
             //return View(farmerShop);
         }
 
+        //[HttpGet]
+        //public IActionResult Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var farmerShop = _context.FarmerShop.Find(id);
+        //    if (farmerShop == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(farmerShop);
+        //}
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, FarmerShop farmerShop, IFormFile coverPhoto)
+        //{
+        //    if (id != farmerShop.Id)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var currentUser = await _userManager.GetUserAsync(User);
+        //    farmerShop.FarmerUser = (OnlineShop.Models.ApplicationUser)currentUser;
+
+        //    try
+        //        {
+        //        if (coverPhoto != null && coverPhoto.Length > 0)
+        //        {
+        //            using (var stream = new MemoryStream())
+        //            {
+        //                await coverPhoto.CopyToAsync(stream);
+        //                farmerShop.CoverPhoto = stream.ToArray();
+        //            }
+        //        }
+
+        //        _context.Update(farmerShop);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!FarmerShopExists(farmerShop.Id))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+
+        //}
+
+
+
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var farmerShop = _context.FarmerShop.Find(id);
+            var farmerShop = await _context.FarmerShop
+                .Include(f => f.ShopAddress)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (farmerShop == null)
             {
                 return NotFound();
@@ -138,37 +201,73 @@ namespace OrganicOption.Areas.Farmer.Controllers
             {
                 return NotFound();
             }
+
             var currentUser = await _userManager.GetUserAsync(User);
+            
             farmerShop.FarmerUser = (OnlineShop.Models.ApplicationUser)currentUser;
 
-            try
-                {
-                if (coverPhoto != null && coverPhoto.Length > 0)
-                {
-                    using (var stream = new MemoryStream())
-                    {
-                        await coverPhoto.CopyToAsync(stream);
-                        farmerShop.CoverPhoto = stream.ToArray();
-                    }
-                }
+            var shopToUpdate = await _context.FarmerShop
+                .Include(f => f.ShopAddress)
+                .FirstOrDefaultAsync(f => f.Id == id);
 
-                _context.Update(farmerShop);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
+            if (shopToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            // Update the fields
+            shopToUpdate.ShopName = farmerShop.ShopName;
+            shopToUpdate.IsShopOpen = farmerShop.IsShopOpen;
+            shopToUpdate.ContractInfo = farmerShop.ContractInfo;
+            shopToUpdate.Latitude = farmerShop.Latitude;
+            shopToUpdate.Longitude = farmerShop.Longitude;
+
+            // Update the address fields
+            if (shopToUpdate.ShopAddress == null)
+            {
+                shopToUpdate.ShopAddress = new Address();
+            }
+            shopToUpdate.ShopAddress.Division = farmerShop.ShopAddress.Division;
+            shopToUpdate.ShopAddress.District = farmerShop.ShopAddress.District;
+            shopToUpdate.ShopAddress.Thana = farmerShop.ShopAddress.Thana;
+            shopToUpdate.ShopAddress.WardNo = farmerShop.ShopAddress.WardNo;
+            shopToUpdate.ShopAddress.StreetNo = farmerShop.ShopAddress.StreetNo;
+            shopToUpdate.ShopAddress.House = farmerShop.ShopAddress.House;
+
+            // Handle file upload for CoverPhoto
+            if (coverPhoto != null && coverPhoto.Length > 0)
+            {
+                using (var stream = new MemoryStream())
                 {
-                    if (!FarmerShopExists(farmerShop.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    await coverPhoto.CopyToAsync(stream);
+                    shopToUpdate.CoverPhoto = stream.ToArray();
                 }
-                return RedirectToAction(nameof(Index));
-          
+            }
+
+            try
+            {
+                _context.Update(shopToUpdate);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!FarmerShopExists(farmerShop.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
         }
+
+    
+
+
+
 
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)

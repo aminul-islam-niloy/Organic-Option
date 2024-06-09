@@ -31,7 +31,11 @@
 
                 <a class="btn btn-warning" href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = @Model.Id })"> Product in Shop</a>
 
-               
+               <br />
+
+                <h4 class="mt-5">Total Revenue: @Model.ShopRevenue</h4>
+                <a class="btn btn-success" asp-area="Farmer" asp-controller="FarmerShop" asp-action="MoneyWithdraw">  Money Withdraw </a>
+
             
             </div>
 
@@ -40,18 +44,42 @@
         </div>
         <div class="col-md-6 mt-30">
             <h4>@Model.ContractInfo</h4>
+
+
+            <h4>Address</h4>
+            @if (Model.ShopAddress != null)
+            {
+                <div style="margin-left:40px">
+                    <label for="House">House:</label>
+                    <span id="House">@Html.DisplayFor(modelItem => Model.ShopAddress.House)</span><br />
+
+                    <label for="StreetNo">Street No:</label>
+                    <span id="StreetNo">@Html.DisplayFor(modelItem => Model.ShopAddress.StreetNo)</span><br />
+
+                    <label for="WardNo">Ward No:</label>
+                    <span id="WardNo">@Html.DisplayFor(modelItem => Model.ShopAddress.WardNo)</span><br />
+
+                    <label for="Thana">Thana:</label>
+                    <span id="Thana">@Html.DisplayFor(modelItem => Model.ShopAddress.Thana)</span><br />
+
+                    <label for="District">District:</label>
+                    <span id="District">@Html.DisplayFor(modelItem => Model.ShopAddress.District)</span><br />
+
+                    <label for="Division">Division:</label>
+                    <span id="Division">@Html.DisplayFor(modelItem => Model.ShopAddress.Division)</span><br />
+                </div>
+            }
+
             <p><strong>Open Status:</strong> @(Model.IsShopOpen ? "Open" : "Closed")</p>
 
             <p><strong>Location:</strong> Latitude: @Model.Latitude, Longitude: @Model.Longitude</p>
            
-            <h4>Total Revenue: @Model.ShopRevenue</h4>
-            <a class="btn btn-success" asp-area="Farmer" asp-controller="FarmerShop" asp-action="MoneyWithdraw"> Dithdraw Money </a>
-
+           
         </div>
         <div class="mt-15 col-md-6 btn d-flex">
-            <a asp-action="Index" asp-area="Farmer" asp-controller="Inventory" class="btn btn-info">Manage Inventory</a>
-            <a asp-action="AllOrdersGroupedByDate" asp-area="Farmer" asp-controller="Inventory" class="btn btn-success">Manage Order</a>
-            <a asp-action="ShowAllProductsByTime" asp-area="Farmer" asp-controller="Inventory" class="btn btn-warning"> Products by Time</a>
+            <a asp-action="Index" asp-area="Farmer" style="margin-left:5px" asp-controller="Inventory" class="btn btn-info">Manage Inventory</a>
+            <a asp-action="AllOrdersGroupedByDate" style="margin-left:5px" asp-area="Farmer" asp-controller="Inventory" class="btn btn-success">Manage Order</a>
+            <a asp-action="ShowAllProductsByTime" style="margin-left:5px" asp-area="Farmer" asp-controller="Inventory" class="btn btn-warning"> Products by Time</a>
         </div>
      
 

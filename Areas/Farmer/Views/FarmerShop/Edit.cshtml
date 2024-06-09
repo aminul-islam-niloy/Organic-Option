@@ -1,4 +1,4 @@
-﻿@model OrganicOption.Models.FarmerShop
+﻿@* @model OrganicOption.Models.FarmerShop
 
 <h3 class="text-info">Edit Shop</h3>
 
@@ -81,6 +81,161 @@
 
                 <input type="hidden" asp-for="FarmerUserId" value="@User.Identity.Name" />
 
+
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="Save" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-3"></div>
+</div>
+ *@
+
+
+
+@model OrganicOption.Models.FarmerShop
+
+<h3 class="text-info">Edit Shop</h3>
+
+<div class="row">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+            <div class="p-4 rounded border">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label asp-for="ShopName"></label>
+                    </div>
+                    <div class="col-lg-5">
+                        <input asp-for="ShopName" class="form-control" />
+                    </div>
+                    <span asp-validation-for="ShopName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label>Is Open:</label>
+                    </div>
+                    <div class="col-lg-5">
+                        <input type="checkbox" asp-for="IsShopOpen" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label> Cover Photo:</label>
+                    </div>
+                    <div class="col-lg-5">
+                        <input asp-for="CoverPhoto" class="form-control" type="file" />
+                    </div>
+                    <span asp-validation-for="CoverPhoto" class="text-danger"></span>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label>Latitude:</label>
+                    </div>
+                    <div class="col-lg-5">
+                        <input type="text" asp-for="Latitude" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label>Longitude:</label>
+                    </div>
+                    <div class="col-lg-5">
+                        <input type="text" asp-for="Longitude" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label>Contract Information:</label>
+                    </div>
+                    <div class="col-lg-5">
+                        <input type="text" asp-for="ContractInfo" />
+                        <span asp-validation-for="ContractInfo"></span>
+                    </div>
+                </div>
+
+
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label asp-for="NID"></label>
+                    </div>
+                    <div class="col-lg-5">
+                        <input asp-for="NID" class="form-control" />
+                    </div>
+                    <span asp-validation-for="NID" class="text-danger"></span>
+                </div>
+
+                <!-- Address fields -->
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label asp-for="ShopAddress.Division"></label>
+                    </div>
+                    <div class="col-lg-5">
+                        <input asp-for="ShopAddress.Division" class="form-control" />
+                    </div>
+                    <span asp-validation-for="ShopAddress.Division" class="text-danger"></span>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label asp-for="ShopAddress.District"></label>
+                    </div>
+                    <div class="col-lg-5">
+                        <input asp-for="ShopAddress.District" class="form-control" />
+                    </div>
+                    <span asp-validation-for="ShopAddress.District" class="text-danger"></span>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label asp-for="ShopAddress.Thana"></label>
+                    </div>
+                    <div class="col-lg-5">
+                        <input asp-for="ShopAddress.Thana" class="form-control" />
+                    </div>
+                    <span asp-validation-for="ShopAddress.Thana" class="text-danger"></span>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label asp-for="ShopAddress.WardNo"></label>
+                    </div>
+                    <div class="col-lg-5">
+                        <input asp-for="ShopAddress.WardNo" class="form-control" />
+                    </div>
+                    <span asp-validation-for="ShopAddress.WardNo" class="text-danger"></span>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label asp-for="ShopAddress.StreetNo"></label>
+                    </div>
+                    <div class="col-lg-5">
+                        <input asp-for="ShopAddress.StreetNo" class="form-control" />
+                    </div>
+                    <span asp-validation-for="ShopAddress.StreetNo" class="text-danger"></span>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-lg-2">
+                        <label asp-for="ShopAddress.House"></label>
+                    </div>
+                    <div class="col-lg-5">
+                        <input asp-for="ShopAddress.House" class="form-control" />
+                    </div>
+                    <span asp-validation-for="ShopAddress.House" class="text-danger"></span>
+                </div>
 
                 <div class="form-group">
                     <input type="submit" class="btn btn-primary" value="Save" />
