@@ -597,6 +597,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
                 // Data is not in cache, so retrieve it from the database
                 farmerShop = await _context.FarmerShop
                     .Include(fs => fs.Products)
+                    .Include(fs=>fs.ShopAddress)
                     .FirstOrDefaultAsync(fs => fs.Id == shopId);
                 if (farmerShop == null)
                 {

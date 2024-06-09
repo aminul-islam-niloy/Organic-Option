@@ -12,14 +12,53 @@
         {
             <p>No cover photo available</p>
         }
-        <div class="col-md-6 mt-30">
+        <div class="col-md-4 mt-30">
             <h2>@Model.FarmerShop.ShopName</h2>
-        </div>
-        <div class="col-md-6 mt-30">
-            <h4>@Model.FarmerShop.ContractInfo</h4>
+            <h4> Phone: @Model.FarmerShop.ContractInfo</h4>
             <p><strong>Open Status:</strong> @(Model.FarmerShop.IsShopOpen ? "Open" : "Closed")</p>
-            <p><strong>Location:</strong> Latitude: @Model.FarmerShop.Latitude, Longitude: @Model.FarmerShop.Longitude</p>
         </div>
+       
+        <div class="col-md-4 mt-30">
+            <h4>Shop Address</h4>
+            @if (Model.FarmerShop.ShopAddress != null)
+            {
+                <div style="margin-left:40px">
+                    <label for="House">House:</label>
+                    <span id="House">@Html.DisplayFor(modelItem => Model.FarmerShop.ShopAddress.House)</span><br />
+
+                    <label for="StreetNo">Street No:</label>
+                    <span id="StreetNo">@Html.DisplayFor(modelItem => Model.FarmerShop.ShopAddress.StreetNo)</span><br />
+
+                    <label for="WardNo">Ward No:</label>
+                    <span id="WardNo">@Html.DisplayFor(modelItem => Model.FarmerShop.ShopAddress.WardNo)</span><br />
+
+                </div>
+            }
+            else
+            {
+                <p>No address available</p>
+            }
+        </div>
+
+        <div class="col-md-4 mt-30">
+            <h4>Address</h4>
+            @if (Model.FarmerShop.ShopAddress != null)
+            {
+                <div style="margin-left:40px">
+                 
+                    <label for="Thana">Thana:</label>
+                    <span id="Thana">@Html.DisplayFor(modelItem => Model.FarmerShop.ShopAddress.Thana)</span><br />
+
+                    <label for="District">District:</label>
+                    <span id="District">@Html.DisplayFor(modelItem => Model.FarmerShop.ShopAddress.District)</span><br />
+
+                    <label for="Division">Division:</label>
+                    <span id="Division">@Html.DisplayFor(modelItem => Model.FarmerShop.ShopAddress.Division)</span><br />
+                </div>
+            }
+            
+        </div>
+       
     </div>
 </div>
 
