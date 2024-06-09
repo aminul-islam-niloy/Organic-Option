@@ -1,0 +1,33 @@
+﻿@model IEnumerable<OrganicOption.Models.Rider_Section.Delivery>
+
+<h2>Your Deliveries</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Product Details</th>
+            <th>Customer Address</th>
+            <th>Delivery Address</th>
+            <th>Shop Name</th>
+            <th>Payable Money</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var delivery in Model)
+        {
+            <tr>
+                <td>@delivery.OrderId</td>
+                <td>@delivery.ProductDetails</td>
+                <td>@delivery.CustomerAddress</td>
+                <td>@delivery.DelivyAddress</td>
+                <td>@delivery.ShopName</td>
+                <td>@delivery.PayableMoney</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@delivery.Id" class="btn btn-info">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
