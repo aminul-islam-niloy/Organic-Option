@@ -19,6 +19,7 @@ using OrganicOption.Models;
 using OrganicOption.Models.Rider_Section;
 using OnlineShop.Service;
 using OrganicOption.Service;
+using System.Diagnostics;
 
 namespace OnlineShop.Areas.Customer.Controllers
 {
@@ -456,12 +457,45 @@ namespace OnlineShop.Areas.Customer.Controllers
 
 
 
+        //[Authorize(Roles = "Rider")]
+        //public async Task<IActionResult> MyOffer()
+        //{
+        //    var offer = await GetOfferForRider();
+
+        //    //HttpContext.Session.Set("OfferData", offer);
+
+        //    if (offer != null)
+        //    {
+        //        var viewModel = new RiderOfferViewModel
+        //        {
+        //            OrderId = offer.OrderId,
+        //            ProductDetails = offer.ProductDetails,
+        //            CustomerAddress = offer.CustomerAddress,
+        //            DeliveryTime = offer.DeliveryTime,
+        //            ShopName = offer.ProductDetails.FirstOrDefault()?.ShopName, // Get shop name
+        //            ShopContract = offer.ProductDetails.FirstOrDefault()?.ShopContact, // Get shop contract
+        //            Revenue = offer.Revenue,
+        //            ShopAddress= offer.ShopAddress,
+        //            TimeRemaining = (offer.OfferStartTime.AddMinutes(1) - DateTime.Now)
+        //        };
+
+        //        HttpContext.Session.Set("OfferData", viewModel);
+
+        //        return View(viewModel);
+        //    }
+        //    else
+        //    {
+        //        return Content("No offer available.");
+        //    }
+        //}
+
+
+
         [Authorize(Roles = "Rider")]
         public async Task<IActionResult> MyOffer()
         {
             var offer = await GetOfferForRider();
 
-            //HttpContext.Session.Set("OfferData", offer);
 
             if (offer != null)
             {
@@ -474,7 +508,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                     ShopName = offer.ProductDetails.FirstOrDefault()?.ShopName, // Get shop name
                     ShopContract = offer.ProductDetails.FirstOrDefault()?.ShopContact, // Get shop contract
                     Revenue = offer.Revenue,
-                    ShopAddress= offer.ShopAddress,
+                    ShopAddress = offer.ShopAddress, // Set the ShopAddress
                     TimeRemaining = (offer.OfferStartTime.AddMinutes(1) - DateTime.Now)
                 };
 
@@ -489,10 +523,9 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
 
+
         // Define a static variable to keep track of the index of the next order
         private static int nextOrderIndex = 0;
-
-
 
 
         [Authorize(Roles = "Rider")]
@@ -515,21 +548,30 @@ namespace OnlineShop.Areas.Customer.Controllers
                 {
                     // Get the order based on the nextOrderIndex
                     var order = ordersOnList.ElementAtOrDefault(nextOrderIndex);
+                    // Fetch the FarmerShopId from the first order detail
+                    var farmerShopId = order.OrderDetails
+                        .Select(od => od.Product.FarmerShopId)
+                        .FirstOrDefault();
+
+                    // Query to get the FarmerShop address using the FarmerShopId
+                    var shopAddress = await _db.FarmerShop
+                        .Where(fs => fs.Id == farmerShopId)
+                        .Select(fs => fs.ShopAddress)
+                        .FirstOrDefaultAsync();
 
                     if (order != null)
                     {
                         var productDetails = order.OrderDetails.Select(od => new ProductwithOrderViewModel
                         {
-
                             ProductName = od.Product.Name,
                             ProductImage = od.Product.Image, // Set the product image URL here
                             ShopName = od.Product.FarmerShop.ShopName,
                             ShopContact = od.Product.FarmerShop.ContractInfo,
                             Quantity = od.Quantity,
-
-                            ShopAddress = od.Product.FarmerShop.ShopAddress,
-
+                            ShopAddress = od.Product.FarmerShop.ShopAddress // Include the ShopAddress
                         }).ToList();
+
+                     
 
                         var offerViewModel = new RiderOfferViewModel
                         {
@@ -538,6 +580,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                             DeliveryTime = EstimateDeliveryTime(order),
                             Revenue = CalculateEarnings(order),
                             ProductDetails = productDetails,
+                            ShopAddress = shopAddress, // Set the ShopAddress
                             OfferStartTime = DateTime.Now // Store the offer start time
                         };
 
@@ -551,6 +594,9 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             return null;
         }
+
+
+      
 
         //not used
 
@@ -595,90 +641,6 @@ namespace OnlineShop.Areas.Customer.Controllers
 
 
 
-
-        //[Authorize(Roles = "Rider")]
-        //public async Task<IActionResult> CreateDeliveryForAcceptedOrder()
-        //{
-        //    // Get the current user's ID (rider's ID)
-        //    var riderId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        //    // Check if the rider already exists in the database
-        //    var existingRider = await _db.RiderModel.FirstOrDefaultAsync(rider => rider.RiderUserId == riderId);
-
-        //    // Retrieve offer data from session
-        //    var offer = HttpContext.Session.Get<RiderOfferViewModel>("OfferData");
-
-        //    if (offer != null)
-        //    {
-        //        var order = await _db.Orders
-        //            .Include(o => o.OrderDetails)
-        //                .ThenInclude(od => od.Product) // Include product information
-        //                    .ThenInclude(p => p.FarmerShop) // Include shop information
-        //            .FirstOrDefaultAsync(o => o.Id == offer.OrderId);
-
-        //        if (order == null)
-        //        {
-        //            // Handle case when the order is not found
-        //            return View("Error");
-        //        }
-
-
-
-        //        decimal totalOrderAmount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
-        //        var delivery = new Delivery
-        //        {
-
-        //            OrderId = offer.OrderId,
-        //            RiderId = existingRider.Id,
-        //            OrderCondition = OrderCondition.OrderTaken,
-        //            PayableMoney = order.PaymentMethods == PaymentMethods.Card ? 0 : totalOrderAmount,
-        //            ProductDetails = string.Join(", ", offer.ProductDetails.Select(product => product.ProductName)),
-        //            CustomerAddress = offer.CustomerAddress, // Use offer.CustomerAddress for delivery address
-        //            DelivyAddress = offer.CustomerAddress,   // Use offer.CustomerAddress for delivery address
-        //            ShopAddress = offer.ShopAddress,
-        //            ShopName = offer.ShopName,
-        //            ShopContract = offer.ShopContract
-        //        };
-
-        //        try
-        //        {
-        //            _db.Deliveries.Add(delivery);
-        //            await _db.SaveChangesAsync();
-
-        //            // Notify farmers for each product in the order
-        //            foreach (var orderDetail in order.OrderDetails)
-        //            {
-        //                var product = orderDetail.Product;
-        //                var farmerShop = _db.FarmerShop.Include(f => f.FarmerUser)
-        //                                                .FirstOrDefault(f => f.Id == product.FarmerShopId);
-        //                if (farmerShop != null)
-        //                {
-        //                    string farmerUserId = farmerShop.FarmerUserId;
-        //                    _notificationService.AddNotification(farmerUserId, $"Order #{order.Id} has been accepted by a rider {existingRider.Id}. Product: '{product.Name}'", product.Id);
-        //                }
-        //            }
-
-        //            // Remove offer data from session after successful delivery creation
-        //            HttpContext.Session.Remove("OfferData");
-
-        //            // Return the view with the delivery details
-        //            return View("DeliveryDetails", delivery);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Console.WriteLine(ex.ToString());
-        //            return View("Error");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        // Handle case when offer data is not available
-        //        return View("Error");
-        //    }
-        //}
-
-
-
         [Authorize(Roles = "Rider")]
         public async Task<IActionResult> CreateDeliveryForAcceptedOrder()
         {
@@ -719,13 +681,20 @@ namespace OnlineShop.Areas.Customer.Controllers
                     ProductDetails = string.Join(", ", offer.ProductDetails.Select(product => product.ProductName)),
                     CustomerAddress = offer.CustomerAddress, // Use offer.CustomerAddress for delivery address
                     DelivyAddress = offer.CustomerAddress,   // Use offer.CustomerAddress for delivery address
-                    ShopAddress = offer.ShopAddress,
+
                     ShopName = offer.ShopName,
                     ShopContract = offer.ShopContract
                 };
 
+
+
+
                 try
                 {
+
+                    // Update the order to reflect it has been offered to a rider and its condition
+                    order.IsOfferedToRider = true;
+                    order.OrderCondition = OrderCondition.OrderTaken;
                     _db.Deliveries.Add(delivery);
                     await _db.SaveChangesAsync();
 
@@ -742,28 +711,36 @@ namespace OnlineShop.Areas.Customer.Controllers
                         }
                     }
 
+                    ViewBag.ShopAddress = offer.ShopAddress;
+
+                    // delivery.ShopAddress = offer.ShopAddress;
+
                     // Remove offer data from session after successful delivery creation
                     HttpContext.Session.Remove("OfferData");
 
                     // Return the view with the delivery details
-                    return View("DeliveryDetails", delivery);
+                    return View(delivery);
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.ToString());
-                    return View("Error");
+                    return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
                 }
             }
             else
             {
                 // Handle case when offer data is not available
-                return View("Error");
+                return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
             }
         }
 
 
 
-
+        // Method to serialize an Address object into a string
+        private string SerializeAddress(OrganicOption.Models.Address address)
+        {
+            return $"{address.Division}, {address.District}, {address.Thana}, {address.WardNo}, {address.StreetNo}, {address.House}";
+        }
 
 
         private async Task<RiderModel> FindAvailableRider()

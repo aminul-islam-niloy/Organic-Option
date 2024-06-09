@@ -21,7 +21,32 @@
                     <p><strong>Product Name:</strong> @product.ProductName</p>
                     <p><strong>Product Image:</strong> <img src="~/@product.ProductImage" alt="Product Image" /></p> <!-- New line for product image -->
                     <p><strong>Shop Name:</strong> @Model.ShopName</p>
-                    <p><strong>Shop Address:</strong> @Model.ShopAddress</p> <!-- New line for shop address -->
+                    <p> Shop Address: </p>
+          
+                    @if (Model.ShopAddress != null)
+                    {
+                        <div style="margin-left:40px">
+                            <label for="House">House:</label>
+                            <span id="House">@Html.DisplayFor(modelItem => Model.ShopAddress.House)</span><br />
+
+                            <label for="StreetNo">Street No:</label>
+                            <span id="StreetNo">@Html.DisplayFor(modelItem => Model.ShopAddress.StreetNo)</span><br />
+
+                            <label for="WardNo">Ward No:</label>
+                            <span id="WardNo">@Html.DisplayFor(modelItem => Model.ShopAddress.WardNo)</span><br />
+
+                            <label for="Thana">Thana:</label>
+                            <span id="Thana">@Html.DisplayFor(modelItem => Model.ShopAddress.Thana)</span><br />
+
+                            <label for="District">District:</label>
+                            <span id="District">@Html.DisplayFor(modelItem => Model.ShopAddress.District)</span><br />
+
+                            <label for="Division">Division:</label>
+                            <span id="Division">@Html.DisplayFor(modelItem => Model.ShopAddress.Division)</span><br />
+                        </div>
+                    }
+                    
+                    
                     <p><strong>Shop Contract:</strong> @Model.ShopContract</p>
                     <p><strong>Product Quantity:</strong> @product.Quantity</p>
 

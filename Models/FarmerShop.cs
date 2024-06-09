@@ -31,8 +31,6 @@ namespace OrganicOption.Models
         public Decimal ShopRevenue { get; set; }
         public DateTime LastSoldDate { get; set; }
 
-        //public  Address  Address {get;set;}
-
         public double Latitude { get; set; } // Latitude of the shop's location
         public double Longitude { get; set; } // Longitude of the shop's location
 

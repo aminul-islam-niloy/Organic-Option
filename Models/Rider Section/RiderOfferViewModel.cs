@@ -11,7 +11,7 @@ namespace OrganicOption.Models.Rider_Section
         public List<ProductwithOrderViewModel> ProductDetails { get; set; } // List of product details
         public Products Product { get; set; }
         public string CustomerAddress { get; set; }
-        public string ShopAddress { get; set; }
+        public Address ShopAddress { get; set; }
         public TimeSpan DeliveryTime { get; set; }
         public TimeSpan TimeRemaining { get; set; }
         public DateTime OfferStartTime { get; set; }
