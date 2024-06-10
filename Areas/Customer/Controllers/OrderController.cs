@@ -269,6 +269,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                 UserPhone = user.PhoneNumber,
                 OrderNo = order.OrderNo,
                 OrderDate = order.OrderDate,
+                OrderCondition = order.OrderCondition,
                 TotalPrice = order.OrderDetails.Sum(od => od.Quantity * od.Price),
                 OrderDetails = order.OrderDetails.Select(od => new OrderDetailsViewModel
                 {

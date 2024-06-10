@@ -29,11 +29,23 @@
             <div class="row">
                 <div class="col-md-4 text-center justify-content-center ">
                     <h4 style="margin-bottom:15px; margin-top:15px  ">Order Status</h4>
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-primary ml-5 ">Processing</button>
-                        <button type="button" class="btn btn-warning ml-5 ">Tracking</button>
-                        <button type="button" class="btn btn-success ml-5">Delivered</button>
-                    </div>
+              
+
+                    <h5>Order Condition: @order.OrderCondition</h5>
+                  
+                        @if (order.OrderCondition == OrderCondition.OnDelivary)
+                        {
+                            <form asp-action="ReleaseOrder" method="post">
+                            <input type="hidden" name="OrderNo" value="@order.OrderNo" />
+                                <button type="submit" class="btn btn-info">Track Order</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary" disabled>@order.OrderCondition</button>
+                        }
+                  
+                 
                 </div>
                 <div class="col-md-4 text-center">
                     <h4 style="margin-bottom:15px;  margin-top:15px ">Order Details</h4>
@@ -64,6 +76,7 @@
                             <th>Image</th>
                             <th>Quantity</th>
                             <th>Payment Method</th>
+                      
                         </tr>
                     </thead>
                     <tbody>
@@ -76,6 +89,7 @@
                                 <td><img src="~/@orderDetail.ProductImage" alt="Product Image" class="img-thumbnail" style="max-width: 70px; max-height: 70px;" /></td>
                                 <td>@orderDetail.Quantity</td>
                                 <td>@orderDetail.PaymentMethods</td>
+                                
                             </tr>
                         }
                     </tbody>

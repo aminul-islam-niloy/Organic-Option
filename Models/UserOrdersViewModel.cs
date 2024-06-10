@@ -17,6 +17,7 @@ namespace OnlineShop.Models
         public ApplicationUser User { get; set; }
         public List<Order> Orders { get; set; }
         public PaymentMethods PaymentMethod { get; set; }
+        public OrderCondition OrderCondition { get; set; }
 
 
         // Order details including product information
