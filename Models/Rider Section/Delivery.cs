@@ -28,5 +28,11 @@ namespace OrganicOption.Models.Rider_Section
 
         public DateTime OrderDeliveredDate { get; set; }
 
+
+        public double ShopLat { get; set; }
+        public double ShopLon { get; set; }
+        public double DeliveryLat { get; set; }
+        public double DeliveryLon { get; set; }
+
     }
 }
