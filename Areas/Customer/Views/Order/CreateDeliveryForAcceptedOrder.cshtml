@@ -1,53 +1,202 @@
 ﻿@model OrganicOption.Models.Rider_Section.Delivery
 
-<h2>Delivery Details</h2>
 
-<div>
-    <h4>Order ID: @Model.OrderId</h4>
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
 
-    <h4>Product Details:</h4>
-    <p>@Model.ProductDetails</p>
 
-    <h4>Customer Address:</h4>
-    <p>@Model.CustomerAddress</p>
 
-    <h4>Delivery Address:</h4>
-    <p>@Model.DelivyAddress</p>
+    .details, .map-container {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        border-radius: 8px;
+        background: white;
+        margin-bottom: 20px;
+    }
 
-    <h4>Shop Name:</h4>
-    <p>@Model.ShopName</p>
+    .details {
+        flex: 1 1 300px;
+    }
 
-    <h4>Shop Address:</h4>
- 
-    @if (ViewBag.ShopAddress != null)
-    {
-        <div>
-            <strong>Division:</strong> @ViewBag.ShopAddress.Division <br />
-            <strong>District:</strong> @ViewBag.ShopAddress.District <br />
-            <strong>Thana:</strong> @ViewBag.ShopAddress.Thana <br />
-            <strong>Ward No:</strong> @ViewBag.ShopAddress.WardNo <br />
-            <strong>Street No:</strong> @ViewBag.ShopAddress.StreetNo <br />
-            <strong>House:</strong> @ViewBag.ShopAddress.House <br />
-            
+    .map-container {
+        flex: 2 1 500px;
+    }
+
+    .card {
+        margin-bottom: 20px;
+    }
+
+        .card h4 {
+            margin: 10px;
+            padding: 5px;
+            text-align: justify-all;
+        }
+
+
+
+    #travel-mode-dropdown {
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+        background: white;
+        padding: 5px;
+        border: 1px solid black;
+    }
+</style>
+
+
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-md-4">
+
+            <h4 style="text-align:center; margin:10px">Delivery Details</h4>
+
+            <div class="details" >
+                <div class="card" style="margin:10px">
+                    <h4>Farmer Shop Details</h4>
+                    <p>Shop Name: @Model.ShopName</p>
+                    <p>Shop Contract: @Model.ShopContract</p>
+                    <p>Shop Address: @Model.ShopAddress</p>
+                    <h4>Shop Address:</h4>
+
+                    @if (ViewBag.ShopAddress != null)
+                    {
+                        <div>
+                            <strong>Division:</strong> @ViewBag.ShopAddress.Division <br />
+                            <strong>District:</strong> @ViewBag.ShopAddress.District <br />
+                            <strong>Thana:</strong> @ViewBag.ShopAddress.Thana <br />
+                            <strong>Ward No:</strong> @ViewBag.ShopAddress.WardNo <br />
+                            <strong>Street No:</strong> @ViewBag.ShopAddress.StreetNo <br />
+                            <strong>House:</strong> @ViewBag.ShopAddress.House <br />
+
+                        </div>
+                    }
+                    else
+                    {
+                        <p>No shop address available.</p>
+                    }
+                    <div style="margin:10px">
+                        <h4>Order ID: @Model.OrderId</h4>
+
+                        <h4>Product Details:</h4>
+                        <p>@Model.ProductDetails</p>
+                    </div>
+
+                </div>
+                <div class="card" style="margin:10px">
+                    <h4>Customer Details</h4>
+                    <p>Customer Address: @Model.CustomerAddress</p>
+                    <p>Delivery Address: @Model.DelivyAddress</p>
+                    <p>Payable Money: @Model.PayableMoney</p>
+                </div>
+                <div>
+                    <a class="btn btn-info" asp-area="Rider" asp-controller="RiderDelivery" asp-action="RunningDeliveries" style="margin-left:5px"> Running Delivary</a>
+                    <a class="btn btn-success" asp-area="Rider" asp-controller="RiderDelivery" asp-action="Index" style="margin-left:5px"> Manage Delivary</a>
+                    <a class="btn btn-primary" asp-area="Rider" asp-controller="RiderDelivery" asp-action="Index" style="margin-left:5px"> Confirm Delivary</a>
+                </div>
+            </div>
         </div>
-    }
-    else
-    {
-        <p>No shop address available.</p>
-    }
+        <div class="col-md-8">
+            <div class="map-container">
+                <div id="map" style="width:100%; height:500px"></div>
+                <div id="status-message" style="margin-top: 20px; color: red;"></div>
+
+                <div id="travel-mode-dropdown">
+                    <label for="travelMode">Select Travel Mode:</label>
+                    <select id="travelMode">
+
+                        <option value="foot-walking">Walking</option>
+                        <option value="foot-walking">Bike</option>
+                        <option value="foot-walking">Track</option>
+                        <option value="cycling-regular">Boat</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
-    <h4>Shop Contract:</h4>
-    <p>@Model.ShopContract</p>
 
-    <h4>Payable Money:</h4>
-    <p>@Model.PayableMoney</p>
 </div>
 
-<br />
-<h3>Go For PickUp Order</h3>
-<h3>Go For Delivery</h3>
+<script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<script>
+    var map = L.map('map').setView([22.806284, 89.553149], 13);
 
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
 
+    var shopLocation = [23.162718, 89.210788];
+    var deliveryLocation = [22.828455, 89.294137];
 
-<a asp-area="Rider" asp-controller="RiderDelivery" asp-action="Index" class="btn btn-primary">All Delivary</a>
+    var shopMarker = L.marker(shopLocation, { icon: L.icon({ iconUrl: '/img/icon/shop.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34] }) }).addTo(map).bindPopup('Farmer Shop').openPopup();
+    var deliveryMarker = L.marker(deliveryLocation, { icon: L.icon({ iconUrl: '/img/icon/customer.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34] }) }).addTo(map).bindPopup('Customer Address').openPopup();
+
+    var riderLocation = null;
+    var routingControl = null;
+
+    function addRoutingControl(travelMode) {
+        if (routingControl) {
+            map.removeControl(routingControl);
+        }
+
+        routingControl = L.Routing.control({
+            waypoints: [
+                L.latLng(riderLocation[0], riderLocation[1]),
+                L.latLng(shopLocation[0], shopLocation[1]),
+                L.latLng(deliveryLocation[0], deliveryLocation[1])
+            ],
+            routeWhileDragging: true,
+            router: L.Routing.openrouteservice('5b3ce3597851110001cf6248d9e2d2a53ae64908a2a36081b95a4abc', {
+                profile: travelMode,
+                serviceUrl: 'https://api.openrouteservice.org/v2/directions'
+            }),
+            showAlternatives: false,
+            lineOptions: {
+                styles: [
+                    { color: 'green', opacity: 0.6, weight: 4 }, // Rider to shop
+                    { color: 'blue', opacity: 0.6, weight: 4 }   // Shop to customer
+                ]
+            },
+            createMarker: function (i, wp, nWps) {
+                if (i === 0) {
+                    return L.marker(wp.latLng, { icon: L.icon({ iconUrl: '/img/icon/delivary.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34] }) }).bindPopup('Rider');
+                } else if (i === 1) {
+                    return L.marker(wp.latLng, { icon: L.icon({ iconUrl: '/img/icon/shop.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34] }) }).bindPopup('Farmer Shop');
+                } else {
+                    return L.marker(wp.latLng, { icon: L.icon({ iconUrl: '/img/icon/customer.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34] }) }).bindPopup('Customer Address');
+                }
+            }
+        }).addTo(map);
+    }
+
+    function handleLocationError() {
+        alert('Geolocation failed.');
+    }
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            riderLocation = [position.coords.latitude, position.coords.longitude];
+            L.marker(riderLocation, { icon: L.icon({ iconUrl: '/img/icon/delivary.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34] }) }).addTo(map).bindPopup('Rider').openPopup();
+
+            addRoutingControl(document.getElementById('travelMode').value);
+        }, handleLocationError);
+    } else {
+        handleLocationError();
+    }
+
+    document.getElementById('travelMode').addEventListener('change', function () {
+        if (riderLocation) {
+            addRoutingControl(this.value);
+        }
+    });
+</script>
