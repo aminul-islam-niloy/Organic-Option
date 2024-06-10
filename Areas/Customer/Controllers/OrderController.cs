@@ -288,6 +288,20 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
 
+        public IActionResult OrderTracking()
+        {
+            return View();
+        }
+
+
+
+
+
+
+
+
+
+
         [Authorize(Roles = "Customer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
