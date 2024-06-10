@@ -77,6 +77,10 @@
                                 {
                                     <li><a asp-area="Farmer" asp-controller="FarmerShop" asp-action="Index" class="nav-link">Manage Shop</a></li>
                                 }
+                                @if (userRole == "Rider")
+                                {
+                                    <li><a asp-area="Rider" asp-controller="RiderDelivery" asp-action="Index" class="nav-link">Manage Ride</a></li>
+                                }
                                 @if (userRole == "Customer")
                                 {
                                    

@@ -87,39 +87,40 @@ namespace OrganicOption.Areas.Rider.Controllers
             return View(deliveries);
         }
 
-        // Action to display delivered orders grouped by daily, weekly, and monthly
-        //public async Task<IActionResult> DeliveredOrders(string period)
-        //{
-        //    var riderId = GetCurrentRiderId();
-        //    if (riderId == null)
-        //    {
-        //        return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //    }
+        //  Action to display delivered orders grouped by daily, weekly, and monthly
+        //https://localhost:44343/Rider/RiderDelivery/DeliveredOrders/?period=weekly
+        public async Task<IActionResult> DeliveredOrders(string period)
+        {
+            var riderId = GetCurrentRiderId();
+            if (riderId == null)
+            {
+                return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            }
 
-        //    IQueryable<Delivery> query = _dbContext.Deliveries.Where(d => d.RiderId == riderId && d.OrderCondition == OrderCondition.Delivered);
+            IQueryable<Delivery> query = _dbContext.Deliveries.Where(d => d.RiderId == riderId && d.OrderCondition == OrderCondition.Delivered);
 
-        //    DateTime now = DateTime.Now;
-        //    switch (period.ToLower())
-        //    {
-        //        case "daily":
-        //            query = query.Where(d => d.OrderDeliveredDate.Date == now.Date);
-        //            break;
-        //        case "weekly":
-        //            var startOfWeek = now.AddDays(-(int)now.DayOfWeek);
-        //            query = query.Where(d => d.OrderDeliveredDate >= startOfWeek && d.OrderDeliveredDate < startOfWeek.AddDays(7));
-        //            break;
-        //        case "monthly":
-        //            query = query.Where(d => d.OrderDeliveredDate.Month == now.Month && d.OrderDeliveredDate.Year == now.Year);
-        //            break;
-        //        default:
-        //            return BadRequest("Invalid period specified.");
-        //    }
+          
+            switch (period.ToLower())
+            {
+                case "daily":
+                    query = query.Where(d => d.OrderDeliveredDate.Date == DateTime.Now);
+                    break;
+                case "weekly":
+                    var startOfWeek = DateTime.Now.AddDays(-(int)DateTime.Now.DayOfWeek);
+                    query = query.Where(d => d.OrderDeliveredDate >= startOfWeek && d.OrderDeliveredDate < startOfWeek.AddDays(7));
+                    break;
+                case "monthly":
+                    query = query.Where(d => d.OrderDeliveredDate.Month == DateTime.Now.Month && d.OrderDeliveredDate.Year == DateTime.Now.Year);
+                    break;
+                default:
+                    return BadRequest("Invalid period specified.");
+            }
 
-        //    var deliveries = await query.ToListAsync();
+            var deliveries = await query.ToListAsync();
 
-        //    ViewBag.Period = period;
-        //    return View(deliveries);
-        //}
+            ViewBag.Period = period;
+            return View(deliveries);
+        }
 
         // Helper method to get the current rider's ID
         private int? GetCurrentRiderId()

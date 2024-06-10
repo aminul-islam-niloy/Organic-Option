@@ -724,13 +724,13 @@ namespace OnlineShop.Areas.Customer.Controllers
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.ToString());
-                    return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+                    return RedirectToAction("Index", "RiderDelivery", new { area = "Rider" });
                 }
             }
             else
             {
                 // Handle case when offer data is not available
-                return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+                return RedirectToAction("Index", "RiderDelivery", new { area = "Rider" });
             }
         }
 

@@ -1,6 +1,14 @@
 ﻿@model IEnumerable<OrganicOption.Models.Rider_Section.Delivery>
 
 <h2>Delivered Orders - @ViewBag.Period</h2>
+<br />
+<br />
+
+<a class="btn btn-info" asp-area="Rider" asp-controller="RiderDelivery" asp-action="DeliveredOrders" asp-route-period="weekly">Weekly Delivery History</a>
+<a class="btn btn-info" asp-area="Rider" asp-controller="RiderDelivery" asp-action="DeliveredOrders" asp-route-period="monthly">Monthly Delivery History</a>
+
+<br />
+<br />
 
 <table class="table">
     <thead>
