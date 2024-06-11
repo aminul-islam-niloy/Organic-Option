@@ -69,7 +69,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             return View(user);
         }
 
-
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> UpdateLocation(double latitude, double longitude)
         {
@@ -78,12 +78,11 @@ namespace OnlineShop.Areas.Customer.Controllers
 
 
             var currentUser = await _userManager.GetUserAsync(User);
-            if (currentUser.Id != user.Id)
+            if (currentUser == null)
             {
-
-                return Forbid();
+                return RedirectToAction("Index", "Home");
             }
-
+    
 
             var userInfo = _db.ApplicationUser.FirstOrDefault(c => c.Id == user.Id);
             if (userInfo == null)
@@ -96,7 +95,7 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             await _userManager.UpdateAsync(userInfo);
 
-            return View(); 
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
