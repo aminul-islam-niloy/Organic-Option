@@ -84,8 +84,8 @@
                     <div style="margin:10px">
                         <h4>Order ID: @Model.OrderId</h4>
 
-                        <h4>Product Details:</h4>
-                        <p>@Model.ProductDetails</p>
+                        <h4>Product Details:@Model.ProductDetails</h4>
+                        
                     </div>
 
                 </div>
@@ -93,6 +93,7 @@
                     <h4>Customer Details</h4>
                     <p>Customer Address: @Model.CustomerAddress</p>
                     <p>Delivery Address: @Model.DelivyAddress</p>
+                    <p>Phone Num: @Model.CustomerPhone</p>
                     <p>Payable Money: @Model.PayableMoney</p>
                 </div>
                 <div>
@@ -135,11 +136,11 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
-    var shopLocation = [23.162718, 89.210788];
-    var deliveryLocation = [22.828455, 89.294137];
+    var shopLocation = [@Model.ShopLat, @Model.ShopLon];
+    var deliveryLocation = [@Model.DeliveryLat, @Model.DeliveryLon];
 
-    var shopMarker = L.marker(shopLocation, { icon: L.icon({ iconUrl: '/img/icon/shop.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34] }) }).addTo(map).bindPopup('Farmer Shop').openPopup();
-    var deliveryMarker = L.marker(deliveryLocation, { icon: L.icon({ iconUrl: '/img/icon/customer.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34] }) }).addTo(map).bindPopup('Customer Address').openPopup();
+    var shopMarker = L.marker(shopLocation, { icon: L.icon({ iconUrl: '/img/icon/shop.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34] }) }).addTo(map).bindPopup('FarmerShop').openPopup();
+    var deliveryMarker = L.marker(deliveryLocation, { icon: L.icon({ iconUrl: '/img/icon/customer.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34] }) }).addTo(map).bindPopup('Customer ').openPopup();
 
     var riderLocation = null;
     var routingControl = null;
@@ -171,9 +172,9 @@
                 if (i === 0) {
                     return L.marker(wp.latLng, { icon: L.icon({ iconUrl: '/img/icon/delivary.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34] }) }).bindPopup('Rider');
                 } else if (i === 1) {
-                    return L.marker(wp.latLng, { icon: L.icon({ iconUrl: '/img/icon/shop.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34] }) }).bindPopup('Farmer Shop');
+                    return L.marker(wp.latLng, { icon: L.icon({ iconUrl: '/img/icon/shop.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34] }) }).bindPopup('FarmerShop');
                 } else {
-                    return L.marker(wp.latLng, { icon: L.icon({ iconUrl: '/img/icon/customer.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34] }) }).bindPopup('Customer Address');
+                    return L.marker(wp.latLng, { icon: L.icon({ iconUrl: '/img/icon/customer.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34] }) }).bindPopup('Customer');
                 }
             }
         }).addTo(map);

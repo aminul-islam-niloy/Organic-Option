@@ -61,8 +61,21 @@ namespace OnlineShop.Areas.Customer.Controllers
         public async Task<IActionResult> Checkout(Order anOrder)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            var userInfo = _db.ApplicationUser.FirstOrDefault(c => c.Id == user.Id);
+
+
+            anOrder.Latitude = userInfo.Latitude;
+            anOrder.Longitude = userInfo.Longitude;
             anOrder.UserId = userId;
             anOrder.OrderDate = DateTime.Now;
+
 
             List<Products> products = HttpContext.Session.Get<List<Products>>("products");
             if (products != null)
@@ -523,6 +536,8 @@ namespace OnlineShop.Areas.Customer.Controllers
                     ShopName = offer.ProductDetails.FirstOrDefault()?.ShopName, // Get shop name
                     ShopContract = offer.ProductDetails.FirstOrDefault()?.ShopContact, // Get shop contract
                     Revenue = offer.Revenue,
+                    letetude = offer.letetude,
+                    longatude = offer.longatude,
                     ShopAddress = offer.ShopAddress, // Set the ShopAddress
                     TimeRemaining = (offer.OfferStartTime.AddMinutes(1) - DateTime.Now)
                 };
@@ -574,6 +589,8 @@ namespace OnlineShop.Areas.Customer.Controllers
                         .Select(fs => fs.ShopAddress)
                         .FirstOrDefaultAsync();
 
+                    var GeoLocation = await _db.FarmerShop.Where(fs => fs.Id == farmerShopId).FirstOrDefaultAsync();
+
                     if (order != null)
                     {
                         var productDetails = order.OrderDetails.Select(od => new ProductwithOrderViewModel
@@ -586,7 +603,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                             ShopAddress = od.Product.FarmerShop.ShopAddress // Include the ShopAddress
                         }).ToList();
 
-                     
+
 
                         var offerViewModel = new RiderOfferViewModel
                         {
@@ -594,7 +611,10 @@ namespace OnlineShop.Areas.Customer.Controllers
                             CustomerAddress = order.Address,
                             DeliveryTime = EstimateDeliveryTime(order),
                             Revenue = CalculateEarnings(order),
+                            letetude = GeoLocation.Latitude,
+                            longatude = GeoLocation.Longitude,
                             ProductDetails = productDetails,
+                            CustomerPhone = order.PhoneNo,
                             ShopAddress = shopAddress, // Set the ShopAddress
                             OfferStartTime = DateTime.Now // Store the offer start time
                         };
@@ -611,7 +631,7 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
 
-      
+
 
         //not used
 
@@ -672,19 +692,19 @@ namespace OnlineShop.Areas.Customer.Controllers
             {
                 var order = await _db.Orders
                     .Include(o => o.OrderDetails)
-                        .ThenInclude(od => od.Product) // Include product information
-                            .ThenInclude(p => p.FarmerShop) // Include shop information
+                        .ThenInclude(od => od.Product)
+                            .ThenInclude(p => p.FarmerShop)
                     .FirstOrDefaultAsync(o => o.Id == offer.OrderId);
 
                 if (order == null)
                 {
-                    // Handle case when the order is not found
+
                     return View("Error");
                 }
 
                 decimal totalOrderAmount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
 
-                // Check if any order detail has a payment method of Card
+
                 bool isPaymentByCard = order.OrderDetails.Any(od => od.PaymentMethods == PaymentMethods.Card) || order.PaymentMethods == PaymentMethods.Card;
 
                 var delivery = new Delivery
@@ -694,11 +714,16 @@ namespace OnlineShop.Areas.Customer.Controllers
                     OrderCondition = OrderCondition.OrderTaken,
                     PayableMoney = isPaymentByCard ? 0 : totalOrderAmount,
                     ProductDetails = string.Join(", ", offer.ProductDetails.Select(product => product.ProductName)),
-                    CustomerAddress = offer.CustomerAddress, // Use offer.CustomerAddress for delivery address
-                    DelivyAddress = offer.CustomerAddress,   // Use offer.CustomerAddress for delivery address
-
+                    CustomerAddress = offer.CustomerAddress,
+                    DelivyAddress = offer.CustomerAddress,
+                    CustomerPhone = offer.CustomerPhone,
                     ShopName = offer.ShopName,
-                    ShopContract = offer.ShopContract
+                    ShopContract = offer.ShopContract,
+                    ShopLat = offer.letetude,
+                    ShopLon = offer.longatude,
+                    DeliveryLat = order.Latitude,
+                    DeliveryLon = order.Longitude,
+                    OrderAcceptTime = DateTime.Now
                 };
 
 
@@ -706,14 +731,20 @@ namespace OnlineShop.Areas.Customer.Controllers
 
                 try
                 {
+                    foreach (var orDesin in order.OrderDetails)
+                    {
+                        orDesin.OrderCondition = OrderCondition.OrderTaken;
 
-                    // Update the order to reflect it has been offered to a rider and its condition
+                    }
                     order.IsOfferedToRider = true;
+
                     order.OrderCondition = OrderCondition.OrderTaken;
                     _db.Deliveries.Add(delivery);
                     await _db.SaveChangesAsync();
 
-                    // Notify farmers for each product in the order
+
+
+
                     foreach (var orderDetail in order.OrderDetails)
                     {
                         var product = orderDetail.Product;
@@ -728,12 +759,10 @@ namespace OnlineShop.Areas.Customer.Controllers
 
                     ViewBag.ShopAddress = offer.ShopAddress;
 
-                    // delivery.ShopAddress = offer.ShopAddress;
 
-                    // Remove offer data from session after successful delivery creation
                     HttpContext.Session.Remove("OfferData");
 
-                    // Return the view with the delivery details
+
                     return View(delivery);
                 }
                 catch (Exception ex)
@@ -744,14 +773,14 @@ namespace OnlineShop.Areas.Customer.Controllers
             }
             else
             {
-                // Handle case when offer data is not available
+
                 return RedirectToAction("Index", "RiderDelivery", new { area = "Rider" });
             }
         }
 
 
 
-        // Method to serialize an Address object into a string
+
         private string SerializeAddress(OrganicOption.Models.Address address)
         {
             return $"{address.Division}, {address.District}, {address.Thana}, {address.WardNo}, {address.StreetNo}, {address.House}";
@@ -770,7 +799,7 @@ namespace OnlineShop.Areas.Customer.Controllers
 
         private TimeSpan EstimateDeliveryTime(Order order)
         {
-            // Example: Fixed average delivery time of 30 minutes
+            //  Fixed average delivery time of 30 minutes
             return TimeSpan.FromMinutes(30);
         }
 

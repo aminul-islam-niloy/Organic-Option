@@ -16,6 +16,9 @@ namespace OrganicOption.Models.Rider_Section
         public TimeSpan TimeRemaining { get; set; }
         public DateTime OfferStartTime { get; set; }
         public decimal Revenue { get; set; }  
+        public string CustomerPhone { get; set; }   
+        public double letetude { get; set; }
+        public double longatude { get; set; }
 
         public string ShopName { get; set; } // Add shop name
         public string ShopContract { get; set; } // Add shop contract
