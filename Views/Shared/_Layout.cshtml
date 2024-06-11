@@ -249,7 +249,7 @@
                         </div>
                         <div class="col-lg-3">
                             <div class="widgets_container newsletter">
-                                <h3>Follow Us</h3>
+                             @*    <h3>Follow Us</h3>
                                 <div class="footer_social_link">
                                     <ul>
                                         <li><a href="https://www.facebook.com/aminulislamniloy122/" title="Facebook"><i class="fa fa-facebook"></i></a></li>
@@ -259,7 +259,9 @@
                                         <li><a href="https://pinterest.com" title="Pinterest"><i class="fa fa-pinterest"></i></a></li>
                                         <li><a href="https://vimeo.com" title="Vimeo"><i class="fa fa-vimeo"></i></a></li>
                                     </ul>
-                                </div>
+                                </div> *@
+
+                            
                                 <div class="subscribe_form">
                                     <h3>Subscribe</h3>
                                     <form id="mc-form" class="mc-form footer-newsletter" method="post" action="#">
@@ -283,6 +285,35 @@
             </div>
         </footer>
     </div>
+
+ 
+
+
+
+    <script>
+        function updateLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
+
+                    // Update the form fields with the current location
+                    document.getElementById('latitude').value = latitude;
+                    document.getElementById('longitude').value = longitude;
+
+                    // Submit the form
+                    document.getElementById('update-location-form').submit();
+                }, function (error) {
+                    console.error('Error getting location:', error);
+                    alert('Failed to get location.');
+                });
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+        }
+    </script>
+
+
 
     <environment include="Development">
         <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>

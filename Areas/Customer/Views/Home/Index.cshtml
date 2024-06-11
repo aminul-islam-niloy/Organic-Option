@@ -42,7 +42,7 @@
                     <a asp-area="" asp-controller="Home" asp-action="Index"><img src="~/img/logo/online-shoping.png" style="height: 50px; width: 80%;" alt=""></a>
             </div>
          </div>
-         <div class="col-lg-9">
+         <div class="col-lg-7">
             <div class="header_middle_inner">
                <div class="search-container">
 
@@ -64,6 +64,15 @@
 
                </div>
             </div>
+         </div>
+
+         <div class="col-lg-2">
+                <form id="update-location-form" method="post" asp-area="Customer" asp-controller="UserProfile" asp-action="UpdateLocation">
+                    <input type="hidden" id="latitude" name="latitude" />
+                    <input type="hidden" id="longitude" name="longitude" />
+                    <button type="button" class="btn btn-success" onclick="updateLocation()">Update Location</button>
+                </form>
+
          </div>
       </div>
    </div>

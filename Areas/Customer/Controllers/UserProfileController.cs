@@ -9,6 +9,7 @@ using OnlineShop.Models;
 using System;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace OnlineShop.Areas.Customer.Controllers
@@ -66,6 +67,36 @@ namespace OnlineShop.Areas.Customer.Controllers
             }
 
             return View(user);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateLocation(double latitude, double longitude)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId);
+
+
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser.Id != user.Id)
+            {
+
+                return Forbid();
+            }
+
+
+            var userInfo = _db.ApplicationUser.FirstOrDefault(c => c.Id == user.Id);
+            if (userInfo == null)
+            {
+                return NotFound();
+            }
+
+            userInfo.Latitude = latitude;
+            userInfo.Longitude = longitude;
+
+            await _userManager.UpdateAsync(userInfo);
+
+            return View(); 
         }
 
         [HttpPost]

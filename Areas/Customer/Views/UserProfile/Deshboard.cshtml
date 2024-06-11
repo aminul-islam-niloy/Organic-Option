@@ -60,7 +60,7 @@
 
 
 <div class="container">
- 
+
     <div class="row mt-5">
         <div class="col-md-4">
             <div class="card">
@@ -76,8 +76,8 @@
                     <br />
                     <br />
                     <h4 class="card-title">@UserManager.GetUserName(User)</h4>
-                  <br />
-                  <br />
+                    <br />
+                    <br />
 
                     <a asp-area="Customer" style="margin-left:10px; margin-bottom :10px ;" asp-controller="UserProfile" class="btn btn-info" asp-action="Edit" asp-route-id="@userId">Edit Profile</a>
                     <br />
@@ -115,7 +115,7 @@
             </div>
 
 
-   
+
             <div class="card">
                 <div class="card-body">
                     <h3 class="card-title">Manage Information</h3>
@@ -123,7 +123,7 @@
                     <dl class="row">
                         @if (User.IsInRole("Admin"))
                         {
-                         
+
 
                             <dt class="col-sm-4">Manage Orders:</dt>
                             <dd class="col-sm-8"> <a asp-area="Admin" style="margin-left:10px" asp-controller="Products" asp-action="Index" class="btn btn-success">Manage Products</a></dd>
@@ -133,20 +133,20 @@
 
                             <dt class="col-sm-4">Manage Tag:</dt>
                             <dd class="col-sm-8"> <a asp-area="Admin" style="margin-left:10px" asp-controller="SpecialTag" asp-action="Index" class="btn btn-success">Manage Tags</a></dd>
-                            
+
                             <dt class="col-sm-4">Manage Orders:</dt>
                             <dd class="col-sm-8"> <a asp-area="Customer" style="margin-left:10px" asp-controller="Order" asp-action="Index" class="btn btn-success"><i class="fa-solid fa-bag-shopping"></i>Manage Orders</a></dd>
                             <dt class="col-sm-4">Manage Users:</dt>
                             <dd class="col-sm-8"> <a asp-area="Customer" style="margin-left:10px" class="btn btn-info" asp-controller="User" asp-action="Index" class="nav-link">Manage User</a> </dd>
                             <dt class="col-sm-4">Manage Shop:</dt>
                             <dd class="col-sm-8"> <a asp-area="Rider" style="margin-left:10px" class="btn btn-info" asp-controller="Rider" asp-action="Riders" class="nav-link">Manage Rider</a> </dd>
-                            
+
                             <dt class="col-sm-4">Other Setting:</dt>
                             <dd class="col-sm-8">   <a asp-area="Identity" class="btn btn-danger" style="margin-left:10px" asp-page="/Account/Manage/ChangePassword" title="Manage"> Password Section</a> </dd>
                         }
                         @if (User.IsInRole("SuperAdmin"))
                         {
-                         
+
                             <dt class="col-sm-4">Manage Role:</dt>
                             <dd class="col-sm-8"> <a asp-area="Admin" style="margin-left:10px" asp-controller="Role" asp-action="Index" class="btn btn-success"> Manage Role</a></dd>
                             <dt class="col-sm-4">Manage Users:</dt>
@@ -172,11 +172,11 @@
 
 
                             <dt class="col-sm-4">Manage Delivary:</dt>
-                            <dd class="col-sm-8">  
-                            <a asp-area="Rider" asp-controller="RiderDelivery" asp-action="Index" class="nav-link">Manage Ride</a>
+                            <dd class="col-sm-8">
+                                <a asp-area="Rider" asp-controller="RiderDelivery" asp-action="Index" class="nav-link">Manage Ride</a>
                             </dd>
-                            
-                            
+
+
                             <dt class="col-sm-4">Other Setting:</dt>
                             <dd class="col-sm-8">   <a asp-area="Identity" class="btn btn-danger" style="margin-left:10px" asp-page="/Account/Manage/ChangePassword" title="Manage"> Password Section</a> </dd>
                         }
@@ -184,7 +184,7 @@
 
                         else if (User.IsInRole("Customer"))
                         {
-                         
+
                             <dt class="col-sm-4">Go to Cart:</dt>
                             <dd class="col-sm-8">
                                 <a asp-area="Customer" style="margin-left:10px" asp-controller="Home" class="btn btn-success width:20px;padding:2px;" asp-action="Cart" class="nav-link"><i class="fas fa-shopping-cart"></i> (@count) Cart</a>
@@ -197,6 +197,15 @@
                     </dl>
 
 
+                    <form id="update-location-form" method="post" asp-area="Customer" asp-controller="UserProfile" asp-action="UpdateLocation">
+                        <input type="hidden" id="latitude" name="latitude" />
+                        <input type="hidden" id="longitude" name="longitude" />
+                        <button type="button" class="btn btn-success" onclick="updateLocation()">Update Location</button>
+                    </form>
+
+
+
+
                 </div>
             </div>
 
@@ -206,9 +215,35 @@
 
     </div>
 
-  
+
 </div>
 
 <br />
 <br />
 <br />
+
+
+<script>
+    function updateLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+
+                // Update the form fields with the current location
+                document.getElementById('latitude').value = latitude;
+                document.getElementById('longitude').value = longitude;
+
+                // Submit the form
+                document.getElementById('update-location-form').submit();
+            }, function (error) {
+                console.error('Error getting location:', error);
+                alert('Failed to get location.');
+            });
+        } else {
+            alert('Geolocation is not supported by this browser.');
+        }
+    }
+</script>
+
+
