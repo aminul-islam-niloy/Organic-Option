@@ -5,8 +5,35 @@ using OnlineShop.Models;
 
 namespace OnlineShop.Models
 {
+    public class OrderDetails
+    {
+        public int Id { get; set; }
+        [Display(Name = "Order")]
+        public int OrderId { get; set; }
+        [Display(Name = "Product")]
+        public int PorductId { get; set; }
 
-    public enum MobileBanking
+        [ForeignKey("OrderId")]
+        public Order Order { get; set; }
+        [ForeignKey("PorductId")]
+        public Products Product { get; set; }
+
+        public int Quantity { get; set; }
+
+        public decimal Price { get; set; }
+        public decimal DiscountedPrice { get; set; }
+        public decimal TotalDelivaryCharge { get; set; }
+
+        public bool RequiresPreservation { get; set; }
+        public string StripeSessionId { get; set; }
+
+        public PaymentMethods PaymentMethods { get; set; }
+
+        public PaymentCondition PaymentCondition { get; set; }
+
+        public OrderCondition OrderCondition { get; set; }
+    }
+      public enum MobileBanking
     {
         BKash,
         Roket,
@@ -38,45 +65,7 @@ namespace OnlineShop.Models
         Delivered,
 
     }
-
-    public class OrderDetails
-    {
-        public int Id { get; set; }
-        [Display(Name = "Order")]
-        public int OrderId { get; set; }
-        [Display(Name = "Product")]
-        public int PorductId { get; set; }
-
-        [ForeignKey("OrderId")]
-        public Order Order { get; set; }
-        [ForeignKey("PorductId")]
-        public Products Product { get; set; }
-
-        // Quantity of the product in this order detail
-        public int Quantity { get; set; }
-
-        // Price of the product in this order detail
-        public decimal Price { get; set; }
-        public decimal DiscountedPrice { get; set; }
-        public decimal TotalDelivaryCharge { get; set; }
-
-
-        // Indicates if preservation is needed for organic products
-        public bool RequiresPreservation { get; set; }
-        public string StripeSessionId { get; set; }
-
-        // Payment method used
-        public PaymentMethods PaymentMethods { get; set; }
-
-        // Payment condition
-        public PaymentCondition PaymentCondition { get; set; }
-
-        // Order condition
-        public OrderCondition OrderCondition { get; set; }
-    }
 }
 
 
-//PaymentMethods paymentMethod = PaymentMethods.MobileBanking;
-//MobileBanking mobileBankingOption = MobileBanking.BKash;
 

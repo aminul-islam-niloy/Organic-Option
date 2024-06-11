@@ -13,7 +13,6 @@ namespace OrganicOption.Models.Rider_Section
         public string DelivyAddress { get; set; }
         public string CustomerPhone { get; set; }
 
-
         public OrderCondition OrderCondition { get; set; }
         public PaymentCondition PaymentCondition { get; set; }
         public decimal PayableMoney { get; set; }
@@ -25,10 +24,8 @@ namespace OrganicOption.Models.Rider_Section
         public Address ShopAddress { get; set; }    
         public string ShopName { get; set; }    
         public string ShopContract { get; set; }
-
         public DateTime OrderDeliveredDate { get; set; }
-
-
+        public DateTime OrderAcceptTime { get; set; }   
         public double ShopLat { get; set; }
         public double ShopLon { get; set; }
         public double DeliveryLat { get; set; }

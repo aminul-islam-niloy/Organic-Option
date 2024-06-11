@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OnlineShop.Models
 {
-    public class ApplicationUser: IdentityUser
+    public class ApplicationUser : IdentityUser
     {
         [Required]
         [Display(Name = "First Name")]
@@ -16,8 +16,10 @@ namespace OnlineShop.Models
         public int? UsernameChangeLimit { get; set; } = 10;
         public byte[] ProfilePicture { get; set; }
 
-        public DateTime? DateOfBirth { get; set; } // Add date of birth property
-        public string Address { get; set; } // Add address property
+        public DateTime? DateOfBirth { get; set; }
+        public string Address { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
 
     }
 }

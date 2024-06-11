@@ -12,14 +12,14 @@ namespace OrganicOption.Models
 {
     public class FarmerShop
     {
-        public int Id { get; set; } // Primary key
+        public int Id { get; set; } 
         [Required]
         [Display(Name = "Shop Name")]
-        public string ShopName { get; set; } // Shop Name
+        public string ShopName { get; set; } 
         [Required]
         [Display(Name = "Cover Photo")]
-        public byte[] CoverPhoto { get; set; } // Cover Photo
-        public bool IsShopOpen { get; set; } // Shop Open or Close
+        public byte[] CoverPhoto { get; set; } 
+        public bool IsShopOpen { get; set; } 
         [Required]
         [Display(Name = "Contract")]
         public string ContractInfo { get; set; }
@@ -31,24 +31,19 @@ namespace OrganicOption.Models
         public Decimal ShopRevenue { get; set; }
         public DateTime LastSoldDate { get; set; }
 
-        public double Latitude { get; set; } // Latitude of the shop's location
-        public double Longitude { get; set; } // Longitude of the shop's location
+        public double Latitude { get; set; } 
+        public double Longitude { get; set; } 
 
-        // Navigation property to link this shop to a farmer
-
-        public ICollection<Products> Products { get; set; } // Products associated with this farmer
-        public ICollection<ShopReview> Reviews { get; set; } // Reviews of this farmer's shop
-
+        public ICollection<Products> Products { get; set; } 
+        public ICollection<ShopReview> Reviews { get; set; } 
         public string FarmerUserId { get; set; } // Foreign key to the ApplicationUser
-        public ApplicationUser FarmerUser { get; set; } // Navigation property
+        public ApplicationUser FarmerUser { get; set; } 
 
         public ICollection<InventoryItem> Inventory { get; set; }
 
         public ICollection<Order> Orders { get; set; }
 
         public ICollection<Delivery> Deliveries { get; set; }
-
-        public virtual ProductTypes ShopCatagory { get; set; }
 
     }
 

@@ -24,8 +24,8 @@ namespace OnlineShop.Models
         public string PhoneNo { get; set; }
         [Required]
         [EmailAddress]
-        public double Latitude { get; set; } // Latitude of the Customer location
-        public double Longitude { get; set; } // Longitude of the Customer location
+        public double Latitude { get; set; } 
+        public double Longitude { get; set; } 
         public string Email { get; set; }
         [Required]
         public string Address { get; set; }
