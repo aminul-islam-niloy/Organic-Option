@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Localization;
 using OnlineShop.Data;
 using OnlineShop.Models;
 using OnlineShop.Payment;
@@ -12,7 +13,10 @@ using OnlineShop.Service;
 using OrganicOption.Service;
 using Stripe;
 using System;
+using System.Globalization;
 using System.Configuration;
+using Microsoft.Extensions.Options;
+using System.Collections.Generic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +34,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     .AddDefaultUI()
     .AddDefaultTokenProviders();
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
 builder.Services.AddRazorPages();
 builder.Services.AddSession(options =>
 {
@@ -58,6 +64,22 @@ builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Str
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddScoped<NotificationService>();
 
+// Localization configuration
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new List<CultureInfo>
+    {
+        new CultureInfo("en"),
+        new CultureInfo("bn")
+    };
+
+    options.DefaultRequestCulture = new RequestCulture("en");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -80,6 +102,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseSession();
+
+// Enable localization
+var localizationOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value;
+app.UseRequestLocalization(localizationOptions);
 
 app.UseEndpoints(endpoints =>
 {
