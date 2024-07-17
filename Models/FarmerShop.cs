@@ -35,7 +35,9 @@ namespace OrganicOption.Models
         public double Longitude { get; set; } 
 
         public ICollection<Products> Products { get; set; } 
-        public ICollection<ShopReview> Reviews { get; set; } 
+        public ICollection<ShopReview> Reviews { get; set; }
+        public double OverallRating { get; set; }
+        public int TotalReviews { get; set; }
         public string FarmerUserId { get; set; } // Foreign key to the ApplicationUser
         public ApplicationUser FarmerUser { get; set; } 
 

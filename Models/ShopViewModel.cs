@@ -23,6 +23,11 @@ namespace OrganicOption.Models
         public List<Products> TopSelling { get; set; }
         public List<FarmerShop> BestSeller { get; set; }
         public FarmerShop FarmerShop { get; set; }
+
+        public double AverageRating { get; set; }
+        public int TotalReviews { get; set; }
+        public string UserName { get; set; }
+        public List<ShopReview> Reviews { get; set; }
     }
 }
 

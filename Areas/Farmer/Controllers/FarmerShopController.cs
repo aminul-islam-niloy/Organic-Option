@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace OrganicOption.Areas.Farmer.Controllers
@@ -656,7 +657,51 @@ namespace OrganicOption.Areas.Farmer.Controllers
         }
 
 
+        //[Authorize(Roles = "Customer")]
+        [AllowAnonymous]
+        public IActionResult CreateReview(string farmerShopId)
+        {
+            ViewBag.FarmerShopId = farmerShopId; // Pass the FarmerShop ID to the view
+            return View();
+        }
 
+        [HttpPost]
+        [AllowAnonymous]
+        //[Authorize(Roles = "Customer")]
+        public IActionResult CreateReview(ShopReview review)
+        {
+            
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = _context.ApplicationUser.Find(userId);
+            review.User = user;
+
+            review.UserName = $"{user.FirstName} {user.LastName}";
+            review.ReviewDate = DateTime.Now;
+
+                _context.ShopReview.Add(review); 
+                _context.SaveChanges();
+
+       
+            var farmerShop = _context.FarmerShop.SingleOrDefault(fs => fs.Id == review.FarmerShopId);
+  
+            if (farmerShop != null)
+            {
+                var newTotalReviews = farmerShop.TotalReviews + 1;
+                var newOverallRating = (farmerShop.OverallRating * farmerShop.TotalReviews + review.Rating) / newTotalReviews;
+
+                farmerShop.TotalReviews = newTotalReviews;
+                farmerShop.OverallRating = newOverallRating;
+
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Shop", new { shopId = review.FarmerShopId });
+        
+
+
+            
+
+        }
 
 
 

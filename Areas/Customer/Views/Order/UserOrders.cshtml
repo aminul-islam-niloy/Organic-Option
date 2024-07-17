@@ -122,7 +122,7 @@
 
                                 <button class="btn btn-secondary " style=" margin-left:5px" disabled>Return Order</button>
                     // <a asp-controller="Review" style="width:180px;height:40px; margin-left:5px" asp-action="Create" asp-route-shopId="@order.ShopId" class="btn btn-success">Review Farmer Shop</a>
-                                <a class="btn btn-warning" style="width:180px;height:40px; margin-left:5px" href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = order.ShopId })">Review Farmer Shop</a>
+                            <a class="btn btn-warning" style="width:180px;height:40px; margin-left:5px" href="@Url.Action("CreateReview", "FarmerShop", new { area = "Farmer", farmerShopId = order.ShopId })">Review  Shop</a>
                             }
                         }
                

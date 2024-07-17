@@ -18,7 +18,7 @@
             <p><strong>Open Status:</strong> @(Model.FarmerShop.IsShopOpen ? "Open" : "Closed")</p>
         </div>
        
-        <div class="col-md-4 mt-30">
+        <div class="col-md-3 mt-30">
             <h4>Shop Address</h4>
             @if (Model.FarmerShop.ShopAddress != null)
             {
@@ -40,7 +40,7 @@
             }
         </div>
 
-        <div class="col-md-4 mt-30">
+        <div class="col-md-3 mt-30">
             <h4>Address</h4>
             @if (Model.FarmerShop.ShopAddress != null)
             {
@@ -56,9 +56,37 @@
                     <span id="Division">@Html.DisplayFor(modelItem => Model.FarmerShop.ShopAddress.Division)</span><br />
                 </div>
             }
-            
+
+          
         </div>
-       
+
+        <div class="col-md-2 mt-30">
+            <p><strong> Rating:</strong> @Model.FarmerShop.OverallRating ( @Model.FarmerShop.TotalReviews reviews)</p>
+            <div>
+                @{
+                    double rating = Model.FarmerShop.OverallRating;
+                    int fullStars = (int)rating;
+                    double halfStarThreshold = rating - fullStars;
+                    int emptyStars = 5 - fullStars - (halfStarThreshold >= 0.5 ? 1 : 0);
+
+                    for (int i = 0; i < fullStars; i++)
+                    {
+                        <i class="fa fa-star"></i>
+                    }
+
+                    if (halfStarThreshold >= 0.5)
+                    {
+                        <i class="fa fa-star-half-o"></i>
+                    }
+
+                    for (int i = 0; i < emptyStars; i++)
+                    {
+                        <i class="fa fa-star-o"></i>
+                    }
+                }
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -543,5 +571,104 @@
                 </div>
             </div>
         </div>
+
+
+
     </div>
 </section>
+<hr />
+<h4>Shop Review and Rating</h4>
+
+@if (Model.FarmerShop.Reviews != null && Model.FarmerShop.Reviews.Any())
+{
+    @foreach (var review in Model.FarmerShop.Reviews)
+    {
+        <div class="review">
+            <div class="review-header">
+                <div class="profile-photo">
+                    @review.UserName.Substring(0, 1)
+                </div>
+                <div class="review-info">
+                    <h4>@review.UserName</h4>
+                    <span>@review.ReviewDate.ToString("MMMM dd, yyyy")</span>
+                </div>
+            </div>
+            <div class="stars">
+                @for (int i = 0; i < review.Rating; i++)
+                {
+                    <label>&#9733;</label>
+                }
+                @for (int i = review.Rating; i < 5; i++)
+                {
+                    <label style="color: #ccc;">&#9733;</label>
+                }
+            </div>
+            <p>@review.Comment</p>
+        </div>
+    }
+}
+else
+{
+    <p>No reviews yet.</p>
+}
+
+
+<style>
+  /*   .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    } */
+
+    .review {
+        padding: 10px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .review-header {
+        display: flex;
+        align-items: center;
+    }
+
+    .profile-photo {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #007bff;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 1.5em;
+        margin-right: 15px;
+    }
+
+    .review-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+        .review-info h4 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+
+        .review-info span {
+            font-size: 0.9em;
+            color: #888;
+        }
+
+    .stars {
+        display: flex;
+        margin: 10px 0;
+    }
+
+        .stars label {
+            font-size: 2em;
+            color: #f39c12;
+        }
+</style>

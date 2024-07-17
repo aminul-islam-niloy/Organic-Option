@@ -19,9 +19,11 @@ namespace OrganicOption.Models
 
         // Navigation property for the user who wrote the review
         public ApplicationUser User { get; set; }
+        [Required]
+        public string UserName { get; set; }
 
         // Foreign key for the farmer being reviewed
-        public string FarmerShopId { get; set; }
+        public int FarmerShopId { get; set; }
         public FarmerShop FarmerShop { get; set; }
 
     }

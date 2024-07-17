@@ -1,0 +1,53 @@
+﻿@model OrganicOption.Models.ShopReview
+@{
+    ViewData["Title"] = "Write a Review";
+}
+
+<h4>Write a Review</h4>
+
+<form asp-action="CreateReview" method="post">
+    <div class="form-group mt-5" style="padding:10px">
+        <label for="comment" style="margin-bottom:10px">Comment:</label>
+        <textarea class="form-control" id="comment" name="Comment" rows="3" required></textarea>
+    </div>
+    <div class="form-group mt-5" style="padding:10px">
+        <label for="rating" style="margin-bottom:10px">Rating (1-5):</label>
+        <br />
+        <div class="stars">
+            <input type="radio" id="star5" name="Rating" value="5" required /><label for="star5">&#9733;</label>
+            <input type="radio" id="star4" name="Rating" value="4" /><label for="star4">&#9733;</label>
+            <input type="radio" id="star3" name="Rating" value="3" /><label for="star3">&#9733;</label>
+            <input type="radio" id="star2" name="Rating" value="2" /><label for="star2">&#9733;</label>
+            <input type="radio" id="star1" name="Rating" value="1" /><label for="star1">&#9733;</label>
+        </div>
+    </div>
+    <input type="hidden" name="FarmerShopId" value="@ViewBag.FarmerShopId" />
+
+    <div class="form-group">
+        <button type="submit" style="margin-left:9px" class="btn btn-warning">Submit Review</button>
+    </div>
+</form>
+
+<style>
+    .stars {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-start;
+    }
+
+        .stars input[type="radio"] {
+            display: none;
+        }
+
+        .stars label {
+            font-size: 2em;
+            color: #ccc;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+
+        .stars input[type="radio"]:checked ~ label,
+        .stars input[type="radio"]:hover ~ label {
+            color: #f39c12;
+        }
+</style>
