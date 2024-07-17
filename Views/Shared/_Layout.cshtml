@@ -417,6 +417,50 @@
         });
     </script>
 
+    <script>
+        // Request permission to show notifications
+        if ('Notification' in window) {
+            Notification.requestPermission().then(function (permission) {
+                console.log('Notification permission:', permission);
+            });
+        } else {
+            console.log('This browser does not support notifications.');
+        }
+
+        // Function to display browser notification
+        function displayNotification(message) {
+            if (Notification.permission === 'granted') {
+                var notification = new Notification('New Notification', {
+                    body: message
+                });
+                notification.onclick = function () {
+                    // Handle notification click if needed
+                    window.focus(); // Focus on the window when notification clicked
+                };
+            }
+        }
+
+        // AJAX call to get unread notifications count and display browser notification
+        function checkNotifications() {
+            $.ajax({
+                url: '/Customer/Notifications/GetUnreadNotificationCount',
+                method: 'GET',
+                success: function (count) {
+                    if (count > 0) {
+                        displayNotification('You have ' + count + ' unread notifications.');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching notification count:', error);
+                }
+            });
+        }
+
+        // Check notifications periodically
+        setInterval(checkNotifications, 60000); // Check every minute (adjust as needed)
+    </script>
+
+
     <script src="~/js/plugins.js"></script>
     <script src="~/js/main.js"></script>
 
