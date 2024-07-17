@@ -289,12 +289,13 @@ namespace OnlineShop.Areas.Customer.Controllers
                     ProductId = od.PorductId,
                     ProductName = od.Product.Name,
                     ProductImage = od.Product.Image,
-
+                    ShopId = od.Product.FarmerShopId,
                     Quantity = od.Quantity,
                     Price = od.Price,
                     PaymentMethods = od.PaymentMethods,
 
-                }).ToList()
+                }).ToList(),
+                ShopId = order.OrderDetails.FirstOrDefault().Product.FarmerShopId
             }).ToList();
 
             return View(viewModel);

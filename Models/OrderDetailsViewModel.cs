@@ -15,7 +15,7 @@ namespace OnlineShop.Models
         public List<ProductViewModel> Products { get; set; }
         public string UserId { get; set; } // Include UserId property
         public string UserName { get; set; }
-
+        public int ShopId { get; set; }
         public int ProductId { get; set; }
         public string ProductName { get; set; }
         public string ProductImage { get; set; }

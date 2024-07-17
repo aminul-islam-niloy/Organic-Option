@@ -19,7 +19,7 @@ namespace OnlineShop.Models
         public PaymentMethods PaymentMethod { get; set; }
         public OrderCondition OrderCondition { get; set; }
 
-
+        public int ShopId { get; set; }
         // Order details including product information
         public List<OrderDetailsViewModel> OrderDetails { get; set; }
 

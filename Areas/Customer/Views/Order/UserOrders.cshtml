@@ -1,107 +1,4 @@
-﻿@* @model List<UserOrdersViewModel>
-
-<h4 class="text-center mt-5 mb-5">My Orders</h4>
-
-<style>
-    /* Custom CSS */
-    .card {
-        border-radius: 10px;
-    }
-
-    .card-header {
-        background-color: #f8f9fa;
-    }
-
-    .card-body {
-        padding: 1rem;
-    }
-
-    .table-responsive {
-        overflow-x: auto;
-    }
-</style>
-
-
-@foreach (var order in Model)
-{
-    <div class="card mb-4">
-        <div class="card-header">
-            <div class="row">
-                <div class="col-md-4 text-center justify-content-center ">
-                    <h4 style="margin-bottom:15px; margin-top:15px  ">Order Status</h4>
-              
-
-                    <h5>Order Condition: @order.OrderCondition</h5>
-                  
-                        @if (order.OrderCondition == OrderCondition.OnDelivary)
-                        {
-                            <form asp-action="ReleaseOrder" method="post">
-                            <input type="hidden" name="OrderNo" value="@order.OrderNo" />
-                                <button type="submit" class="btn btn-info">Track Order</button>
-                            </form>
-                        }
-                        else
-                        {
-                            <button class="btn btn-secondary" disabled>@order.OrderCondition</button>
-                        }
-                  
-                 
-                </div>
-                <div class="col-md-4 text-center">
-                    <h4 style="margin-bottom:15px;  margin-top:15px ">Order Details</h4>
-                    <p><strong>Order No:</strong> @order.OrderNo</p>
-                    <p><strong>Order Date:</strong> @order.OrderDate.ToShortDateString()</p>
-                    <p><strong>Total Price:</strong> @order.TotalPrice ৳</p>
-                </div>
-                <div class="col-md-4 text-center ">
-                    <h4 style="margin-bottom:15px ;  margin-top:15px ">Action</h4>
-                    <div class="btn-group ">
-                       
-                        <form method="post" asp-action="DeleteUserOrder" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                            <input type="hidden" name="id" value="@order.OrderNo" />
-                            <button type="submit" class="btn btn-danger ">Delete</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Product ID</th>
-                            <th>Product Name</th>
-                            <th>Price</th>
-                            <th>Image</th>
-                            <th>Quantity</th>
-                            <th>Payment Method</th>
-                      
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var orderDetail in order.OrderDetails)
-                        {
-                            <tr>
-                                <td>@orderDetail.ProductId</td>
-                                <td>@orderDetail.ProductName</td>
-                                <td>@orderDetail.Price ৳</td>
-                                <td><img src="~/@orderDetail.ProductImage" alt="Product Image" class="img-thumbnail" style="max-width: 70px; max-height: 70px;" /></td>
-                                <td>@orderDetail.Quantity</td>
-                                <td>@orderDetail.PaymentMethods</td>
-                                
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-}
-
- *@
-
-@model List<UserOrdersViewModel>
+﻿@model List<UserOrdersViewModel>
 
 <h3 class="text-center mt-5 mb-5">My Orders</h3>
 
@@ -186,23 +83,49 @@
                             <p>Delivered</p>
                         </div>
                     </div>
-                  @*   <h5>Order Condition: @order.OrderCondition</h5> *@
+                    @*   <h5>Order Condition: @order.OrderCondition</h5> *@
                 </div>
                 <div class="col-md-3 text-center">
-                
+
                     <p><strong>Order No:</strong> @order.OrderNo</p>
                     <p><strong>Order Date:</strong> @order.OrderDate.ToShortDateString()</p>
                     <p><strong>Total Price:</strong> @order.TotalPrice ৳</p>
                 </div>
                 <div class="col-md-3 text-center">
                     <h5 style="margin-bottom:15px; margin-top:15px">Action</h5>
-                    <div class="btn-group">
-                        <form method="post" asp-action="DeleteUserOrder" onsubmit="return confirm('Are you sure you want to delete this item?');">
-                            <input type="hidden" name="id" value="@order.OrderNo" />
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                        <button class="btn btn-secondary" disabled>Return Order</button>
-                    </div>
+
+                    @{
+                        if (order.OrderCondition == OrderCondition.Onlist || order.OrderCondition == OrderCondition.OrderTaken)
+                        {
+                            <button class="btn btn-secondary" style="margin:5px"; disabled>Cancel Order</button>
+                        }
+                    }
+
+                    @{
+                        if (order.OrderCondition == OrderCondition.OnDelivary )
+                        {
+                            <button class="btn btn-secondary" style="margin:5px;" disabled> Order Track</button>
+                        }
+                    }
+
+                        @{
+                            @if (order.OrderCondition == OrderCondition.Delivered)
+                            {
+
+                                <div class="btn-group mb-2 mt-2">
+                                    <form method="post" asp-action="DeleteUserOrder" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                        <input type="hidden" name="id" value="@order.OrderNo" />
+                                        <button type="submit" class="btn btn-danger">Delete Order</button>
+                                    </form>
+
+                                </div>
+
+                                <button class="btn btn-secondary " style=" margin-left:5px" disabled>Return Order</button>
+                    // <a asp-controller="Review" style="width:180px;height:40px; margin-left:5px" asp-action="Create" asp-route-shopId="@order.ShopId" class="btn btn-success">Review Farmer Shop</a>
+                                <a class="btn btn-warning" style="width:180px;height:40px; margin-left:5px" href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = order.ShopId })">Review Farmer Shop</a>
+                            }
+                        }
+               
                 </div>
             </div>
         </div>
