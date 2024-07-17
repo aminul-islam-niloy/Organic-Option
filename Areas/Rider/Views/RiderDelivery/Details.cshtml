@@ -77,7 +77,9 @@
                 <div>
                     <a class="btn btn-info" asp-area="Rider" asp-controller="RiderDelivery" asp-action="RunningDeliveries" style="margin:5px"> Running Delivary</a>
                     <a class="btn btn-success" asp-area="Rider" asp-controller="RiderDelivery" asp-action="Index" style="margin:5px"> Manage Delivary</a>
-                    <a class="btn btn-primary" asp-area="Rider" asp-controller="RiderDelivery" asp-action="Index" style="margin:5px"> Confirm Delivary</a>
+                   @*  <a class="btn btn-primary" asp-area="Rider" asp-controller="RiderDelivery" asp-route="@Model.Id" asp-action="ConfirmDelivery" style="margin:5px"> Confirm Delivary</a> *@
+                    <a class="btn btn-warning" style="margin:5px" href="@Url.Action("ConfirmDelivery", "RiderDelivery", new { area = "Rider", deliveryId = @Model.Id })">Confirm Delivary</a>
+                
                 </div>
             </div>
             </div>

@@ -161,6 +161,50 @@ namespace OrganicOption.Areas.Rider.Controllers
 
             return View();
         }
+
+
+        //[HttpPost]
+        public async Task<IActionResult> ConfirmDelivery(int deliveryId)
+        {
+            var riderUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var rider = await _dbContext.RiderModel.FirstOrDefaultAsync(r => r.RiderUserId == riderUserId);
+
+            if (rider == null)
+            {
+                return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            }
+
+            // Find the delivery and related order by deliveryId and riderId
+            var delivery = await _dbContext.Deliveries
+                .FirstOrDefaultAsync(d => d.Id == deliveryId && d.RiderId == rider.Id);
+
+            if (delivery == null)
+            {
+                return NotFound();
+            }
+
+            var order = await _dbContext.Orders.FirstOrDefaultAsync(o => o.Id == delivery.OrderId);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            // Update revenue and due
+            rider.Revenue += order.DelivaryCharge;
+            rider.RiderDue += delivery.PayableMoney;
+
+            // Update order condition
+            order.OrderCondition = OrderCondition.Delivered;
+            delivery.OrderCondition= OrderCondition.Delivered;
+
+
+
+            // Save changes
+            await _dbContext.SaveChangesAsync();
+
+            return RedirectToAction("RunningDeliveries");
+        }
+
     }
 
 }
