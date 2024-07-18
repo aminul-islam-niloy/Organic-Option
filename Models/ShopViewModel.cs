@@ -18,7 +18,7 @@ namespace OrganicOption.Models
         public List<Products> Honey { get; set; }
 
 
-        public List<ShopReview> TopRatedShop { get; set; }
+        //public List<ShopReview> TopRatedShop { get; set; }
         public List<Products> DiscountProduct { get; set; }
         public List<Products> TopSelling { get; set; }
         public List<FarmerShop> BestSeller { get; set; }
@@ -27,7 +27,8 @@ namespace OrganicOption.Models
         public double AverageRating { get; set; }
         public int TotalReviews { get; set; }
         public string UserName { get; set; }
-        public List<ShopReview> Reviews { get; set; }
+        public List<ShopReviewViewModel> ShopReviews { get; set; }
+
     }
 }
 

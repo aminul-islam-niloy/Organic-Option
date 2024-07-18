@@ -609,11 +609,29 @@ namespace OrganicOption.Areas.Farmer.Controllers
                 _cache.Set($"farmerShop_{shopId}", farmerShop, TimeSpan.FromMinutes(5));
             }
 
+            //var shopReviews = _context.ShopReview.FirstOrDefaultAsync(fs => fs.FarmerShopId == shopId);
+            //ViewBag.ShopReview = shopReviews;
+
+
+            var shopReviews = _context.ShopReview
+             .Where(r => r.FarmerShopId == shopId)
+             .Select(r => new ShopReviewViewModel
+             {
+                 UserName = r.UserName,
+                 Comment = r.Comment,
+                 Rating = r.Rating,
+                 ReviewDate=r.ReviewDate
+             })
+             .ToList();
+
+
             // Now retrieve products for the specific shop and categorize them
             var viewModel = new ShopViewModel
             {
                 FarmerShop = farmerShop,
+                ShopReviews= shopReviews,
                 Fruits = (List<Products>)GetCachedProductsByCategoryAndShop("Fruits", shopId),
+             
                 Vegetable = (List<Products>)GetCachedProductsByCategoryAndShop("Vegetable", shopId),
                 Dairy = (List<Products>)GetCachedProductsByCategoryAndShop("Dairy", shopId),
                 Pets = (List<Products>)GetCachedProductsByCategoryAndShop("Pets", shopId),
