@@ -399,7 +399,7 @@
                         <div class="product_desc">
                             <p>@Model.SpecificProduct.Description eget velit. Donec ac tempus ante.  sed commodo augue nisi non neque.   lorem et placerat vestibulum metus nisi posuere nisl</p>
                         </div>
-                        <div class="product_variant color">
+                      @*   <div class="product_variant color">
                             <h3>Available Options</h3>
                             <label>color</label>
                            
@@ -409,7 +409,7 @@
                                 <li class="color3"><a href="#"></a></li>
                                 <li class="color4"><a href="#"></a></li>
                             </ul>
-                        </div>
+                        </div> *@
 
 
                         <div class="product_variant quantity">
@@ -469,7 +469,123 @@
                     </div>
 
                 </div>
+
+           
             </div>
+            <br />
+
+
+              <div class="container mt-2">
+                    <hr />
+
+                    <div class="row">
+
+                        <div class="col-md-5">
+
+                            <h3>Distance-Based Charges</h3>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Distance (km)</th>
+                                        <th>Base Delivery Charge (BDT)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>0-5</td>
+                                        <td>50</td>
+                                    </tr>
+                                    <tr>
+                                        <td>5-10</td>
+                                        <td>100</td>
+                                    </tr>
+                                    <tr>
+                                        <td>10-20</td>
+                                        <td>150</td>
+                                    </tr>
+                                    <tr>
+                                        <td>20-50</td>
+                                        <td>200</td>
+                                    </tr>
+                                    <tr>
+                                        <td>50+</td>
+                                        <td>300</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="col-md-7">
+                            <h3>Product-Based Charges</h3>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Product Type</th>
+                                        <th>Quantity Range</th>
+                                        <th>Additional Charge (BDT)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Cattle</td>
+                                        <td>Per cattle</td>
+                                        <td>1000</td>
+                                    </tr>
+                                    <tr>
+                                        <td rowspan="5">Crops</td>
+                                        <td>10-50 kg</td>
+                                        <td>50</td>
+                                    </tr>
+                                    <tr>
+                                        <td>50-100 kg</td>
+                                        <td>100</td>
+                                    </tr>
+                                    <tr>
+                                        <td>100-500 kg</td>
+                                        <td>200</td>
+                                    </tr>
+                                    <tr>
+                                        <td>500-1000 kg</td>
+                                        <td>400</td>
+                                    </tr>
+                                    <tr>
+                                        <td>1000+ kg</td>
+                                        <td>600</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td rowspan="5">Liquid</td>
+                                        <td>10-50 liters</td>
+                                        <td>50</td>
+                                    </tr>
+                                    <tr>
+                                        <td>50-100 liters</td>
+                                        <td>100</td>
+                                    </tr>
+                                    <tr>
+                                        <td>100-500 liters</td>
+                                        <td>300</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>500-1000 liters</td>
+                                        <td>500</td>
+                                    </tr>
+                                    <tr>
+                                        <td>1000+ liters</td>
+                                        <td>800</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
+
+                   
+               </div>
+            
         </div>
     </div>
 </div>
