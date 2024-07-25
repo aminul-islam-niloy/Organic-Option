@@ -334,7 +334,8 @@
                                     {
                                         <tr>
                                             <td>
-                                                <img src="~/@item.Image" style="height:100px; width:100px" />
+                                                <a asp-action="Detail" asp-controller="Home" asp-route-id="@item.Id"><img src="~/@item.Image" style="height:100px; width:100px" /></a>
+                                                
                                             </td>
                                             <td>@item.Name</td>
 
@@ -371,7 +372,7 @@
             <!--coupon code area start-->
             <div class="coupon_area">
                 <div class="row">
-                    <div class="col-lg-6 col-md-6">
+                   @*  <div class="col-lg-6 col-md-6">
                         <div class="coupon_code left">
                             <h3>Coupon</h3>
                             <div class="coupon_inner">
@@ -380,7 +381,7 @@
                                 <button type="submit">Apply coupon</button>
                             </div>
                         </div>
-                    </div>
+                    </div> *@
 
 
                     @if (Model.Count != 0)
