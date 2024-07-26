@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OrganicOption.Models.Rider_Section;
+using System;
 using System.Collections.Generic;
 
 namespace OnlineShop.Models
@@ -18,6 +19,7 @@ namespace OnlineShop.Models
         public List<Order> Orders { get; set; }
         public PaymentMethods PaymentMethod { get; set; }
         public OrderCondition OrderCondition { get; set; }
+        public double DeliveryCharge { get; set; }
 
         public int ShopId { get; set; }
         // Order details including product information

@@ -451,7 +451,8 @@ namespace OnlineShop.Areas.Customer.Controllers
                 OrderNo = order.OrderNo,
                 OrderDate = order.OrderDate,
                 OrderCondition = order.OrderCondition,
-                TotalPrice = order.OrderDetails.Sum(od => od.Quantity * od.Price),
+                DeliveryCharge= (double)order.DelivaryCharge,
+                TotalPrice = order.OrderDetails.Sum(od => od.Quantity * od.Price)+order.DelivaryCharge,
                 OrderDetails = order.OrderDetails.Select(od => new OrderDetailsViewModel
                 {
                     ProductId = od.PorductId,
