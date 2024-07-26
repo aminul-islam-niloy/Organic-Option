@@ -46,12 +46,109 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
 
+
+
+
+
+        //calculate Distance and Charge
+    
+
+        public static double CalculateBaseCharge(double distance)
+        {
+            if (distance <= 5) return 50;
+            if (distance <= 10) return 100;
+            if (distance <= 20) return 150;
+            if (distance <= 50) return 200;
+            return 300;
+        }
+
+      
+
+
+
         //GET Checkout actioin method
 
+        [Authorize(Roles = "Customer")]
+        [HttpGet]
         public IActionResult Checkout()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userInfo = _db.ApplicationUser.FirstOrDefault(c => c.Id == userId);
+
+            List<Products> products = HttpContext.Session.Get<List<Products>>("products");
+            double totalDeliveryCharge = 0;
+
+            if (products != null)
+            {
+                foreach (var product in products)
+                {
+                    var farmerShop = _db.FarmerShop.FirstOrDefault(f => f.Id == product.FarmerShopId);
+                    if (farmerShop != null)
+                    {
+                        double distance = CalculateDistance(userInfo.Latitude, userInfo.Longitude, farmerShop.Latitude, farmerShop.Longitude);
+                        double baseCharge = CalculateBaseCharge(distance);
+                        double additionalCharge = CalculateAdditionalCharge(product);
+                        totalDeliveryCharge += baseCharge + additionalCharge;
+                    }
+                }
+            }
+
+            ViewBag.TotalDeliveryCharge = totalDeliveryCharge;
             return View();
         }
+
+        private double CalculateAdditionalCharge(Products product)
+        {
+            double additionalCharge = 0;
+
+            if (product.ProductTypes.ProductType == "Cattle" && product.QuantityType == QuantityType.Item)
+            {
+                additionalCharge = product.Quantity * 1000;
+            }
+            else if (product.ProductTypes.ProductType == "Crops" && product.QuantityType == QuantityType.Kg)
+            {
+                if (product.Quantity <= 50) additionalCharge = 50;
+                else if (product.Quantity <= 100) additionalCharge = 100;
+                else if (product.Quantity <= 500) additionalCharge = 200;
+                else if (product.Quantity <= 1000) additionalCharge = 400;
+                else additionalCharge = 600;
+            }
+            else if (product.ProductTypes.ProductType == "Liquid" && product.QuantityType == QuantityType.Liter)
+            {
+                if (product.Quantity <= 50) additionalCharge = 50;
+                else if (product.Quantity <= 100) additionalCharge = 100;
+                else if (product.Quantity <= 500) additionalCharge = 300;
+                else if (product.Quantity <= 1000) additionalCharge = 500;
+                else additionalCharge = 800;
+            }
+
+            return additionalCharge;
+        }
+
+        public static double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
+        {
+            const double R = 6371; // Radius of the Earth in kilometers
+            double dLat = ToRadians(lat2 - lat1);
+            double dLon = ToRadians(lon2 - lon1);
+            double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                       Math.Cos(ToRadians(lat1)) * Math.Cos(ToRadians(lat2)) *
+                       Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            return R * c; // Distance in kilometers
+        }
+
+        private static double ToRadians(double angle)
+{
+    return angle * (Math.PI / 180);
+}
+        
+
+
+
+        //public IActionResult Checkout()
+        //{
+        //    return View();
+        //}
 
         //POST Checkout action method
 

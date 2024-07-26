@@ -489,32 +489,29 @@
                         </div>
 
                     </div>
-
-                    <div class="row  mt-10 text-center">
+                    <div class="row mt-10 text-center">
                         <div class="col-lg-4 md-8">
-
-                            <div class="cart_subtotal ">
+                            <div class="cart_subtotal">
                                 <p>Shipping</p>
-
+                                <p>Total Delivery Charge: @ViewBag.TotalDeliveryCharge BDT</p>
                             </div>
-
                         </div>
                         <div class="col-lg-4 md-8">
-
                             <div>
-
-
-
-                                <h4>Total Price : @products.Sum(c => c.DiscountPrice != 0 ? (c.Price + c.DiscountPrice) * c.QuantityInCart : c.Price * c.QuantityInCart) Tk</h4>
-
+                                @{
+                                    var totalDeliveryCharge = Convert.ToDecimal(ViewBag.TotalDeliveryCharge);
+                                    var totalPrice = products.Sum(c => c.DiscountPrice != 0
+                                    ? (c.Price + c.DiscountPrice) * c.QuantityInCart
+                                    : c.Price * c.QuantityInCart) + totalDeliveryCharge;
+                                }
+                                <h4>Total Price: @totalPrice Tk</h4>
                             </div>
-                            <div >
-                                <input type="submit" value="Place Order" class="btn btn-info" />
+                            <div>
+                                <input type="submit" value="Place Order" class="btn btn-success" />
                             </div>
-
                         </div>
-                        <div class="col-lg-4 md-8"></div>
                     </div>
+
                 </div>
             </div>
 
