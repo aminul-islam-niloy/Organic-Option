@@ -7,19 +7,17 @@ using OnlineShop.Data;
 using OnlineShop.Models;
 using OnlineShop.Payment;
 using OnlineShop.Session;
-using Stripe.Checkout;
+using OrganicOption.Models;
+using OrganicOption.Models.Rider_Section;
+using OrganicOption.Models.View_Model;
+using OrganicOption.Service;
 using Stripe;
+using Stripe.Checkout;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
-using OrganicOption.Models;
-using OrganicOption.Models.Rider_Section;
-using OnlineShop.Service;
-using OrganicOption.Service;
-using System.Diagnostics;
 
 namespace OnlineShop.Areas.Customer.Controllers
 {
@@ -403,6 +401,88 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             return View(ordersWithProductsAndUsers);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> OrderIndex()
+        {
+            string dateRange = null;
+            // Call the model method with the dateRange
+            return await OrderIndexModel(dateRange);
+        }
+
+       
+
+        [HttpPost]
+
+        //[Authorize(Roles = "Admin")]
+
+        public async Task<IActionResult> OrderIndexModel(string dateRange)
+        {
+            DateTime startDate, endDate;
+            if (!string.IsNullOrEmpty(dateRange))
+            {
+                var dates = dateRange.Split('-');
+                startDate = DateTime.Parse(dates[0]);
+                endDate = DateTime.Parse(dates[1]);
+            }
+            else
+            {
+                startDate = DateTime.Now.AddDays(-7);
+                endDate = DateTime.Now;
+            }
+
+            var orders = await _db.Orders
+                .Include(o => o.User)
+                .Include(o => o.OrderDetails)
+                    .ThenInclude(od => od.Product)
+                .Where(o => o.OrderDate >= startDate && o.OrderDate <= endDate)
+                .ToListAsync();
+
+            // Get the Delivery records related to these orders
+            var orderIds = orders.Select(o => o.Id).ToList();
+            var deliveries = await _db.Deliveries
+                .Where(d => orderIds.Contains(d.OrderId))
+                .ToListAsync();
+
+            var riderIds = deliveries.Select(d => d.RiderId).Distinct().ToList();
+            var riderDict = await _db.RiderModel
+                .Where(r => riderIds.Contains(r.Id))
+                .ToDictionaryAsync(r => r.Id);
+
+            var farmerShopIds = orders.SelectMany(o => o.OrderDetails.Select(od => od.Product.FarmerShopId)).Distinct().ToList();
+            var farmerShopDict = await _db.FarmerShop
+                .Where(fs => farmerShopIds.Contains(fs.Id))
+                .ToDictionaryAsync(fs => fs.Id);
+
+            var viewModel = orders.Select(order => new AllOrderViewModel
+            {
+                OrderId = order.Id,
+                OrderNo = order.OrderNo,
+                OrderDate = order.OrderDate,
+                OrderCondition = order.OrderCondition,
+                DeliveryCharge = (double)order.DelivaryCharge,
+                TotalPrice = (double)(order.OrderDetails.Sum(od => od.Quantity * od.Price) + order.DelivaryCharge),
+                Customer = new CustomerInfoViewModel { Name = order.User.UserName, Phone = order.User.PhoneNumber },
+                Rider = deliveries.Where(d => d.OrderId == order.Id)
+                          .Select(d => riderDict.ContainsKey(d.RiderId) ? new RiderInfoViewModel
+                          {
+                              Name = riderDict[d.RiderId].Name,
+                              Phone = riderDict[d.RiderId].PhoneNumber
+                          } : null)
+                          .FirstOrDefault(),
+                FarmerShop = (order.OrderDetails.FirstOrDefault()?.Product.FarmerShopId != null
+                      && farmerShopDict.ContainsKey(order.OrderDetails.FirstOrDefault().Product.FarmerShopId))
+                      ? new FarmerShopInfoViewModel
+                      {
+                          ShopId = farmerShopDict[order.OrderDetails.FirstOrDefault().Product.FarmerShopId].Id,
+                          ShopName = farmerShopDict[order.OrderDetails.FirstOrDefault().Product.FarmerShopId].ShopName
+                      } : null,
+                Payment = new PaymentInfoViewModel { PaymentMethods = order.PaymentMethods }
+            }).ToList();
+
+            return View(viewModel);
+        }
+
 
 
 

@@ -1,0 +1,84 @@
+﻿@model IEnumerable<OrganicOption.Models.View_Model.AllOrderViewModel>
+
+<div class="container mt-4">
+    <h2>Orders</h2>
+    <form method="get" class="form-inline mb-3" action="/Order/OrderIndex">
+        <div class="form-group">
+            <label for="dateRange" class="mr-2">Date Range:</label>
+            <input type="text" class="form-control" id="dateRange" name="dateRange" placeholder="Select date range" />
+        </div>
+        <button type="submit" class="btn btn-primary ml-2">Filter</button>
+    </form>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Order No</th>
+                <th>Order Date</th>
+                <th>Customer Info</th>
+                <th>Rider Info</th>
+                <th>Order Info</th>
+                <th>FarmerShop ID</th>
+                <th>Payment</th>
+                <th>Condition</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.OrderId</td>
+                    <td>@order.OrderNo</td>
+                    <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
+                    <td>@order.Customer.Name<br />@order.Customer.Phone</td>
+                    <td>@order.Rider?.Name<br />@order.Rider?.Phone</td>
+                    <td>Total: @order.TotalPrice ৳<br />Delivery: @order.DeliveryCharge ৳</td>
+                    <td>@order.FarmerShop?.ShopId<br />@order.FarmerShop?.ShopName</td>
+                    <td>@order.Payment.PaymentMethods<br />Amount: @order.Payment.Amount ৳</td>
+                    <td>@order.OrderCondition</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('#dateRange').daterangepicker({
+                locale: {
+                    format: 'YYYY-MM-DD'
+                },
+                startDate: moment().subtract(7, 'days'),
+                endDate: moment(),
+                opens: 'left'
+            });
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/daterangepicker/3.1/daterangepicker.min.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/daterangepicker/3.1/daterangepicker.min.js"></script>
+
+
+}
+
+
+
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Include Moment.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
+<!-- Include Date Range Picker CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/daterangepicker/3.1/daterangepicker.min.css" />
+
+<!-- Include Date Range Picker JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/daterangepicker/3.1/daterangepicker.min.js"></script>
+
