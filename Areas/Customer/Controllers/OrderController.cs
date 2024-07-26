@@ -103,22 +103,22 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             if (product.ProductTypes.ProductType == "Cattle" && product.QuantityType == QuantityType.Item)
             {
-                additionalCharge = product.Quantity * 1000;
+                additionalCharge = product.QuantityInCart * 1000;
             }
             else if (product.ProductTypes.ProductType == "Crops" && product.QuantityType == QuantityType.Kg)
             {
-                if (product.Quantity <= 50) additionalCharge = 50;
-                else if (product.Quantity <= 100) additionalCharge = 100;
-                else if (product.Quantity <= 500) additionalCharge = 200;
-                else if (product.Quantity <= 1000) additionalCharge = 400;
+                if (product.QuantityInCart <= 50) additionalCharge = 50;
+                else if (product.QuantityInCart <= 100) additionalCharge = 100;
+                else if (product.QuantityInCart <= 500) additionalCharge = 200;
+                else if (product.QuantityInCart <= 1000) additionalCharge = 400;
                 else additionalCharge = 600;
             }
             else if (product.ProductTypes.ProductType == "Liquid" && product.QuantityType == QuantityType.Liter)
             {
-                if (product.Quantity <= 50) additionalCharge = 50;
-                else if (product.Quantity <= 100) additionalCharge = 100;
-                else if (product.Quantity <= 500) additionalCharge = 300;
-                else if (product.Quantity <= 1000) additionalCharge = 500;
+                if (product.QuantityInCart <= 50) additionalCharge = 50;
+                else if (product.QuantityInCart <= 100) additionalCharge = 100;
+                else if (product.QuantityInCart <= 500) additionalCharge = 300;
+                else if (product.QuantityInCart <= 1000) additionalCharge = 500;
                 else additionalCharge = 800;
             }
 
@@ -141,7 +141,7 @@ namespace OnlineShop.Areas.Customer.Controllers
 {
     return angle * (Math.PI / 180);
 }
-        
+
 
 
 
@@ -152,61 +152,133 @@ namespace OnlineShop.Areas.Customer.Controllers
 
         //POST Checkout action method
 
+        //[Authorize(Roles = "Customer")]
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Checkout(Order anOrder)
+        //{
+        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+
+        //    var user = await _userManager.FindByIdAsync(userId);
+
+
+        //    var currentUser = await _userManager.GetUserAsync(User);
+
+        //    var userInfo = _db.ApplicationUser.FirstOrDefault(c => c.Id == user.Id);
+
+
+        //    anOrder.Latitude = userInfo.Latitude;
+        //    anOrder.Longitude = userInfo.Longitude;
+        //    anOrder.UserId = userId;
+        //    anOrder.OrderDate = DateTime.Now;
+
+
+        //    List<Products> products = HttpContext.Session.Get<List<Products>>("products");
+        //    if (products != null)
+        //    {
+        //        foreach (var product in products)
+        //        {
+        //            var orderDetails = new OrderDetails
+        //            {
+        //                PorductId = product.Id,
+        //                Price = product.Price + (product.Discount > 0 ? product.DiscountPrice : 0),
+        //                Quantity = product.QuantityInCart
+        //            };
+        //            anOrder.OrderDetails.Add(orderDetails);
+        //        }
+        //    }
+
+        //    anOrder.OrderNo = GetOrderNo();
+        //    _db.Orders.Add(anOrder);
+        //    await _db.SaveChangesAsync();
+
+        //    List<Products> sesProducts = HttpContext.Session.Get<List<Products>>("products");
+        //    if (sesProducts != null)
+        //    {
+        //        foreach (var product in sesProducts)
+        //        {
+        //            UpdateFarmerStore(product.Id, product.QuantityInCart, product.Price, anOrder.Id, product.FarmerShopId);
+
+        //            // Retrieve FarmerUserId based on FarmerShopId
+        //            var farmerShop = _db.FarmerShop.Include(f => f.FarmerUser)
+        //                                            .FirstOrDefault(f => f.Id == product.FarmerShopId);
+        //            if (farmerShop != null)
+        //            {
+        //                string farmerUserId = farmerShop.FarmerUserId;
+        //                _notificationService.AddNotification(farmerUserId, $"{anOrder.OrderNo} that '{product.Name}'  has been ordered from your Shop.", product.Id);
+        //            }
+        //        }
+        //    }
+
+        //    HttpContext.Session.Set("products", new List<Products>());
+        //    return RedirectToAction("PaymentPage", new { orderId = anOrder.Id });
+        //}
+
+
+
         [Authorize(Roles = "Customer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Checkout(Order anOrder)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-
             var user = await _userManager.FindByIdAsync(userId);
-
-
-            var currentUser = await _userManager.GetUserAsync(User);
-
             var userInfo = _db.ApplicationUser.FirstOrDefault(c => c.Id == user.Id);
-
 
             anOrder.Latitude = userInfo.Latitude;
             anOrder.Longitude = userInfo.Longitude;
             anOrder.UserId = userId;
             anOrder.OrderDate = DateTime.Now;
 
-
             List<Products> products = HttpContext.Session.Get<List<Products>>("products");
+            double totalDeliveryCharge = 0;
+
             if (products != null)
             {
                 foreach (var product in products)
                 {
+                  
+
+                    var farmerShop = _db.FarmerShop.FirstOrDefault(f => f.Id == product.FarmerShopId);
+                    if (farmerShop != null)
+                    {
+                        double distance = CalculateDistance(userInfo.Latitude, userInfo.Longitude, farmerShop.Latitude, farmerShop.Longitude);
+                        double baseCharge = CalculateBaseCharge(distance);
+                        double additionalCharge = CalculateAdditionalCharge(product);
+                        totalDeliveryCharge += baseCharge + additionalCharge;
+                    }
+
                     var orderDetails = new OrderDetails
                     {
                         PorductId = product.Id,
                         Price = product.Price + (product.Discount > 0 ? product.DiscountPrice : 0),
-                        Quantity = product.QuantityInCart
+                        Quantity = product.QuantityInCart,
+                        TotalDelivaryCharge = (decimal)totalDeliveryCharge,
+                        DiscountedPrice=product.Discount
                     };
                     anOrder.OrderDetails.Add(orderDetails);
                 }
             }
 
+            anOrder.DelivaryCharge = (decimal)totalDeliveryCharge;
+
             anOrder.OrderNo = GetOrderNo();
             _db.Orders.Add(anOrder);
             await _db.SaveChangesAsync();
 
-            List<Products> sesProducts = HttpContext.Session.Get<List<Products>>("products");
-            if (sesProducts != null)
+            if (products != null)
             {
-                foreach (var product in sesProducts)
+                foreach (var product in products)
                 {
                     UpdateFarmerStore(product.Id, product.QuantityInCart, product.Price, anOrder.Id, product.FarmerShopId);
 
-                    // Retrieve FarmerUserId based on FarmerShopId
                     var farmerShop = _db.FarmerShop.Include(f => f.FarmerUser)
                                                     .FirstOrDefault(f => f.Id == product.FarmerShopId);
                     if (farmerShop != null)
                     {
                         string farmerUserId = farmerShop.FarmerUserId;
-                        _notificationService.AddNotification(farmerUserId, $"{anOrder.OrderNo} that '{product.Name}'  has been ordered from your Shop.", product.Id);
+                        _notificationService.AddNotification(farmerUserId, $"{anOrder.OrderNo} that '{product.Name}' has been ordered from your Shop.", product.Id);
                     }
                 }
             }
@@ -299,8 +371,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                     od.Order.UserId, // Include user ID in grouping
                     od.Order.User.UserName,
 
-                    // Include username
-                    // Include email
+                   
                 })
                 .Select(g => new OrderDetailsViewModel
                 {
