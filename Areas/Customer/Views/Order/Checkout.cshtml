@@ -348,7 +348,71 @@
                                 <span asp-validation-for="Address" class="text-danger"></span>
                             </div>
 
+
                         </div>
+
+                        <!-- Address fields -->
+                        <div class="form-group row">
+                            <div class="col-lg-2">
+                                <label asp-for="CustomerAddress.Division"></label>
+                            </div>
+                            <div class="col-lg-5">
+                                <input asp-for="CustomerAddress.Division" class="form-control" />
+                            </div>
+                            <span asp-validation-for="CustomerAddress.Division" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-lg-2">
+                                <label asp-for="CustomerAddress.District"></label>
+                            </div>
+                            <div class="col-lg-5">
+                                <input asp-for="CustomerAddress.District" class="form-control" />
+                            </div>
+                            <span asp-validation-for="CustomerAddress.District" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-lg-2">
+                                <label asp-for="CustomerAddress.Thana"></label>
+                            </div>
+                            <div class="col-lg-5">
+                                <input asp-for="CustomerAddress.Thana" class="form-control" />
+                            </div>
+                            <span asp-validation-for="CustomerAddress.Thana" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-lg-2">
+                                <label asp-for="CustomerAddress.WardNo"></label>
+                            </div>
+                            <div class="col-lg-5">
+                                <input asp-for="CustomerAddress.WardNo" class="form-control" />
+                            </div>
+                            <span asp-validation-for="CustomerAddress.WardNo" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-lg-2">
+                                <label asp-for="CustomerAddress.StreetNo"></label>
+                            </div>
+                            <div class="col-lg-5">
+                                <input asp-for="CustomerAddress.StreetNo" class="form-control" />
+                            </div>
+                            <span asp-validation-for="CustomerAddress.StreetNo" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-lg-2">
+                                <label asp-for="CustomerAddress.House"></label>
+                            </div>
+                            <div class="col-lg-5">
+                                <input asp-for="CustomerAddress.House" class="form-control" />
+                            </div>
+                            <span asp-validation-for="CustomerAddress.House" class="text-danger"></span>
+                        </div>
+
+
                         <div class="form-group row">
                             <div class="col-lg-3">
                                 <label asp-for="Email"></label>
