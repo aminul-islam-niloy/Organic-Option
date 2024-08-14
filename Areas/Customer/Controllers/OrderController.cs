@@ -401,22 +401,17 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             return View(ordersWithProductsAndUsers);
         }
-
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult OrderIndex()
         {
-            string dateRange = null;
-            // Call the model method with the dateRange
-            return await OrderIndexModel(dateRange);
+            // Call the model method with a default date range
+            return View();
         }
 
-       
-
         [HttpPost]
-
-        //[Authorize(Roles = "Admin")]
-
-        public async Task<IActionResult> OrderIndexModel(string dateRange)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AllOrderIndex(string dateRange)
         {
             DateTime startDate, endDate;
             if (!string.IsNullOrEmpty(dateRange))

@@ -2,7 +2,7 @@
 
 <div class="container mt-4">
     <h2>Orders</h2>
-    <form method="post" class="form-inline mb-3" action="/Order/AllOrderIndex">
+    <form method="post" class="form-inline mb-3" action="/Order/OrderIndex">
         <input type="hidden" id="dateRange" name="dateRange" />
         <div class="btn-group mt-3">
             <button type="button" class="btn btn-secondary" onclick="setDateRange('today')">Today</button>
@@ -13,7 +13,38 @@
         <button type="submit" class="btn btn-primary ml-2">Filter</button>
     </form>
 
-
+    <table class="table table-bordered table-striped mt-3">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Order No</th>
+                <th>Order Date</th>
+                <th>Customer Info</th>
+                <th>Rider Info</th>
+                <th>Order Info</th>
+                <th>FarmerShop ID</th>
+                <th>Payment</th>
+                <th>Condition</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.OrderId</td>
+                    <td>@order.OrderNo</td>
+                    <td>@order.OrderDate.ToString("yyyy-MM-dd")</td>
+                    <td>@order.Customer.Name<br />@order.Customer.Phone</td>
+                    <td>@order.Rider?.Name<br />@order.Rider?.Phone</td>
+                    <td>Total: @order.TotalPrice ৳<br />Delivery: @order.DeliveryCharge ৳</td>
+                    <td>@order.FarmerShop?.ShopId<br />@order.FarmerShop?.ShopName</td>
+                    <td>@order.Payment.PaymentMethods<br />@order.Payment.Amount ৳</td>
+                    <td>@order.OrderCondition</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
