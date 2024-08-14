@@ -403,7 +403,7 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> OrderIndex()
+        public IActionResult OrderIndex()
         {
             string dateRange = null;
             // Call the model method with the dateRange
