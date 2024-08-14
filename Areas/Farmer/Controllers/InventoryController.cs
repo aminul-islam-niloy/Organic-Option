@@ -416,7 +416,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
             }
 
             // Define the date range for past days and the present day
-            DateTime startDate = DateTime.Today.AddDays(-30); // Change the number of days as needed
+            DateTime startDate = DateTime.Today.AddDays(-90); // Change the number of days as needed
             DateTime endDate = DateTime.Today.AddDays(1).AddTicks(-1);
 
             // Retrieve orders for the specified date range
