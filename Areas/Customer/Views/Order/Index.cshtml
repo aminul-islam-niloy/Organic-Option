@@ -4,6 +4,8 @@
     ViewData["Title"] = "Order Information";
 }
 
+<a href="@Url.Action("AllOrders", "YourControllerName", new { filterType = "current" })">View Current Month Orders</a>
+
 @foreach (var orderDetails in Model)
 {
 

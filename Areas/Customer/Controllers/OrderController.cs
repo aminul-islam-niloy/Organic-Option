@@ -458,6 +458,83 @@ namespace OnlineShop.Areas.Customer.Controllers
             return View(orders);
         }
 
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult AllOrders(DateTime? filterDate, string filterType = "current")
+        {
+            // Get the current date
+            DateTime currentDate = DateTime.Now;
+
+            // Determine the start and end dates for filtering
+            DateTime startDate;
+            DateTime endDate;
+
+            if (filterType == "previous")
+            {
+                // Previous month
+                startDate = new DateTime(currentDate.Year, currentDate.Month, 1).AddMonths(-1);
+                endDate = startDate.AddMonths(1).AddDays(-1);
+            }
+            else if (filterType == "specific" && filterDate.HasValue)
+            {
+                // Specific date
+                startDate = filterDate.Value.Date;
+                endDate = filterDate.Value.Date.AddDays(1).AddTicks(-1);
+            }
+            else
+            {
+                // Current month (default)
+                startDate = new DateTime(currentDate.Year, currentDate.Month, 1);
+                endDate = startDate.AddMonths(1).AddDays(-1);
+            }
+
+            // Fetch orders within the specified date range
+            var orders = _db.OrderDetails
+                .Include(od => od.Product)
+                .Include(od => od.Order)
+                    .ThenInclude(o => o.User)
+                .Where(od => od.Order.OrderDate >= startDate && od.Order.OrderDate <= endDate)
+                .GroupBy(od => new
+                {
+                    od.OrderId,
+                    od.Order.OrderNo,
+                    od.Order.Name,
+                    od.Order.Address,
+                    od.Order.Email,
+                    od.Order.PhoneNo,
+                    od.Order.OrderDate,
+                    od.Order.UserId,
+                    od.Order.User.UserName,
+                    od.Order.OrderCondition
+                })
+                .Select(g => new OrderDetailsViewModel
+                {
+                    OrderId = g.Key.OrderId,
+                    OrderNo = g.Key.OrderNo,
+                    CustomerName = g.Key.Name,
+                    OrderCondition = g.Key.OrderCondition,
+                    CustomerAddress = g.Key.Address,
+                    CustomerPhone = g.Key.PhoneNo,
+                    CustomerEmail = g.Key.Email,
+                    OrderDate = g.Key.OrderDate,
+                    UserId = g.Key.UserId,
+                    UserName = g.Key.UserName,
+                    PaymentMethods = g.First().PaymentMethods,
+                    Products = g.Select(od => new ProductViewModel
+                    {
+                        ProductId = od.PorductId,
+                        ProductName = od.Product.Name,
+                        Price = od.Product.Price,
+                        Quantity = od.Quantity
+                    }).ToList(),
+                    TotalPrice = g.Sum(od => od.Product.Price * od.Quantity)
+                }).ToList();
+
+            return View(orders);
+        }
+
+
         [Authorize(Roles = "Admin")]
         public IActionResult OrderDetails(int id)
         {
