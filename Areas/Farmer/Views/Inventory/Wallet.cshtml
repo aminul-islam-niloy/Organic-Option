@@ -1,0 +1,18 @@
+﻿@model OrganicOption.Models.FarmerShop
+<br />
+<div class="container">
+    <h3>Rider Dashboard</h3>
+
+    <div class="row">
+        <div class="col-md-4">
+            <h4>Total Revenue</h4>
+            <p>@Model.ShopRevenue</p>
+        </div>
+
+        <div class="col-md-4">
+            <h4>Actions</h4>
+            <a href="@Url.Action("RequestWithdraw", "Inventory")" class="btn btn-primary">Request Withdrawal</a>
+            <a href="@Url.Action("WithdrawHistory", "Inventory")" class="btn btn-secondary">History Details</a>
+        </div>
+    </div>
+</div>

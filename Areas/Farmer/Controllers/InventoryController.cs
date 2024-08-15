@@ -538,6 +538,68 @@ namespace OrganicOption.Areas.Farmer.Controllers
             return View();
         }
 
+        public IActionResult Wallet()
+        {
+            var farmerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var farmer = _context.FarmerShop.SingleOrDefault(f => f.FarmerUserId == farmerId);
+            return View(farmer);
+        }
+
+        public IActionResult RequestWithdraw()
+        {
+            var farmerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var farmer = _context.FarmerShop.SingleOrDefault(f => f.FarmerUserId == farmerId);
+            return View(farmer);
+        }
+
+        [HttpPost]
+        public IActionResult RequestWithdraw(decimal amount)
+        {
+            var farmerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var farmer = _context.FarmerShop.SingleOrDefault(f => f.FarmerUserId == farmerId);
+
+            if (farmer == null || farmer.ShopRevenue < amount)
+            {
+                TempData["Error"] = "Insufficient funds.";
+                return RedirectToAction("RequestWithdraw");
+            }
+
+            var request = new WithdrawalHistory
+            {
+                UserId = farmerId,
+                Amount = amount,
+                RequestDate = DateTime.Now,
+                IsApproved = false,
+                UserType = "Farmer"
+            };
+
+            _context.withdrawalHistories.Add(request);
+            _context.SaveChanges();
+
+            TempData["Success"] = "Withdrawal request submitted successfully.";
+            return RedirectToAction("Wallet");
+        }
+
+        [Authorize(Roles = "Rider,Farmer")]
+        public async Task<IActionResult> WithdrawHistory()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var role = await _userManager.GetRolesAsync(user);
+            var withdrawHistory = await _context.withdrawalHistories
+                .Where(w => w.UserId == user.Id)
+                .OrderByDescending(w => w.ConfirmDate)
+                .ToListAsync();
+
+            return View(withdrawHistory);
+        }
+
+
+        public IActionResult FarmerRevenueDetails(int farmerId)
+        {
+            var farmer = _context.FarmerShop.SingleOrDefault(f => f.Id == farmerId);
+            return View(farmer);
+        }
+
 
 
 
