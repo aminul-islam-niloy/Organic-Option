@@ -1,0 +1,47 @@
+﻿@model IEnumerable<OrganicOption.Models.WithdrawalHistory>
+
+<div class="container">
+    <h3>Withdrawal Requests</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Amount</th>
+                <th>Request Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var request in Model)
+            {
+                <tr>
+                    @* <td>@request.User?.UserName</td>  *@
+                    <td>@request.UserId</td>
+                    <td>@request.Amount</td>
+                    <td>@request.RequestDate</td>
+                    <td>
+                        @if (!request.IsApproved)
+                        {
+                            <form asp-action="ApproveWithdraw" method="post">
+                                <input type="hidden" name="id" value="@request.Id" />
+                                <button type="submit" class="btn btn-warning">Approve</button>
+                            </form>
+                        }
+                        else if (!request.IsConfirmed)
+                        {
+                            <form asp-action="ConfirmWithdraw" method="post">
+                                <input type="hidden" name="id" value="@request.Id" />
+                                <button type="submit" class="btn btn-primary">Confirm</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-success">Completed</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
