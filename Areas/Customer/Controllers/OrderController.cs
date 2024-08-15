@@ -1013,8 +1013,8 @@ namespace OnlineShop.Areas.Customer.Controllers
                 OrderCondition = OrderCondition.OrderTaken,
                 PayableMoney = order.PaymentCondition == PaymentCondition.Paid ? 0 : totalOrderAmount,
                 ProductDetails = order.OrderDetails.Select(od => od.Product.Name).FirstOrDefault(),
-                CustomerAddress = order.Address,
-                DelivyAddress = rider.Location,
+                CustomerAddress = order.Address
+                
 
             };
 

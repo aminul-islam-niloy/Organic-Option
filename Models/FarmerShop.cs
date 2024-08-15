@@ -46,6 +46,7 @@ namespace OrganicOption.Models
         public ICollection<Order> Orders { get; set; }
 
         public ICollection<Delivery> Deliveries { get; set; }
+        public ICollection<WithdrawalHistory> WithdrawalHistories { get; set; }
 
     }
 

@@ -35,6 +35,7 @@ namespace OnlineShop.Data
         public DbSet<Shift> Shifts { get; set; }
         public DbSet<Delivery> Deliveries { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<WithdrawalHistory> withdrawalHistories { get; set; }
 
 
 
