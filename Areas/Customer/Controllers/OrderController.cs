@@ -462,11 +462,6 @@ namespace OnlineShop.Areas.Customer.Controllers
         public IActionResult OrderDetails(int id)
         {
 
-            
-
-            var Rider= _db.Deliveries.Where(r=>r.OrderId== id);
-            
-
             var order = _db.OrderDetails
                 .Include(od => od.Product)
                 .Include(od => od.Order)
@@ -482,6 +477,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                     CustomerEmail = od.Order.Email,
                     ShopId = od.Product.FarmerShopId, 
                     //RiderId= Rider.
+                    CardInfo=od.StripeSessionId,
                     OrderDate = od.Order.OrderDate,
                     UserId = od.Order.UserId,
                     UserName = od.Order.User.UserName,
@@ -505,6 +501,24 @@ namespace OnlineShop.Areas.Customer.Controllers
             {
                 return NotFound();
             }
+
+
+            // Fetch the Rider information related to this order
+            var rider = (from d in _db.Deliveries
+                         join r in _db.RiderModel on d.RiderId equals r.Id
+                         where d.OrderId == id
+                         select new
+                         {   Id = r.Id, 
+                             RiderName = r.Name,
+                             RiderPhone = r.PhoneNumber
+                           
+                         }).FirstOrDefault();
+
+           
+            ViewBag.RiderId= rider?.Id;
+            ViewBag.RiderName = rider?.RiderName;
+            ViewBag.RiderPhone = rider?.RiderPhone;
+          
 
             return View(order);
         }
