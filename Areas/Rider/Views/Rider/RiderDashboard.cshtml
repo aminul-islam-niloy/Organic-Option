@@ -1,0 +1,21 @@
+﻿@model OrganicOption.Models.Rider_Section.RiderModel
+<br />
+<div class="container">
+    <h3>Rider Dashboard</h3>
+
+    <div class="row">
+        <div class="col-md-4">
+            <h4>Total Revenue</h4>
+            <p>@Model.Revenue</p>
+        </div>
+        <div class="col-md-4">
+            <h4>Due Amount</h4>
+            <p>@Model.RiderDue</p>
+        </div>
+        <div class="col-md-4">
+            <h4>Actions</h4>
+            <a href="@Url.Action("RequestWithdraw", "Rider")" class="btn btn-primary">Request Withdrawal</a>
+            <a href="@Url.Action("RiderRevenueDetails", "Rider")" class="btn btn-secondary">View Revenue Details</a>
+        </div>
+    </div>
+</div>

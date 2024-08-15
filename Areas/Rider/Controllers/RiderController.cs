@@ -12,6 +12,7 @@ using OrganicOption.Models.Rider_Section;
 using System;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace OrganicOption.Areas.Rider.Controllers
@@ -336,6 +337,14 @@ namespace OrganicOption.Areas.Rider.Controllers
         public IActionResult RiderExist()
         {
             return View();
+        }
+
+
+        public IActionResult RiderDashboard()
+        {
+            var riderId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var rider = _context.RiderModel.Include(r => r.RiderAddress).SingleOrDefault(r => r.RiderUserId == riderId);
+            return View(rider);
         }
 
 
