@@ -102,5 +102,24 @@ namespace OrganicOption.Areas.Admin.Controllers
 
             return RedirectToAction("AdminViewWithdrawals");
         }
+
+
+        public IActionResult AllWithdrawals()
+        {
+            // Calculate total confirmed revenue
+            var totalRevenue = _db.withdrawalHistories
+                .Where(w => w.IsConfirmed)
+                .Sum(w => w.Amount);
+
+            // Group confirmed withdrawals by date (in the current month)
+            var confirmedWithdrawals = _db.withdrawalHistories
+                .Where(w => w.IsConfirmed && w.ConfirmDate.HasValue && w.ConfirmDate.Value.Month == DateTime.Now.Month)
+                .OrderBy(w => w.ConfirmDate)
+                .ToList();
+
+            // Pass data to the view
+            ViewBag.TotalRevenue = totalRevenue;
+            return View(confirmedWithdrawals);
+        }
     }
 }
