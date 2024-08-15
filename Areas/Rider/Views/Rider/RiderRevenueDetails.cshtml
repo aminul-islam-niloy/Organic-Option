@@ -1,0 +1,16 @@
+﻿@model OrganicOption.Models.Rider_Section.RiderModel
+
+<div class="container">
+    <h2>Rider Revenue Details</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Updated Revenue Information</h4>
+            <p><strong>Total Revenue:</strong> @Model.Revenue</p>
+            <p><strong>Due Amount:</strong> @Model.RiderDue</p>
+        </div>
+        <div class="col-md-6">
+            <a href="@Url.Action("RiderDashboard")" class="btn btn-primary">Back to Dashboard</a>
+        </div>
+    </div>
+</div>

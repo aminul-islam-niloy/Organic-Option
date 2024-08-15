@@ -1,0 +1,41 @@
+﻿@model IEnumerable<OrganicOption.Models.WithdrawalHistory>
+
+
+<div class="container">
+    <h2>Withdraw History</h2>
+
+    <table class="table table-bordered mt-4">
+        <thead>
+            <tr>
+                <th>Amount</th>
+                <th>Withdraw Date</th>
+                <th>Status</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Amount</td>
+                    <td>@item.ConfirmDate.ToString()</td>
+                    <td>
+                        @if (item.IsConfirmed)
+                        {
+                            <span class="text-success">Confirmed</span>
+                        }
+                        else if (item.IsApproved)
+                        {
+                            <span class="text-warning">Approved</span>
+                        }
+                        else
+                        {
+                            <span class="text-danger">Pending</span>
+                        }
+                    </td>
+                    <td>@item.UserType</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

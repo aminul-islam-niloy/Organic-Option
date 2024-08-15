@@ -347,6 +347,72 @@ namespace OrganicOption.Areas.Rider.Controllers
             return View(rider);
         }
 
+        public IActionResult RequestWithdraw()
+        {
+            var riderId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var rider = _context.RiderModel.SingleOrDefault(r => r.RiderUserId == riderId);
+            return View(rider);
+        }
+
+        [HttpPost]
+        public IActionResult RequestWithdraw(decimal amount)
+        {
+            var riderId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var rider = _context.RiderModel.SingleOrDefault(r => r.RiderUserId == riderId);
+
+            if (rider == null || (rider.Revenue + rider.RiderDue) < amount)
+            {
+                TempData["Error"] = "Insufficient funds.";
+                return RedirectToAction("RequestWithdraw");
+            }
+
+            var request = new WithdrawalHistory
+            {
+                UserId = riderId,
+                Amount = amount,
+                RequestDate = DateTime.Now,
+                IsApproved = false,
+                UserType = "Rider"
+                
+            };
+
+            _context.withdrawalHistories.Add(request);
+            _context.SaveChanges();
+
+            TempData["Success"] = "Withdrawal request submitted successfully.";
+            return RedirectToAction("RiderDashboard");
+        }
+
+        public IActionResult RiderRevenueDetails(int riderId)
+        {
+            var rider = _context.RiderModel.SingleOrDefault(r => r.Id == riderId);
+            return View(rider);
+        }
+
+        [Authorize(Roles = "Rider,Farmer")]
+        public async Task<IActionResult> WithdrawHistory()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var role = await _userManager.GetRolesAsync(user);
+            var withdrawHistory = await _context.withdrawalHistories
+                .Where(w => w.UserId == user.Id)
+                .OrderByDescending(w => w.ConfirmDate)
+                .ToListAsync();
+
+            return View(withdrawHistory);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AdminWithdrawHistory()
+        {
+            var withdrawHistory = await _context.withdrawalHistories
+                .Include(w => w.User)
+                .OrderByDescending(w => w.ConfirmDate)
+                .ToListAsync();
+
+            return View(withdrawHistory);
+        }
+
 
 
     }

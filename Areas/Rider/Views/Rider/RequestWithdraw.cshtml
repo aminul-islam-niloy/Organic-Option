@@ -1,0 +1,22 @@
+﻿@model OrganicOption.Models.Rider_Section.RiderModel
+
+<div class="container">
+    <h2>Request Withdrawal</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Rider Revenue</h4>
+            <p><strong>Total Revenue:</strong> @Model.Revenue</p>
+            <p><strong>Due Amount:</strong> @Model.RiderDue</p>
+        </div>
+        <div class="col-md-6">
+            <form asp-action="RequestWithdraw" method="post">
+                <div class="form-group">
+                    <label for="Amount">Withdrawal Amount</label>
+                    <input type="number" class="form-control" id="Amount" name="Amount" required />
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Withdrawal Request</button>
+            </form>
+        </div>
+    </div>
+</div>
