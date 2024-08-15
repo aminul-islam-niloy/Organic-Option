@@ -1,0 +1,62 @@
+﻿@model OrderDetailsViewModel
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="container">
+    <h2>Order Details for Order #@Model.OrderNo</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Customer Information</h4>
+            <p><strong>Name:</strong> @Model.CustomerName</p>
+            <p><strong>Address:</strong> @Model.CustomerAddress</p>
+            <p><strong>Email:</strong> @Model.CustomerEmail</p>
+            <p><strong>Phone:</strong> @Model.CustomerPhone</p>
+        </div>
+        <div class="col-md-6">
+            <h4>Payment Information</h4>
+            <p><strong>Payment Method:</strong> @Model.PaymentMethods</p>
+            <p><strong>Total Price:</strong> @Model.TotalPrice</p>
+            <p><strong>Delivery Charge:</strong> @Model.TotalDelivaryCharge</p>
+            <p><strong>Discount:</strong> @Model.TotalDiscount</p>
+        </div>
+    </div>
+
+    <h4>Products</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Product ID</th>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model.Products)
+            {
+                <tr>
+                    <td>@product.ProductId</td>
+                    <td>@product.ProductName</td>
+                    <td>@product.Quantity</td>
+                    <td>@product.Price</td>
+                   
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+    <p></p>
+
+    <h4>Farmer Shop Information</h4>
+    <p>Shop id : @Model.ShopId  </p>
+ 
+        Visit Shop: <a class="btn btn-warning " style="margin-left: 5px" href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = @Model.ShopId })">Go To Shop</a>
+    </p>
+
+    <h4>Rider Information</h4>
+</div>

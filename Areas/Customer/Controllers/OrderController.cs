@@ -143,75 +143,6 @@ namespace OnlineShop.Areas.Customer.Controllers
 
 
 
-        //public IActionResult Checkout()
-        //{
-        //    return View();
-        //}
-
-        //POST Checkout action method
-
-        //[Authorize(Roles = "Customer")]
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Checkout(Order anOrder)
-        //{
-        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-
-        //    var user = await _userManager.FindByIdAsync(userId);
-
-
-        //    var currentUser = await _userManager.GetUserAsync(User);
-
-        //    var userInfo = _db.ApplicationUser.FirstOrDefault(c => c.Id == user.Id);
-
-
-        //    anOrder.Latitude = userInfo.Latitude;
-        //    anOrder.Longitude = userInfo.Longitude;
-        //    anOrder.UserId = userId;
-        //    anOrder.OrderDate = DateTime.Now;
-
-
-        //    List<Products> products = HttpContext.Session.Get<List<Products>>("products");
-        //    if (products != null)
-        //    {
-        //        foreach (var product in products)
-        //        {
-        //            var orderDetails = new OrderDetails
-        //            {
-        //                PorductId = product.Id,
-        //                Price = product.Price + (product.Discount > 0 ? product.DiscountPrice : 0),
-        //                Quantity = product.QuantityInCart
-        //            };
-        //            anOrder.OrderDetails.Add(orderDetails);
-        //        }
-        //    }
-
-        //    anOrder.OrderNo = GetOrderNo();
-        //    _db.Orders.Add(anOrder);
-        //    await _db.SaveChangesAsync();
-
-        //    List<Products> sesProducts = HttpContext.Session.Get<List<Products>>("products");
-        //    if (sesProducts != null)
-        //    {
-        //        foreach (var product in sesProducts)
-        //        {
-        //            UpdateFarmerStore(product.Id, product.QuantityInCart, product.Price, anOrder.Id, product.FarmerShopId);
-
-        //            // Retrieve FarmerUserId based on FarmerShopId
-        //            var farmerShop = _db.FarmerShop.Include(f => f.FarmerUser)
-        //                                            .FirstOrDefault(f => f.Id == product.FarmerShopId);
-        //            if (farmerShop != null)
-        //            {
-        //                string farmerUserId = farmerShop.FarmerUserId;
-        //                _notificationService.AddNotification(farmerUserId, $"{anOrder.OrderNo} that '{product.Name}'  has been ordered from your Shop.", product.Id);
-        //            }
-        //        }
-        //    }
-
-        //    HttpContext.Session.Set("products", new List<Products>());
-        //    return RedirectToAction("PaymentPage", new { orderId = anOrder.Id });
-        //}
 
 
 
@@ -478,6 +409,105 @@ namespace OnlineShop.Areas.Customer.Controllers
             return View(viewModel);
         }
 
+
+
+        [Authorize(Roles = "Admin")]
+
+        public IActionResult AllOrders()
+        {
+            var orders = _db.OrderDetails
+                .Include(od => od.Product)
+                .Include(od => od.Order)
+                    .ThenInclude(o => o.User)
+                .GroupBy(od => new
+                {
+                    od.OrderId,
+                    od.Order.OrderNo,
+                    od.Order.Name,
+                    od.Order.Address,
+                    od.Order.Email,
+                    od.Order.PhoneNo,
+                    od.Order.OrderDate,
+                    od.Order.UserId,
+                    od.Order.User.UserName,
+                    od.Order.OrderCondition
+                })
+                .Select(g => new OrderDetailsViewModel
+                {
+                    OrderId = g.Key.OrderId,
+                    OrderNo = g.Key.OrderNo,
+                    CustomerName = g.Key.Name,
+                    OrderCondition = g.Key.OrderCondition,
+                    CustomerAddress = g.Key.Address,
+                    CustomerPhone = g.Key.PhoneNo,
+                    CustomerEmail = g.Key.Email,
+                    OrderDate = g.Key.OrderDate,
+                    UserId = g.Key.UserId,
+                    UserName = g.Key.UserName,
+                    PaymentMethods = g.First().PaymentMethods,
+                    Products = g.Select(od => new ProductViewModel
+                    {
+                        ProductId = od.PorductId,
+                        ProductName = od.Product.Name,
+                        Price = od.Product.Price,
+                        Quantity = od.Quantity
+                    }).ToList(),
+                    TotalPrice = g.Sum(od => od.Product.Price * od.Quantity)
+                }).ToList();
+
+            return View(orders);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult OrderDetails(int id)
+        {
+
+            
+
+            var Rider= _db.Deliveries.Where(r=>r.OrderId== id);
+            
+
+            var order = _db.OrderDetails
+                .Include(od => od.Product)
+                .Include(od => od.Order)
+                    .ThenInclude(o => o.User)
+                .Where(od => od.OrderId == id)
+                .Select(od => new OrderDetailsViewModel
+                {
+                    OrderId = od.OrderId,
+                    OrderNo = od.Order.OrderNo,
+                    CustomerName = od.Order.Name,
+                    CustomerAddress = od.Order.Address,
+                    CustomerPhone = od.Order.PhoneNo,
+                    CustomerEmail = od.Order.Email,
+                    ShopId = od.Product.FarmerShopId, 
+                    //RiderId= Rider.
+                    OrderDate = od.Order.OrderDate,
+                    UserId = od.Order.UserId,
+                    UserName = od.Order.User.UserName,
+                    PaymentMethods = od.PaymentMethods,
+                    Products = new List<ProductViewModel>
+                    {
+                new ProductViewModel
+                {
+                    ProductId = od.Id,
+                    ProductName = od.Product.Name,
+                    Price = od.Product.Price,
+                    Quantity = od.Quantity
+                }
+                    },
+                    TotalPrice = od.Product.Price * od.Quantity,
+                    TotalDelivaryCharge = od.TotalDelivaryCharge,
+                    TotalDiscount = od.DiscountedPrice
+                }).FirstOrDefault();
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return View(order);
+        }
 
 
 

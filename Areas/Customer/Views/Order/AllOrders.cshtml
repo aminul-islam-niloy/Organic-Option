@@ -1,0 +1,38 @@
+﻿@model List<OrderDetailsViewModel>
+
+@{
+    ViewData["Title"] = "All Orders";
+}
+
+<div class="container-fluid">
+    <h2 class="text-center">All Orders</h2>
+    <table class="table table-bordered mt-4">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Order Date</th>
+                <th>Total Price</th>
+                <th>Order Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.OrderNo</td>
+                    <td>@order.OrderDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@order.TotalPrice</td>
+                    <td>@order.OrderCondition</td>
+                    <td>
+                        <a href="@Url.Action("OrderDetails", new { id = order.OrderId })" class="btn btn-info">Details</a>
+                        <form method="post" asp-action="Delete" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                            <input type="hidden" name="id" value="@order.OrderId" />
+                           @*  <button type="submit" class="btn btn-danger">Delete</button> *@
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
