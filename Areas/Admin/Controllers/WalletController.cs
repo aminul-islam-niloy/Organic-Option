@@ -25,15 +25,12 @@ namespace OrganicOption.Areas.Admin.Controllers
             _db = db;
             _userManager = userManager;
         }
-        public  async Task<IActionResult> AdminViewWithdrawals()
+        public  IActionResult AdminViewWithdrawals()
         {
             var withdrawalRequests = _db.withdrawalHistories
                      .Where(w => !w.IsConfirmed)
                 .ToList();
 
-
-
-      
             //foreach (var request in withdrawalRequests)
             //{
             //    // Ensure that _userManager is of type UserManager<ApplicationUser>
