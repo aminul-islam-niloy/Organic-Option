@@ -1,0 +1,35 @@
+﻿@model IEnumerable<IGrouping<string, OrganicOption.Models.Blogs.ProductPrice>>
+
+@{
+    ViewBag.Title = "Product Prices";
+}
+<br />
+<h3>Product Prices</h3>
+<br />
+@foreach (var group in Model)
+{
+    <h3 class="text-center">@group.Key</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Price</th>
+                <th>Updated Date</th>
+                <th>Edit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in group)
+            {
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.Price Tk</td>
+                    <td>@item.UpdatedDate.ToString("g")</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
