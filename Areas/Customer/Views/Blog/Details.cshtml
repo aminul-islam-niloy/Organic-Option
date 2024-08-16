@@ -1,0 +1,53 @@
+﻿@model OrganicOption.Models.Blogs.BlogPost
+<br />
+<div class="container">
+    <h3 class="display-7 mt-4 text-center">@Model.Title</h3>
+
+    <!-- Main Image -->
+    <div class="text-center mb-4">
+        <img src="@Model.Image" class="img-fluid rounded shadow" alt="@Model.Title" style="max-width: 100%; height: auto;" />
+    </div>
+
+    <!-- Posted Date -->
+    <p class="text-muted">Posted on @Model.PostedDate.ToString("MMMM dd, yyyy")</p>
+
+    <!-- Full Description with different styles -->
+    <div class="full-description mt-4">
+        @Html.Raw(Model.FullDescription)
+    </div>
+
+    <!-- Back to List Button -->
+    <div class="mt-5">
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
+
+<style>
+    .full-description p {
+        margin-bottom: 1.5rem;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    .full-description h3 {
+        margin-top: 2rem;
+        font-weight: bold;
+        color: #343a40;
+    }
+
+    .full-description img {
+        max-width: 100%;
+        height: auto;
+        margin: 1.5rem 0;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .full-description blockquote {
+        font-size: 1.2rem;
+        margin: 2rem 0;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-left: 4px solid #343a40;
+    }
+</style>

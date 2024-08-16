@@ -1,0 +1,26 @@
+﻿@model IEnumerable<OrganicOption.Models.Blogs.BlogPost>
+
+<div class="container mt-4">
+    <h2 class="text-center">Manage Blog Posts</h2>
+
+    <a asp-action="Create" class="btn btn-primary mb-3">Add New Blog Post</a>
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-60">
+                    <img src="@item.Image" class="card-img-top" style="width:60%; height:auto" alt="@item.Title">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Title</h5>
+                        <p class="card-text">@item.ShortDescription</p>
+                        <p class="text-muted">Posted on @item.PostedDate.ToString("MMMM dd, yyyy")</p>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">View</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

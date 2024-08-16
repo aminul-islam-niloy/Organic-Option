@@ -1,0 +1,24 @@
+﻿@model IEnumerable<OrganicOption.Models.Blogs.BlogPost>
+
+<div class="container mt-10">
+    <h4>Blog Posts</h4>
+    <div class="row">
+        @foreach (var post in Model)
+        {
+                <div class=" card col-md-4 " style=" margin:10px; padding:10px">
+            
+                        <img src="@post.Image" class="card-img-top" style="max-width: 60%;  height: auto;" alt="@post.Title">
+                
+                    <div class="card-body">
+                        <h5 class="card-title">@post.Title</h5>
+                        <p class="card-text">@post.ShortDescription</p>
+                        <p class="card-text"><small class="text-muted">Posted on @post.PostedDate.ToString("MMMM dd, yyyy")</small></p>
+                        <a href="@Url.Action("Details", new { id = post.Id })" class="btn btn-primary">Read More</a>
+                    </div>
+                </div>
+     
+             
+
+        }
+    </div>
+</div>
