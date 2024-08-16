@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -24,12 +25,14 @@ namespace OnlineShop.Areas.Customer.Controllers
         private ApplicationDbContext _db;
         private readonly IEmailService _emailService;
         private readonly IMemoryCache _cache;
+        UserManager<IdentityUser> _userManager;
 
-        public HomeController(ApplicationDbContext db, IEmailService emailService, IMemoryCache memoryCache)
+        public HomeController(ApplicationDbContext db, IEmailService emailService, IMemoryCache memoryCache, UserManager<IdentityUser> userManager)
         {
             _db = db;
             _emailService = emailService;
             _cache = memoryCache;
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index(int? page)
@@ -129,81 +132,216 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
         // GET: Customer/Home/Products
-        public IActionResult Products(int? page)
+        //public IActionResult Products(int? page)
+        //{
+        //    ViewData["productTypeSearchId"] = new SelectList(_db.ProductTypes.ToList(), "Id", "ProductType");
+        //    // Check if products are already cached
+        //    if (!_cache.TryGetValue("AllProducts", out IPagedList<Products> cachedProducts))
+        //    {
+        //        // Products not found in cache, retrieve them from the database
+        //        var products = _db.Products.Include(p => p.ProductTypes).ToList().ToPagedList(page ?? 1, 12);
+
+        //        // Cache the products for 5 minutes
+        //        _cache.Set("AllProducts", products, TimeSpan.FromMinutes(5));
+
+        //        return View(products);
+        //    }
+
+        //    // Products found in cache, return them
+        //    return View(cachedProducts);
+        //}
+
+
+        //// POST: Filter products based on search criteria
+        //[HttpPost]
+        //public IActionResult Products(int? page, int productTypeId, string searchString, decimal? lowAmount, decimal? largeAmount, string sortOrder)
+        //{
+        //    // Remove cached products to ensure fresh results are fetched
+        //    _cache.Remove("AllProducts");
+
+        //    ViewData["productTypeSearchId"] = new SelectList(_db.ProductTypes.ToList(), "Id", "ProductType");
+
+        //    // Fetch minimum and maximum prices from the database
+        //    var minPrice = _db.Products.Min(p => p.Price);
+        //    var maxPrice = _db.Products.Max(p => p.Price);
+
+        //    ViewData["MinPrice"] = minPrice;
+        //    ViewData["MaxPrice"] = maxPrice;
+
+        //    var productsQuery = _db.Products.Include(p => p.ProductTypes).AsQueryable();
+
+        //    // Filter by product type
+        //    if (productTypeId != 0)
+        //    {
+        //        productsQuery = productsQuery.Where(p => p.ProductTypes.Id == productTypeId);
+        //    }
+
+        //    // Filter by search string
+        //    if (!string.IsNullOrEmpty(searchString))
+        //    {
+        //        productsQuery = productsQuery.Where(p => p.Name.Contains(searchString));
+        //    }
+
+        //    // Filter by price range
+        //    if (lowAmount.HasValue && largeAmount.HasValue)
+        //    {
+        //        productsQuery = productsQuery.Where(p => p.Price >= lowAmount && p.Price <= largeAmount);
+        //    }
+
+        //    // Apply sorting
+        //    switch (sortOrder)
+        //    {
+        //        case "PriceLowToHigh":
+        //            productsQuery = productsQuery.OrderBy(p => p.Price);
+        //            break;
+        //        case "PriceHighToLow":
+        //            productsQuery = productsQuery.OrderByDescending(p => p.Price);
+        //            break;
+        //        default:
+        //            break;
+        //    }
+
+        //    // Retrieve and cache the filtered products
+        //    var filteredProducts = productsQuery.ToPagedList(page ?? 1, 12);
+        //    _cache.Set("AllProducts", filteredProducts, TimeSpan.FromMinutes(5));
+
+        //    return View(filteredProducts);
+        //}
+
+
+
+        public async Task<IActionResult> Products(int? page)
         {
-            ViewData["productTypeSearchId"] = new SelectList(_db.ProductTypes.ToList(), "Id", "ProductType");
-            // Check if products are already cached
-            if (!_cache.TryGetValue("AllProducts", out IPagedList<Products> cachedProducts))
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
             {
-                // Products not found in cache, retrieve them from the database
-                var products = _db.Products.Include(p => p.ProductTypes).ToList().ToPagedList(page ?? 1, 12);
-
-                // Cache the products for 5 minutes
-                _cache.Set("AllProducts", products, TimeSpan.FromMinutes(5));
-
-                return View(products);
+                return NotFound();
             }
 
-            // Products found in cache, return them
+            var user = await _db.ApplicationUser.FirstOrDefaultAsync(c => c.Id == currentUser.Id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            double userLatitude = user.Latitude;
+            double userLongitude = user.Longitude;
+
+            if (!_cache.TryGetValue("AllProducts", out IPagedList<Products> cachedProducts))
+            {
+                var products = await _db.Products
+                    .Include(p => p.ProductTypes)
+                    .Include(p => p.FarmerShop)
+                    .ToListAsync();
+
+                var filteredProducts = products
+                    .Where(p => CalculateDistance(userLatitude, userLongitude, p.FarmerShop.Latitude, p.FarmerShop.Longitude) <= 10)
+                    .ToList();
+
+                var pagedProducts = filteredProducts.ToPagedList(page ?? 1, 12);
+
+                _cache.Set("AllProducts", pagedProducts, TimeSpan.FromMinutes(5));
+
+                ViewData["productTypeSearchId"] = new SelectList(_db.ProductTypes.ToList(), "Id", "ProductType");
+                return View(pagedProducts);
+            }
+
+            ViewData["productTypeSearchId"] = new SelectList(_db.ProductTypes.ToList(), "Id", "ProductType");
             return View(cachedProducts);
         }
 
 
-        // POST: Filter products based on search criteria
+
+
+        private double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
+        {
+            var R = 6371; // Radius of the earth in km
+            var dLat = ToRadians(lat2 - lat1);
+            var dLon = ToRadians(lon2 - lon1);
+            var a =
+                Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                Math.Cos(ToRadians(lat1)) * Math.Cos(ToRadians(lat2)) *
+                Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+            var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            return R * c; // Distance in km
+        }
+
+        private double ToRadians(double deg) => deg * (Math.PI / 180);
+
+
         [HttpPost]
-        public IActionResult Products(int? page, int productTypeId, string searchString, decimal? lowAmount, decimal? largeAmount, string sortOrder)
+        public async Task<IActionResult> Products(int? page, int productTypeId, string searchString, decimal? lowAmount, decimal? largeAmount, string sortOrder, int range = 10)
         {
             // Remove cached products to ensure fresh results are fetched
             _cache.Remove("AllProducts");
 
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _db.ApplicationUser.FirstOrDefaultAsync(c => c.Id == currentUser.Id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            double userLatitude = user.Latitude;
+            double userLongitude = user.Longitude;
+
             ViewData["productTypeSearchId"] = new SelectList(_db.ProductTypes.ToList(), "Id", "ProductType");
 
-            // Fetch minimum and maximum prices from the database
-            var minPrice = _db.Products.Min(p => p.Price);
-            var maxPrice = _db.Products.Max(p => p.Price);
-
-            ViewData["MinPrice"] = minPrice;
-            ViewData["MaxPrice"] = maxPrice;
-
-            var productsQuery = _db.Products.Include(p => p.ProductTypes).AsQueryable();
+            var products = await _db.Products
+                .Include(p => p.ProductTypes)
+                .Include(p => p.FarmerShop)
+                .ToListAsync();
 
             // Filter by product type
             if (productTypeId != 0)
             {
-                productsQuery = productsQuery.Where(p => p.ProductTypes.Id == productTypeId);
+                products = products.Where(p => p.ProductTypes.Id == productTypeId).ToList();
             }
 
             // Filter by search string
             if (!string.IsNullOrEmpty(searchString))
             {
-                productsQuery = productsQuery.Where(p => p.Name.Contains(searchString));
+                products = products.Where(p => p.Name.Contains(searchString)).ToList();
             }
 
             // Filter by price range
             if (lowAmount.HasValue && largeAmount.HasValue)
             {
-                productsQuery = productsQuery.Where(p => p.Price >= lowAmount && p.Price <= largeAmount);
+                products = products.Where(p => p.Price >= lowAmount && p.Price <= largeAmount).ToList();
             }
+
+            // Filter by proximity range
+            products = products.Where(p => CalculateDistance(userLatitude, userLongitude, p.FarmerShop.Latitude, p.FarmerShop.Longitude) <= range).ToList();
 
             // Apply sorting
             switch (sortOrder)
             {
                 case "PriceLowToHigh":
-                    productsQuery = productsQuery.OrderBy(p => p.Price);
+                    products = products.OrderBy(p => p.Price).ToList();
                     break;
                 case "PriceHighToLow":
-                    productsQuery = productsQuery.OrderByDescending(p => p.Price);
+                    products = products.OrderByDescending(p => p.Price).ToList();
                     break;
                 default:
                     break;
             }
 
-            // Retrieve and cache the filtered products
-            var filteredProducts = productsQuery.ToPagedList(page ?? 1, 12);
-            _cache.Set("AllProducts", filteredProducts, TimeSpan.FromMinutes(5));
+            // Paginate the filtered products
+            var pagedProducts = products.ToPagedList(page ?? 1, 12);
 
-            return View(filteredProducts);
+            // Cache the paged products for 5 minutes
+            _cache.Set("AllProducts", pagedProducts, TimeSpan.FromMinutes(5));
+
+            return View(pagedProducts);
         }
+
+
+
 
 
 
