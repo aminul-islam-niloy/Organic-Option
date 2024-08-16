@@ -1,0 +1,28 @@
+﻿@model IEnumerable<OrganicOption.Models.Blogs.FeedBack>
+
+@{
+    ViewData["Title"] = "Feedback List";
+}
+<br />
+<h3>@ViewData["Title"]</h3>
+<br />
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Comment</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Email</td>
+                <td>@item.Comment</td>
+            </tr>
+        }
+    </tbody>
+</table>
