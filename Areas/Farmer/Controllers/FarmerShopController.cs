@@ -45,6 +45,61 @@ namespace OrganicOption.Areas.Farmer.Controllers
         }
 
 
+        [AllowAnonymous]
+        public async Task<IActionResult> FarmerShop(double? latitude, double? longitude, int range = 7)
+        {
+           
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.ApplicationUser.FirstOrDefaultAsync(c => c.Id == currentUser.Id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+         
+            if (!latitude.HasValue || !longitude.HasValue)
+            {
+                latitude = user?.Latitude;
+                longitude = user?.Longitude;
+            }
+
+            if (!latitude.HasValue || !longitude.HasValue)
+            {
+                
+                return BadRequest("Location information is required.");
+            }
+
+
+            var farmerShops = await _context.FarmerShop.ToListAsync();
+
+ 
+            var nearbyShops = farmerShops.Where(shop => CalculateDistance(latitude.Value, longitude.Value, shop.Latitude, shop.Longitude) <= range).ToList();
+
+            return View(nearbyShops);
+        }
+
+
+        private double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
+        {
+            var R = 6371; // Radius of the earth in km
+            var dLat = ToRadians(lat2 - lat1);
+            var dLon = ToRadians(lon2 - lon1);
+            var a =
+                Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                Math.Cos(ToRadians(lat1)) * Math.Cos(ToRadians(lat2)) *
+                Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+            var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            return R * c; // Distance in km
+        }
+
+        private double ToRadians(double deg) => deg * (Math.PI / 180);
+
+
 
         public async Task<IActionResult> Index()
         {
