@@ -1,26 +1,23 @@
 ﻿@model List<OrganicOption.Models.FarmerShop>
 
-
-<div class="row">
-    <div class="col-md-6">
-        <form method="get" action="@Url.Action("FarmerShop", "FarmerShop")">
-            <div class="form-group justify-content-center">
-                <label for="range">Select Range:</label>
-                <select class="form-control" id="range" name="range">
-                    <option value="7">7 km</option>
-                    <option value="15">15 km</option>
-                    <option value="30">30 km</option>
-                    <option value="100000">30 Km +</option>
-                </select>
-
-
-                <button type="submit" class="btn btn-primary">Filter</button>
-            </div>
-        </form>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="get" action="@Url.Action("FarmerShop", "FarmerShop")" class="p-4 shadow-sm rounded bg-light d-flex align-items-center">
+                <div class="form-group flex-grow-1 mb-0">
+                    <label for="range" class="sr-only">Select Range:</label>
+                    <select class="form-control" id="range" name="range">
+                        <option value="7">7 km</option>
+                        <option value="15">15 km</option>
+                        <option value="30">30 km</option>
+                        <option value="100000">30 km +</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary ml-2">Filter</button>
+            </form>
+        </div>
     </div>
-    <div class="col-md-6"> </div>
 </div>
-
 
 <br />
 <br />
