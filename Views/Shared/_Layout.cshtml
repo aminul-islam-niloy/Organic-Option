@@ -368,7 +368,7 @@
     </environment>
 
 
-
+@* 
     <script>
         $(document).ready(function () {
             console.log("Document is ready");
@@ -458,7 +458,84 @@
 
         // Check notifications periodically
         setInterval(checkNotifications, 60000); // Check every minute (adjust as needed)
+    </script> *@
+
+
+    <script>
+        $(document).ready(function () {
+            console.log("Document is ready");
+
+            let userInteracted = false;
+
+            function enableSound() {
+                console.log("User interaction detected");
+                userInteracted = true;
+                document.removeEventListener('click', enableSound);
+                document.removeEventListener('keypress', enableSound);
+            }
+
+            document.addEventListener('click', enableSound);
+            document.addEventListener('keypress', enableSound);
+
+            // Request permission to show notifications
+            if ('Notification' in window) {
+                Notification.requestPermission().then(function (permission) {
+                    console.log('Notification permission:', permission);
+                });
+            } else {
+                console.log('This browser does not support notifications.');
+            }
+
+            // Function to display browser notification
+            function displayNotification(message) {
+                if (Notification.permission === 'granted') {
+                    var notification = new Notification('New Notification', {
+                        body: message,
+                        icon: '/path/to/icon.png' // Optional: Add an icon to the notification
+                    });
+                    notification.onclick = function () {
+                        window.focus(); // Focus on the window when notification clicked
+                    };
+                }
+            }
+
+            function checkForNewNotifications() {
+                console.log("Checking for new notifications");
+                if (!userInteracted) {
+                    console.log("Waiting for user interaction to enable sound");
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("GetUnreadNotificationCount", "Notifications")',
+                    method: 'GET',
+                    success: function (data) {
+                        console.log("Successfully fetched unread notification count:", data);
+                        var currentCount = parseInt($("#notification-count").text());
+                        if (data > currentCount) {
+                            $("#notification-count").text(data);
+                            var audio = $("#notification-sound")[0];
+                            audio.play().then(() => {
+                                console.log("Sound played successfully");
+                            }).catch(function (error) {
+                                console.log("Error playing sound:", error);
+                            });
+
+                            // Display browser notification
+                            displayNotification('You have ' + data + ' unread notifications.');
+                        }
+                    },
+                    error: function (error) {
+                        console.log("Error fetching notifications:", error);
+                    }
+                });
+            }
+
+            // Check notifications periodically
+            setInterval(checkForNewNotifications, 60000); // Check every minute (adjust as needed)
+        });
     </script>
+
 
 
     <script src="~/js/plugins.js"></script>

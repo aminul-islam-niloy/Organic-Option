@@ -8,6 +8,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using OnlineShop.Models;
+using OrganicOption.Models.Rider_Section;
+using OrganicOption.Models;
+using OrganicOption.Service;
+using Stripe.Climate;
 
 namespace OrganicOption.Areas.Admin.Controllers
 {
@@ -18,12 +22,13 @@ namespace OrganicOption.Areas.Admin.Controllers
         private readonly ApplicationDbContext _db;
 
         UserManager<IdentityUser> _userManager;
-      
+        private readonly NotificationService _notificationService;
 
-        public WalletController(ApplicationDbContext db, UserManager<IdentityUser> userManager)
+        public WalletController(ApplicationDbContext db, UserManager<IdentityUser> userManager, NotificationService notificationService)
         {
             _db = db;
             _userManager = userManager;
+            _notificationService = notificationService;
         }
         public  IActionResult AdminViewWithdrawals()
         {
@@ -82,6 +87,9 @@ namespace OrganicOption.Areas.Admin.Controllers
                     rider.Revenue = 0;
                     rider.RiderDue -= remainingAmount;
                 }
+                var RiderUserId = rider.RiderUserId;
+                
+                _notificationService.AddNotification(RiderUserId, $"Your Withdraw #{request.Id} Request is accepted. You can track it", request.Id);
             }
             else if (request.UserType == "Farmer")
             {
@@ -93,6 +101,10 @@ namespace OrganicOption.Areas.Admin.Controllers
                 }
 
                 farmer.ShopRevenue -= request.Amount;
+
+                var FarmerUserId = farmer.FarmerUserId;
+
+                _notificationService.AddNotification(FarmerUserId, $"Your Withdraw #{request.Id} Request is accepted. You can track it", request.Id);
             }
 
           

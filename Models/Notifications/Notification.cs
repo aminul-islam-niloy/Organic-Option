@@ -9,7 +9,7 @@ namespace OrganicOption.Models.Notifications
         public DateTime DateCreated { get; set; }
         public bool IsRead { get; set; }
 
-        public string UserId { get; set; } // Add UserId to link to a specific user
+        public string UserId { get; set; } 
         public int? ProductId { get; set; }
         public int OrderId { get; set; }
     }
