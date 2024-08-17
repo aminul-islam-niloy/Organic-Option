@@ -60,9 +60,6 @@ namespace OnlineShop.Areas.Customer.Controllers
             return 300;
         }
 
-      
-
-
 
         //GET Checkout actioin method
 
@@ -136,14 +133,9 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
         private static double ToRadians(double angle)
-{
-    return angle * (Math.PI / 180);
-}
-
-
-
-
-
+            {
+                return angle * (Math.PI / 180);
+            }
 
 
         [Authorize(Roles = "Customer")]
@@ -217,10 +209,6 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
 
-
-
-
-
         private void UpdateFarmerStore(int id, int quantitySold, decimal price, int orderId, int FarmerShopId)
         {
             // Retrieve the product and update its sold quantity and last sold date
@@ -257,13 +245,6 @@ namespace OnlineShop.Areas.Customer.Controllers
             _db.SaveChanges();
         }
 
-
-
-
-
-
-
-
         public IActionResult OrderConfirmation()
         {
             return View();
@@ -276,139 +257,6 @@ namespace OnlineShop.Areas.Customer.Controllers
             int rowCount = _db.Orders.ToList().Count() + 1;
             return rowCount.ToString("000");
         }
-
-
-
-
-        [Authorize(Roles = "Admin")]
-        public IActionResult Index()
-        {
-            var ordersWithProductsAndUsers = _db.OrderDetails
-                .Include(od => od.Product)
-                .Include(od => od.Order)
-                    .ThenInclude(o => o.User) // Include user details
-                .Where(od => od.Order != null && od.Product != null)
-                .GroupBy(od => new
-                {
-                    od.OrderId,
-                    od.Order.OrderNo,
-                    od.Order.Name,
-                    od.Order.Address,
-                    od.Order.Email,
-                    od.Order.PhoneNo,
-                    od.Order.OrderDate,
-                    od.Order.UserId, // Include user ID in grouping
-                    od.Order.User.UserName,
-
-                   
-                })
-                .Select(g => new OrderDetailsViewModel
-                {
-                    OrderId = g.Key.OrderId,
-                    OrderNo = g.Key.OrderNo,
-                    CustomerName = g.Key.Name,
-                    CustomerAddress = g.Key.Address,
-                    CustomerPhone = g.Key.PhoneNo,
-                    CustomerEmail = g.Key.Email,
-                    OrderDate = g.Key.OrderDate,
-                    UserId = g.Key.UserId, // Add user ID to the view model
-                    UserName = g.Key.UserName,
-                    PaymentMethods = g.First().PaymentMethods,
-
-
-                    Products = g.Select(od => new ProductViewModel
-                    {
-                        ProductId = od.PorductId,
-                        ProductName = od.Product.Name,
-                        Price = od.Product.Price,
-                        Image = od.Product.Image,
-
-                        Quantity = od.Quantity // Get quantity from OrderDetails
-                    }).ToList(),
-
-                    // Calculate the total price by summing the prices of all products in the order
-                    TotalPrice = g.Sum(od => od.Product.Price * od.Quantity)
-                }).ToList();
-
-            return View(ordersWithProductsAndUsers);
-        }
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public IActionResult OrderIndex()
-        {
-            // Call the model method with a default date range
-            return View();
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AllOrderIndex(string dateRange)
-        {
-            DateTime startDate, endDate;
-            if (!string.IsNullOrEmpty(dateRange))
-            {
-                var dates = dateRange.Split('-');
-                startDate = DateTime.Parse(dates[0]);
-                endDate = DateTime.Parse(dates[1]);
-            }
-            else
-            {
-                startDate = DateTime.Now.AddDays(-7);
-                endDate = DateTime.Now;
-            }
-
-            var orders = await _db.Orders
-                .Include(o => o.User)
-                .Include(o => o.OrderDetails)
-                    .ThenInclude(od => od.Product)
-                .Where(o => o.OrderDate >= startDate && o.OrderDate <= endDate)
-                .ToListAsync();
-
-            // Get the Delivery records related to these orders
-            var orderIds = orders.Select(o => o.Id).ToList();
-            var deliveries = await _db.Deliveries
-                .Where(d => orderIds.Contains(d.OrderId))
-                .ToListAsync();
-
-            var riderIds = deliveries.Select(d => d.RiderId).Distinct().ToList();
-            var riderDict = await _db.RiderModel
-                .Where(r => riderIds.Contains(r.Id))
-                .ToDictionaryAsync(r => r.Id);
-
-            var farmerShopIds = orders.SelectMany(o => o.OrderDetails.Select(od => od.Product.FarmerShopId)).Distinct().ToList();
-            var farmerShopDict = await _db.FarmerShop
-                .Where(fs => farmerShopIds.Contains(fs.Id))
-                .ToDictionaryAsync(fs => fs.Id);
-
-            var viewModel = orders.Select(order => new AllOrderViewModel
-            {
-                OrderId = order.Id,
-                OrderNo = order.OrderNo,
-                OrderDate = order.OrderDate,
-                OrderCondition = order.OrderCondition,
-                DeliveryCharge = (double)order.DelivaryCharge,
-                TotalPrice = (double)(order.OrderDetails.Sum(od => od.Quantity * od.Price) + order.DelivaryCharge),
-                Customer = new CustomerInfoViewModel { Name = order.User.UserName, Phone = order.User.PhoneNumber },
-                Rider = deliveries.Where(d => d.OrderId == order.Id)
-                          .Select(d => riderDict.ContainsKey(d.RiderId) ? new RiderInfoViewModel
-                          {
-                              Name = riderDict[d.RiderId].Name,
-                              Phone = riderDict[d.RiderId].PhoneNumber
-                          } : null)
-                          .FirstOrDefault(),
-                FarmerShop = (order.OrderDetails.FirstOrDefault()?.Product.FarmerShopId != null
-                      && farmerShopDict.ContainsKey(order.OrderDetails.FirstOrDefault().Product.FarmerShopId))
-                      ? new FarmerShopInfoViewModel
-                      {
-                          ShopId = farmerShopDict[order.OrderDetails.FirstOrDefault().Product.FarmerShopId].Id,
-                          ShopName = farmerShopDict[order.OrderDetails.FirstOrDefault().Product.FarmerShopId].ShopName
-                      } : null,
-                Payment = new PaymentInfoViewModel { PaymentMethods = order.PaymentMethods }
-            }).ToList();
-
-            return View(viewModel);
-        }
-
 
 
         [Authorize(Roles = "Admin")]
@@ -709,61 +557,6 @@ namespace OnlineShop.Areas.Customer.Controllers
 
         //stripe payment method
 
-        //public IActionResult CreatePayment(string amount)
-        //{
-
-        //    var currency = "usd"; // Currency code
-        //    var successUrl = "https://localhost:44343/Customer/Order";
-        //    var cancelUrl = "https://localhost:44343/Customer/Order/Checkout";
-        //    StripeConfiguration.ApiKey = _stripeSettings.SecretKey;
-
-        //    var options = new SessionCreateOptions
-        //    {
-        //        PaymentMethodTypes = new List<string>
-        //        {
-        //            "card"
-        //        },
-        //        LineItems = new List<SessionLineItemOptions>
-        //        {
-        //            new SessionLineItemOptions
-        //            {
-        //                PriceData = new SessionLineItemPriceDataOptions
-        //                {
-        //                    Currency = currency,
-        //                    UnitAmount = Convert.ToInt32(amount) * 100,  // Amount in smallest currency unit (e.g., cents)
-        //                    ProductData = new SessionLineItemPriceDataProductDataOptions
-        //                    {
-        //                        Name = "Product Name",
-        //                        Description = "Product Description"
-        //                    }
-        //                },
-        //                Quantity = 1
-        //            }
-        //        },
-        //        Mode = "payment",
-        //        SuccessUrl = successUrl,
-        //        CancelUrl = cancelUrl
-        //    };
-
-        //    var service = new SessionService();
-        //    var session = service.Create(options);
-        //    SessionId = session.Id;
-
-        //    return Redirect(session.Url);
-        //}
-
-        //public async Task<IActionResult> success()
-        //{
-
-        //    return View("Index");
-        //}
-
-        //public IActionResult cancel()
-        //{
-        //    return View();
-        //}
-
-
         [HttpPost]
         public IActionResult CreatePayment(int orderId)
         {
@@ -850,46 +643,10 @@ namespace OnlineShop.Areas.Customer.Controllers
 
 
 
-
-        //[Authorize(Roles = "Rider")]
-        //public async Task<IActionResult> MyOffer()
-        //{
-        //    var offer = await GetOfferForRider();
-
-        //    //HttpContext.Session.Set("OfferData", offer);
-
-        //    if (offer != null)
-        //    {
-        //        var viewModel = new RiderOfferViewModel
-        //        {
-        //            OrderId = offer.OrderId,
-        //            ProductDetails = offer.ProductDetails,
-        //            CustomerAddress = offer.CustomerAddress,
-        //            DeliveryTime = offer.DeliveryTime,
-        //            ShopName = offer.ProductDetails.FirstOrDefault()?.ShopName, // Get shop name
-        //            ShopContract = offer.ProductDetails.FirstOrDefault()?.ShopContact, // Get shop contract
-        //            Revenue = offer.Revenue,
-        //            ShopAddress= offer.ShopAddress,
-        //            TimeRemaining = (offer.OfferStartTime.AddMinutes(1) - DateTime.Now)
-        //        };
-
-        //        HttpContext.Session.Set("OfferData", viewModel);
-
-        //        return View(viewModel);
-        //    }
-        //    else
-        //    {
-        //        return Content("No offer available.");
-        //    }
-        //}
-
-
-
         [Authorize(Roles = "Rider")]
         public async Task<IActionResult> MyOffer()
         {
             var offer = await GetOfferForRider();
-
 
             if (offer != null)
             {
@@ -919,8 +676,7 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
 
-
-        // Define a static variable to keep track of the index of the next order
+        //  index of the next order
         private static int nextOrderIndex = 0;
 
 
@@ -933,10 +689,10 @@ namespace OnlineShop.Areas.Customer.Controllers
             {
                 var ordersOnList = await _db.Orders
                     .Include(o => o.OrderDetails)
-                        .ThenInclude(od => od.Product) // Include product information
-                            .ThenInclude(p => p.FarmerShop) // Include shop information
+                        .ThenInclude(od => od.Product) 
+                            .ThenInclude(p => p.FarmerShop) 
                     .Where(o => o.OrderDetails.Any(od => od.OrderCondition == OrderCondition.Onlist) && !o.IsOfferedToRider)
-                    .OrderBy(o => o.Id) // Ensure order is fetched in ascending order of ID
+                    .OrderBy(o => o.Id) 
                     .ToListAsync();
 
                 // Check if there are any orders available
@@ -944,12 +700,11 @@ namespace OnlineShop.Areas.Customer.Controllers
                 {
                     // Get the order based on the nextOrderIndex
                     var order = ordersOnList.ElementAtOrDefault(nextOrderIndex);
-                    // Fetch the FarmerShopId from the first order detail
+                
                     var farmerShopId = order.OrderDetails
                         .Select(od => od.Product.FarmerShopId)
                         .FirstOrDefault();
 
-                    // Query to get the FarmerShop address using the FarmerShopId
                     var shopAddress = await _db.FarmerShop
                         .Where(fs => fs.Id == farmerShopId)
                         .Select(fs => fs.ShopAddress)
@@ -962,14 +717,12 @@ namespace OnlineShop.Areas.Customer.Controllers
                         var productDetails = order.OrderDetails.Select(od => new ProductwithOrderViewModel
                         {
                             ProductName = od.Product.Name,
-                            ProductImage = od.Product.Image, // Set the product image URL here
+                            ProductImage = od.Product.Image,
                             ShopName = od.Product.FarmerShop.ShopName,
                             ShopContact = od.Product.FarmerShop.ContractInfo,
                             Quantity = od.Quantity,
-                            ShopAddress = od.Product.FarmerShop.ShopAddress // Include the ShopAddress
+                            ShopAddress = od.Product.FarmerShop.ShopAddress
                         }).ToList();
-
-
 
                         var offerViewModel = new RiderOfferViewModel
                         {
@@ -981,8 +734,8 @@ namespace OnlineShop.Areas.Customer.Controllers
                             longatude = GeoLocation.Longitude,
                             ProductDetails = productDetails,
                             CustomerPhone = order.PhoneNo,
-                            ShopAddress = shopAddress, // Set the ShopAddress
-                            OfferStartTime = DateTime.Now // Store the offer start time
+                            ShopAddress = shopAddress, 
+                            OfferStartTime = DateTime.Now 
                         };
 
                         // Increment the nextOrderIndex for the next call
@@ -997,58 +750,11 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
 
-
-
-        //not used
-
-        [Authorize(Roles = "Rider")]
-        private async Task AcceptedOrder(Order order, RiderModel rider)
-        {
-            decimal totalOrderAmount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
-
-            var delivery = new Delivery
-            {
-                OrderId = order.Id,
-                RiderId = rider.Id,
-                OrderCondition = OrderCondition.OrderTaken,
-                PayableMoney = order.PaymentCondition == PaymentCondition.Paid ? 0 : totalOrderAmount,
-                ProductDetails = order.OrderDetails.Select(od => od.Product.Name).FirstOrDefault(),
-                CustomerAddress = order.Address
-                
-
-            };
-
-            _db.Deliveries.Add(delivery);
-            await _db.SaveChangesAsync();
-
-            order.IsOfferedToRider = true;
-            order.OrderCondition = OrderCondition.OrderTaken;
-            await _db.SaveChangesAsync();
-
-            // Notify farmers for each product in the order
-            foreach (var orderDetail in order.OrderDetails)
-            {
-                var product = orderDetail.Product;
-                var farmerShop = _db.FarmerShop.Include(f => f.FarmerUser)
-                                                .FirstOrDefault(f => f.Id == product.FarmerShopId);
-                if (farmerShop != null)
-                {
-                    string farmerUserId = farmerShop.FarmerUserId;
-                    _notificationService.AddNotification(farmerUserId, $"Order #{order.Id} has been accepted by a rider :  {delivery.RiderId}.for  Product: '{product.Name}'", product.Id);
-                }
-            }
-        }
-
-
-
-
         [Authorize(Roles = "Rider")]
         public async Task<IActionResult> CreateDeliveryForAcceptedOrder()
         {
-            // Get the current user's ID (rider's ID)
             var riderId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Check if the rider already exists in the database
             var existingRider = await _db.RiderModel.FirstOrDefaultAsync(rider => rider.RiderUserId == riderId);
 
             // Retrieve offer data from session
@@ -1064,7 +770,6 @@ namespace OnlineShop.Areas.Customer.Controllers
 
                 if (order == null)
                 {
-
                     return View("Error");
                 }
 
@@ -1092,9 +797,6 @@ namespace OnlineShop.Areas.Customer.Controllers
                     OrderAcceptTime = DateTime.Now
                 };
 
-
-
-
                 try
                 {
                     foreach (var orDesin in order.OrderDetails)
@@ -1107,9 +809,6 @@ namespace OnlineShop.Areas.Customer.Controllers
                     order.OrderCondition = OrderCondition.OrderTaken;
                     _db.Deliveries.Add(delivery);
                     await _db.SaveChangesAsync();
-
-
-
 
                     foreach (var orderDetail in order.OrderDetails)
                     {
@@ -1124,10 +823,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                     }
 
                     ViewBag.ShopAddress = offer.ShopAddress;
-
-
                     HttpContext.Session.Remove("OfferData");
-
 
                     return View(delivery);
                 }
@@ -1139,17 +835,8 @@ namespace OnlineShop.Areas.Customer.Controllers
             }
             else
             {
-
                 return RedirectToAction("Index", "RiderDelivery", new { area = "Rider" });
             }
-        }
-
-
-
-
-        private string SerializeAddress(OrganicOption.Models.Address address)
-        {
-            return $"{address.Division}, {address.District}, {address.Thana}, {address.WardNo}, {address.StreetNo}, {address.House}";
         }
 
 
@@ -1168,7 +855,6 @@ namespace OnlineShop.Areas.Customer.Controllers
             //  Fixed average delivery time of 30 minutes
             return TimeSpan.FromMinutes(30);
         }
-
 
         private decimal CalculateEarnings(Order order)
         {
@@ -1192,51 +878,6 @@ namespace OnlineShop.Areas.Customer.Controllers
 
 
         }
-
-
-
-
-
-
-
-        // Method to update FarmerShop revenue when products are released
-        private async Task UpdateFarmerShopRevenue(int orderId)
-        {
-            var order = await _db.Orders
-                .Include(o => o.OrderDetails)
-                .ThenInclude(od => od.Product)
-                .FirstOrDefaultAsync(o => o.Id == orderId);
-
-            if (order != null)
-            {
-                decimal totalOrderPrice = order.OrderDetails.Sum(od => od.Price * od.Quantity);
-
-                // Retrieve the FarmerShop associated with the order
-                var farmerShop = order.OrderDetails.FirstOrDefault()?.Product?.FarmerShop;
-
-                if (farmerShop != null)
-                {
-                    // Update FarmerShop's revenue
-                    farmerShop.ShopRevenue += totalOrderPrice;
-
-                    // Save changes to the database
-                    await _db.SaveChangesAsync();
-                }
-                else
-                {
-                    // Handle the case where FarmerShop is not found
-                }
-            }
-            else
-            {
-                // Handle the case where the order is not found
-            }
-        }
-
-
-
-
-
 
 
     }
