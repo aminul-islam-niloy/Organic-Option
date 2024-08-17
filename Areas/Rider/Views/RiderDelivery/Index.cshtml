@@ -5,11 +5,11 @@
 <br />
 
 <a class="btn btn-info"  asp-area="Rider" asp-controller="Rider" asp-action="Index"> Go For New Delivary</a>
-<a class="btn btn-info" asp-area="Rider" asp-controller="RiderDelivery" asp-action="RunningDeliveries"> Running Delivary</a>
+<a class="btn btn-secondary" asp-area="Rider" asp-controller="RiderDelivery" asp-action="RunningDeliveries"> Running Delivary</a>
 
-<a class="btn btn-info" asp-area="Rider" asp-controller="RiderDelivery" asp-action="RiderRevenue"> My Wallet</a>
+<a class="btn btn-success" asp-area="Rider" asp-controller="Rider" asp-action="RiderDashboard"> My Wallet</a>
 
-<a class="btn btn-info" asp-area="Rider" asp-controller="RiderDelivery" asp-action="DeliveredOrders" asp-route-period="daily">Daily Delivery History</a>
+<a class="btn btn-warning" asp-area="Rider" asp-controller="RiderDelivery" asp-action="DeliveredOrders" asp-route-period="daily">Daily Delivery History</a>
 
 <br />
 <br />
@@ -17,12 +17,12 @@
 <table class="table">
     <thead>
         <tr>
+            <th>Id</th>
             <th>Order ID</th>
             <th>Product Details</th>
             <th>Customer Address</th>
-            <th>Delivery Address</th>
             <th>Shop Name</th>
-            <th>Payable Money</th>
+            <th>Delivary Condition</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -30,12 +30,12 @@
         @foreach (var delivery in Model)
         {
             <tr>
+                <td>@delivery.Id</td>
                 <td>@delivery.OrderId</td>
                 <td>@delivery.ProductDetails</td>
-                <td>@delivery.CustomerAddress</td>
                 <td>@delivery.DelivyAddress</td>
                 <td>@delivery.ShopName</td>
-                <td>@delivery.PayableMoney</td>
+                <td>@delivery.OrderCondition</td>
                 <td>
                     <a asp-action="Details" asp-route-id="@delivery.Id" class="btn btn-info">Details</a>
                 </td>

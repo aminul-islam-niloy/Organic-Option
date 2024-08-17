@@ -1,7 +1,9 @@
 ﻿@model IEnumerable<OrganicOption.Models.Rider_Section.Delivery>
-
-<h2>Currently Running Deliveries</h2>
-
+<br />
+<h3>Currently Running Deliveries</h3>
+<br />
+@if (Model.Any())
+{
 <table class="table">
     <thead>
         <tr>
@@ -15,6 +17,7 @@
         </tr>
     </thead>
     <tbody>
+
         @foreach (var delivery in Model)
         {
             <tr>
@@ -30,4 +33,9 @@
             </tr>
         }
     </tbody>
-</table>
+    </table>
+}
+else
+{
+    <p>No Running Order </p>
+}
