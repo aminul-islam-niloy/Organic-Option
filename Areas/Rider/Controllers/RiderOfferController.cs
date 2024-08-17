@@ -76,66 +76,71 @@ namespace OrganicOption.Areas.Rider.Controllers
         [Authorize(Roles = "Rider")]
         private async Task<RiderOfferViewModel> GetOfferForRider()
         {
-            var availableRider = await FindAvailableRider();
+            // Retrieve the orders that are on the list and not yet offered to a rider
+            var ordersOnList = await _db.Orders
+                .Include(o => o.OrderDetails)
+                    .ThenInclude(od => od.Product)
+                        .ThenInclude(p => p.FarmerShop)
+                .Where(o => o.OrderDetails.Any(od => od.OrderCondition == OrderCondition.Onlist) && !o.IsOfferedToRider)
+                .OrderBy(o => o.Id)
+                .ToListAsync();
 
-            if (availableRider != null)
+            if (ordersOnList.Count > 0)
             {
-                var ordersOnList = await _db.Orders
-                    .Include(o => o.OrderDetails)
-                        .ThenInclude(od => od.Product)
-                            .ThenInclude(p => p.FarmerShop)
-                    .Where(o => o.OrderDetails.Any(od => od.OrderCondition == OrderCondition.Onlist) && !o.IsOfferedToRider)
-                    .OrderBy(o => o.Id)
-                    .ToListAsync();
+                // Get the order based on the nextOrderIndex
+                var order = ordersOnList.ElementAtOrDefault(nextOrderIndex);
 
-                // Check if there are any orders available
-                if (ordersOnList.Count > 0)
+                if (order != null)
                 {
-                    // Get the order based on the nextOrderIndex
-                    var order = ordersOnList.ElementAtOrDefault(nextOrderIndex);
-
+                    // Retrieve the FarmerShop location details
                     var farmerShopId = order.OrderDetails
                         .Select(od => od.Product.FarmerShopId)
                         .FirstOrDefault();
 
-                    var shopAddress = await _db.FarmerShop
+                    var shopLocation = await _db.FarmerShop
                         .Where(fs => fs.Id == farmerShopId)
-                        .Select(fs => fs.ShopAddress)
+                        .Select(fs => new { fs.Latitude, fs.Longitude, fs.ShopAddress })
                         .FirstOrDefaultAsync();
 
-                    var GeoLocation = await _db.FarmerShop.Where(fs => fs.Id == farmerShopId).FirstOrDefaultAsync();
-
-                    if (order != null)
+                    if (shopLocation != null)
                     {
-                        var productDetails = order.OrderDetails.Select(od => new ProductwithOrderViewModel
+                        // Now that shopLocation is initialized, we can find an available rider
+                        var availableRider = await FindAvailableRider(shopLocation.Latitude, shopLocation.Longitude);
+
+                        if (availableRider != null)
                         {
-                            ProductName = od.Product.Name,
-                            ProductImage = od.Product.Image,
-                            ShopName = od.Product.FarmerShop.ShopName,
-                            ShopContact = od.Product.FarmerShop.ContractInfo,
-                            Quantity = od.Quantity,
-                            ShopAddress = od.Product.FarmerShop.ShopAddress
-                        }).ToList();
+                            var distance = CalculateDistance(shopLocation.Latitude, shopLocation.Longitude, order.Latitude, order.Longitude);
 
-                        var offerViewModel = new RiderOfferViewModel
-                        {
-                            OrderId = order.Id,
-                            CustomerAddress = order.Address,
-                            CutomerCurrentAddress = order.CustomerAddress,
-                            DeliveryTime = EstimateDeliveryTime(order),
-                            Revenue = CalculateEarnings(order),
-                            letetude = GeoLocation.Latitude,
-                            longatude = GeoLocation.Longitude,
-                            ProductDetails = productDetails,
-                            CustomerPhone = order.PhoneNo,
-                            ShopAddress = shopAddress,
-                            OfferStartTime = DateTime.Now
-                        };
+                            var productDetails = order.OrderDetails.Select(od => new ProductwithOrderViewModel
+                            {
+                                ProductName = od.Product.Name,
+                                ProductImage = od.Product.Image,
+                                ShopName = od.Product.FarmerShop.ShopName,
+                                ShopContact = od.Product.FarmerShop.ContractInfo,
+                                Quantity = od.Quantity,
+                                ShopAddress = shopLocation.ShopAddress
+                            }).ToList();
 
-                        // Increment the nextOrderIndex for the next call
-                        nextOrderIndex = (nextOrderIndex + 1) % ordersOnList.Count;
+                            var offerViewModel = new RiderOfferViewModel
+                            {
+                                OrderId = order.Id,
+                                CustomerAddress = order.Address,
+                                CutomerCurrentAddress = order.CustomerAddress,
+                                DeliveryTime = EstimateDeliveryTime(distance),
+                                Revenue = CalculateEarnings(order, distance),
+                                letetude = shopLocation.Latitude,
+                                longatude = shopLocation.Longitude,
+                                ProductDetails = productDetails,
+                                CustomerPhone = order.PhoneNo,
+                                ShopAddress = shopLocation.ShopAddress,
+                                OfferStartTime = DateTime.Now
+                            };
 
-                        return offerViewModel;
+                            // Increment the nextOrderIndex for the next call
+                            nextOrderIndex = (nextOrderIndex + 1) % ordersOnList.Count;
+
+                            return offerViewModel;
+                        }
                     }
                 }
             }
@@ -143,41 +148,196 @@ namespace OrganicOption.Areas.Rider.Controllers
             return null;
         }
 
-        private async Task<RiderModel> FindAvailableRider()
+        private double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
         {
-            var availableRider = await _db.RiderModel
-                .FirstOrDefaultAsync(r => r.RiderStatus && !r.OnDeliaryByOffer);
+            const double R = 6371e3; // Earth's radius in meters
+            var φ1 = lat1 * Math.PI / 180; // φ, λ in radians
+            var φ2 = lat2 * Math.PI / 180;
+            var Δφ = (lat2 - lat1) * Math.PI / 180;
+            var Δλ = (lon2 - lon1) * Math.PI / 180;
 
-            return availableRider;
+            var a = Math.Sin(Δφ / 2) * Math.Sin(Δφ / 2) +
+                    Math.Cos(φ1) * Math.Cos(φ2) *
+                    Math.Sin(Δλ / 2) * Math.Sin(Δλ / 2);
+            var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+
+            var distance = R * c; // in meters
+            return distance / 1000; // in kilometers
         }
 
-
-
-        private TimeSpan EstimateDeliveryTime(Order order)
+        // Find an available rider within 15 km of the FarmerShop
+        private async Task<RiderModel> FindAvailableRider(double shopLat, double shopLon)
         {
-            //  Fixed average delivery time of 30 minutes
-            return TimeSpan.FromMinutes(30);
-        }
 
-        private decimal CalculateEarnings(Order order)
-        {
-            //// Example: Earnings are 10% of the total order amount
-            //decimal totalOrderAmount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
-            //decimal earningsPercentage = 0.02m; // 2%
-            //return totalOrderAmount * earningsPercentage;
+            var currentUser = await _userManager.GetUserAsync(User);
+            var user = await _db.ApplicationUser.FirstOrDefaultAsync(c => c.Id == currentUser.Id);
+           
 
-            decimal deliveryCharge = order.DelivaryCharge; // Assuming DelivaryCharge is the delivery charge for the order
+            double Latitude = user.Latitude;
+            double Longitude = user.Longitude;
 
-            if (deliveryCharge < 50)
+            var riders = await _db.RiderModel
+                .Where(r => r.RiderStatus && !r.OnDeliaryByOffer)
+                .ToListAsync();
+
+            foreach (var rider in riders)
             {
-                deliveryCharge = 70;
+                var distance = CalculateDistance(shopLat, shopLon, Latitude, Longitude);
+                if (distance <= 150)
+                {
+                    return rider;
+                }
             }
 
-            // Calculate earnings as 70% of the delivery charge
-            decimal earnings = deliveryCharge * 0.70m;
+            return null;
+        }
+
+
+        private double DegreesToRadians(double degrees)
+        {
+            return degrees * Math.PI / 180;
+        }
+
+        // delivery time based on distance
+        private TimeSpan EstimateDeliveryTime(double distanceKm)
+        {
+            //  average rider speed  30 km/h
+            double averageSpeedKmph = 30.0;
+
+            // Calculate time in minutes
+            double timeInMinutes = (distanceKm / averageSpeedKmph) * 60;
+
+            // Add a buffer time 
+            timeInMinutes += 10.0;
+
+            return TimeSpan.FromMinutes(timeInMinutes);
+        }
+
+        //  delivery charges based on distance and product type
+        private decimal CalculateEarnings(Order order, double distanceKm)
+        {
+            decimal baseDeliveryCharge = CalculateBaseDeliveryCharge(distanceKm);
+            decimal additionalProductCharge = CalculateProductBasedCharge(order);
+
+            decimal totalCharge = baseDeliveryCharge + additionalProductCharge;
+
+        
+            decimal earnings = totalCharge * 0.70m; // 70% to the rider
 
             return earnings;
+        }
 
+        // delivery charge based on distance
+        private decimal CalculateBaseDeliveryCharge(double distanceKm)
+        {
+            if (distanceKm <= 5)
+            {
+                return 50m;
+            }
+            else if (distanceKm <= 10)
+            {
+                return 100m;
+            }
+            else if (distanceKm <= 20)
+            {
+                return 150m;
+            }
+            else if (distanceKm <= 50)
+            {
+                return 200m;
+            }
+            else
+            {
+                return 300m;
+            }
+        }
+
+        // Method to calculate additional charges based on the product type and quantity
+        private decimal CalculateProductBasedCharge(Order order)
+        {
+            decimal additionalCharge = 0m;
+
+            foreach (var orderDetail in order.OrderDetails)
+            {
+                if (orderDetail?.Product?.ProductTypes == null)
+                {
+                    // Handle the null case, you might want to log this or skip to the next iteration
+                    continue;
+                }
+
+                additionalCharge += CalculateAdditionalCharge(orderDetail.Product, orderDetail.Quantity);
+            }
+
+            return additionalCharge;
+        }
+
+        // Method to calculate additional charge based on product type and quantity
+        private decimal CalculateAdditionalCharge(Products product, decimal quantity)
+        {
+            switch (product.ProductTypes.ProductType)
+            {
+                case "Cattle":
+                    return quantity * 1000m; // Per cattle
+
+                case "Crops":
+                    return CalculateCropsCharge(quantity);
+
+                case "Liquid":
+                    return CalculateLiquidCharge(quantity);
+
+                default:
+                    return 0m; // No additional charge for unknown product types
+            }
+        }
+
+        // Method to calculate additional charge for crops based on quantity (in Kg)
+        private decimal CalculateCropsCharge(decimal quantityKg)
+        {
+            if (quantityKg <= 50)
+            {
+                return 50m;
+            }
+            else if (quantityKg <= 100)
+            {
+                return 100m;
+            }
+            else if (quantityKg <= 500)
+            {
+                return 200m;
+            }
+            else if (quantityKg <= 1000)
+            {
+                return 400m;
+            }
+            else
+            {
+                return 600m;
+            }
+        }
+
+        // Method to calculate additional charge for liquids based on quantity (in Liters)
+        private decimal CalculateLiquidCharge(decimal quantityLiters)
+        {
+            if (quantityLiters <= 50)
+            {
+                return 50m;
+            }
+            else if (quantityLiters <= 100)
+            {
+                return 100m;
+            }
+            else if (quantityLiters <= 500)
+            {
+                return 300m;
+            }
+            else if (quantityLiters <= 1000)
+            {
+                return 500m;
+            }
+            else
+            {
+                return 800m;
+            }
         }
 
 

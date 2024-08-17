@@ -53,7 +53,7 @@
                 }
                 <p><strong>Customer Address:</strong> @Model.CustomerAddress</p>
                 <p><strong>Customer Phone:</strong> @Model.CustomerPhone</p>
-                <p><strong>Estimated Delivery Time:</strong> @Model.DeliveryTime</p>
+                <p><strong>Estimated Delivery Time:</strong> @Model.DeliveryTime.ToString(@"d\.hh\:mm");</p>
                 <p><strong>Estimated Revenue:</strong> @Model.Revenue</p>
                 <p><strong>Time Remaining:</strong> @Model.TimeRemaining.ToString("mm':'ss")</p>
                 <hr />
