@@ -1,0 +1,78 @@
+﻿@model OrganicOption.Models.Rider_Section.RiderOfferViewModel
+
+<script>
+    // Refresh the page after 1 minute
+    setTimeout(function () {
+        window.location.reload(true);
+    }, 60000); // 1 minute = 60000 milliseconds
+</script>
+
+@if (Model != null)
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h4>Offer Details</h4>
+                <p><strong>Order ID:</strong> @Model.OrderId</p>
+
+
+                @foreach (var product in Model.ProductDetails)
+                {
+                    <p><strong>Product Name:</strong> @product.ProductName</p>
+                    <p><strong>Product Image:</strong> <img src="~/@product.ProductImage" alt="Product Image" /></p> <!-- New line for product image -->
+                    <p><strong>Shop Name:</strong> @Model.ShopName</p>
+                    <p> Shop Address: </p>
+
+                    @if (Model.ShopAddress != null)
+                    {
+                        <div style="margin-left:40px">
+                            <label for="House">House:</label>
+                            <span id="House">@Html.DisplayFor(modelItem => Model.ShopAddress.House)</span><br />
+
+                            <label for="StreetNo">Street No:</label>
+                            <span id="StreetNo">@Html.DisplayFor(modelItem => Model.ShopAddress.StreetNo)</span><br />
+
+                            <label for="WardNo">Ward No:</label>
+                            <span id="WardNo">@Html.DisplayFor(modelItem => Model.ShopAddress.WardNo)</span><br />
+
+                            <label for="Thana">Thana:</label>
+                            <span id="Thana">@Html.DisplayFor(modelItem => Model.ShopAddress.Thana)</span><br />
+
+                            <label for="District">District:</label>
+                            <span id="District">@Html.DisplayFor(modelItem => Model.ShopAddress.District)</span><br />
+
+                            <label for="Division">Division:</label>
+                            <span id="Division">@Html.DisplayFor(modelItem => Model.ShopAddress.Division)</span><br />
+                        </div>
+                    }
+
+
+                    <p><strong>Shop Contract:</strong> @Model.ShopContract</p>
+                    <p><strong>Product Quantity:</strong> @product.Quantity</p>
+
+                }
+                <p><strong>Customer Address:</strong> @Model.CustomerAddress</p>
+                <p><strong>Customer Phone:</strong> @Model.CustomerPhone</p>
+                <p><strong>Estimated Delivery Time:</strong> @Model.DeliveryTime</p>
+                <p><strong>Estimated Revenue:</strong> @Model.Revenue</p>
+                <p><strong>Time Remaining:</strong> @Model.TimeRemaining.ToString("mm':'ss")</p>
+                <hr />
+                <div class="text-center">
+                    @*                     <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("CreateDeliveryForAcceptedOrder", "Order")'">Accept Offer</button> *@
+                    <a asp-area="Customer" asp-controller="Order" asp-action="CreateDeliveryForAcceptedOrder" class="btn btn-primary">Accept Offer</a>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.reload(true)">Next Offer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <p>No offer available.</p>
+            </div>
+        </div>
+    </div>
+}

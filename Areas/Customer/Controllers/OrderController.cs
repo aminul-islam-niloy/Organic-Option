@@ -9,7 +9,6 @@ using OnlineShop.Payment;
 using OnlineShop.Session;
 using OrganicOption.Models;
 using OrganicOption.Models.Rider_Section;
-using OrganicOption.Models.View_Model;
 using OrganicOption.Service;
 using Stripe;
 using Stripe.Checkout;
