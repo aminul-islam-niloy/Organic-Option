@@ -39,17 +39,6 @@ namespace OnlineShop.Areas.Customer.Controllers
         {
 
 
-            //UserEmailOptions options = new UserEmailOptions
-            //{
-            //    ToEmails = new List<string>() { "test@gmail.com" },
-               
-            //};
-
-            //await _emailService.SendTestEmail(options);
-
-
-
-            // Check if the data is already cached
             if (!_cache.TryGetValue("products", out IEnumerable<Products> products))
             {
                 // Data is not in cache, so retrieve it from the database
@@ -62,7 +51,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                 _cache.Set("products", products, TimeSpan.FromMinutes(5));
             }
 
-            // You can use the cached data here
+            //  cached data 
             ViewData["productTypeSearchId"] = new SelectList(_db.ProductTypes.ToList(), "Id", "ProductType");
 
             var viewModel = new IndexPageViewModel
@@ -83,12 +72,12 @@ namespace OnlineShop.Areas.Customer.Controllers
             return View(viewModel);
         }
 
-        // Helper method to retrieve cached products by category
+        // retrieve cached products by category
         private IEnumerable<Products> GetCachedProductsByCategory(string category)
         {
             if (!_cache.TryGetValue(category, out IEnumerable<Products> cachedProducts))
             {
-                // Data is not in cache, so retrieve it from the database
+                // Data is not in cache, retrieve it from the database
                 cachedProducts = _db.Products
                     .Where(p => p.ProductTypes.ProductType == category)
                     .Include(p => p.ProductTypes)
@@ -130,6 +119,8 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             return View(pagedProducts);
         }
+
+        //Code without Local Shop 
 
         // GET: Customer/Home/Products
         //public IActionResult Products(int? page)

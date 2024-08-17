@@ -655,13 +655,14 @@ namespace OnlineShop.Areas.Customer.Controllers
                     OrderId = offer.OrderId,
                     ProductDetails = offer.ProductDetails,
                     CustomerAddress = offer.CustomerAddress,
+                    CustomerPhone= offer.CustomerPhone,
                     DeliveryTime = offer.DeliveryTime,
-                    ShopName = offer.ProductDetails.FirstOrDefault()?.ShopName, // Get shop name
-                    ShopContract = offer.ProductDetails.FirstOrDefault()?.ShopContact, // Get shop contract
+                    ShopName = offer.ProductDetails.FirstOrDefault()?.ShopName, 
+                    ShopContract = offer.ProductDetails.FirstOrDefault()?.ShopContact, 
                     Revenue = offer.Revenue,
                     letetude = offer.letetude,
                     longatude = offer.longatude,
-                    ShopAddress = offer.ShopAddress, // Set the ShopAddress
+                    ShopAddress = offer.ShopAddress, 
                     TimeRemaining = (offer.OfferStartTime.AddMinutes(1) - DateTime.Now)
                 };
 
@@ -728,6 +729,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                         {
                             OrderId = order.Id,
                             CustomerAddress = order.Address,
+                            CutomerCurrentAddress= order.CustomerAddress,
                             DeliveryTime = EstimateDeliveryTime(order),
                             Revenue = CalculateEarnings(order),
                             letetude = GeoLocation.Latitude,
@@ -748,6 +750,45 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             return null;
         }
+
+        private async Task<RiderModel> FindAvailableRider()
+        {
+            var availableRider = await _db.RiderModel
+                .FirstOrDefaultAsync(r => r.RiderStatus && !r.OnDeliaryByOffer);
+
+            return availableRider;
+        }
+
+
+
+        private TimeSpan EstimateDeliveryTime(Order order)
+        {
+            //  Fixed average delivery time of 30 minutes
+            return TimeSpan.FromMinutes(30);
+        }
+
+        private decimal CalculateEarnings(Order order)
+        {
+            //// Example: Earnings are 10% of the total order amount
+            //decimal totalOrderAmount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
+            //decimal earningsPercentage = 0.02m; // 2%
+            //return totalOrderAmount * earningsPercentage;
+
+            decimal deliveryCharge = order.DelivaryCharge; // Assuming DelivaryCharge is the delivery charge for the order
+
+            if (deliveryCharge < 50)
+            {
+                deliveryCharge = 70;
+            }
+
+            // Calculate earnings as 70% of the delivery charge
+            decimal earnings = deliveryCharge * 0.70m;
+
+            return earnings;
+
+        }
+
+
 
 
         [Authorize(Roles = "Rider")]
@@ -837,46 +878,6 @@ namespace OnlineShop.Areas.Customer.Controllers
             {
                 return RedirectToAction("Index", "RiderDelivery", new { area = "Rider" });
             }
-        }
-
-
-        private async Task<RiderModel> FindAvailableRider()
-        {
-            var availableRider = await _db.RiderModel
-                .FirstOrDefaultAsync(r => r.RiderStatus && !r.OnDeliaryByOffer);
-
-            return availableRider;
-        }
-
-
-
-        private TimeSpan EstimateDeliveryTime(Order order)
-        {
-            //  Fixed average delivery time of 30 minutes
-            return TimeSpan.FromMinutes(30);
-        }
-
-        private decimal CalculateEarnings(Order order)
-        {
-            //// Example: Earnings are 10% of the total order amount
-            //decimal totalOrderAmount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
-            //decimal earningsPercentage = 0.02m; // 2%
-            //return totalOrderAmount * earningsPercentage;
-
-            decimal deliveryCharge = order.DelivaryCharge; // Assuming DelivaryCharge is the delivery charge for the order
-
-            if (deliveryCharge < 50)
-            {
-                deliveryCharge = 70;
-            }
-
-            // Calculate earnings as 70% of the delivery charge
-            decimal earnings = deliveryCharge * 0.70m;
-
-            return earnings;
-
-
-
         }
 
 

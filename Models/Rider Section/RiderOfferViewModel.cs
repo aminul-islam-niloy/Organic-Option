@@ -8,8 +8,9 @@ namespace OrganicOption.Models.Rider_Section
     {
 
         public int OrderId { get; set; }
-        public List<ProductwithOrderViewModel> ProductDetails { get; set; } // List of product details
+        public List<ProductwithOrderViewModel> ProductDetails { get; set; } 
         public Products Product { get; set; }
+        public Address CutomerCurrentAddress { get; set; }  
         public string CustomerAddress { get; set; }
         public Address ShopAddress { get; set; }
         public TimeSpan DeliveryTime { get; set; }
@@ -20,8 +21,8 @@ namespace OrganicOption.Models.Rider_Section
         public double letetude { get; set; }
         public double longatude { get; set; }
 
-        public string ShopName { get; set; } // Add shop name
-        public string ShopContract { get; set; } // Add shop contract
+        public string ShopName { get; set; } 
+        public string ShopContract { get; set; } 
 
 
 
