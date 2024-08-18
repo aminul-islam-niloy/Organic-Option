@@ -26,12 +26,13 @@ namespace OrganicOption.Areas.Rider.Controllers
         private readonly IMemoryCache _cache;
         private readonly NotificationService _notificationService;
 
-        public RiderOfferController(ApplicationDbContext db, UserManager<IdentityUser> userManager, IWebHostEnvironment webHostEnvironment, IMemoryCache memoryCache)
+        public RiderOfferController(ApplicationDbContext db, UserManager<IdentityUser> userManager, IWebHostEnvironment webHostEnvironment, IMemoryCache memoryCache, NotificationService notificationService)
         {
             _db = db;
             _userManager = userManager;
             _webHostEnvironment = webHostEnvironment;
             _cache = memoryCache;
+            _notificationService = notificationService;
         }
 
 
@@ -343,97 +344,6 @@ namespace OrganicOption.Areas.Rider.Controllers
 
 
 
-        //[Authorize(Roles = "Rider")]
-        //public async Task<IActionResult> CreateDeliveryForAcceptedOrder()
-        //{
-        //    var riderId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        //    var existingRider = await _db.RiderModel.FirstOrDefaultAsync(rider => rider.RiderUserId == riderId);
-
-        //    // Retrieve offer data from session
-        //    var offer = HttpContext.Session.Get<RiderOfferViewModel>("OfferData");
-
-        //    if (offer != null)
-        //    {
-        //        var order = await _db.Orders
-        //            .Include(o => o.OrderDetails)
-        //                .ThenInclude(od => od.Product)
-        //                    .ThenInclude(p => p.FarmerShop)
-        //            .FirstOrDefaultAsync(o => o.Id == offer.OrderId);
-
-        //        if (order == null)
-        //        {
-        //            return View("Error");
-        //        }
-
-        //        decimal totalOrderAmount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
-
-
-        //        bool isPaymentByCard = order.OrderDetails.Any(od => od.PaymentMethods == PaymentMethods.Card) || order.PaymentMethods == PaymentMethods.Card;
-
-        //        var delivery = new Delivery
-        //        {
-        //            OrderId = offer.OrderId,
-        //            RiderId = existingRider.Id,
-        //            OrderCondition = OrderCondition.OrderTaken,
-        //            PayableMoney = isPaymentByCard ? 0 : totalOrderAmount,
-        //            ProductDetails = string.Join(", ", offer.ProductDetails.Select(product => product.ProductName)),
-        //            CustomerAddress = offer.CustomerAddress,
-        //            DelivyAddress = offer.CustomerAddress,
-        //            CustomerPhone = offer.CustomerPhone,
-        //            ShopName = offer.ShopName,
-        //            ShopContract = offer.ShopContract,
-        //            ShopLat = offer.letetude,
-        //            ShopLon = offer.longatude,
-        //            DeliveryLat = order.Latitude,
-        //            DeliveryLon = order.Longitude,
-        //            OrderAcceptTime = DateTime.Now
-        //        };
-
-        //        try
-        //        {
-        //            foreach (var orDesin in order.OrderDetails)
-        //            {
-        //                orDesin.OrderCondition = OrderCondition.OrderTaken;
-
-        //            }
-        //            order.IsOfferedToRider = true;
-
-        //            order.OrderCondition = OrderCondition.OrderTaken;
-        //            _db.Deliveries.Add(delivery);
-        //            await _db.SaveChangesAsync();
-
-        //            foreach (var orderDetail in order.OrderDetails)
-        //            {
-        //                var product = orderDetail.Product;
-        //                var farmerShop = _db.FarmerShop.Include(f => f.FarmerUser)
-        //                                                .FirstOrDefault(f => f.Id == product.FarmerShopId);
-        //                if (farmerShop != null)
-        //                {
-        //                    string farmerUserId = farmerShop.FarmerUserId;
-        //                    _notificationService.AddNotification(farmerUserId, $"Order #{order.Id} has been accepted by a rider {existingRider.Id}. Product: '{product.Name}'", product.Id);
-        //                }
-        //            }
-
-        //            ViewBag.ShopAddress = offer.ShopAddress;
-        //            HttpContext.Session.Remove("OfferData");
-
-        //            return View(delivery);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Console.WriteLine(ex.ToString());
-        //            return RedirectToAction("Index", "RiderDelivery", new { area = "Rider" });
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return RedirectToAction("Index", "RiderDelivery", new { area = "Rider" });
-        //    }
-        //}
-
-
-
         [Authorize(Roles = "Rider")]
         public async Task<IActionResult> CreateDeliveryForAcceptedOrder()
         {
@@ -462,6 +372,7 @@ namespace OrganicOption.Areas.Rider.Controllers
 
                 bool isPaymentByCard = order.OrderDetails.Any(od => od.PaymentMethods == PaymentMethods.Card) || order.PaymentMethods == PaymentMethods.Card;
 
+
                 var delivery = new Delivery
                 {
                     OrderId = offer.OrderId,
@@ -471,9 +382,11 @@ namespace OrganicOption.Areas.Rider.Controllers
                     ProductDetails = string.Join(", ", offer.ProductDetails.Select(product => product.ProductName)),
                     CustomerAddress = offer.CustomerAddress,
                     DelivyAddress = offer.CustomerAddress,
+                    //CustomerPreAdd = offer.CutomerCurrentAddress,
                     CustomerPhone = offer.CustomerPhone,
                     ShopName = offer.ShopName,
                     ShopContract = offer.ShopContract,
+                    //ShopAddress = offer.ShopAddress,
                     ShopLat = offer.letetude,
                     ShopLon = offer.longatude,
                     DeliveryLat = order.Latitude,
@@ -488,11 +401,7 @@ namespace OrganicOption.Areas.Rider.Controllers
                         orDesin.OrderCondition = OrderCondition.OrderTaken;
 
                     }
-                    order.IsOfferedToRider = true;
-
-                    order.OrderCondition = OrderCondition.OrderTaken;
-                    _db.Deliveries.Add(delivery);
-                    await _db.SaveChangesAsync();
+                    
 
                     foreach (var orderDetail in order.OrderDetails)
                     {
@@ -506,6 +415,12 @@ namespace OrganicOption.Areas.Rider.Controllers
                         }
                     }
 
+                    var rider = _db.RiderModel.SingleOrDefault(r => r.RiderUserId == riderId);
+                    order.IsOfferedToRider = true;
+                    rider.OnDeliaryByOffer = true;  
+                    order.OrderCondition = OrderCondition.OrderTaken;
+                    _db.Deliveries.Add(delivery);
+                    await _db.SaveChangesAsync();
                     ViewBag.ShopAddress = offer.ShopAddress;
                     HttpContext.Session.Remove("OfferData");
 
@@ -522,6 +437,7 @@ namespace OrganicOption.Areas.Rider.Controllers
                 return RedirectToAction("Index", "RiderDelivery", new { area = "Rider" });
             }
         }
+
 
 
 
