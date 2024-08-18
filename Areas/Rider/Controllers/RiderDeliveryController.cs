@@ -197,7 +197,8 @@ namespace OrganicOption.Areas.Rider.Controllers
             order.OrderCondition = OrderCondition.Delivered;
             delivery.OrderCondition= OrderCondition.Delivered;
 
-
+         
+            rider.OnDeliaryByOffer = false;
 
             // Save changes
             await _dbContext.SaveChangesAsync();
