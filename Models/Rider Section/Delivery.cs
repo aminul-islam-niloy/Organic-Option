@@ -22,6 +22,7 @@ namespace OrganicOption.Models.Rider_Section
         public Order Order { get; set; }
 
         public Address ShopAddress { get; set; }    
+        public Address CustomerPreAdd { get; set; }    
         public string ShopName { get; set; }    
         public string ShopContract { get; set; }
         public DateTime OrderDeliveredDate { get; set; }
