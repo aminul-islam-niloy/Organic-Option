@@ -99,9 +99,13 @@
                 <div>
                     <a class="btn btn-info" asp-area="Rider" asp-controller="RiderDelivery" asp-action="RunningDeliveries" style="margin-left:5px"> Running Delivary</a>
                     <a class="btn btn-success" asp-area="Rider" asp-controller="RiderDelivery" asp-action="Index" style="margin-left:5px"> Manage Delivary</a>
-                    @*  <a class="btn btn-primary" asp-area="Rider" asp-controller="RiderDelivery" asp-action="Index" style="margin-left:5px"> Confirm Delivary</a> *@
-                    <a class="btn btn-warning" href="@Url.Action("ConfirmDelivery", "RiderDelivery", new { area = "Rider", deliveryId = @Model.Id })">Confirm Delivary</a>
-                </div>
+                   
+                    @if (Model.OrderCondition == OrderCondition.OnDelivary)
+                    {
+                        <a class="btn btn-warning" style="margin:5px" href="@Url.Action("ConfirmDelivery", "RiderDelivery", new { area = "Rider", deliveryId = @Model.Id })">Confirm Delivery</a>
+                    }
+               
+               </div>
             </div>
         </div>
         <div class="col-md-8">
