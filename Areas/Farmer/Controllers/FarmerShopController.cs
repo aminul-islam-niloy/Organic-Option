@@ -170,62 +170,6 @@ namespace OrganicOption.Areas.Farmer.Controllers
             //return View(farmerShop);
         }
 
-        //[HttpGet]
-        //public IActionResult Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var farmerShop = _context.FarmerShop.Find(id);
-        //    if (farmerShop == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(farmerShop);
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, FarmerShop farmerShop, IFormFile coverPhoto)
-        //{
-        //    if (id != farmerShop.Id)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var currentUser = await _userManager.GetUserAsync(User);
-        //    farmerShop.FarmerUser = (OnlineShop.Models.ApplicationUser)currentUser;
-
-        //    try
-        //        {
-        //        if (coverPhoto != null && coverPhoto.Length > 0)
-        //        {
-        //            using (var stream = new MemoryStream())
-        //            {
-        //                await coverPhoto.CopyToAsync(stream);
-        //                farmerShop.CoverPhoto = stream.ToArray();
-        //            }
-        //        }
-
-        //        _context.Update(farmerShop);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!FarmerShopExists(farmerShop.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-
-        //}
 
 
 
@@ -320,7 +264,28 @@ namespace OrganicOption.Areas.Farmer.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-    
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditOpenStatus(int id, bool IsShopOpen)
+        {
+            var shopToUpdate = await _context.FarmerShop.FindAsync(id);
+            if (shopToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            shopToUpdate.IsShopOpen = IsShopOpen;
+
+          
+                _context.Update(shopToUpdate);
+                await _context.SaveChangesAsync();
+            
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
 
 
 

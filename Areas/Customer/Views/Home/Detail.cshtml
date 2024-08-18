@@ -363,16 +363,8 @@
 
                         </div>
 
-                        <div class="product_rating">
-                            <ul>
-                                <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                            </ul>
-                        </div>
-                        <div class="price_box">
+                      
+                        <div class="price_box mt-5">
                             
 
                             @if(Model.SpecificProduct.Discount > 0)
@@ -399,17 +391,7 @@
                         <div class="product_desc">
                             <p>@Model.SpecificProduct.Description eget velit. Donec ac tempus ante.  sed commodo augue nisi non neque.   lorem et placerat vestibulum metus nisi posuere nisl</p>
                         </div>
-                      @*   <div class="product_variant color">
-                            <h3>Available Options</h3>
-                            <label>color</label>
-                           
-                            <ul>
-                                <li class="color1"><a href="#"> </a></li>
-                                <li class="color2"><a href="#"></a></li>
-                                <li class="color3"><a href="#"></a></li>
-                                <li class="color4"><a href="#"></a></li>
-                            </ul>
-                        </div> *@
+                     
 
 
                         <div class="product_variant quantity">
@@ -429,25 +411,35 @@
                             <ul>
                                 @if (Model.SpecificProduct.Quantity != 0)
                                 {
-                                    @* Check if the product is already in the cart *@
-                                    var existingProduct = products.FirstOrDefault(p => p.Id == Model.SpecificProduct.Id);
-                                    if (existingProduct != null)
+                                    if (ViewBag.IsShopOpen)
                                     {
-                                        <li>
-                                            <button type="submit" class="btn btn-danger form-control" asp-action="RemoveToCart" asp-route-id="@Model.SpecificProduct.Id"> Remove from Cart</button>
-                                        </li>
+
+                                        @* Check if the product is already in the cart *@
+                                        var existingProduct = products.FirstOrDefault(p => p.Id == Model.SpecificProduct.Id);
+                                        if (existingProduct != null)
+                                        {
+                                            <li>
+                                                <button type="submit" class="btn btn-danger form-control" asp-action="RemoveToCart" asp-route-id="@Model.SpecificProduct.Id"> Remove from Cart</button>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li>
+                                                <input asp-for="SpecificProduct.QuantityInCart" name="quantityInCart" class="form-control" type="number" min="1" max="@Model.SpecificProduct.Quantity" value="1" />
+                                            </li>
+                                            <li>
+                                                <input type="submit" class="btn btn-info form-control" value="Add to Cart" />
+                                            </li>
+                                        }
                                     }
                                     else
                                     {
-                                        <li>
-                                            <input asp-for="SpecificProduct.QuantityInCart" name="quantityInCart" class="form-control" type="number" min="1" max="@Model.SpecificProduct.Quantity" value="1" />
-                                        </li>
-                                        <li>
-                                            <input type="submit" class="btn btn-info form-control" value="Add to Cart" />
+                                        <li class="text-danger">
+                                            Shop is closed. Contact the shop or try later.
                                         </li>
                                     }
                                 }
-                                <li class="wishlist"><a href="wishlist.html" title="Add to Wishlist"><i class="fa fa-heart-o" aria-hidden="true"></i></a></li>
+                                @* <li class="wishlist"><a href="wishlist.html" title="Add to Wishlist"><i class="fa fa-heart-o" aria-hidden="true"></i></a></li> *@
                             </ul>
                         </div>
 

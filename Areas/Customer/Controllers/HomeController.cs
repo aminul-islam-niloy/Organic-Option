@@ -356,13 +356,23 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             var specificProduct = _db.Products
                 .Include(p => p.ProductTypes)
-                .Include(p => p.ImagesSmall)  // Include images
+                .Include(p => p.ImagesSmall)
                 .FirstOrDefault(c => c.Id == id);
 
             if (specificProduct == null)
             {
                 return NotFound();
             }
+
+            var farmerShop = _db.FarmerShop.FirstOrDefault(f => f.Id == specificProduct.FarmerShopId);
+
+            if (farmerShop == null)
+            {
+                return NotFound();
+            }
+
+            
+            ViewBag.IsShopOpen = farmerShop.IsShopOpen;
 
             // Query related products ( products of the same category)
             var relatedProducts = _db.Products
