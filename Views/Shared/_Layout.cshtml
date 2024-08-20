@@ -58,112 +58,314 @@
     <link rel="stylesheet" href="/css/cssplugins.css">
     <link rel="stylesheet" href="/css/cssstyle.css">
 
-
-
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
     <script src="https://kit.fontawesome.com/238e4a8eca.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css" />
 </head>
 <body>
 
+
+
+    <!--header area start-->
     <header class="header_area">
-        <div class="header_top">
+        <!--header middel start-->
+        <div class="header_bottom sticky-header">
             <div class="container">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="top_right text-right">
-                            <ul>
-                                <li><a asp-area="" asp-controller="Home" asp-action="Index">Organic Option</a></li>
-                                @if (userRole == "SuperAdmin")
-                                {
-                                    <li><a asp-area="Admin" asp-controller="Role" asp-action="Index" class="nav-link">Role User</a></li>
-                                }
-                                @if (userRole == "Admin")
-                                {
-                                    <li><a asp-area="Admin" asp-controller="Products" asp-action="Index" class="nav-link">Products</a></li>
-                                }
-                                @if (userRole == "Farmer")
-                                {
-                                    <li><a asp-area="Farmer" asp-controller="FarmerShop" asp-action="Index" class="nav-link">Manage Shop</a></li>
-                                }
-                                @if (userRole == "Rider")
-                                {
-                                    <li><a asp-area="Rider" asp-controller="RiderDelivery" asp-action="Index" class="nav-link">Manage Ride</a></li>
-                                }
-                                @if (userRole == "Customer")
-                                {
-                                   
-                                    <li class="nav-item"> <a asp-area="Customer" asp-controller="Home" asp-action="Cart"><i class="fas fa-shopping-cart"></i> (@count) Cart</a></li>
-                                
-                                }
-                               
-
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" 
-                                       asp-area="Customer" asp-controller="Notifications" asp-action="Latest">
-                                        <i class="fas fa-bell"></i>
-                                        <span class="notification-icon">
-                                            @if (unreadCount > 0)
-                                            {
-                                                <span class="badge" id="notification-count">@unreadCount</span>
-                                            }
-                                        </span>
-                                    </a>
-                                </li>
-                            
-                            
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-2"></div>
-                    <div class="col-lg-6">
-                        <div class="top_right text-right">
-                            <ul>
-                                <li>
-                                    <a href="#">
-                                        <i class="zmdi zmdi-dribbble"></i> @CultureInfo.CurrentCulture.TwoLetterISOLanguageName
-                                        <i class="zmdi zmdi-caret-down"></i>
-                                    </a>
-                                    <ul class="dropdown_language">
-                                        <li>
-                                            <a asp-area="Customer" asp-controller="Language" asp-action="SetLanguage" asp-route-culture="en" asp-route-returnUrl="@Uri.EscapeDataString(HttpContextAccessor.HttpContext.Request.Path + HttpContextAccessor.HttpContext.Request.QueryString)">
-                                                English
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a asp-area="Customer" asp-controller="Language" asp-action="SetLanguage" asp-route-culture="bn" asp-route-returnUrl="@Uri.EscapeDataString(HttpContextAccessor.HttpContext.Request.Path + HttpContextAccessor.HttpContext.Request.QueryString)">
-                                                Bangla
-                                            </a>
-                                        </li>
-                                    </ul>
-
-                                   @*  <ul class="dropdown_language">
-                                        <li><a href="#" onclick="setLanguageAndReload('en');">English</a></li>
-                                        <li><a href="#" onclick="setLanguageAndReload('bn');">Bangla</a></li>
-                                    </ul> *@
-
-                                </li>
-
-
-
-                                @if (SignInManager.IsSignedIn(User))
-                                {
-                                    <li class="top_links">
-                                        <a href="/Customer/UserProfile/Deshboard/@userId" title="Manage">
-                                            <i class="zmdi zmdi-account"></i> My Account
-                                            <i class="zmdi zmdi-caret-down"></i>
+                <div class="row align-items-center">
+                    <div class="col-12">
+                        <div class="main_menu header_position">
+                            <nav>
+                                <ul>
+                                    <li>
+                                        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                                            <img src="/assets/img/logo/online-shoping.png" style="height: 40px; width: auto;" alt="Logo">
                                         </a>
-                                        <ul class="dropdown_links">
-                                            <li><a asp-area="Customer" asp-controller="Home" asp-action="Cart">Checkout </a></li>
-                                            <li><a href="/Customer/UserProfile/Deshboard/@userId" title="Manage"> <i class="fa-solid fa-user"></i>  @UserManager.GetUserName(User)</a></li>
-                                            <li><a asp-area="Customer" asp-controller="Home" asp-action="Cart">Shopping Cart</a></li>
-                                            <li><a asp-area="Customer" asp-controller="Home" asp-action="Cart">Wishlist</a></li>
+                                    </li>
+
+                                    <li>
+                                        <a asp-area="" asp-controller="Home" asp-action="Index"><i class="zmdi zmdi-home"></i> home </a>
+
+                                    </li>
+
+                                    @if (userRole == "SuperAdmin")
+                                    {
+                                        <li><a asp-area="Admin" asp-controller="Role" asp-action="Index" class="nav-link">Role User</a></li>
+
+                                        <li class="mega_items ">
+                                            <a asp-area="Admin" asp-controller="Role" asp-action="Index"><i class="zmdi zmdi-shopping-basket"></i>Manage Roles <i class="zmdi zmdi-account"></i></a>
+                                            <div class="mega_menu">
+                                                <ul class="mega_menu_inner">
+                                                    <li>
+                                                        <a asp-area="Customer" asp-controller="Home" asp-action="Products">Product</a>
+                                                        <ul>
+                                                            <li><a href="shop-fullwidth.html">Full Width</a></li>
+                                                            <li><a href="shop-fullwidth-list.html">Full Width list</a></li>
+                                                            <li><a href="shop-right-sidebar.html">Right Sidebar </a></li>
+                                                            <li><a href="shop-right-sidebar-list.html"> Right Sidebar list</a></li>
+                                                            <li><a href="shop-list.html">List View</a></li>
+                                                        </ul>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        </li>
+
+                                    }
+                                    @if (userRole == "Admin")
+                                    {
+                                        <li class="mega_items ">
+                                            <a a asp-area="Admin" asp-controller="Products" asp-action="Index"><i class="zmdi zmdi-shopping-basket"></i>Manage Products <i class="zmdi zmdi-caret-down"></i></a>
+                                            <div class="mega_menu">
+                                                <ul class="mega_menu_inner">
+                                                    <li>
+                                                        <a asp-area="Customer" asp-controller="Home" asp-action="Products">Product</a>
+                                                        <ul>
+                                                            <li><a href="shop-fullwidth.html">Full Width</a></li>
+                                                            <li><a href="shop-fullwidth-list.html">Full Width list</a></li>
+                                                            <li><a href="shop-right-sidebar.html">Right Sidebar </a></li>
+                                                            <li><a href="shop-right-sidebar-list.html"> Right Sidebar list</a></li>
+                                                            <li><a href="shop-list.html">List View</a></li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <a asp-area="Farmer" asp-controller="FarmerShop" asp-action="AllShop">All Shop</a>
+                                                        <ul>
+                                                            <li><a href="cart.html">cart</a></li>
+                                                            <li><a href="wishlist.html">Wishlist</a></li>
+                                                            <li><a href="checkout.html">Checkout</a></li>
+                                                            <li><a href="my-account.html">my account</a></li>
+                                                            <li><a href="404.html">Error 404</a></li>
+                                                        </ul>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    }
+                                    @if (userRole == "Farmer")
+                                    {
+                                        <li class="mega_items ">
+                                            <a asp-area="Farmer" asp-controller="FarmerShop" asp-action="Index"><i class="zmdi zmdi-shopping-basket"></i>Manage shop <i class="zmdi zmdi-caret-down"></i></a>
+                                            <div class="mega_menu">
+                                                <ul class="mega_menu_inner">
+                                                    <li>
+                                                        <a asp-area="Customer" asp-controller="Home" asp-action="Products">Product</a>
+                                                        <ul>
+                                                            <li><a href="shop-fullwidth.html">Full Width</a></li>
+                                                            <li><a href="shop-fullwidth-list.html">Full Width list</a></li>
+                                                            <li><a href="shop-right-sidebar.html">Right Sidebar </a></li>
+                                                            <li><a href="shop-right-sidebar-list.html"> Right Sidebar list</a></li>
+                                                            <li><a href="shop-list.html">List View</a></li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <a asp-area="Farmer" asp-controller="FarmerShop" asp-action="AllShop">All Shop</a>
+                                                        <ul>
+                                                            <li><a href="cart.html">cart</a></li>
+                                                            <li><a href="wishlist.html">Wishlist</a></li>
+                                                            <li><a href="checkout.html">Checkout</a></li>
+                                                            <li><a href="my-account.html">my account</a></li>
+                                                            <li><a href="404.html">Error 404</a></li>
+                                                        </ul>
+                                                    </li>
+                                                   
+                                                </ul>
+                                            </div>
+                                        </li>
+
+                                    }
+
+                                    @if (userRole == "Rider")
+                                    {
+                                        <li class="mega_items ">
+                                            <a asp-area="Rider" asp-controller="RiderDelivery" asp-action="Index"><i class="zmdi zmdi-bike"></i>Manage Ride <i class="zmdi zmdi-caret-down"></i></a>
+                                            <div class="mega_menu">
+                                                <ul class="mega_menu_inner">
+                                                    <li>
+                                                        <a asp-area="Customer" asp-controller="Home" asp-action="Products">Product</a>
+                                                        <ul>
+                                                            <li><a href="shop-fullwidth.html">Full Width</a></li>
+                                                            <li><a href="shop-fullwidth-list.html">Full Width list</a></li>
+                                                            <li><a href="shop-right-sidebar.html">Right Sidebar </a></li>
+                                                            <li><a href="shop-right-sidebar-list.html"> Right Sidebar list</a></li>
+                                                            <li><a href="shop-list.html">List View</a></li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <a asp-area="Farmer" asp-controller="FarmerShop" asp-action="AllShop">All Shop</a>
+                                                        <ul>
+                                                            <li><a href="cart.html">cart</a></li>
+                                                            <li><a href="wishlist.html">Wishlist</a></li>
+                                                            <li><a href="checkout.html">Checkout</a></li>
+                                                            <li><a href="my-account.html">my account</a></li>
+                                                            <li><a href="404.html">Error 404</a></li>
+                                                        </ul>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    }
+
+                                    {
+                                        <li class="mega_items ">
+                                            <a asp-area="Farmer" asp-controller="FarmerShop" asp-action="AllShop"><i class="zmdi zmdi-shopping-basket"></i> shop <i class="zmdi zmdi-caret-down"></i></a>
+                                            <div class="mega_menu">
+                                                <ul class="mega_menu_inner">
+                                                    <li>
+                                                        <a asp-area="Customer" asp-controller="Home" asp-action="Products" >Product</a>
+                                                        <ul>
+                                                            <li><a href="shop-fullwidth.html">Full Width</a></li>
+                                                            <li><a href="shop-fullwidth-list.html">Full Width list</a></li>
+                                                            <li><a href="shop-right-sidebar.html">Right Sidebar </a></li>
+                                                            <li><a href="shop-right-sidebar-list.html"> Right Sidebar list</a></li>
+                                                            <li><a href="shop-list.html">List View</a></li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">other Pages</a>
+                                                        <ul>
+                                                            <li><a href="cart.html">cart</a></li>
+                                                            <li><a href="wishlist.html">Wishlist</a></li>
+                                                            <li><a href="checkout.html">Checkout</a></li>
+                                                            <li><a href="my-account.html">my account</a></li>
+                                                            <li><a href="404.html">Error 404</a></li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#">Product Types</a>
+                                                        <ul>
+                                                            <li><a href="product-details.html">product details</a></li>
+                                                            <li><a href="product-sidebar.html">product sidebar</a></li>
+                                                            <li><a href="product-grouped.html">product grouped</a></li>
+                                                            <li><a href="variable-product.html">product variable</a></li>
+
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    
+
+                                    <li>
+                                        <a href="blog.html"><i class="zmdi zmdi-collection-music"></i> blog <i class="zmdi zmdi-caret-down"></i></a>
+                                        <ul class="sub_menu pages">
+                                            <li><a href="Customer/Blog">blog details</a></li>
+                                            <li><a href="blog-fullwidth.html">blog fullwidth</a></li>
+                                            <li><a href="blog-sidebar.html">blog sidebar</a></li>
                                         </ul>
                                     </li>
+
+
                                     <li>
-                                        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
-                                            <button type="submit" class="btn">Logout</button>
-                                        </form>
+                                        <div class="wrapper ">
+                                             <form method="post" action="@Url.Action("Products", "Home")">
+                                       
+                                            <div class="searchBar">
+                                                    <input id="searchQueryInput" type="text" name="searchString" placeholder="Search product..."  />
+                                                <button id="searchQuerySubmit" type="submit" name="searchQuerySubmit">
+                                                    <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                                        <path fill="#666666" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            </form>
+                                        </div>
+                                    </li>
+
+
+                                    <li class="nav-item" style="margin-left:25px; position: relative;">
+                                        <a class="nav-link" asp-area="Customer" asp-controller="Notifications" asp-action="Latest">
+                                            <i class="fa-regular fa-bell" style="font-size: 18px; position: relative;"></i>
+                                            @if (unreadCount > 0)
+                                            {
+                                                <span class="badge" style="background: red; color: white; position: absolute; top: 12px; left: 30px; font-size: 12px; padding: 2px 5px; border-radius: 50%;" id="notification-count">@unreadCount</span>
+                                            }
+                                        </a>
+                                    </li>
+                                    @if (userRole == "Customer")
+                                    {
+                                        <li class="nav-item">
+                                            <a asp-area="Customer" asp-controller="Home" asp-action="Cart">
+                                                <i class="fas fa-shopping-cart" style="font-size: 18px; position: relative;"></i>  @if (count > 0)
+                                                {
+                                                    <span class="badge" style="  background: red; color: white; position: absolute; top: 12px; left: 30px; font-size: 12px; padding: 2px 5px; border-radius: 50%;" id="cart-count">@count</span>
+                                                }
+                                            </a>
+                                        </li>
+                                    }
+
+                                    @if (SignInManager.IsSignedIn(User))
+                                    {
+                                        <li >
+                                            <a href="/Customer/UserProfile/Deshboard/@userId" title="Manage">
+                                                <i class="zmdi zmdi-account"></i> My Account <i class="zmdi zmdi-caret-down"></i></a>
+                                            
+                                                <ul class="sub_menu pages">
+                                                     <li><a asp-area="Customer" asp-controller="Home" asp-action="Cart">Checkout </a></li> 
+                                                    <li><a href="/Customer/UserProfile/Deshboard/@userId" title="Manage"> <i class="fa-solid fa-user"></i>  @UserManager.GetUserName(User)</a></li>
+                                                     <li><a asp-area="Customer" asp-controller="Home" asp-action="Cart">Shopping Cart</a></li>
+                                                    <li><a asp-area="Customer" asp-controller="Home" asp-action="Cart">Wishlist</a></li> 
+                                                    <li>
+                                                        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
+
+                                                        <button class="btn btn-danger" style="width:170px; margin-top;5px "  type="submit">Logout</button>
+                                                        </form>
+                                                    </li>
+                                                </ul>
+                                        </li>
+                                       
+                                    }
+                                    else
+                                    {
+                                        <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+                                        <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+                                    }
+                                </ul>
+
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!--header area end-->
+
+
+    <!--Offcanvas menu area start-->
+    <div class="off_canvars_overlay"></div>
+    <div class="Offcanvas_menu">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="canvas_open">
+                        <span>MENU</span>
+                        <a href="javascript:void(0)"><i class="ion-navicon"></i></a>
+                    </div>
+                    <div class="Offcanvas_menu_wrapper">
+                        <div class="canvas_close">
+                            <a href="javascript:void(0)">
+                                <i class="ion-android-close"></i>
+                            </a>
+                        </div>
+                        <div class="welcome_text">
+                            <p>Welcome to <span> Organic Option</span></p>
+                        </div>
+                        <div class="top_right">
+                            <ul>
+                              
+                                @if (userId != null)
+                                {
+                                    <li class="top_links">
+                                        <a href="/Customer/UserProfile/Deshboard/@userId"><i class="zmdi zmdi-account"></i> My account <i class="zmdi zmdi-caret-down"></i></a>
+                                        <ul class="dropdown_links">
+
+                                            <li><a href="/Customer/UserProfile/Deshboard/@userId">My Account </a></li>
+                                            <li> <a asp-area="Customer" asp-controller="Home" asp-action="Cart"><i class="fas fa-shopping-cart"></i> (@count) Cart</a></li>
+                                            <li><a href="wishlist.html">Wishlist</a></li>
+                                            <li><a href="wishlist.html">Wishlist</a></li>
+                                        </ul>
                                     </li>
                                 }
                                 else
@@ -173,11 +375,109 @@
                                 }
                             </ul>
                         </div>
+                        <div class="search-container">
+
+                            <form method="post" action="@Url.Action("Products", "Home")">
+                                
+                                <div class="search_box">
+                                    <input placeholder="Search product..." type="text" name="searchString">
+                                    <button type="submit"><i class="zmdi zmdi-search"></i></button>
+                                </div>
+                            </form>
+
+                        </div>
+                        <div class="mini_cart_wrapper">
+                            <a asp-area="Customer" asp-controller="Home" asp-action="Cart"><i class="fas fa-shopping-cart"></i> (@count) Cart</a>
+                        </div>
+                        <div id="menu" class="text-left">
+                            <ul class="offcanvas_main_menu">
+                                <li class="menu-item-has-children">
+                                    <a asp-area="" asp-controller="Home" asp-action="Products">Products</a>
+                                    <ul class="sub-menu">
+
+                                        @if (userId != null)
+                                        {
+                                            <li class="menu-item-has-children">
+                                                <a href="#">other Pages</a>
+                                                <ul class="sub-menu">
+                                                    <li> <a asp-area="Customer" asp-controller="Home" asp-action="Cart"><i class="fas fa-shopping-cart"></i> (@count) Cart</a></li>
+                                                    <li><a href="wishlist.html">Wishlist</a></li>
+                                                    @if (userId != null)
+                                                    {
+                                                        <li><a href="/Customer/UserProfile/Deshboard/@userId">My Account </a></li>
+
+                                                    }
+                                                    <li><a href="404.html">Error 404</a></li>
+                                                </ul>
+                                            </li>
+                                        }
+                                        <li class="menu-item-has-children">
+                                            <a href="#">Product Types</a>
+                                            <ul class="sub-menu">
+                                                <li>
+                                                    <a href="product-details.html">product details</a>
+                                                </li>
+                                                <li>
+                                                    <a href="product-sidebar.html">product sidebar</a>
+                                                </li>
+                                                <li>
+                                                    <a href="product-grouped.html">product grouped</a>
+                                                </li>
+                                                <li>
+                                                    <a href="variable-product.html">product variable</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item-has-children">
+                                    <a asp-action="AllShop" asp-area="Farmer" asp-controller="FarmerShop"> Shop </a>
+
+                                    <ul class="sub-menu">
+                                        <li><a href="blog.html">blog</a></li>
+                                        <li><a href="blog-details.html">blog details</a></li>
+                                        <li><a href="blog-fullwidth.html">blog fullwidth</a></li>
+                                        <li><a href="blog-sidebar.html">blog sidebar</a></li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item-has-children">
+                                    <a href="#">pages </a>
+                                    <ul class="sub-menu">
+                                        <li><a href="about.html">About Us</a></li>
+                                        <li><a href="services.html">services</a></li>
+                                        <li><a href="portfolio.html">portfolio</a></li>
+                                        <li><a href="faq.html">Frequently Questions</a></li>
+                                        <li><a href="contact.html">contact</a></li>
+
+                                        <li><a href="wishlist.html">Wishlist</a></li>
+                                        <li><a href="404.html">Error 404</a></li>
+                                    </ul>
+                                </li>
+                                <li class="menu-item-has-children">
+                                    @if (userId != null)
+                                    {
+                                        <a href="/Customer/UserProfile/Deshboard/@userId">my account</a>
+                                    }
+                                </li>
+                                <li class="menu-item-has-children">
+                                    <a href="about.html">about Us</a>
+                                </li>
+                                <li class="menu-item-has-children">
+                                    <a href="contact.html"> Contact Us</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </header>
+    </div>
+    <!--Offcanvas menu area end-->
+
+
+
+
+
 
     <partial name="_CookieConsentPartial" />
 

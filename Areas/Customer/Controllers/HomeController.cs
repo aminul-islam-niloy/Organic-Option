@@ -200,7 +200,7 @@ namespace OnlineShop.Areas.Customer.Controllers
         //}
 
 
-        [Authorize(Roles = "Customer")]
+        [Authorize]
         public async Task<IActionResult> Products(int? page)
         {
             var currentUser = await _userManager.GetUserAsync(User);
@@ -259,9 +259,9 @@ namespace OnlineShop.Areas.Customer.Controllers
 
         private double ToRadians(double deg) => deg * (Math.PI / 180);
 
-        [Authorize(Roles = "Customer")]
+        [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Products(int? page, int productTypeId, string searchString, decimal? lowAmount, decimal? largeAmount, string sortOrder, int range = 10)
+        public async Task<IActionResult> Products(int? page, int productTypeId, string searchString, decimal? lowAmount, decimal? largeAmount, string sortOrder, int range = 100)
         {
             // Remove cached products to ensure fresh results are fetched
             _cache.Remove("AllProducts");
