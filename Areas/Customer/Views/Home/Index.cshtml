@@ -1,7 +1,4 @@
 ﻿@using OnlineShop.Models;
-@* @model X.PagedList.IPagedList<Products>
-@using X.PagedList.Mvc.Core *@
-
 @model IndexPageViewModel
 
 @{
@@ -28,9 +25,7 @@
         products = new List<Products>();
     }
     count = products.Count();
-
 }
-
 
 <!-- category div start -->
 <div class="container my-4">
@@ -160,8 +155,6 @@
     }
 </style>
 <!-- category div End -->
-
-
 
 <!--deals product section area start-->
 <section class="deals_product_section mb-50">
@@ -552,6 +545,7 @@
    </div>
 </section>
 <!--deals product section area end-->
+
 <!--new product area start-->
 <section class="new_product_area mb-50">
    <div class="container">
@@ -620,6 +614,7 @@
    </div>
 </section>
 <!--new product area end-->
+
 <!--banner area start-->
 <div class="banner_area banner_column2 mb-50">
     <div class="container">
@@ -791,67 +786,11 @@
 
 
 
-<!--brand newsletter area start-->
-<div class="brand_newsletter_area">
-   <div class="container">
-      <div class="row">
-         <div class="col-12">
-            <div class="brand_container owl-carousel">
-               <div class="single_brand">
-                  <a href="#"><img src="~/img/brand/brand.png" alt="" /></a>
-               </div>
-               <div class="single_brand">
-                  <a href="#"><img src="~/img/brand/brand1.png" alt="" /></a>
-               </div>
-               <div class="single_brand">
-                  <a href="#"><img src="~/img/brand/brand2.png" alt="" /></a>
-               </div>
-               <div class="single_brand">
-                  <a href="#"><img src="~/img/brand/brand3.png" alt="" /></a>
-               </div>
-               <div class="single_brand">
-                  <a href="#"><img src="~/img/brand/brand4.png" alt="" /></a>
-               </div>
-               <div class="single_brand">
-                  <a href="#"><img src="~/img/brand/brand5.png" alt="" /></a>
-               </div>
-               <div class="single_brand">
-                  <a href="#"><img src="~/img/brand/brand1.png" alt="" /></a>
-               </div>
-            </div>
-         </div>
-      </div>
-   </div>
-</div>
-
-<div>
-   @* @Html.PagedListPager(Model,
-   page => Url.Action("Index", new { page }),
-   PagedListRenderOptions.PageNumbersOnly) *@
-  @*  @Html.PagedListPager(Model, page => Url.Action("Index", new { page, foo1Param = "1", foo2Param = "2"}))  *@
-</div>
-
-
 @section Scripts{
 @{
 await Html.RenderPartialAsync("_ValidationScriptsPartial");
 }
-
-
-<script>
-
-  
-   $(document).ready(function () {
-       $('.slider_area').owlCarousel({
-           items: 1,
-           loop: true,
-           autoplay: true,
-           autoplayTimeout: 5000, // 5 seconds
-           autoplayHoverPause: false,
-           nav: true,
-           dots: false
-       });
-   });
-</script>
 }
+
+
 
