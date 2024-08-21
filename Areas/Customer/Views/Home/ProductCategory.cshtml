@@ -1,0 +1,57 @@
+﻿@model List<OnlineShop.Models.Products>
+
+@{
+    var title = ViewData["Title"] as string;
+}
+<br />
+
+@if (Model.Any())
+{
+
+    
+    <div class="row container no-gutters shop_wrapper">
+        <h3 class="mt-2 mb-2" style="font-size:30px">@title</h3>
+
+        @foreach (var product in Model)
+        {
+
+            <div class="col-lg-3 col-md-4 col-12 mt-2">
+                <div class="single_product" style="margin-top:5px; margin-bottom:5px; margin-left:5px; margin-right:5px; border-radius:5px">
+                    <div class="product_thumb">
+                        <a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id"><img src="~/@product.Image" style="height:270px; width:270px; margin:10px; border:5px" alt=""></a>
+                        <div class="label_product">
+                            <span class="label_sale">sale</span>
+                        </div>
+
+                    </div>
+                    <div class="product_content grid_content">
+                        <div class="product_name">
+                            <h3><a href="product-details.html">@product.Name</a></h3>
+                        </div>
+                        
+                        <div class="price_box">
+                            <span class="current_price">@product.Price ৳</span>
+
+                        </div>
+                        <div class="action_links">
+                            <ul>
+                                
+                                <li class="add_to_cart"><a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id" title="add to cart"><i class="zmdi zmdi-shopping-cart-plus"></i> add to cart</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        }
+
+    </div>
+}
+else{
+    <p style="margin:30px;font-size:30px">No Product Avalable </p>
+}
+
