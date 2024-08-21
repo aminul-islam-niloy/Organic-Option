@@ -8807,8 +8807,8 @@ textarea:-ms-input-placeholder {
   justify-content: space-between;
   align-items: center;
   border: 1px solid #ddd;
-  padding: 8px 10px;
-  margin: 0 0 30px;
+  padding: 8px 5px;
+  margin: 0 0 10px;
 }
 @media only screen and (max-width: 767px) {
   .shop_toolbar_wrapper {

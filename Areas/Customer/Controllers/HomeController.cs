@@ -115,7 +115,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             }
 
             // Convert the filtered products to a paged list using the current page number
-            var pagedProducts = products.ToPagedList(page ?? 1, 12);
+            var pagedProducts = products.ToPagedList(page ?? 1, 100);
 
             return View(pagedProducts);
         }
@@ -130,7 +130,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             if (!_cache.TryGetValue("AllProducts", out IPagedList<Products> cachedProducts))
             {
                 // Products not found in cache, retrieve them from the database
-                var products = _db.Products.Include(p => p.ProductTypes).ToList().ToPagedList(page ?? 1, 12);
+                var products = _db.Products.Include(p => p.ProductTypes).ToList().ToPagedList(page ?? 1, 100);
 
                 // Cache the products for 5 minutes
                 _cache.Set("AllProducts", products, TimeSpan.FromMinutes(5));
@@ -193,7 +193,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             }
 
             // Retrieve and cache the filtered products
-            var filteredProducts = productsQuery.ToPagedList(page ?? 1, 12);
+            var filteredProducts = productsQuery.ToPagedList(page ?? 1, 100);
             _cache.Set("AllProducts", filteredProducts, TimeSpan.FromMinutes(5));
 
             return View(filteredProducts);
@@ -339,7 +339,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                                   
                                   .Where(m => m.ProductTypes.ProductType == category)
                                   .ToList();
-            ViewData["Title"] = $"Product Category: {category}";
+            ViewData["Title"] = $"Product : {category}";
             return View("ProductCategory", products);
         }
 
