@@ -9976,9 +9976,9 @@ textarea:-ms-input-placeholder {
   text-transform: capitalize;
   margin-bottom: 0;
 }
-.checkout_btn a:hover {
-  background: #262626;
-}
+    .checkout_btn a:hover {
+        background: #30f68c;
+    }
 
 .coupon_area {
   margin-bottom: 60px;
