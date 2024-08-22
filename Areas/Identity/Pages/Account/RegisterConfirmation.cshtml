@@ -2,8 +2,16 @@
 @model OnlineShop.Areas.Identity.Pages.Account.RegisterConfirmationModel
 
 @{
-    ViewData["Title"] = "Registration Confirmation";
+    ViewData["Title"] = "Registration Confirmed !";
 }
 
-<h3>@ViewData["Title"]</h3>
-<p>Please check your email to confirm your registration.</p>
+<div class="d-flex justify-content-center align-items-center mt-20">
+    <div class="card text-center" style="width: 20rem; margin:20px; height:16rem; border-radius: 10px; padding: 10px;">
+        <h4 class="card-title" style="margin-top:20px">@ViewData["Title"]</h4>
+        <p class="card-text">Please check your email to confirm your registration.</p>
+        <div class="mt-4">
+            <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-primary mb-2 w-100"> Go to Home</a>
+            <a href="https://mailtrap.io/inboxes/2734630" target="_blank" class="btn btn-secondary w-100">Trap Mailbox</a>
+        </div>
+    </div>
+</div>

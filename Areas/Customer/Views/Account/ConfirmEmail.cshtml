@@ -1,9 +1,11 @@
-﻿<h4>ConfirmEmail</h4>
-
-    <div class="alert alert-success" role="alert">
-        <p>Your email has been verified successfully.</p>
+﻿
+<div class="d-flex justify-content-center align-items-center mt-20">
+    <div class="card text-center" style="width: 20rem; margin:20px; height:16rem; border-radius: 10px; padding: 10px;">
+        <h4 class="card-title" style="margin-top:20px">Thnak You For Email Confirmation</h4>
+        <p class="card-text">Now You can Login. If you face any Trouble Read Blog Or Contracts us for Help</p>
+        <div class="mt-4">
+            <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-primary mb-2 w-100"> Go to Home</a>
+            <a asp-area="Identity"  asp-page="/Account/Login" class="btn btn-secondary w-100">Login </a>
+        </div>
     </div>
-
-<p>
-  Now   you can login     <a asp-area="Identity" class="btn btn-success" asp-page="/Account/Login">Login</a>
-</p>
+</div>
