@@ -207,7 +207,8 @@
                                         </li>
                                     }
 
-                                    
+                                     @if (userRole == "Customer")
+                                    {
                                         <li class="mega_items ">
                                             <a asp-area="Farmer" asp-controller="FarmerShop" asp-action="AllShop"><i class="zmdi zmdi-shopping-basket"></i> shop <i class="zmdi zmdi-caret-down"></i></a>
                                             <div class="mega_menu">
@@ -245,8 +246,7 @@
                                                 </ul>
                                             </div>
                                         </li>
-                                    
-
+                                    }
                                     <li>
                                         <a href="blog.html"><i class="zmdi zmdi-collection-music"></i> blog <i class="zmdi zmdi-caret-down"></i></a>
                                         <ul class="sub_menu pages">
