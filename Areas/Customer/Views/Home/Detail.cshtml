@@ -32,159 +32,167 @@
 <form asp-action="Detail" method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="SpecificProduct.Id" />
 
-<!--product details start-->
-<div class="product_details mt-50 mb-50">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 col-md-6">
-                <div class="product-details-tab">
-                    <div id="img-1" class="zoomWrapper single-zoom">
-                        <a href="#">
-                                <img id="zoom1" src="~/@Model.SpecificProduct.Image" style="  width:90%; height:460px;" data-zoom-image="~/img/product/productbig1.jpg" alt="big-1">
-                        </a>
-                    </div>
-                    <div class="single-zoom-thumb">
-                        <ul class="s-tab-zoom owl-carousel single-product-active" id="gallery_01">
+    <!--product details start-->
+    <div class="product_details mt-50 mb-50">
+        <div class="container">
+            <div class="row">
+             
 
+                <div class="col-lg-6 col-md-6">
+                    <div class="product-images" style="margin:30px">
+                        <div id="main-image" class="zoomWrapper">
+                            <img id="zoomedImage" src="~/@Model.SpecificProduct.Image" alt="Main Product Image" class="img-fluid" style="width:90%; height:450px;" />
+                        </div>
+                        <div class="thumbnail-images mt-3 d-flex justify-content-center">
+                            <ul class="list-inline">
                                 @foreach (var image in Model.SpecificProduct.ImagesSmall)
                                 {
-                                    <li>
-                                        <a href="#" class="elevatezoom-gallery active" data-update="" data-image="@Url.Content(image.ImagePath)" data-zoom-image="@Url.Content(image.ImagePath)">
-                                            <img src="~/@Url.Content(image.ImagePath)" style="  width:100%; height:100px;" alt="No Image show" />
-                                        </a>
+                                    <li class="list-inline-item">
+                                        <img src="~/@Url.Content(image.ImagePath)" alt="Thumbnail" class="img-thumbnail" style="width:120px; height:120px; cursor:pointer;" onclick="showZoomedImage(this)" />
                                     </li>
                                 }
-                        </ul>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-6 col-md-6">
-                <div class="product_d_right">
-             
-                        <h1>@Model.SpecificProduct.Name </h1>
-                        <div class="product_nav">
-                            @if (@Model.SpecificProduct.IsAvailable && @Model.SpecificProduct.Quantity>0)
-                            {
-                                <img src="~/Images/stock.jpeg" style=" width:50px; height:50px; " alt="Stock"/>
-                            }
-                            else
-                            {
-                                <img src="~/Images/out.jpg" style=" width:50px; height:50px; " alt="out of Stock" />
-                            }
 
-                        </div>
-                        <div>
-                            <a class="btn btn-warning" href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = @Model.SpecificProduct.FarmerShopId })">Go To Shop</a>
+                <div class="col-lg-6 col-md-6">
+                    <div class="product_d_right">
 
-                        </div>
-
-                      
-                        <div class="price_box mt-5">
-
-                            @if(Model.SpecificProduct.Discount > 0)
-                            {
-                                decimal discountPercentage = @Model.SpecificProduct.Discount;
-                                decimal currentPrice = @Model.SpecificProduct.Price;
-                                decimal disPrice = currentPrice * discountPercentage / 100;
-                                decimal totalNewPrice = currentPrice - disPrice;
-
-                                <span class="current_price"> New Price  @totalNewPrice ৳‎</span>
-                                <br />
-
-                                <span class="old_price">Old Price @Model.SpecificProduct.Price ৳‎</span>
-                            }
-                            else
-                            {
-                                <span class="current_price"> Price @Model.SpecificProduct.Price ৳‎</span>
-                            }
-
-                        </div>
-                        <div class="product_desc">
-                            <p>@Model.SpecificProduct.Description eget velit. Donec ac tempus ante.  sed commodo augue nisi non neque.   lorem et placerat vestibulum metus nisi posuere nisl</p>
-                        </div>
-                     
-
-
-                        <div class="product_variant quantity">
-                            <label>Preservation Need? : </label>
-                            <label> @(Model.SpecificProduct.PreservationRequired? "Yes":"No") </label>
-                        
-
-                        </div>
-
-                        <div class="product_variant quantity">
-                            <label>quantity : </label>
-                            <label>@Model.SpecificProduct.Quantity  @Model.SpecificProduct.QuantityType</label>
-                        
-                        </div>
-
-                        <div class="action_links">
-                            <ul>
-                                @if (Model.SpecificProduct.Quantity != 0)
-                                {
-                                    if (ViewBag.IsShopOpen)
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <h1 style="font-size:40px; margin-bottom:5px">@Model.SpecificProduct.Name</h1>
+                                <div class="price-box mt-3">
+                                    @if (Model.SpecificProduct.Discount > 0)
                                     {
+                                        decimal discountPercentage = @Model.SpecificProduct.Discount;
+                                        decimal currentPrice = @Model.SpecificProduct.Price;
+                                        decimal disPrice = currentPrice * discountPercentage / 100;
+                                        decimal totalNewPrice = currentPrice - disPrice;
 
-                                        @* Check if the product is already in the cart *@
-                                        var existingProduct = products.FirstOrDefault(p => p.Id == Model.SpecificProduct.Id);
-                                        if (existingProduct != null)
-                                        {
-                                            <li>
-                                                <button type="submit" class="btn btn-danger form-control" asp-action="RemoveToCart" asp-route-id="@Model.SpecificProduct.Id"> Remove from Cart</button>
-                                            </li>
-                                        }
-                                        else
-                                        {
-                                            <li>
-                                                <input asp-for="SpecificProduct.QuantityInCart" name="quantityInCart" class="form-control" type="number" min="1" max="@Model.SpecificProduct.Quantity" value="1" />
-                                            </li>
-                                            <li>
-                                                <input type="submit" class="btn btn-info form-control" value="Add to Cart" />
-                                            </li>
-                                        }
+                                        <span class="current-price text-success">New Price: @totalNewPrice ৳‎</span>
+                                        <br />
+                                        <span class="old-price text-muted">Old Price: @Model.SpecificProduct.Price ৳‎</span>
                                     }
                                     else
                                     {
-                                        <li class="text-danger">
-                                            Shop is closed. Contact the shop or try later.
-                                        </li>
+                                        <span class="current-price text-success">Price: @Model.SpecificProduct.Price ৳‎</span>
                                     }
-                                }
+                                </div>
+
+                                <div class="availability mt-3">
+                                    @if (@Model.SpecificProduct.IsAvailable && @Model.SpecificProduct.Quantity > 0)
+                                    {
+                                        <span class="badge bg-success">In Stock</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Out of Stock</span>
+                                    }
+                                </div>
+
                                 
-                            </ul>
+                            </div>
+                            <br />
+                            <div >
+                    
+                                <a class="btn btn-default  mb-2" href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = @Model.SpecificProduct.FarmerShopId })">Go To Shop</a>
+                                
+                            </div>
+
+
+                            <hr />
+                            <div class="product_desc mt-2">
+                                <p>
+                                    @Model.SpecificProduct.Description eget velit. Donec ac tempus ante.  sed commodo augue nisi non neque. <br />
+      
+                                    Donec ac tempus ante.  sed commodo augue nisi non neque.   lorem et placerat vestibulum metus nisi posuere nisl
+                                </p>
+                            </div>
+
+
+
+                            <div class="product_variant quantity">
+                                <label>Preservation Need? : </label>
+                                <label> @(Model.SpecificProduct.PreservationRequired ? "Yes" : "No") </label>
+
+
+                            </div>
+
+                            <div class="product_variant quantity">
+                                <label>quantity : </label>
+                                <label>@Model.SpecificProduct.Quantity  @Model.SpecificProduct.QuantityType</label>
+
+                            </div>
+
+                            <div class="action_links">
+                                <ul>
+                                    @if (Model.SpecificProduct.Quantity != 0)
+                                    {
+                                        if (ViewBag.IsShopOpen)
+                                        {
+
+                                           
+                                            var existingProduct = products.FirstOrDefault(p => p.Id == Model.SpecificProduct.Id);
+                                            if (existingProduct != null)
+                                            {
+                                                <li>
+                                                    <button type="submit" class="btn btn-danger form-control" asp-action="RemoveToCart" asp-route-id="@Model.SpecificProduct.Id"> Remove from Cart</button>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li>
+                                                    <input asp-for="SpecificProduct.QuantityInCart" name="quantityInCart" class="form-control" type="number" min="1" max="@Model.SpecificProduct.Quantity" value="1" />
+                                                </li>
+                                                <li>
+                                                    <input type="submit" class="btn btn-info form-control" value="Add to Cart" />
+                                                </li>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <li class="text-danger">
+                                                Shop is closed. Contact the shop or try later.
+                                            </li>
+                                        }
+                                    }
+
+                                </ul>
+                            </div>
+
+                            <div class="product_meta">
+                                <label>Catagory : </label>
+                                <span>@Model.SpecificProduct.ProductTypes.ProductType</span>
+                            </div>
+
+
+                            <div class="priduct_social">
+                                <ul>
+                                    <li><a class="facebook" href="#" title="facebook"><i class="fa fa-facebook"></i> Like</a></li>
+                                    <li><a class="twitter" href="#" title="twitter"><i class="fa fa-twitter"></i> tweet</a></li>
+                                    <li><a class="pinterest" href="#" title="pinterest"><i class="fa fa-pinterest"></i> save</a></li>
+                                    <li><a class="google-plus" href="#" title="google +"><i class="fa fa-google-plus"></i> share</a></li>
+                                    <li><a class="linkedin" href="#" title="linkedin"><i class="fa fa-linkedin"></i> linked</a></li>
+                                </ul>
+                            </div>
+
                         </div>
 
-                        <div class="product_meta">
-                            <label>Catagory : </label>
-                            <span>@Model.SpecificProduct.ProductTypes.ProductType</span>
-                        </div>
 
-                 
-                    <div class="priduct_social">
-                        <ul>
-                            <li><a class="facebook" href="#" title="facebook"><i class="fa fa-facebook"></i> Like</a></li>
-                            <li><a class="twitter" href="#" title="twitter"><i class="fa fa-twitter"></i> tweet</a></li>
-                            <li><a class="pinterest" href="#" title="pinterest"><i class="fa fa-pinterest"></i> save</a></li>
-                            <li><a class="google-plus" href="#" title="google +"><i class="fa fa-google-plus"></i> share</a></li>
-                            <li><a class="linkedin" href="#" title="linkedin"><i class="fa fa-linkedin"></i> linked</a></li>
-                        </ul>
                     </div>
-
                 </div>
+                <br />
+          
 
-           
-            </div>
-            <br />
-
-
-              <div class="container mt-2">
+                <div class="container mt-2">
                     <hr />
 
                     <div class="row">
 
                         <div class="col-md-5">
 
-                            <h3>Distance-Based Charges</h3>
+                            <h4 class="mb-2 mt-2">Distance-Based Charges</h4>
                             <table class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
@@ -220,7 +228,7 @@
 
 
                         <div class="col-md-7">
-                            <h3>Product-Based Charges</h3>
+                            <h4 class="mt-2 mb-2">Product-Based Charges</h4>
                             <table class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
@@ -289,139 +297,66 @@
                     </div>
 
                     <a asp-action="Index" class="btn btn-success">Back to List</a>
-                   
-               </div>
-            
+
+                </div>
+
+            </div>
         </div>
+
     </div>
 
-</div>
 
-   
 
 </form>
 
 
+<script>
+    function showZoomedImage(imgElement) {
+        const mainImage = document.getElementById('zoomedImage');
+        mainImage.src = imgElement.src;
+    }
+</script>
+
+<style>
+    .product-details h1 {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .price-box .current-price {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .price-box .old-price {
+        text-decoration: line-through;
+    }
+
+    .availability .badge {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .action-buttons .btn {
+        margin-right: 10px;
+    }
+
+    .product-meta {
+        font-size: 1rem;
+    }
+
+
+
+    .table th, .table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+</style>
+
+
+
+
 <!--product details end-->
-<!--product info start-->
-<div class="product_d_info">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="product_d_inner">
-                    <div class="product_info_button">
-                        <ul class="nav" role="tablist">
-                            <li>
-                                <a class="active" data-bs-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="false">Description</a>
-                            </li>
-                            <li>
-                                <a data-bs-toggle="tab" href="#sheet" role="tab" aria-controls="sheet" aria-selected="false">Specification</a>
-                            </li>
-                            <li>
-                                <a data-bs-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">Reviews (1)</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="info" role="tabpanel">
-                            <div class="product_info_content">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla.</p>
-                                <p>Pellentesque aliquet, sem eget laoreet ultrices, ipsum metus feugiat sem, quis fermentum turpis eros eget velit. Donec ac tempus ante. Fusce ultricies massa massa. Fusce aliquam, purus eget sagittis vulputate, sapien libero hendrerit est, sed commodo augue nisi non neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor, lorem et placerat vestibulum, metus nisi posuere nisl, in accumsan elit odio quis mi. Cras neque metus, consequat et blandit et, luctus a nunc. Etiam gravida vehicula tellus, in imperdiet ligula euismod eget.</p>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="sheet" role="tabpanel">
-                            <div class="product_d_table">
-                                <form action="#">
-                                    <table>
-                                        <tbody>
-                                            <tr>
-                                                <td class="first_child">Compositions</td>
-                                                <td>Polyester</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="first_child">Styles</td>
-                                                <td>Girly</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="first_child">Properties</td>
-                                                <td>Short Dress</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </form>
-                            </div>
-                            <div class="product_info_content">
-                                <p>Fashion has been creating well-designed collections since 2010. The brand offers feminine designs delivering stylish separates and statement dresses which have since evolved into a full ready-to-wear collection in which every item is a vital part of a woman's wardrobe. The result? Cool, easy, chic looks with youthful elegance and unmistakable signature style. All the beautiful pieces are made in Italy and manufactured with the greatest attention. Now Fashion extends to a range of accessories including shoes, hats, belts and more!</p>
-                            </div>
-                        </div>
-
-                        <div class="tab-pane fade" id="reviews" role="tabpanel">
-                            <div class="reviews_wrapper">
-                                <h2>1 review for Donec eu furniture</h2>
-                                <div class="reviews_comment_box">
-                                    <div class="comment_thmb">
-                                        <img src="~/img/blog/comment2.jpg" alt="">
-                                    </div>
-                                    <div class="comment_text">
-                                        <div class="reviews_meta">
-                                            <div class="star_rating">
-                                                <ul>
-                                                    <li><a href="#"><i class="ion-ios-star"></i></a></li>
-                                                    <li><a href="#"><i class="ion-ios-star"></i></a></li>
-                                                    <li><a href="#"><i class="ion-ios-star"></i></a></li>
-                                                    <li><a href="#"><i class="ion-ios-star"></i></a></li>
-                                                    <li><a href="#"><i class="ion-ios-star"></i></a></li>
-                                                </ul>
-                                            </div>
-                                            <p><strong>admin </strong>- March 25 2024</p>
-                                            <span>Organic Option</span>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="comment_title">
-                                    <h2>Add a review </h2>
-                                    <p>Your email address will not be published.  Required fields are marked </p>
-                                </div>
-                                <div class="product_ratting mb-10">
-                                    <h3>Your rating</h3>
-                                    <ul>
-                                        <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                    </ul>
-                                </div>
-                                <div class="product_review_form">
-                                    <form action="#">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <label for="review_comment">Your review </label>
-                                                <textarea name="comment" id="review_comment"></textarea>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6">
-                                                <label for="author">Name</label>
-                                                <input id="author" type="text">
-
-                                            </div>
-                                            <div class="col-lg-6 col-md-6">
-                                                <label for="email">Email </label>
-                                                <input id="email" type="text">
-                                            </div>
-                                        </div>
-                                        <button type="submit">Submit</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!--product info end-->
 <!--product area start-->
 <section class="product_area related_products mb-47">
     <div class="container">
@@ -432,44 +367,36 @@
                 </div>
                 <div class="product_carousel product_column4 owl-carousel">
 
-                    @foreach(var  product in Model.RelatedProducts)
+                    @foreach (var product in Model.RelatedProducts)
                     {
-                        
-                    <div class="single_product">
-                        <div class="product_thumb">
-                                <a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id"><img src="~/@product.Image" alt="Releted Image" style="height:250px; width:80%"></a>
-                            <div class="label_product">
-                                <span class="label_sale">sale</span>
-                            </div>
-                           
-                        </div>
-                        <div class="product_content">
-                            <div class="product_name">
-                                <h3><a href="product-details.html">@product.Name</a></h3>
-                            </div>
-                            <div class="product_rating">
-                                <ul>
-                                    <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                    <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                    <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                    <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                    <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                </ul>
-                            </div>
-                            <div class="price_box">
-                                    <span class="current_price">@product.Price ৳</span>
-                         
-                            </div>
-                            <div class="action_links">
-                                <ul>
-                                    <li class="wishlist"><a href="wishlist.html" title="Add to Wishlist"><i class="fa fa-heart-o" aria-hidden="true"></i></a></li>
-                                   
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
 
-                }
+                        <div class="single_product">
+                            <div class="product_thumb">
+                                <a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id"><img src="~/@product.Image" alt="Releted Image" style="height:250px; width:80%"></a>
+                                <div class="label_product">
+                                    <span class="label_sale">sale</span>
+                                </div>
+
+                            </div>
+                            <div class="product_content">
+                                <div class="product_name">
+                                    <h3><a href="product-details.html">@product.Name</a></h3>
+                                </div>
+
+                                <div class="price_box">
+                                    <span class="current_price">@product.Price ৳</span>
+
+                                </div>
+                                <div class="action_links">
+                                    <ul>
+                                        <li class="add_to_cart"><a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id" title="add to cart"><i class="zmdi zmdi-shopping-cart-plus"></i> Buy Now</a></li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    }
 
                 </div>
             </div>
@@ -477,8 +404,7 @@
     </div>
 </section>
 <!--product area end-->
-
-@section Scripts{
+@section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
