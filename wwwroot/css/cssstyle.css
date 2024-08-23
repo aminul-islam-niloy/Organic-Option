@@ -5125,6 +5125,7 @@ textarea:-ms-input-placeholder {
 .single_deals_product .product_content {
   width: 54%;
   padding-left: 20px;
+  margin-top:30px;
 }
 @media only screen and (max-width: 767px) {
   .single_deals_product .product_content {
