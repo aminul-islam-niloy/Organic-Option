@@ -220,6 +220,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
             shopToUpdate.IsShopOpen = farmerShop.IsShopOpen;
             shopToUpdate.ContractInfo = farmerShop.ContractInfo;
             shopToUpdate.Latitude = farmerShop.Latitude;
+            shopToUpdate.NID = farmerShop.NID;
             shopToUpdate.Longitude = farmerShop.Longitude;
 
             // Update the address fields

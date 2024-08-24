@@ -3,206 +3,118 @@
 <br />
 
 <div class="container">
-
-
-    <div class="row">
-
-        @if (Model.CoverPhoto != null)
-        {
-
-            <img src="data:image;base64,@Convert.ToBase64String(Model.CoverPhoto)" class="img-fluid" alt="Cover Photo" style="width:1200px;height:200px" />
-        }
-        else
-        {
-            <p>No cover photo available</p>
-        }
-        <div class="col-md-6 mt-30">
-
-            <h2>@Model.ShopName</h2>
-
-            <div class="mt-15 col-md-6">
-
-                <a asp-action="Edit" asp-controller="FarmerShop" class="btn btn-warning" asp-route-id="@Model.Id">Edit</a>
-
-                
-                <a asp-action="Delete" asp-controller="FarmerShop" class="btn btn-danger" asp-route-id="@Model.Id">Delete</a>
-
-
-
-                <a class="btn btn-warning" href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = @Model.Id })"> Product in Shop</a>
-
-               <br />
-
-                <h4 class="mt-5">Total Revenue: @Model.ShopRevenue</h4>
-
-                <a href="@Url.Action("Wallet", "Inventory")" class="btn btn-primary">My Wallet</a>
-
+ 
+        <div class="row">
+            <!-- Left Section: Shop Cover Photo -->
+            <div class="col-md-8 mb-4">
+                @if (Model.CoverPhoto != null)
+                {
+                    <img src="data:image;base64,@Convert.ToBase64String(Model.CoverPhoto)" class="img-fluid rounded" alt="Cover Photo" />
+                }
+                else
+                {
+                    <p>No cover photo available</p>
+                }
             </div>
 
-          
-
-        </div>
-        <div class="col-md-6 mt-30">
-            <h4>@Model.ContractInfo</h4>
-
-
-            <h4>Address</h4>
-            @if (Model.ShopAddress != null)
-            {
-                <div style="margin-left:40px">
-                    <label for="House">House:</label>
-                    <span id="House">@Html.DisplayFor(modelItem => Model.ShopAddress.House)</span><br />
-
-                    <label for="StreetNo">Street No:</label>
-                    <span id="StreetNo">@Html.DisplayFor(modelItem => Model.ShopAddress.StreetNo)</span><br />
-
-                    <label for="WardNo">Ward No:</label>
-                    <span id="WardNo">@Html.DisplayFor(modelItem => Model.ShopAddress.WardNo)</span><br />
-
-                    <label for="Thana">Thana:</label>
-                    <span id="Thana">@Html.DisplayFor(modelItem => Model.ShopAddress.Thana)</span><br />
-
-                    <label for="District">District:</label>
-                    <span id="District">@Html.DisplayFor(modelItem => Model.ShopAddress.District)</span><br />
-
-                    <label for="Division">Division:</label>
-                    <span id="Division">@Html.DisplayFor(modelItem => Model.ShopAddress.Division)</span><br />
-                </div>
-            }
-
-            <p><strong>Open Status:</strong> @(Model.IsShopOpen ? "Open" : "Closed")</p>
-
-            <h4 class="mt-3">Open Status:</h4>
+            <!-- Right Section: Shop Information -->
+            <div class="col-md-4 mb-4">
+                <h3 class="mb-3">@Model.ShopName</h3>
+                <h4 class="mb-3">@Model.ContractInfo</h4>
+                <p><strong>Open Status:</strong> @(Model.IsShopOpen ? "Open" : "Closed")</p>
+                <h4 class="mb-3">Total Revenue: @Model.ShopRevenue</h4>
+                <a href="@Url.Action("Wallet", "Inventory")" class="btn btn-primary mb-3">My Wallet</a>
             <form asp-action="EditOpenStatus" method="post">
+       
+                <input type="hidden" name="IsShopOpen" value="false" />
+
                 <label class="switch">
-                    <input type="checkbox" name="IsShopOpen" @(Model.IsShopOpen ? "checked" : "") />
+                    <input type="checkbox" name="IsShopOpen" value="true" @(Model.IsShopOpen ? "checked" : "") />
                     <span class="slider round"></span>
                 </label>
+
                 <input type="hidden" name="Id" value="@Model.Id" />
                 <button type="submit" class="btn btn-primary mt-3">Save</button>
             </form>
 
-            <p><strong>Location:</strong> Latitude: @Model.Latitude, Longitude: @Model.Longitude</p>
-           
-           
-        </div>
-        <div class="mt-15 col-md-6 btn d-flex">
-            <a asp-action="Index" asp-area="Farmer" style="margin-left:5px" asp-controller="Inventory" class="btn btn-info">Manage Inventory</a>
-            <a asp-action="AllOrdersGroupedByDate" style="margin-left:5px" asp-area="Farmer" asp-controller="Inventory" class="btn btn-success">Manage Order</a>
-            <a asp-action="ShowAllProductsByTime" style="margin-left:5px" asp-area="Farmer" asp-controller="Inventory" class="btn btn-warning"> Products by Time</a>
-        </div>
-     
-
-        <div>
-            <div class="row mt-30">
-                <div class="col-lg-8">
-                   <h4> Farmer Product Management</h4>
-                </div>
-                <div class="col-lg-4 text-right">
-                   
-                    <a asp-action="AddProduct" class="btn btn-info"><i class="fas fa-plus"></i>&nbsp; Add New Product</a>
-                </div>
             </div>
 
-
-            <table class=" display table table-striped border" style="margin-top:15px" id="myTable">
-                <thead>
-                    <tr class="table-info">
-                        <th>
-                            <label>Image</label>
-                        </th>
-
-                        <th>
-                            <label>Name</label>
-                        </th>
-
-
-                        <th>
-                            <label>Price</label>
-                        </th>
-
-                        <th>
-                            <label>Avalable</label>
-                        </th>
-                        <th>
-                            <label>Catagory</label>
-                        </th>
-
-                        <th>
-                            <label> Preservation ?</label>
-                        </th>
-                        <th>
-                            <label>Quantity</label>
-                        </th>
-
-                        <th>
-                            <label>ExpairOn</label>
-                        </th>
-
-                        <th>
-                            <label>Action</label>
-                        </th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    @if (Model.Products != null)
-                    {
-                        @foreach (var item in Model.Products)
-                        {
-                            <tr>
-                                <td><img src="~/@item.Image" style="max-width: 50px; max-height: 50px;" /></td>
-                                <td>@item.Name</td>
-                                <td>@item.Price</td>
-                                <td>@item.IsAvailable</td>
-                                <td>@item.ProductTypes.ProductType</td>
-                                <td>@item.PreservationRequired</td>
-                                <td>@item.Quantity @item.QuantityType</td>
-
-                                @{
-                                    TimeSpan difference = item.ExpirationTime - DateTime.Now;
-                                    int d = (int)difference.TotalDays;
-                                    int hours = difference.Hours;
-                                    int minutes = difference.Minutes;
-                                    int seconds = difference.Seconds;
-                                }
-                                <td>@d D @hours H @minutes Min</td>
-
-
-
-                                <td style="width: 150px">
-                                    <div class="btn-group">
-                                        <a asp-action="EditProduct" class="btn btn-primary" asp-controller="FarmerShop" asp-route-id="@item.Id"><i class="fa-solid fa-pen-to-square"></i></a>
-                                        <a asp-action="ProductDetails" class="btn btn-success" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info"></i></a>
-                                        <a asp-action="ProductDelete" class="btn btn-danger" asp-route-id="@item.Id"><i class="fa-solid fa-trash"></i></a>
-                                    </div>
-
-                                </td>
-                            </tr>
-                        }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="7">No products available</td>
-                        </tr>
-                    }
-                </tbody>
-
-
-
-            </table>
         </div>
 
 
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <h4>Shop Management</h4>
+                <a asp-action="Edit" asp-controller="FarmerShop" class="btn btn-warning mb-2" asp-route-id="@Model.Id">Edit</a>
+                <a asp-action="Delete" asp-controller="FarmerShop" class="btn btn-danger mb-2" asp-route-id="@Model.Id">Delete</a>
+                <a class="btn btn-warning mb-3" href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = @Model.Id })">Products in Shop</a>
+            </div>
+            <div class="col-md-6 mb-4">
+                <h4>Other Information</h4>
+                <a asp-action="Index" asp-area="Farmer" asp-controller="Inventory" class="btn btn-info mb-2">Manage Inventory</a>
+                <a asp-action="AllOrdersGroupedByDate" asp-area="Farmer" asp-controller="Inventory" class="btn btn-success mb-2">Manage Orders</a>
+                <a asp-action="ShowAllProductsByTime" asp-area="Farmer" asp-controller="Inventory" class="btn btn-warning mb-2">Products by Time</a>
+                
+            </div>
+        </div>
+
+
+    <a asp-action="AddProduct" class="btn btn-info"><i class="fas fa-plus"></i>&nbsp; Add New Product</a>
+    <div class="table-responsive">
+        <table class="table table-bordered mt-3" id="myTable">
+            <thead>
+                <tr class="table-info">
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Available</th>
+                    <th>Preservation?</th>
+                    <th>Quantity</th>
+                    <th>Expire On</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Products != null)
+                {
+                    @foreach (var item in Model.Products)
+                    {
+                        <tr>
+                            <td><img src="~/@item.Image" style="max-width: 50px; max-height: 50px;" /></td>
+                            <td>@item.Name</td>
+                            <td>@item.Price</td>
+                            <td>@item.IsAvailable</td>
+                            <td>@item.PreservationRequired</td>
+                            <td>@item.Quantity @item.QuantityType</td>
+
+                            @{
+                                TimeSpan difference = item.ExpirationTime - DateTime.Now;
+                                int d = (int)difference.TotalDays;
+                                int hours = difference.Hours;
+                                int minutes = difference.Minutes;
+                                int seconds = difference.Seconds;
+                            }
+                            <td>@d D @hours H @minutes Min</td>
+                            <td style="width: 150px">
+                                <div class="btn-group">
+                                    <a asp-action="EditProduct" class="btn btn-primary" asp-controller="FarmerShop" asp-route-id="@item.Id"><i class="fa-solid fa-pen-to-square"></i></a>
+                                    <a asp-action="ProductDetails" class="btn btn-success" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info"></i></a>
+                                    <a asp-action="ProductDelete" class="btn btn-danger" asp-route-id="@item.Id"><i class="fa-solid fa-trash"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8">No products available</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
-</div>
-
-
-
-
-
-
+ </div>
 
 
 
