@@ -381,8 +381,8 @@ namespace OnlineShop.Areas.Customer.Controllers
                 return NotFound();
             }
 
-            
-            ViewBag.IsShopOpen = farmerShop.IsShopOpen;
+    
+           
 
             // Query related products ( products of the same category)
             var relatedProducts = _db.Products
@@ -393,7 +393,10 @@ namespace OnlineShop.Areas.Customer.Controllers
             var viewModel = new ProductDetailViewModelHome
             {
                 SpecificProduct = specificProduct,
-                RelatedProducts = relatedProducts
+                RelatedProducts = relatedProducts,
+                ShopName = farmerShop.ShopName,
+                IsShopOpen = farmerShop.IsShopOpen,
+                OverallRatting  = farmerShop.OverallRating
             };
 
             return View(viewModel);

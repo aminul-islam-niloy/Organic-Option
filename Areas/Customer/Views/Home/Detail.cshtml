@@ -36,8 +36,7 @@
     <div class="product_details mt-50 mb-50">
         <div class="container">
             <div class="row">
-             
-
+                <!-- Left column for product images -->
                 <div class="col-lg-6 col-md-6">
                     <div class="product-images" style="margin:30px">
                         <div id="main-image" class="zoomWrapper">
@@ -56,12 +55,13 @@
                     </div>
                 </div>
 
+                <!-- Right column for product details -->
                 <div class="col-lg-6 col-md-6">
                     <div class="product_d_right">
-
                         <div class="row">
-                            <div class="col-lg-6 col-md-6">
-                                <h1 style="font-size:40px; margin-bottom:5px">@Model.SpecificProduct.Name</h1>
+                           
+                            <div class="col-lg-8 col-md-8 text-left">
+                                <h1 style="font-size:30px; margin-bottom:5px">@Model.SpecificProduct.Name</h1>
                                 <div class="price-box mt-3">
                                     @if (Model.SpecificProduct.Discount > 0)
                                     {
@@ -90,100 +90,149 @@
                                         <span class="badge bg-danger">Out of Stock</span>
                                     }
                                 </div>
-
-                                
-                            </div>
-                            <br />
-                            <div >
-                    
-                                <a class="btn btn-default  mb-2" href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = @Model.SpecificProduct.FarmerShopId })">Go To Shop</a>
-                                
                             </div>
 
+                            <div class="col-lg-4 col-md-4 text-end  justify-content-end">
+                                <p style="font-size:12px; margin-bottom: 0;"><strong>@Model.ShopName</strong></p>
+                                <a class="btn btn-success " style="margin-left:5px" href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = @Model.SpecificProduct.FarmerShopId })">Go To Shop</a>
 
-                            <hr />
-                            <div class="product_desc mt-2">
-                                <p>
-                                    @Model.SpecificProduct.Description eget velit. Donec ac tempus ante.  sed commodo augue nisi non neque. <br />
-      
-                                    Donec ac tempus ante.  sed commodo augue nisi non neque.   lorem et placerat vestibulum metus nisi posuere nisl
-                                </p>
+                                <div >
+                                    <p><strong> Rating:</strong> @Model.OverallRatting </p>
+                                    <div>
+                                        @{
+                                            double rating = Model.OverallRatting;
+                                            int fullStars = (int)rating;
+                                            double halfStarThreshold = rating - fullStars;
+                                            int emptyStars = 5 - fullStars - (halfStarThreshold >= 0.5 ? 1 : 0);
+
+                                            for (int i = 0; i < fullStars; i++)
+                                            {
+                                                <i class="fa fa-star"></i>
+                                            }
+
+                                            if (halfStarThreshold >= 0.5)
+                                            {
+                                                <i class="fa fa-star-half-o"></i>
+                                            }
+
+                                            for (int i = 0; i < emptyStars; i++)
+                                            {
+                                                <i class="fa fa-star-o"></i>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            
+                            
                             </div>
+                            
+                        </div>
 
+                        @* <div>
+                            <p><strong> Rating:</strong> @Model.OverallRatting </p>
+                            <div>
+                                @{
+                                    double rating = Model.OverallRatting;
+                                    int fullStars = (int)rating;
+                                    double halfStarThreshold = rating - fullStars;
+                                    int emptyStars = 5 - fullStars - (halfStarThreshold >= 0.5 ? 1 : 0);
 
-
-                            <div class="product_variant quantity">
-                                <label>Preservation Need? : </label>
-                                <label> @(Model.SpecificProduct.PreservationRequired ? "Yes" : "No") </label>
-
-
-                            </div>
-
-                            <div class="product_variant quantity">
-                                <label>quantity : </label>
-                                <label>@Model.SpecificProduct.Quantity  @Model.SpecificProduct.QuantityType</label>
-
-                            </div>
-
-                            <div class="action_links">
-                                <ul>
-                                    @if (Model.SpecificProduct.Quantity != 0)
+                                    for (int i = 0; i < fullStars; i++)
                                     {
-                                        if (ViewBag.IsShopOpen)
-                                        {
+                                        <i class="fa fa-star"></i>
+                                    }
 
-                                           
-                                            var existingProduct = products.FirstOrDefault(p => p.Id == Model.SpecificProduct.Id);
-                                            if (existingProduct != null)
-                                            {
-                                                <li>
-                                                    <button type="submit" class="btn btn-danger form-control" asp-action="RemoveToCart" asp-route-id="@Model.SpecificProduct.Id"> Remove from Cart</button>
-                                                </li>
-                                            }
-                                            else
-                                            {
-                                                <li>
-                                                    <input asp-for="SpecificProduct.QuantityInCart" name="quantityInCart" class="form-control" type="number" min="1" max="@Model.SpecificProduct.Quantity" value="1" />
-                                                </li>
-                                                <li>
-                                                    <input type="submit" class="btn btn-info form-control" value="Add to Cart" />
-                                                </li>
-                                            }
+                                    if (halfStarThreshold >= 0.5)
+                                    {
+                                        <i class="fa fa-star-half-o"></i>
+                                    }
+
+                                    for (int i = 0; i < emptyStars; i++)
+                                    {
+                                        <i class="fa fa-star-o"></i>
+                                    }
+                                }
+                            </div>
+                        </div> *@
+                      
+                        <hr />
+                        <div class="product_desc mt-2">
+                            <p>@Model.SpecificProduct.Description eget velit. Donec ac tempus ante.  sed commodo augue nisi non neque.</p>
+                        </div>
+
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="info" role="tabpanel">
+                                <div class="product_info_content">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product_variant quantity">
+                            <label>Preservation Need? :</label>
+                            <label> @(Model.SpecificProduct.PreservationRequired ? "Yes" : "No") </label>
+                        </div>
+
+                        <div class="product_variant quantity">
+                            <label>Quantity :</label>
+                            <label>@Model.SpecificProduct.Quantity  @Model.SpecificProduct.QuantityType</label>
+                        </div>
+
+                        <div class="action_links">
+                            <ul>
+                                @if (Model.SpecificProduct.Quantity != 0)
+                                {
+                                    if (Model.IsShopOpen)
+                                    {
+                                        var existingProduct = products.FirstOrDefault(p => p.Id == Model.SpecificProduct.Id);
+                                        if (existingProduct != null)
+                                        {
+                                            <li>
+                                                <button type="submit" class="btn btn-danger form-control" asp-action="RemoveToCart" asp-route-id="@Model.SpecificProduct.Id">Remove from Cart</button>
+                                            </li>
                                         }
                                         else
                                         {
-                                            <li class="text-danger">
-                                                Shop is closed. Contact the shop or try later.
+                                            <li>
+                                                <input asp-for="SpecificProduct.QuantityInCart" name="quantityInCart" class="form-control" type="number" min="1" max="@Model.SpecificProduct.Quantity" value="1" />
+                                            </li>
+                                            <li>
+                                                <input type="submit" class="btn btn-info form-control" value="Add to Cart" />
                                             </li>
                                         }
                                     }
-
-                                </ul>
-                            </div>
-
-                            <div class="product_meta">
-                                <label>Catagory : </label>
-                                <span>@Model.SpecificProduct.ProductTypes.ProductType</span>
-                            </div>
-
-
-                            <div class="priduct_social">
-                                <ul>
-                                    <li><a class="facebook" href="#" title="facebook"><i class="fa fa-facebook"></i> Like</a></li>
-                                    <li><a class="twitter" href="#" title="twitter"><i class="fa fa-twitter"></i> tweet</a></li>
-                                    <li><a class="pinterest" href="#" title="pinterest"><i class="fa fa-pinterest"></i> save</a></li>
-                                    <li><a class="google-plus" href="#" title="google +"><i class="fa fa-google-plus"></i> share</a></li>
-                                    <li><a class="linkedin" href="#" title="linkedin"><i class="fa fa-linkedin"></i> linked</a></li>
-                                </ul>
-                            </div>
-
+                                    else
+                                    {
+                                        <li class="text-danger">
+                                            Shop is closed. Contact the shop or try later.
+                                        </li>
+                                    }
+                                }
+                            </ul>
                         </div>
 
+                        <div class="product_meta">
+                            <label>Category :</label>
+                            <span>@Model.SpecificProduct.ProductTypes.ProductType</span>
+                        </div>
+
+                        <div class="priduct_social">
+                            <ul>
+                                <li><a class="facebook" href="#" title="facebook"><i class="fa fa-facebook"></i> Like</a></li>
+                                <li><a class="twitter" href="#" title="twitter"><i class="fa fa-twitter"></i> tweet</a></li>
+                                <li><a class="pinterest" href="#" title="pinterest"><i class="fa fa-pinterest"></i> save</a></li>
+                                <li><a class="google-plus" href="#" title="google +"><i class="fa fa-google-plus"></i> share</a></li>
+                                <li><a class="linkedin" href="#" title="linkedin"><i class="fa fa-linkedin"></i> linked</a></li>
+                            </ul>
+                        </div>
 
                     </div>
                 </div>
+
+    <!--product details end-->
+
                 <br />
-          
+
 
                 <div class="container mt-2">
                     <hr />
