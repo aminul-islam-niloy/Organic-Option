@@ -446,7 +446,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
          
 
-            var product = _context.Products.Include(c => c.ProductTypes).Include(c => c.SpecialTag)
+            var product = _context.Products.Include(c => c.ProductTypes).Include(c => c.SpecialTag).Include(c=>c.ImagesSmall)
                 .FirstOrDefault(c => c.Id == Id);
             if (product == null)
             {
@@ -571,12 +571,15 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
         public ActionResult ProductDelete(int? id)
         {
+            ViewData["productTypeId"] = new SelectList(_context.ProductTypes.ToList(), "Id", "ProductType");
+            ViewData["TagId"] = new SelectList(_context.SpecialTag.ToList(), "Id", "Name");
             if (id == null)
             {
                 return NotFound();
             }
 
-            var product = _context.Products.Include(c => c.SpecialTag).Include(c => c.ProductTypes).Where(c => c.Id == id).FirstOrDefault();
+            var product = _context.Products.Include(c => c.SpecialTag).Include(c => c.ProductTypes).Include(c=>c.ImagesSmall)
+                .Where(c => c.Id == id).FirstOrDefault();
             if (product == null)
             {
                 return NotFound();
