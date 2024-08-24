@@ -1,10 +1,7 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
-<h3>No Shop Exists. </h3>
-<h3>You can Create Shop  by clicking This : </h3>
-<a asp-area="Farmer" style="margin-left:10px" class="btn btn-info" asp-controller="FarmerShop" asp-action="Create" class="nav-link">Create Shop</a>
-
+﻿<div class="container mt-5 text-center">
+    <h3>No Shop Exists.</h3>
+    <h3>You can create a shop by clicking this:</h3>
+    <a asp-area="Farmer" asp-controller="FarmerShop" asp-action="Create" class="btn btn-info mt-3">
+        Create Shop
+    </a>
+</div>
