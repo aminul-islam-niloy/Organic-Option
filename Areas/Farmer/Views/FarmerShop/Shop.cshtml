@@ -1,23 +1,23 @@
 ﻿@model OrganicOption.Models.ShopViewModel
 
-<br />
 
-<div class="container">
-    <div class="row">
+
+<div class="container mt-4">
+    <div class= "  row" >
         @if (Model.FarmerShop.CoverPhoto != null)
         {
-            <img src="data:image;base64,@Convert.ToBase64String(Model.FarmerShop.CoverPhoto)" class="img-fluid" alt="Cover Photo" style="width:1200px;height:200px" />
+            <img src="data:image;base64,@Convert.ToBase64String(Model.FarmerShop.CoverPhoto)" class="img-fluid" alt="Cover Photo" style=" border-radius:10px; width:1200px;height:300px" />
         }
         else
         {
             <p>No cover photo available</p>
         }
         <div class="col-md-4 mt-30">
-            <h2>@Model.FarmerShop.ShopName</h2>
+            <h3>@Model.FarmerShop.ShopName</h3>
             <h4> Phone: @Model.FarmerShop.ContractInfo</h4>
-            <p><strong>Open Status:</strong> @(Model.FarmerShop.IsShopOpen ? "Open" : "Closed")</p>
+            <p><strong>Shop is :</strong> @(Model.FarmerShop.IsShopOpen ? "Open" : "Closed")</p>
         </div>
-       
+
         <div class="col-md-3 mt-30">
             <h4>Shop Address</h4>
             @if (Model.FarmerShop.ShopAddress != null)
@@ -41,11 +41,11 @@
         </div>
 
         <div class="col-md-3 mt-30">
-            <h4>Address</h4>
+          
             @if (Model.FarmerShop.ShopAddress != null)
             {
                 <div style="margin-left:40px">
-                 
+
                     <label for="Thana">Thana:</label>
                     <span id="Thana">@Html.DisplayFor(modelItem => Model.FarmerShop.ShopAddress.Thana)</span><br />
 
@@ -57,7 +57,7 @@
                 </div>
             }
 
-          
+
         </div>
 
         <div class="col-md-2 mt-30">
@@ -90,7 +90,6 @@
     </div>
 </div>
 
-<br />
 
 
 <!--deals product section area start-->
@@ -162,7 +161,7 @@
                                     {
                                         <div class="single_deals_product">
                                             <div class="product_thumb">
-                                                 <a asp-action="Detail" asp-controller="Home" asp-area="Customer" asp-route-id="@product.Id"><img src="~/@product.Image" style="height: 320px; width: 60%;  border-top:5px;" alt="Card Image"></a>
+                                                <a asp-action="Detail" asp-controller="Home" asp-area="Customer" asp-route-id="@product.Id"><img src="~/@product.Image" style="height: 320px; width: 60%;  border-top:5px;" alt="Card Image"></a>
                                                 <div class="label_product">
                                                     <span class="label_sale">sale</span>
                                                 </div>
@@ -170,28 +169,20 @@
                                                     <div class="alarm_icone">
                                                         <i class="zmdi zmdi-timer"></i>
                                                     </div>
-                                                    <div data-countdown="2025/12/15"></div>
+                                                    <div data-countdown="2024/8/31"></div>
                                                 </div>
                                             </div>
-                                            <div class="product_content">
+                                            <div class="product_content mt-5">
                                                 <div class="product_name">
                                                     <h3><a href="product-details.html">@product.Name</a></h3>
                                                 </div>
-                                                <div class="product_rating">
-                                                    <ul>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                    </ul>
-                                                </div>
+                                             
                                                 <div class="price_box">
                                                     <span class="current_price"> @product.Price ৳ </span>
                                                 </div>
                                                 <div class="action_links">
                                                     <ul>
-                                                        <li class="wishlist"><a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id" title="Add to Wishlist"><i class="fa fa-heart-o" aria-hidden="true"></i></a></li>
+                                                        
                                                         <li class="add_to_cart"><a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id" title="add to cart"><i class="zmdi zmdi-shopping-cart-plus"></i> add to cart</a></li>
 
                                                     </ul>
@@ -207,7 +198,7 @@
                                     {
                                         <div class="single_deals_product">
                                             <div class="product_thumb">
-                                                 <a asp-action="Detail" asp-controller="Home" asp-area="Customer" asp-route-id="@product.Id"><img src="~/@product.Image" style="height: 320px; width: 60%; border-top:5px;" alt="Card Image"></a>
+                                                <a asp-action="Detail" asp-controller="Home" asp-area="Customer" asp-route-id="@product.Id"><img src="~/@product.Image" style="height: 320px; width: 60%; border-top:5px;" alt="Card Image"></a>
                                                 <div class="label_product">
                                                     <span class="label_sale">sale</span>
                                                 </div>
@@ -215,24 +206,23 @@
                                                     <div class="alarm_icone">
                                                         <i class="zmdi zmdi-timer"></i>
                                                     </div>
-                                                    <div data-countdown="2025/12/15"></div>
+                                                    <div data-countdown="2024/8/31"></div>
                                                 </div>
                                             </div>
-                                            <div class="product_content">
+                                            <div class="product_content mt-5">
                                                 <div class="product_name">
                                                     <h3><a href="product-details.html">@product.Name</a></h3>
                                                 </div>
-                                                <div class="product_rating">
-                                                    <ul>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                    </ul>
-                                                </div>
+
                                                 <div class="price_box">
-                                                    <span class="current_price"> @product.Price  ৳</span>
+                                                    <span class="current_price"> @product.Price ৳ </span>
+                                                </div>
+                                                <div class="action_links">
+                                                    <ul>
+
+                                                        <li class="add_to_cart"><a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id" title="add to cart"><i class="zmdi zmdi-shopping-cart-plus"></i> add to cart</a></li>
+
+                                                    </ul>
                                                 </div>
                                             </div>
                                         </div>
@@ -245,7 +235,7 @@
                                     {
                                         <div class="single_deals_product">
                                             <div class="product_thumb">
-                                                 <a asp-action="Detail" asp-controller="Home" asp-area="Customer" asp-route-id="@product.Id"><img src="~/@product.Image" style="height: 320px; width: 60%; border-top:5px;" alt="Card Image"></a>
+                                                <a asp-action="Detail" asp-controller="Home" asp-area="Customer" asp-route-id="@product.Id"><img src="~/@product.Image" style="height: 320px; width: 60%; border-top:5px;" alt="Card Image"></a>
                                                 <div class="label_product">
                                                     <span class="label_sale">sale</span>
                                                 </div>
@@ -253,24 +243,23 @@
                                                     <div class="alarm_icone">
                                                         <i class="zmdi zmdi-timer"></i>
                                                     </div>
-                                                    <div data-countdown="2025/12/15"></div>
+                                                    <div data-countdown="2024/8/31"></div>
                                                 </div>
                                             </div>
-                                            <div class="product_content">
+                                            <div class="product_content mt-5">
                                                 <div class="product_name">
                                                     <h3><a href="product-details.html">@product.Name</a></h3>
                                                 </div>
-                                                <div class="product_rating">
-                                                    <ul>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                    </ul>
-                                                </div>
+
                                                 <div class="price_box">
-                                                    <span class="current_price"> @product.Price  ৳</span>
+                                                    <span class="current_price"> @product.Price ৳ </span>
+                                                </div>
+                                                <div class="action_links">
+                                                    <ul>
+
+                                                        <li class="add_to_cart"><a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id" title="add to cart"><i class="zmdi zmdi-shopping-cart-plus"></i> add to cart</a></li>
+
+                                                    </ul>
                                                 </div>
                                             </div>
                                         </div>
@@ -283,7 +272,7 @@
                                     {
                                         <div class="single_deals_product">
                                             <div class="product_thumb">
-                                                 <a asp-action="Detail" asp-controller="Home" asp-area="Customer" asp-route-id="@product.Id"><img src="~/@product.Image" style="height: 320px; width: 60%; border-top:5px;" alt="Card Image"></a>
+                                                <a asp-action="Detail" asp-controller="Home" asp-area="Customer" asp-route-id="@product.Id"><img src="~/@product.Image" style="height: 320px; width: 60%; border-top:5px;" alt="Card Image"></a>
                                                 <div class="label_product">
                                                     <span class="label_sale">sale</span>
                                                 </div>
@@ -291,24 +280,23 @@
                                                     <div class="alarm_icone">
                                                         <i class="zmdi zmdi-timer"></i>
                                                     </div>
-                                                    <div data-countdown="2025/12/15"></div>
+                                                    <div data-countdown="2024/8/31"></div>
                                                 </div>
                                             </div>
-                                            <div class="product_content">
+                                            <div class="product_content mt-5">
                                                 <div class="product_name">
                                                     <h3><a href="product-details.html">@product.Name</a></h3>
                                                 </div>
-                                                <div class="product_rating">
-                                                    <ul>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                    </ul>
-                                                </div>
+
                                                 <div class="price_box">
-                                                    <span class="current_price"> @product.Price  ৳</span>
+                                                    <span class="current_price"> @product.Price ৳ </span>
+                                                </div>
+                                                <div class="action_links">
+                                                    <ul>
+
+                                                        <li class="add_to_cart"><a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id" title="add to cart"><i class="zmdi zmdi-shopping-cart-plus"></i> add to cart</a></li>
+
+                                                    </ul>
                                                 </div>
                                             </div>
                                         </div>
@@ -321,7 +309,7 @@
                                     {
                                         <div class="single_deals_product">
                                             <div class="product_thumb">
-                                                 <a asp-action="Detail" asp-controller="Home" asp-area="Customer" asp-route-id="@product.Id"><img src="~/@product.Image" style="height: 320px; width: 60%; border-top:5px; " alt="Card Image"></a>
+                                                <a asp-action="Detail" asp-controller="Home" asp-area="Customer" asp-route-id="@product.Id"><img src="~/@product.Image" style="height: 320px; width: 60%; border-top:5px; " alt="Card Image"></a>
                                                 <div class="label_product">
                                                     <span class="label_sale">sale</span>
                                                 </div>
@@ -329,24 +317,23 @@
                                                     <div class="alarm_icone">
                                                         <i class="zmdi zmdi-timer"></i>
                                                     </div>
-                                                    <div data-countdown="2025/12/15"></div>
+                                                    <div data-countdown="2024/8/31"></div>
                                                 </div>
                                             </div>
-                                            <div class="product_content">
+                                            <div class="product_content mt-5">
                                                 <div class="product_name">
                                                     <h3><a href="product-details.html">@product.Name</a></h3>
                                                 </div>
-                                                <div class="product_rating">
-                                                    <ul>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                    </ul>
-                                                </div>
+
                                                 <div class="price_box">
-                                                    <span class="current_price"> @product.Price  ৳</span>
+                                                    <span class="current_price"> @product.Price ৳ </span>
+                                                </div>
+                                                <div class="action_links">
+                                                    <ul>
+
+                                                        <li class="add_to_cart"><a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id" title="add to cart"><i class="zmdi zmdi-shopping-cart-plus"></i> add to cart</a></li>
+
+                                                    </ul>
                                                 </div>
                                             </div>
                                         </div>
@@ -359,7 +346,7 @@
                                     {
                                         <div class="single_deals_product">
                                             <div class="product_thumb">
-                                                 <a asp-action="Detail" asp-controller="Home" asp-area="Customer" asp-route-id="@product.Id"><img src="~/@product.Image" style="height: 320px; width: 60%; border-top:5px;" alt="Card Image"></a>
+                                                <a asp-action="Detail" asp-controller="Home" asp-area="Customer" asp-route-id="@product.Id"><img src="~/@product.Image" style="height: 320px; width: 60%; border-top:5px;" alt="Card Image"></a>
                                                 <div class="label_product">
                                                     <span class="label_sale">sale</span>
                                                 </div>
@@ -367,29 +354,21 @@
                                                     <div class="alarm_icone">
                                                         <i class="zmdi zmdi-timer"></i>
                                                     </div>
-                                                    <div data-countdown="2025/12/15"></div>
+                                                    <div data-countdown="2024/8/31"></div>
                                                 </div>
                                             </div>
-                                            <div class="product_content">
+                                            <div class="product_content mt-5">
                                                 <div class="product_name">
                                                     <h3><a href="product-details.html">@product.Name</a></h3>
                                                 </div>
-                                                <div class="product_rating">
-                                                    <ul>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                    </ul>
-                                                </div>
+
                                                 <div class="price_box">
-                                                    <span class="current_price"> @product.Price  ৳</span>
+                                                    <span class="current_price"> @product.Price ৳ </span>
                                                 </div>
                                                 <div class="action_links">
                                                     <ul>
-                                                        <li class="wishlist"><a href="wishlist.html" title="Add to Wishlist"><i class="fa fa-heart-o" aria-hidden="true"></i></a></li>
-                                                        <li class="add_to_cart"><a href="cart.html" title="add to cart"><i class="zmdi zmdi-shopping-cart-plus"></i> add to cart</a></li>
+
+                                                        <li class="add_to_cart"><a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id" title="add to cart"><i class="zmdi zmdi-shopping-cart-plus"></i> add to cart</a></li>
 
                                                     </ul>
                                                 </div>
@@ -404,7 +383,7 @@
                                     {
                                         <div class="single_deals_product">
                                             <div class="product_thumb">
-                                                 <a asp-action="Detail" asp-controller="Home" asp-area="Customer" asp-route-id="@product.Id"><img src="~/@product.Image" style="height: 320px; width: 60%; border-top:5px;" alt="Card Image"></a>
+                                                <a asp-action="Detail" asp-controller="Home" asp-area="Customer" asp-route-id="@product.Id"><img src="~/@product.Image" style="height: 320px; width: 60%; border-top:5px;" alt="Card Image"></a>
                                                 <div class="label_product">
                                                     <span class="label_sale">sale</span>
                                                 </div>
@@ -412,24 +391,23 @@
                                                     <div class="alarm_icone">
                                                         <i class="zmdi zmdi-timer"></i>
                                                     </div>
-                                                    <div data-countdown="2025/12/15"></div>
+                                                    <div data-countdown="2024/8/31"></div>
                                                 </div>
                                             </div>
-                                            <div class="product_content">
+                                            <div class="product_content mt-5">
                                                 <div class="product_name">
                                                     <h3><a href="product-details.html">@product.Name</a></h3>
                                                 </div>
-                                                <div class="product_rating">
-                                                    <ul>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                    </ul>
-                                                </div>
+
                                                 <div class="price_box">
-                                                    <span class="current_price"> @product.Price  ৳</span>
+                                                    <span class="current_price"> @product.Price ৳ </span>
+                                                </div>
+                                                <div class="action_links">
+                                                    <ul>
+
+                                                        <li class="add_to_cart"><a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id" title="add to cart"><i class="zmdi zmdi-shopping-cart-plus"></i> add to cart</a></li>
+
+                                                    </ul>
                                                 </div>
                                             </div>
                                         </div>
@@ -442,7 +420,7 @@
                                     {
                                         <div class="single_deals_product">
                                             <div class="product_thumb">
-                                                 <a asp-action="Detail" asp-controller="Home" asp-area="Customer" asp-route-id="@product.Id"><img src="~/@product.Image" style="height: 320px; width: 60%; border-top:5px;" alt="Card Image"></a>
+                                                <a asp-action="Detail" asp-controller="Home" asp-area="Customer" asp-route-id="@product.Id"><img src="~/@product.Image" style="height: 320px; width: 60%; border-top:5px;" alt="Card Image"></a>
                                                 <div class="label_product">
                                                     <span class="label_sale">sale</span>
                                                 </div>
@@ -450,24 +428,23 @@
                                                     <div class="alarm_icone">
                                                         <i class="zmdi zmdi-timer"></i>
                                                     </div>
-                                                    <div data-countdown="2025/12/15"></div>
+                                                    <div data-countdown="2024/8/31"></div>
                                                 </div>
                                             </div>
-                                            <div class="product_content">
+                                            <div class="product_content mt-5">
                                                 <div class="product_name">
                                                     <h3><a href="product-details.html">@product.Name</a></h3>
                                                 </div>
-                                                <div class="product_rating">
-                                                    <ul>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                        <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                                    </ul>
-                                                </div>
+
                                                 <div class="price_box">
-                                                    <span class="current_price"> @product.Price  ৳</span>
+                                                    <span class="current_price"> @product.Price ৳ </span>
+                                                </div>
+                                                <div class="action_links">
+                                                    <ul>
+
+                                                        <li class="add_to_cart"><a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id" title="add to cart"><i class="zmdi zmdi-shopping-cart-plus"></i> add to cart</a></li>
+
+                                                    </ul>
                                                 </div>
                                             </div>
                                         </div>
@@ -482,7 +459,6 @@
     </div>
 </section>
 <!--deals product section area end-->
-
 <!--banner area start-->
 <div class="banner_area banner_column2 mb-50">
     <div class="container">
@@ -490,7 +466,7 @@
             <div class="col-lg-6 col-md-6">
                 <div class="single_banner">
                     <div class="banner_thumb">
-                        <a asp-area="" asp-controller="Home" asp-action="Products"> <img src="~/img/bg/fish.png" alt=""></a>
+                        <a asp-area="" asp-controller="Home" asp-action="Products"> <img src="~/img/bg/fish.png" alt="" style="height:230px"></a>
                     </div>
 
                 </div>
@@ -498,7 +474,7 @@
             <div class="col-lg-6 col-md-6">
                 <div class="single_banner">
                     <div class="banner_thumb">
-                        <a asp-area="" asp-controller="Home" asp-action="Products"><img src="~/img/bg/vegetable.jpg" alt=""></a>
+                        <a asp-area="" asp-controller="Home" asp-action="Products"><img src="~/img/bg/vegetable.jpg" style="height:230px" alt=""></a>
                     </div>
 
                 </div>
@@ -519,9 +495,9 @@
         <div class="new_product_two_container">
             <div class="row no-gutters">
                 <div class="col-lg-3 col-md-12">
-                    <div class="single_banner">
+                    <div class="single_banner" >
                         <div class="banner_thumb">
-                            <a asp-area="" asp-controller="Home" asp-action="Products"><img src="~/img/bg/new Products.jpg" alt="" /></a>
+                            <a asp-area="" asp-controller="Home" asp-action="Products"><img src="~/img/bg/new Products.jpg" alt="" style="height:415px"></a>
                         </div>
                     </div>
                 </div>
@@ -538,29 +514,21 @@
                                         <span class="label_sale">sale</span>
                                     </div>
                                     <div>
-                                        <a asp-action="Detail"  asp-controller="Home" asp-route-id="@product.Id" data-bs-toggle="modal" data-bs-target="#modal_box" title="quick view"> </a>
+                                        <a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id" data-bs-toggle="modal" data-bs-target="#modal_box" title="quick view"> </a>
                                     </div>
                                 </div>
                                 <div class="product_content">
                                     <div class="product_name">
                                         <h3><a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id">@product.Name</a></h3>
                                     </div>
-                                    <div class="product_rating">
-                                        <ul>
-                                            <li> <a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                            <li> <a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                            <li> <a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                            <li> <a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                            <li><a href="#"><i class="zmdi zmdi-star-outline"></i></a></li>
-                                        </ul>
-                                    </div>
+                                   
                                     <div class="price_box">
                                         <span class="current_price"> @product.Price ৳</span>
                                     </div>
                                     <div class="action_links">
                                         <ul>
-                                            <li class="wishlist"><a asp-action="Detail" asp-area="Customer" asp-controller="Home" asp-route-id="@product.Id" title="Add to Wishlist"><i class="fa fa-heart-o" aria-hidden="true"></i></a></li>
-                                            <li class="add_to_cart"><a asp-action="Detail" asp-area="Customer"  asp-controller="Home" asp-route-id="@product.Id" title="add to cart"><i class="zmdi zmdi-shopping-cart-plus"></i> add to cart</a></li>
+                                           
+                                            <li class="add_to_cart"><a asp-action="Detail" asp-area="Customer" asp-controller="Home" asp-route-id="@product.Id" title="add to cart"><i class="zmdi zmdi-shopping-cart-plus"></i> add to cart</a></li>
 
                                         </ul>
                                     </div>
@@ -577,6 +545,8 @@
     </div>
 </section>
 <hr />
+
+<div class="container">
 <h4>Shop Review and Rating</h4>
 
 @if (Model.ShopReviews != null && Model.ShopReviews.Any())
@@ -589,11 +559,11 @@
                     @review.UserName
                 </div>
                 <div class="review-info">
-                    <h4>@review.UserName</h4>
+                    <h4 style="margin:5px">@review.UserName</h4>
                     <span>@review.ReviewDate.ToString()</span>
                 </div>
             </div>
-            <div class="stars">
+            <div class="stars ">
                 @for (int i = 0; i < review.Rating; i++)
                 {
                     <label>&#9733;</label>
@@ -611,20 +581,14 @@ else
 {
     <p>No reviews yet.</p>
 }
-
+</div>
 
 <style>
-  /*   .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: #fff;
-        border-radius: 15px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    } */
+   
 
     .review {
         padding: 10px;
+        margin-left:20px;
         margin-bottom: 20px;
         border-bottom: 1px solid #ddd;
     }
@@ -632,25 +596,24 @@ else
     .review-header {
         display: flex;
         align-items: center;
+        margin-left:15px;
     }
 
     .profile-photo {
         width: 60px;
         height: 60px;
         border-radius: 50%;
-        background-color: #0f0f;
+        background-color: #1ec354;
         color: #000;
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 1.3em;
-        margin-right:15px;
-    
-      
+        font-size: 1.0em;
+
     }
 
     .review-info {
-        margin-left:5px;
+        margin-left: 5px;
         display: flex;
         flex-direction: column;
     }
@@ -667,11 +630,12 @@ else
 
     .stars {
         display: flex;
-        margin: 10px 0;
+         margin: 10px 0; 
+        margin-left:20px;
     }
 
         .stars label {
-            font-size: 2em;
+            font-size: 1.5em;
             color: #f39c12;
         }
 </style>
