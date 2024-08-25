@@ -10,6 +10,7 @@ using OnlineShop.Data;
 using OnlineShop.Models;
 using OrganicOption.Models;
 using OrganicOption.Models.Farmer_Section;
+using OrganicOption.Models.Rider_Section;
 using OrganicOption.Service;
 using Stripe;
 using Stripe.Climate;
@@ -80,7 +81,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
                     .Where(p => _context.InventoryItem.Any(item => item.ProductId == p.Id))
                     .ToList();
                 ViewBag.TotalSoldProduct = TotalsoldProducts;
-                // Do something with unsoldProducts
+              
             }
 
 
@@ -91,7 +92,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
                     .Where(p => !_context.InventoryItem.Any(item => item.ProductId == p.Id))
                     .ToList();
                 ViewBag.UnsoldProduct = unsoldProducts;
-                // Do something with unsoldProducts
+               
             }
 
 
@@ -106,7 +107,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
         //Inventory
 
-        // Action method to show all products in the shop
+        //  all products in the shop
         public async Task<IActionResult> ShowAllProducts()
         {
             ViewData["productTypeId"] = new SelectList(_context.ProductTypes.ToList(), "Id", "ProductType");
@@ -258,7 +259,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             if (farmerShop == null)
             {
-                return NotFound(); // Handle if farmer shop not found
+                return NotFound(); 
             }
 
             DateTime startDate = DateTime.Today.AddDays(-7);
@@ -296,7 +297,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
         public async Task<IActionResult> MonthlyOrders()
         {
-            // Retrieve the current user
+         
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
@@ -310,7 +311,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             if (farmerShop == null)
             {
-                return NotFound(); // Handle if farmer shop not found
+                return NotFound();
             }
 
             DateTime startDate = DateTime.Today.AddDays(-30);
@@ -361,11 +362,11 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             if (farmerShop == null)
             {
-                return NotFound(); // Handle if farmer shop not found
+                return NotFound(); 
             }
 
-            // Define the date range for past days and the present day
-            DateTime startDate = DateTime.Today.AddDays(-90); // Change the number of days as needed
+            // past 90 days and the present day
+            DateTime startDate = DateTime.Today.AddDays(-90); 
             DateTime endDate = DateTime.Today.AddDays(1).AddTicks(-1);
 
             // Retrieve orders for the specified date range
@@ -405,6 +406,90 @@ namespace OrganicOption.Areas.Farmer.Controllers
         }
 
 
+        public async Task<IActionResult> OrderDetails(int orderId)
+        {
+
+         
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            
+            var farmerShop = await _context.FarmerShop.Include(s=>s.ShopAddress)
+                .Include(fs => fs.Products)
+                .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
+
+
+            var order = await _context.Orders
+                .Include(o=>o.CustomerAddress)
+                .Include(o => o.OrderDetails)
+                    .ThenInclude(od => od.Product)
+                        .ThenInclude(p => p.FarmerShop)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+          
+            var delivery = await _context.Deliveries
+                .Include(d => d.Order)
+                .FirstOrDefaultAsync(d => d.OrderId == orderId);
+
+            RiderModel rider = null;
+            if (delivery != null)
+            {
+              
+                rider = await _context.RiderModel.Include(s=>s.RiderAddress)
+                    .FirstOrDefaultAsync(r => r.Id == delivery.RiderId);
+            }
+
+
+
+            // Map the order details to the view model
+            var orderDetailsViewModel = new OrderDetailsViewModel
+            {
+                OrderId = order.Id,
+                CustomerName = order.Name,
+                CustomerAddress = order.Address,
+                CuAddress = order.CustomerAddress,
+                CustomerPhone = order.PhoneNo,
+                OrderDate = order.OrderDate,
+                Products = order.OrderDetails.Select(od => new ProductViewModel
+                {
+                    ProductName = od.Product.Name,
+                    Quantity = od.Quantity,
+                    Price = od.Product.Price
+                }).ToList(),
+                TotalPrice = order.OrderDetails.Sum(od => od.Quantity * od.Product.Price),
+
+                //shop infor
+
+                ShopName= farmerShop.ShopName,
+                ShopId= farmerShop.Id,
+                SpAddress=farmerShop.ShopAddress,
+
+                //rider info
+                RiderName = rider.Name,
+                RiderPhone= rider.PhoneNumber,
+                RiderId= rider.Id,  
+                RpAddress=rider.RiderAddress,
+                OrderCondition = order.OrderCondition,
+                PayableMoney=delivery.PayableMoney,
+                PaymentMethods= order.PaymentMethods,
+                DelivaryCharge=order.DelivaryCharge,
+                OrderAccept= delivery.OrderAcceptTime
+
+            };
+
+            return View(orderDetailsViewModel);
+        }
+
+
+
 
         [Authorize(Roles = "Farmer")]
         [HttpPost]
@@ -424,7 +509,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             if (farmerShop == null)
             {
-                return NotFound(); // Handle if farmer shop not found
+                return NotFound(); 
             }
 
             // Get the order and its details
@@ -451,8 +536,8 @@ namespace OrganicOption.Areas.Farmer.Controllers
             }
 
             // Notify the customer
-            var customerUserId = order.UserId; // Assuming UserId is the customer's Id
-            _notificationService.AddNotification(customerUserId, $"Your order #{order.Id} is on the way. You can track it.", order.Id);
+            var customerUserId = order.UserId; 
+            _notificationService.AddNotification(customerUserId, $"Your order {order.Id} is on the way. You can track it.", order.Id);
 
             // Update the farmer's total revenue for the specific shop
             foreach (var orderDetail in order.OrderDetails)
@@ -466,19 +551,19 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             await _context.SaveChangesAsync();
 
-            // Optionally, return to a relevant view or action
+           
             return RedirectToAction("AllOrdersGroupedByDate");
         }
 
 
 
-        // Action method to find and show the most sold product
+        
         public IActionResult ShowMostSoldProduct()
         {
             return View();
         }
 
-        // Action method to show daily sales
+        
     
 
 
@@ -548,6 +633,8 @@ namespace OrganicOption.Areas.Farmer.Controllers
             var farmer = _context.FarmerShop.SingleOrDefault(f => f.Id == farmerId);
             return View(farmer);
         }
+
+
 
 
 

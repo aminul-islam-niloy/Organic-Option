@@ -23,12 +23,10 @@
                         <thead class="thead-dark">
                             <tr>
                                 <th scope="col">Order ID</th>
-                                <th scope="col">Customer Name</th>
-                                <th scope="col">Phone</th>
                                 <th scope="col">Order Time</th>
-                                 <th scope="col">Products</th> 
                                 <th scope="col">Total Price</th>
                                 <th scope="col">Order Condition</th>
+                                <th scope="col">Details</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -37,22 +35,23 @@
                             {
                                 <tr>
                                     <td>@orderInfo.OrderId</td>
-                                    <td>@orderInfo.CustomerName</td>
-                                    <td>@orderInfo.Phone</td>
+                                   
                                     <td>@orderInfo.OrderTme.ToString("dd/MM/yyyy HH:mm")</td>
-                                    <td>
+                                   @*  <td>
                                         <ul class="list-unstyled mb-0">
                                             @foreach (var productInfo in orderInfo.Products)
                                             {
                                                 <li><strong>@productInfo.Name</strong> - Quantity: @productInfo.Quantity - Price: @productInfo.Price</li>
                                             }
                                         </ul>
-                                    </td>
+                                    </td> *@
                                     <td>@orderInfo.TotalPrice</td>
                                     <td>@orderInfo.OrderCondition</td>
+                                    <td> <a asp-action="OrderDetails" asp-controller="Inventory" asp-route-orderId="@orderInfo.OrderId" class="btn btn-info">View Details</a></td>
                                     <td>
                                         @if (orderInfo.OrderCondition == OrderCondition.OrderTaken)
                                         {
+                                           
                                             <form asp-action="ReleaseOrder" method="post">
                                                 <input type="hidden" name="orderId" value="@orderInfo.OrderId" />
                                                 <button type="submit" class="btn btn-info">Release</button>
