@@ -408,22 +408,26 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
         public async Task<IActionResult> OrderDetails(int orderId)
         {
-
-         
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-                return NotFound();
+     
+                return RedirectToAction("Error", "Home"); 
             }
 
-            
-            var farmerShop = await _context.FarmerShop.Include(s=>s.ShopAddress)
+            var farmerShop = await _context.FarmerShop
+                .Include(s => s.ShopAddress)
                 .Include(fs => fs.Products)
                 .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
 
+            if (farmerShop == null)
+            {
+                
+                return RedirectToAction("Error", "Home"); 
+            }
 
             var order = await _context.Orders
-                .Include(o=>o.CustomerAddress)
+                .Include(o => o.CustomerAddress)
                 .Include(o => o.OrderDetails)
                     .ThenInclude(od => od.Product)
                         .ThenInclude(p => p.FarmerShop)
@@ -431,10 +435,10 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             if (order == null)
             {
-                return NotFound();
+               
+                return NotFound(); 
             }
 
-          
             var delivery = await _context.Deliveries
                 .Include(d => d.Order)
                 .FirstOrDefaultAsync(d => d.OrderId == orderId);
@@ -442,50 +446,53 @@ namespace OrganicOption.Areas.Farmer.Controllers
             RiderModel rider = null;
             if (delivery != null)
             {
-              
-                rider = await _context.RiderModel.Include(s=>s.RiderAddress)
+                rider = await _context.RiderModel
+                    .Include(s => s.RiderAddress)
                     .FirstOrDefaultAsync(r => r.Id == delivery.RiderId);
             }
 
-
-
-            // Map the order details to the view model
-            var orderDetailsViewModel = new OrderDetailsViewModel
+            try
             {
-                OrderId = order.Id,
-                CustomerName = order.Name,
-                CustomerAddress = order.Address,
-                CuAddress = order.CustomerAddress,
-                CustomerPhone = order.PhoneNo,
-                OrderDate = order.OrderDate,
-                Products = order.OrderDetails.Select(od => new ProductViewModel
+                var orderDetailsViewModel = new OrderDetailsViewModel
                 {
-                    ProductName = od.Product.Name,
-                    Quantity = od.Quantity,
-                    Price = od.Product.Price
-                }).ToList(),
-                TotalPrice = order.OrderDetails.Sum(od => od.Quantity * od.Product.Price),
+                    OrderId = order.Id,
+                    CustomerName = order.Name,
+                    CustomerAddress = order.Address,
+                    CuAddress = order.CustomerAddress,
+                    CustomerPhone = order.PhoneNo,
+                    OrderDate = order.OrderDate,
+                    Products = order.OrderDetails.Select(od => new ProductViewModel
+                    {
+                        ProductName = od.Product.Name,
+                        Quantity = od.Quantity,
+                        Price = od.Product.Price
+                    }).ToList(),
+                    TotalPrice = order.OrderDetails.Sum(od => od.Quantity * od.Product.Price),
 
-                //shop infor
+                    // Shop information
+                    ShopName = farmerShop.ShopName,
+                    ShopId = farmerShop.Id,
+                    SpAddress = farmerShop.ShopAddress,
 
-                ShopName= farmerShop.ShopName,
-                ShopId= farmerShop.Id,
-                SpAddress=farmerShop.ShopAddress,
+                    // Rider information
+                    RiderName = rider?.Name,
+                    RiderPhone = rider?.PhoneNumber,
+                    RiderId = rider.Id,
+                    RpAddress = rider?.RiderAddress,
+                    OrderCondition = order.OrderCondition,
+                    PayableMoney = delivery?.PayableMoney ?? 0,
+                    PaymentMethods = order.PaymentMethods,
+                    DelivaryCharge = order.DelivaryCharge,
+                    OrderAccept = delivery.OrderAcceptTime
+                };
 
-                //rider info
-                RiderName = rider.Name,
-                RiderPhone= rider.PhoneNumber,
-                RiderId= rider.Id,  
-                RpAddress=rider.RiderAddress,
-                OrderCondition = order.OrderCondition,
-                PayableMoney=delivery.PayableMoney,
-                PaymentMethods= order.PaymentMethods,
-                DelivaryCharge=order.DelivaryCharge,
-                OrderAccept= delivery.OrderAcceptTime
-
-            };
-
-            return View(orderDetailsViewModel);
+                return View(orderDetailsViewModel);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return RedirectToAction("Error", "Home");
+            }
         }
 
 
