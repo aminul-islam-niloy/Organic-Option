@@ -6,7 +6,7 @@
 
 <div class="container">
     <div class="row">
-        <div>
+        <div class="table-responsive">
             <table class="display table table-striped border" style="margin-top:15px">
                 <thead>
                     <tr class="table-info">
@@ -38,47 +38,8 @@
                                     string expirationStatus = difference.TotalMilliseconds <= 0 ? "Expired" : $"{(int)difference.TotalDays} days {difference.Hours} hours {difference.Minutes} minutes";
                                     <td>@expirationStatus</td>
                                 }
-@* 
-                                @{
-                                    TimeSpan difference = item.ExpirationTime - DateTime.Now;
-                                    string expirationStatus;
-                                    string progressColor;
-                                    double progressPercentage;
 
-                                    if (difference.TotalMilliseconds <= 0)
-                                    {
-                                        expirationStatus = "Expired";
-                                        progressColor = "bg-danger";
-                                        progressPercentage = 100; // Full progress bar for expired items
-                                        item.Quantity = 0; // Set quantity to zero if expired
-                                    }
-                                    else
-                                    {
-                                        expirationStatus = $"{(int)difference.TotalDays} days {difference.Hours} hours {difference.Minutes} minutes";
-                                        double totalHours = difference.TotalHours;
-                                        double totalHoursUntilExpiration = (item.ExpirationTime - item.CreationTime).TotalHours;
-                                        progressPercentage = (totalHours - totalHoursUntilExpiration) / totalHours * 100;
-
-                                        if (progressPercentage <= 30)
-                                        {
-                                            progressColor = "bg-danger";
-                                        }
-                                        else if (progressPercentage <= 50)
-                                        {
-                                            progressColor = "bg-warning";
-                                        }
-                                        else
-                                        {
-                                            progressColor = "bg-success";
-                                        }
-                                    }
-                                }
-                                <td>
-                                    <div class="progress">
-                                        <div class="progress-bar @progressColor" role="progressbar" style="width: @(progressPercentage)%;" aria-valuenow="@(progressPercentage)" aria-valuemin="0" aria-valuemax="100">@expirationStatus</div>
-                                    </div>
-                                </td>
- *@
+                                
                          
                                 <td style="width: 150px">
                                     <div class="btn-group">
