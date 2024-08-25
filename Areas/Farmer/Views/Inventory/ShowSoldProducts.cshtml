@@ -1,10 +1,15 @@
 ﻿@model OrganicOption.Models.FarmerShop
 <br />
+
+<div class="container">
+    <a href="javascript:history.back()" class="btn btn-secondary mb-3"><i class="fa fa-arrow-left"></i> Back</a>
+
 <h4>Products Sold Today</h4>
+
 
 @if (ViewBag.SoldProductsToday != null && ViewBag.SoldProductsToday.Count > 0)
 {
-    <table>
+    <table class="table-responsive">
         <thead>
             <tr>
                 <th>Product ID</th>
@@ -34,5 +39,6 @@
 }
 else
 {
-    <p>No products were sold today.</p>
+    <h4>No products were sold today.</h4>
 }
+</div>
