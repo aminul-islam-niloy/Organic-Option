@@ -8,7 +8,7 @@
     <div class="row justify-content-center">
         <div class="col-md-10 col-lg-8">
             <!-- Single Card for All Information -->
-            <div class="card mb-3 border-primary shadow-sm">
+            <div class="card mb-3 border-primary shadow-sm" id="printable-card">
                 <div class="card-body">
                     <table class="table table-bordered">
                         <tbody>
@@ -155,7 +155,7 @@
 
     <!-- Print Button -->
     <div class="mt-4 text-center">
-        <button class="btn btn-primary" onclick="window.print();">Generate Invoice</button>
+        <button class="btn btn-primary" id="print-button">Generate Invoice</button>
     </div>
 </div>
 
@@ -184,12 +184,23 @@
         border: 1px solid #dee2e6;
     }
 
-    .mr-3{
-        margin-right:5px;
+    .mr-3 {
+        margin-right: 5px;
     }
 
     .row.justify-content-center {
         display: flex;
         justify-content: center;
     }
+
 </style>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#print-button').on('click', function () {
+            window.print();
+        });
+    });
+</script>
