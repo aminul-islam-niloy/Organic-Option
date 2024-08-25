@@ -265,6 +265,34 @@ namespace OrganicOption.Areas.Farmer.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> EditOpenStatus(int id, bool IsShopOpen)
+        //{
+        //    var shopToUpdate = await _context.FarmerShop.FindAsync(id);
+        //    if (shopToUpdate == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    // Update the IsShopOpen status
+        //    shopToUpdate.IsShopOpen = IsShopOpen;
+
+        //    try
+        //    {
+        //        _context.Update(shopToUpdate);
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateException)
+        //    {
+        //        // Handle the exception if needed (e.g., log it, show a message, etc.)
+        //        // Return a view or handle the exception as appropriate
+        //    }
+
+        //    return RedirectToAction(nameof(Index));
+        //}
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditOpenStatus(int id, bool IsShopOpen)
@@ -277,14 +305,13 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             shopToUpdate.IsShopOpen = IsShopOpen;
 
-          
+            
                 _context.Update(shopToUpdate);
                 await _context.SaveChangesAsync();
-            
+          
 
             return RedirectToAction(nameof(Index));
         }
-
 
 
 

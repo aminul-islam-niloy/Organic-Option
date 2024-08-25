@@ -1,11 +1,7 @@
-﻿@model List<OrganicOption.Models.FarmerShop>
-<br />
-<br />
-
-<div class="container">
+﻿<div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <form method="get" action="@Url.Action("FarmerShop", "FarmerShop")" class="p-4 shadow-sm rounded bg-light d-flex align-items-center">
+            <form method="get" action="@Url.Action("FarmerShop", "FarmerShop")" class="d-flex align-items-center" style="margin:10px;padding:10px">
                 <div class="form-group flex-grow-1 mb-0">
                     <label for="range" class="sr-only">Select Range:</label>
                     <select class="form-control" id="range" name="range">
@@ -15,32 +11,83 @@
                         <option value="100000">30 km +</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary ml-2">Filter</button>
+                <button type="submit" class="btn btn-primary ml-2" style="margin: 7px">Filter</button>
             </form>
         </div>
     </div>
-</div>
 
+    <div class="row">
+        @foreach (var shop in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <a href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = shop.Id })" class="card-link">
+                    <div class="card shadow-sm rounded h-100">
+                        @if (shop.CoverPhoto != null)
+                        {
+                            <img src="data:image;base64,@Convert.ToBase64String(shop.CoverPhoto)" class="card-img-top" style="width:100%; height:200px; object-fit: cover;" alt="Shop Image">
+                        }
+                        else
+                        {
+                            <div class="card-img-top d-flex align-items-center justify-content-center" style="width:100%; height:200px; background-color: #f8f9fa;">
+                                <p>No cover photo available</p>
+                            </div>
+                        }
 
-<div class="row">
-    @foreach (var shop in Model)
-    {
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                @if (shop.CoverPhoto != null)
-                {
-                    <img src="data:image;base64,@Convert.ToBase64String(shop.CoverPhoto)" class="card-img-top" style="width:100%; height:200px" alt="Shop Image">
-                }
-                else
-                {
-                    <p>No cover photo available</p>
-                }
-                <div class="card-body">
-                    <h5 class="card-title">@shop.ShopName</h5>
-                    <p>@(shop.IsShopOpen ? "Shop is open" : "Shop is closed")</p>
-                    <a href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = shop.Id })" class="btn btn-warning">Visit Shop</a>
-                </div>
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title mb-1">@shop.ShopName</h5>
+                                <p class="mb-0 text-muted">Shop is  @(shop.IsShopOpen ? "Open" : "Closed")</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="mb-1"><strong>Rating:</strong> @shop.OverallRating</p>
+                                <div class="rating-stars">
+                                    @{
+                                        double rating = shop.OverallRating;
+                                        int fullStars = (int)rating;
+                                        double halfStarThreshold = rating - fullStars;
+                                        int emptyStars = 5 - fullStars - (halfStarThreshold >= 0.5 ? 1 : 0);
+
+                                        for (int i = 0; i < fullStars; i++)
+                                        {
+                                            <i class="fa fa-star text-warning"></i>
+                                        }
+
+                                        if (halfStarThreshold >= 0.5)
+                                        {
+                                            <i class="fa fa-star-half-o text-warning"></i>
+                                        }
+
+                                        for (int i = 0; i < emptyStars; i++)
+                                        {
+                                            <i class="fa fa-star-o text-warning"></i>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
             </div>
-        </div>
-    }
+        }
+    </div>
 </div>
+
+<style>
+    .card-link {
+        text-decoration: none;
+        color: inherit;
+    }
+
+        .card-link:hover .card {
+            transform: translateY(-5px);
+            transition: transform 0.2s ease-in-out;
+        }
+
+    .card {
+        border-radius: 15px;
+    }
+
+    .rating-stars i {
+        font-size: 1.2rem;
+    }
+</style>

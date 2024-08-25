@@ -23,11 +23,8 @@
                 <h4 class="mb-3">@Model.ContractInfo</h4>
                 <p><strong>Open Status:</strong> @(Model.IsShopOpen ? "Open" : "Closed")</p>
                 <h4 class="mb-3">Total Revenue: @Model.ShopRevenue</h4>
-                <a href="@Url.Action("Wallet", "Inventory")" class="btn btn-primary mb-3">My Wallet</a>
+            @*     <a href="@Url.Action("Wallet", "Inventory")" class="btn btn-primary mb-3">My Wallet</a>
             <form asp-action="EditOpenStatus" method="post">
-       
-                <input type="hidden" name="IsShopOpen" value="false" />
-
                 <label class="switch">
                     <input type="checkbox" name="IsShopOpen" value="true" @(Model.IsShopOpen ? "checked" : "") />
                     <span class="slider round"></span>
@@ -35,7 +32,17 @@
 
                 <input type="hidden" name="Id" value="@Model.Id" />
                 <button type="submit" class="btn btn-primary mt-3">Save</button>
+            </form> *@
+
+            <form id="shop-status-form" asp-action="EditOpenStatus" method="post">
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <label class="switch">
+                    <input type="checkbox" id="IsShopOpen" name="IsShopOpen" value="true" @(Model.IsShopOpen ? "checked" : "") />
+                    <span class="slider round"></span>
+                </label>
             </form>
+            <a asp-action="Wallet" asp-controller="Inventory" class="btn btn-warning mt-2" asp-route-id="@Model.Id">My Wallet</a>
+
 
             </div>
 
@@ -117,4 +124,83 @@
  </div>
 
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#IsShopOpen').change(function () {
+            // Get the form data
+            var form = $('#shop-status-form');
+            var formData = form.serialize();
+
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'),
+                data: formData,
+                success: function (response) {
+                    console.log("Shop status updated successfully");
+                    // Optionally, you can show a success message or update the UI
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error updating shop status: " + error);
+                    // Optionally, show an error message
+                }
+            });
+        });
+    });
+</script>
+
+
+
+<style>
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+</style>
 
