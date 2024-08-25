@@ -1,21 +1,28 @@
 ﻿@model OrganicOption.Models.FarmerShop
+
 <br />
-<div class="container justify-content-center">
-    <a href="javascript:history.back()" class="btn btn-secondary mb-3"><i class="fa fa-arrow-left"></i> Back</a>
-  
+<div class="container">
+    <a href="javascript:history.back()" class="btn btn-secondary mb-2">
+        <i class="fa fa-arrow-left"></i> Back
+    </a>
 
-    <div class="row text-center justify-content-center">
-        <h3 class="mb-2">Shop Revenue</h3>
-        <hr />
-        <div class="col-md-4">
-            <h4>Total Revenue</h4>
-            <p>@Model.ShopRevenue</p>
-        </div>
-
-        <div class="col-md-4">
-            <h4>Actions</h4>
-            <a href="@Url.Action("RequestWithdraw", "Inventory")" class="btn btn-primary m">Request Withdrawal</a>
-            <a href="@Url.Action("WithdrawHistory", "Inventory")" class="btn btn-secondary " style="margin-left:5px">History Details</a>
+    <div class="d-flex justify-content-center align-items-center" style="min-height: 30vh;">
+        <div class="card shadow p-4" style="max-width: 700px; width: 100%;">
+            <div class="text-center">
+                <h4 class="mb-2">Shop Revenue</h4>
+                <hr />
+            </div>
+            <div class="row justify-content-center text-center">
+                <div class="col-md-3 mb-3">
+                    <h4>Total Revenue</h4>
+                    <p>@Model.ShopRevenue</p>
+                </div>
+                <div class="d-flex justify-content-center">
+                 
+                    <a href="@Url.Action("RequestWithdraw", "Inventory")" class="btn btn-primary">Request Withdrawal</a>
+                    <a href="@Url.Action("WithdrawHistory", "Inventory")" class="btn btn-secondary " style="margin-left:7px">History Details</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
