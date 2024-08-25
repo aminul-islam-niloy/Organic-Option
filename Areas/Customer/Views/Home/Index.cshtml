@@ -129,7 +129,7 @@
                 <img src="/assets/img/product/location.png" style="width:30%; height:80px;" alt="Location Icon">
             </div>
             <div class="text-center ">
-                <button class="btn btn-success" style="width: 60%; margin-bottom: 10px;">Nearby Shop</button>
+                <a asp-action="AllShop" asp-controller="Farmershop" asp-area="Farmer" class="btn btn-success" style="width: 60%; margin-bottom: 10px;">Nearby Shop</a>
                 <form id="update-location-form" method="post" asp-area="Customer" asp-controller="UserProfile" asp-action="UpdateLocation">
                     <input type="hidden" id="latitude" name="latitude" />
                     <input type="hidden" id="longitude" name="longitude" />
