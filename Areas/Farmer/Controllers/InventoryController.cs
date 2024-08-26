@@ -411,8 +411,8 @@ namespace OrganicOption.Areas.Farmer.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-     
-                return RedirectToAction("Error", "Home"); 
+
+                return RedirectToAction(nameof(AllOrdersGroupedByDate));
             }
 
             var farmerShop = await _context.FarmerShop
@@ -422,8 +422,8 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             if (farmerShop == null)
             {
-                
-                return RedirectToAction("Error", "Home"); 
+
+                return RedirectToAction(nameof(AllOrdersGroupedByDate));
             }
 
             var order = await _context.Orders
@@ -442,6 +442,11 @@ namespace OrganicOption.Areas.Farmer.Controllers
             var delivery = await _context.Deliveries
                 .Include(d => d.Order)
                 .FirstOrDefaultAsync(d => d.OrderId == orderId);
+
+            if(delivery == null)
+            {
+                return RedirectToAction(nameof(AllOrdersGroupedByDate));
+            }
 
             RiderModel rider = null;
             if (delivery != null)
@@ -491,7 +496,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return RedirectToAction("Error", "Home");
+                return RedirectToAction(nameof(AllOrdersGroupedByDate));
             }
         }
 
