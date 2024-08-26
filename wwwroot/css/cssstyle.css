@@ -615,6 +615,47 @@ textarea:-ms-input-placeholder {
   margin-bottom: 10px;
 }
 
+/*rider model sidebar
+*/
+/* Sidebar */
+.sidebar {
+    height: 100vh;
+    position: fixed;
+    top: 57px;
+    left: 0;
+    width: 200px;
+    background-color: #343a40;
+}
+
+.card {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+    .sidebar ul li {
+        margin: 15px 0;
+    }
+
+        .sidebar ul li a {
+            color: #ffffff; /* White text color */
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+            .sidebar ul li a i {
+                margin-right: 10px;
+            }
+
+
+
+
 /* searchbox css on nav menu  */
 /* Search Form Container */
 .searchBar {

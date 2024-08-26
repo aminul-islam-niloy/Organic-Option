@@ -1,73 +1,140 @@
 ﻿@model IEnumerable<OrganicOption.Models.Rider_Section.RiderModel>
-<br />
-<br />
-    <div class="row">
-        <div class="col-lg-3"></div>
-        <div class="col-lg-6">
 
-        <div class="container-fluid">
-            <div class="row">
-                @foreach (OrganicOption.Models.Rider_Section.RiderModel rider in Model)
-                {
-                    <div class=" mb-4">
-                        <div class="card h-100">
-                            <div class="card-header">
-                                <h5 class="card-title">@rider.Name</h5>
+<div class="top-bar  text-dark p-2 text-center justify-content-center">
+    <ul class="nav text-center justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-list"></i> My Orders
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-chart-bar"></i> Performance
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-wallet"></i> Wallet
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </li>
+    </ul>
+</div>
+
+    <!-- Main Content -->
+    <div class="container mt-30">
+        <div class="row justify-content-center">
+            @foreach (var rider in Model)
+            {
+                <div class="col-lg-7 col-md-6 mb-4">
+                    <div class="card p-3 text-center justify-content-center mt-7">
+                        <div class="text-center">
+                            <h3>@rider.Name's Ride</h3>
+                        </div>
+                    <p class="card-text small">
+                        <strong>Age:</strong> @rider.Age
+                        <strong style="margin-left:10px">Phone Number:</strong> @rider.PhoneNumber
+                    </p>
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+                                <!-- Rider Image -->
+                                <img src="~/img/logo/rider.png" alt="@rider.Name" class="rounded-circle img-fluid" style="max-width: 150px;">
                             </div>
-                            <div class="card-body">
-                                <p class="card-text">
-                                    <strong>Age:</strong> @rider.Age<br />
-                                    <strong>Phone Number:</strong> @rider.PhoneNumber<br />
-                                    <strong>NID:</strong> @rider.NID<br />
-                                    <strong>Licence:</strong> @rider.DrivingLicense<br />
-
-                                    <strong >Address:</strong>
-                                    @if (rider.RiderAddress != null)
-                                    {
-                                        <div style="margin-left:40px">
-                                            <label for="House">House</label>
-                                            <span id="House">@Html.DisplayFor(modelItem => rider.RiderAddress.House)</span><br />
-
-                                            <label for="StreetNo">Street No</label>
-                                            <span id="StreetNo">@Html.DisplayFor(modelItem => rider.RiderAddress.StreetNo)</span><br />
-
-                                            <label for="WardNo">Ward No</label>
-                                            <span id="WardNo">@Html.DisplayFor(modelItem => rider.RiderAddress.WardNo)</span><br />
-
-                                            <label for="Thana">Thana</label>
-                                            <span id="Thana">@Html.DisplayFor(modelItem => rider.RiderAddress.Thana)</span><br />
-
-                                            <label for="District">District</label>
-                                            <span id="District">@Html.DisplayFor(modelItem => rider.RiderAddress.District)</span><br />
-
-                                            <label for="Division">Division</label>
-                                            <span id="Division">@Html.DisplayFor(modelItem => rider.RiderAddress.Division)</span><br />
-                                        </div>
-                                    }
-
-                                    else
-                                    {
-                                        <div>No address available</div>
-                                    }
-                                </p>
-                            </div>
-                            <div class="card-footer">
-                                <a asp-action="EditRider" asp-area="Rider" asp-controller="Rider" class="btn btn-primary">Edit Rider</a>
-                                <a asp-action="EditShift" asp-area="Rider" asp-controller="Rider" class="btn btn-success">Start Shift</a>
-                                <a asp-action="UpdateShift" asp-area="Rider" asp-controller="Rider" class="btn btn-danger">Finish Shift</a>
-                            </div>
-
-                            <a asp-action="MyOffer" asp-area="Rider" asp-controller="RiderOffer" class="btn btn-warning"> Go for Deleary</a>
+                           
+                        </div>
+                        <div class=" d-flex justify-content-between">
+                            <a asp-action="EditRider" asp-area="Rider" asp-controller="Rider" class="btn btn-primary w-25">Edit</a>
+                            <a asp-action="EditShift" asp-area="Rider" asp-controller="Rider" class="btn btn-success w-25">Start Shift</a>
+                            <a asp-action="UpdateShift" asp-area="Rider" asp-controller="Rider" class="btn btn-danger w-25">Finish Shift</a>
+                        </div>
+                        <div class="mt-3 text-center">
+                        <a asp-action="MyOffer" asp-area="Rider" asp-controller="RiderOffer" class="btn btn-warning" style="width:200px; height:45px; border-radius:10px">Go for Delivery</a>
                         </div>
                     </div>
-                }
-            </div>
+                </div>
+            }
         </div>
-
-
-        </div>
-        <div class="col-lg-3"></div>
-
-
     </div>
 
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<style>
+    /* Sidebar */
+    .top-bar {
+        width: 100%;
+        position: relative;
+        top: 0;
+        left: 0;
+        background: #1cb252;
+        color: black;
+    }
+
+        .top-bar .nav-item {
+            margin-right: 20px;
+        }
+
+    .card {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        transform: translateY(-1px);
+        transition: all 0.2s ease;
+    }
+
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        margin-bottom: 5px;
+    }
+
+
+    .main-content {
+        margin-left: 220px; 
+        padding: 20px;
+    }
+
+  
+
+    .card-header {
+        padding: 7px;
+    }
+
+    .card-body {
+        font-size: 1.0rem;
+    }
+
+  
+
+    .btn {
+        padding: 5px;
+        font-size: 1rem;
+    }
+
+    .btn-warning {
+        width: 100%;
+    }
+
+    /* Form group labels */
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        margin-bottom: 5px;
+    }
+</style>

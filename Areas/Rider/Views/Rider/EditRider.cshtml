@@ -1,85 +1,157 @@
 ﻿@model OrganicOption.Models.Rider_Section.RiderModel
-<br />
-<br />
-<div class="row">
-    <div class="col-lg-3"></div>
-    <div class="col-lg-6">
 
 
-<h3>Edit Rider Profile</h3>
 
-<form asp-action="EditRider" method="post" enctype="multipart/form-data">
-    <div class="p-4 rounded border">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="top-bar  text-dark p-2 text-center justify-content-center">
+        <ul class="nav text-center justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-list"></i> My Orders
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-chart-bar"></i> Performance
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-wallet"></i> Wallet
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </li>
+    </ul>
+</div>
 
-        <div class="form-group">
-            <label asp-for="Name">Name</label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
-        </div>
+<!-- Main Content -->
 
-        <div class="form-group">
-            <label asp-for="Age">Age</label>
-            <input asp-for="Age" class="form-control" />
-            <span asp-validation-for="Age" class="text-danger"></span>
-        </div>
+<div class="container">
 
-        <div class="form-group">
-            <label asp-for="DrivingLicense">Driving License</label>
-            <input asp-for="DrivingLicense" class="form-control" />
-            <span asp-validation-for="DrivingLicense" class="text-danger"></span>
-        </div>
+    <div class="row justify-content-center">
+        <div class="card col-lg-8 col-md-10 col-sm-12">
 
-        <div class="form-group">
-            <label asp-for="NID">NID</label>
-            <input asp-for="NID" class="form-control" />
-            <span asp-validation-for="NID" class="text-danger"></span>
-        </div>
+            <form asp-action="EditRider" method="post" enctype="multipart/form-data" style="margin:20px;padding:20px;">
+                <h3 class="text-info text-center  mb-2">Edit Rider Profile</h3>
+                <hr />
+                <div>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <div class="form-group">
-            <label asp-for="PhoneNumber">Phone Number</label>
-            <input asp-for="PhoneNumber" class="form-control" />
-            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-        </div>
+                    <div class="form-group row">
+                        <label asp-for="Name" class="col-lg-4 col-form-label text-lg-right"></label>
+                        <div class="col-lg-8">
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
 
-                <div class="form-group">
-                    <label>Address</label>
-                    <div>
-                        <label for="RiderAddress_Division">Division</label>
-                        <input type="text" id="RiderAddress_Division" asp-for="RiderAddress.Division" class="form-control" />
+                    <div class="form-group row">
+                        <label asp-for="Age" class="col-lg-4 col-form-label text-lg-right"></label>
+                        <div class="col-lg-8">
+                            <input asp-for="Age" class="form-control" />
+                            <span asp-validation-for="Age" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="DrivingLicense" class="col-lg-4 col-form-label text-lg-right"></label>
+                        <div class="col-lg-8">
+                            <input asp-for="DrivingLicense" class="form-control" />
+                            <span asp-validation-for="DrivingLicense" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="NID" class="col-lg-4 col-form-label text-lg-right"></label>
+                        <div class="col-lg-8">
+                            <input asp-for="NID" class="form-control" />
+                            <span asp-validation-for="NID" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="PhoneNumber" class="col-lg-4 col-form-label text-lg-right"></label>
+                        <div class="col-lg-8">
+                            <input asp-for="PhoneNumber" class="form-control" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="margin:2px">Address</label>
+                        <input type="text" asp-for="RiderAddress.Division" placeholder="Division" class="form-control mb-2" />
+                        <input type="text" asp-for="RiderAddress.District" placeholder="District" class="form-control mb-2" />
+                        <input type="text" asp-for="RiderAddress.Thana" placeholder="Thana" class="form-control mb-2" />
+                        <input type="text" asp-for="RiderAddress.WardNo" placeholder="Ward No" class="form-control mb-2" />
+                        <input type="text" asp-for="RiderAddress.StreetNo" placeholder="Street No" class="form-control mb-2" />
+                        <input type="text" asp-for="RiderAddress.House" placeholder="House" class="form-control mb-2" />
                         <span asp-validation-for="RiderAddress.Division" class="text-danger"></span>
-                    </div>
-                    <div>
-                        <label for="RiderAddress_District">District</label>
-                        <input type="text" id="RiderAddress_District" asp-for="RiderAddress.District" class="form-control" />
                         <span asp-validation-for="RiderAddress.District" class="text-danger"></span>
-                    </div>
-                    <div>
-                        <label for="RiderAddress_Thana">Thana</label>
-                        <input type="text" id="RiderAddress_Thana" asp-for="RiderAddress.Thana" class="form-control" />
                         <span asp-validation-for="RiderAddress.Thana" class="text-danger"></span>
-                    </div>
-                    <div>
-                        <label for="RiderAddress_WardNo">Ward No</label>
-                        <input type="text" id="RiderAddress_WardNo" asp-for="RiderAddress.WardNo" class="form-control" />
                         <span asp-validation-for="RiderAddress.WardNo" class="text-danger"></span>
-                    </div>
-                    <div>
-                        <label for="RiderAddress_StreetNo">Street No</label>
-                        <input type="text" id="RiderAddress_StreetNo" asp-for="RiderAddress.StreetNo" class="form-control" />
                         <span asp-validation-for="RiderAddress.StreetNo" class="text-danger"></span>
-                    </div>
-                    <div>
-                        <label for="RiderAddress_House">House</label>
-                        <input type="text" id="RiderAddress_House" asp-for="RiderAddress.House" class="form-control" />
                         <span asp-validation-for="RiderAddress.House" class="text-danger"></span>
                     </div>
+
+                    <input type="hidden" asp-for="RiderUserId" value="@User.Identity.Name" />
+
+                    <div class="form-group text-center justify-content-center mt-5">
+                        <input type="submit" class="btn btn-primary" value="Update Profile" style="width:200px; height:45px; border-radius:10px" />
+                    </div>
                 </div>
-
-
-        <input type="submit" class="btn btn-primary" value="Save" />
-    </div>
-</form>
-
+            </form>
+        </div>
     </div>
 </div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<style>
+    .top-bar {
+        width: 100%;
+        position: relative;
+        top: 0;
+        left: 0;
+        background: #1cb252;
+        color:black;
+    }
+
+        .top-bar .nav-item {
+            margin-right: 20px;
+        }
+
+    .card {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        transform: translateY(-1px);
+        transition: all 0.2s ease;
+    }
+
+    .main-content {
+        margin-top: 20px;
+        padding: 10px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        margin-bottom: 5px;
+    }
+
+  
+</style>
