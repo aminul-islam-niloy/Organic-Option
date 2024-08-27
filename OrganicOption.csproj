@@ -3,15 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp6.0</TargetFramework>
     <UserSecretsId>aspnet-OnlineShop-58e08731-c9d0-4839-b0c1-37a31e19cc2e</UserSecretsId>
-    <ApplicationIcon>leaf.ico</ApplicationIcon>
+    <ApplicationIcon>wwwroot\leaf.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="favicon.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="leaf.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -59,6 +55,10 @@
     <Folder Include="Areas\Rider\Data\" />
     <Folder Include="Areas\Rider\Models\" />
     <Folder Include="wwwroot\Image\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\leaf.ico" />
   </ItemGroup>
 
 </Project>
