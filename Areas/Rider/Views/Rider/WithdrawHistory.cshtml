@@ -1,8 +1,39 @@
 ﻿@model IEnumerable<OrganicOption.Models.WithdrawalHistory>
 
+<div class="top-bar  text-dark p-2 text-center justify-content-center">
+    <ul class="nav text-center justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-list"></i> My Orders
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-chart-bar"></i> Performance
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-wallet"></i> Wallet
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </li>
+    </ul>
+</div>
 
+
+<br />
+<h4 class="text-center"> Withdraw History</h4>
 <div class="container">
-    <h2>Withdraw History</h2>
 
     <table class="table table-bordered mt-4">
         <thead>
@@ -10,7 +41,7 @@
                 <th>Amount</th>
                 <th>Withdraw Date</th>
                 <th>Status</th>
-               
+              
             </tr>
         </thead>
         <tbody>
@@ -33,9 +64,33 @@
                             <span class="text-danger">Pending</span>
                         }
                     </td>
-                 
+                  
                 </tr>
             }
         </tbody>
     </table>
 </div>
+
+
+<style>
+    .top-bar {
+        width: 100%;
+        position: relative;
+        top: 0;
+        left: 0;
+        background: #1cb252;
+        color: black;
+    }
+
+        .top-bar .nav-item {
+            margin-right: 20px;
+        }
+
+    .card {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        transform: translateY(-1px);
+        transition: all 0.2s ease;
+    }
+</style>
+
+

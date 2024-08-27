@@ -1,22 +1,81 @@
 ﻿@model OrganicOption.Models.Rider_Section.RiderModel
+<div class="top-bar  text-dark p-2 text-center justify-content-center">
+    <ul class="nav text-center justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-list"></i> My Orders
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-chart-bar"></i> Performance
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-wallet"></i> Wallet
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </li>
+    </ul>
+</div>
 
-<div class="container">
-    <h2>Request Withdrawal</h2>
+<br />
 
-    <div class="row">
-        <div class="col-md-6">
-            <h4>Rider Revenue</h4>
-            <p><strong>Total Revenue:</strong> @Model.Revenue</p>
-            <p><strong>Due Amount:</strong> @Model.RiderDue</p>
-        </div>
-        <div class="col-md-6">
-            <form asp-action="RequestWithdraw" method="post">
-                <div class="form-group">
-                    <label for="Amount">Withdrawal Amount</label>
-                    <input type="number" class="form-control" id="Amount" name="Amount" required />
-                </div>
-                <button type="submit" class="btn btn-primary">Submit Withdrawal Request</button>
-            </form>
+<div class="container ">
+  
+
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 30vh;">
+    <div class="card shadow p-4" style="max-width: 600px; width: 100%;">
+       
+
+        <h3 class="mb-4 text-center">Request Withdrawal</h3>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h4>Farmer Revenue</h4>
+                <h4><strong>Total Revenue:</strong> @Model.Revenue</h4>
+            </div>
+            <div class="col-md-12 mt-3">
+                <form asp-action="RequestWithdraw" method="post">
+                    <div class="form-group d-flex justify-content-center align-items-end">
+                        <input type="number" class="form-control me-2" id="Amount" name="Amount" placeholder="Withdrawal Amount" style="max-width:200px" required />
+                        <button type="submit" class="btn btn-primary">Submit Request</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
+</div>
+
+
+<style>
+    .top-bar {
+        width: 100%;
+        position: relative;
+        top: 0;
+        left: 0;
+        background: #1cb252;
+        color: black;
+    }
+
+        .top-bar .nav-item {
+            margin-right: 20px;
+        }
+
+    .card {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        transform: translateY(-1px);
+        transition: all 0.2s ease;
+    }
+</style>
