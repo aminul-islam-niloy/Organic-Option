@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data;
 using OnlineShop.Models;
 using OrganicOption.Models.Rider_Section;
+using Stripe.Climate;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -65,6 +66,19 @@ namespace OrganicOption.Areas.Rider.Controllers
 
                 return NotFound();
             }
+
+            var order = await _dbContext.Orders
+                    .Include(o => o.CustomerAddress).Include(o => o.OrderDetails)
+                     .ThenInclude(od => od.Product)
+                     .FirstOrDefaultAsync(o => o.Id == delivery.OrderId);
+            ViewBag.CustomerAddress = order.CustomerAddress;
+           
+            var farmerShopId = order.OrderDetails.FirstOrDefault()?.Product.FarmerShopId;
+
+            var farmerShop = await _dbContext.FarmerShop.Include(a => a.ShopAddress)
+            .FirstOrDefaultAsync(fs => fs.Id == farmerShopId);
+
+            ViewBag.ShopAddress = farmerShop.ShopAddress;
 
             return View(delivery);
         }
@@ -199,6 +213,7 @@ namespace OrganicOption.Areas.Rider.Controllers
 
          
             rider.OnDeliaryByOffer = false;
+            delivery.OrderDeliveredDate = DateTime.Now; 
 
             // Save changes
             await _dbContext.SaveChangesAsync();

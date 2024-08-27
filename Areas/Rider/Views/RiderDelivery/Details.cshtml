@@ -30,18 +30,18 @@
 
         <div class="row">
             <!-- Details Section -->
-            <div class="col-md-4 details">
+            <div class="col-md-4 details" style="">
                 <h4>Farmer Shop Details</h4>
                 <p>Shop Name: @Model.ShopName</p>
                 <p>Shop Contract: @Model.ShopContract</p>
 
-                <p>
+                
                     Shop Address:
-                    @if (ViewBag.ShopAddress != null)
+                @if (ViewBag.ShopAddress != null)
                     {
                     <p>
                         <strong>
-                                @ViewBag.ShopAddress.House, @ViewBag.ShopAddress.StreetNo, @ViewBag.ShopAddress.WardNo,
+                            @ViewBag.ShopAddress.House, @ViewBag.ShopAddress.StreetNo, @ViewBag.ShopAddress.WardNo,
                                 @ViewBag.ShopAddress.Thana, @ViewBag.ShopAddress.District, @ViewBag.ShopAddress.Division
                         </strong>
                     </p>
@@ -50,22 +50,22 @@
                     {
                     <p>No shop address available.</p>
                     }
-                </p>
+             
 
-                <h4>Order Details</h4>
-                <p><strong>Order ID:</strong> @Model.OrderId</p>
-                <p><strong>Product Details:</strong> @Model.ProductDetails</p>
+              
+                <p><strong>Order ID:</strong> @Model.OrderId 
+                <strong style="margin-left:7px">Product Name:</strong> @Model.ProductDetails</p>
 
 
                 <h4>Customer Details</h4>
 
-                <p>
+             
                     Customer Address:
-                    @if (ViewBag.CustomerAddress != null)
+                @if (ViewBag.CustomerAddress != null)
                     {
                     <p>
                         <strong>
-                                @ViewBag.CustomerAddress.House, @ViewBag.CustomerAddress.StreetNo,
+                            @ViewBag.CustomerAddress.House, @ViewBag.CustomerAddress.StreetNo,
                                 @ViewBag.CustomerAddress.WardNo, @ViewBag.CustomerAddress.Thana, @ViewBag.CustomerAddress.District, @ViewBag.CustomerAddress.Division
                         </strong>
                     </p>
@@ -74,7 +74,7 @@
                     {
                     <p>No  address available.</p>
                     }
-                </p>
+               
 
                 <p><strong>Phone Number:</strong> @Model.CustomerPhone</p>
 
