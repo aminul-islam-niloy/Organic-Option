@@ -47,6 +47,8 @@ namespace OrganicOption.Areas.Rider.Controllers
                 {
                     OrderId = offer.OrderId,
                     ProductDetails = offer.ProductDetails,
+                    CustomerName = offer.CustomerName,
+                    CutomerCurrentAddress = offer.CutomerCurrentAddress,
                     CustomerAddress = offer.CustomerAddress,
                     CustomerPhone = offer.CustomerPhone,
                     DeliveryTime = offer.DeliveryTime,
@@ -65,7 +67,7 @@ namespace OrganicOption.Areas.Rider.Controllers
             }
             else
             {
-                return Content("No offer available.");
+                return RedirectToAction("Index", "RiderDelivery", new { area = "Rider" });
             }
         }
 
@@ -79,7 +81,8 @@ namespace OrganicOption.Areas.Rider.Controllers
         {
             // orders that are on the list and not yet offered to a rider
             var ordersOnList = await _db.Orders
-                .Include(o => o.OrderDetails)
+                .Include(o => o.CustomerAddress)
+                   .Include(o => o.OrderDetails)
                     .ThenInclude(od => od.Product)
                         .ThenInclude(p => p.FarmerShop)
                 .Where(o => o.OrderDetails.Any(od => od.OrderCondition == OrderCondition.Onlist) && !o.IsOfferedToRider)
@@ -98,7 +101,7 @@ namespace OrganicOption.Areas.Rider.Controllers
                         .Select(od => od.Product.FarmerShopId)
                         .FirstOrDefault();
 
-                    var shopLocation = await _db.FarmerShop
+                    var shopLocation = await _db.FarmerShop.Include(fs =>fs.ShopAddress)
                         .Where(fs => fs.Id == farmerShopId)
                         .Select(fs => new { fs.Latitude, fs.Longitude, fs.ShopAddress })
                         .FirstOrDefaultAsync();
@@ -125,10 +128,11 @@ namespace OrganicOption.Areas.Rider.Controllers
                             var offerViewModel = new RiderOfferViewModel
                             {
                                 OrderId = order.Id,
+                                CustomerName = order.Name,
                                 CustomerAddress = order.Address,
-                                CutomerCurrentAddress = order.CustomerAddress,
+                                CutomerCurrentAddress = order.CustomerAddress, //address address
                                 DeliveryTime = EstimateDeliveryTime(distance),
-                                Revenue = CalculateEarnings(order, distance),
+                                Revenue = order.DelivaryCharge,
                                 letetude = shopLocation.Latitude,
                                 longatude = shopLocation.Longitude,
                                 ProductDetails = productDetails,
@@ -220,9 +224,9 @@ namespace OrganicOption.Areas.Rider.Controllers
             decimal totalCharge = baseDeliveryCharge + additionalProductCharge;
 
         
-            decimal earnings = totalCharge * 0.70m; // 70% to the rider
+           // decimal earnings = totalCharge * 0.70m; // 70% to the rider
 
-            return earnings;
+            return totalCharge;
         }
 
         // delivery charge based on distance

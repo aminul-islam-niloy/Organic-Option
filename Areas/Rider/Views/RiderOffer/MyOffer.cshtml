@@ -1,66 +1,101 @@
 ﻿@model OrganicOption.Models.Rider_Section.RiderOfferViewModel
 
-<script>
-    // Refresh the page after 1 minute
-    setTimeout(function () {
-        window.location.reload(true);
-    }, 60000); // 1 minute = 60000 milliseconds
-</script>
+
+<div class="top-bar text-dark p-2 text-center justify-content-center">
+    <ul class="nav text-center justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-list"></i> My Orders
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-chart-bar"></i> Performance
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-wallet"></i> Wallet
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#">
+                <i class="fas fa-cog"></i> Settings
+            </a>
+        </li>
+    </ul>
+</div>
 
 @if (Model != null)
 {
     <div class="container">
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <h4>Offer Details</h4>
-                <p><strong>Order ID:</strong> @Model.OrderId</p>
-
+        <div class="row justify-content-center">
+            <div class="card col-lg-8 col-md-10 p-4">
+                <h4 class="text-center mb-2">Offer Details</h4>
+                <p class="text-center"><strong>Order ID:</strong> @Model.OrderId</p>
 
                 @foreach (var product in Model.ProductDetails)
                 {
-                    <p><strong>Product Name:</strong> @product.ProductName</p>
-                    <p><strong>Product Image:</strong> <img src="~/@product.ProductImage" alt="Product Image" /></p> <!-- New line for product image -->
-                    <p><strong>Shop Name:</strong> @Model.ShopName</p>
-                    <p> Shop Address: </p>
-
-                    @if (Model.ShopAddress != null)
-                    {
-                        <div style="margin-left:40px">
-                            <label for="House">House:</label>
-                            <span id="House">@Html.DisplayFor(modelItem => Model.ShopAddress.House)</span><br />
-
-                            <label for="StreetNo">Street No:</label>
-                            <span id="StreetNo">@Html.DisplayFor(modelItem => Model.ShopAddress.StreetNo)</span><br />
-
-                            <label for="WardNo">Ward No:</label>
-                            <span id="WardNo">@Html.DisplayFor(modelItem => Model.ShopAddress.WardNo)</span><br />
-
-                            <label for="Thana">Thana:</label>
-                            <span id="Thana">@Html.DisplayFor(modelItem => Model.ShopAddress.Thana)</span><br />
-
-                            <label for="District">District:</label>
-                            <span id="District">@Html.DisplayFor(modelItem => Model.ShopAddress.District)</span><br />
-
-                            <label for="Division">Division:</label>
-                            <span id="Division">@Html.DisplayFor(modelItem => Model.ShopAddress.Division)</span><br />
+                    <div class="row mb-4">
+                        <div class="col-md-10">
+                            <p class="text-center">
+                                <strong>Product Name:</strong> @product.ProductName
+                                <strong style="margin-left:7px">Product Quantity:</strong> @product.Quantity
+                            </p>
                         </div>
-                    }
-
-
-                    <p><strong>Shop Contract:</strong> @Model.ShopContract</p>
-                    <p><strong>Product Quantity:</strong> @product.Quantity</p>
-
+                        <div class="col-md-10 text-center">
+                            <p><strong>Product Image:</strong></p>
+                            <img src="~/@product.ProductImage" alt="Product Image" class="img-fluid rounded" style="max-width: 150px;" />
+                        </div>
+                    </div>
                 }
-                <p><strong>Customer Address:</strong> @Model.CustomerAddress</p>
-                <p><strong>Customer Phone:</strong> @Model.CustomerPhone</p>
-                <p><strong>Estimated Delivery Time:</strong> @Model.DeliveryTime.ToString(@"d\.hh\:mm");</p>
-                <p><strong>Estimated Revenue:</strong> @Model.Revenue</p>
-                <p><strong>Time Remaining:</strong> @Model.TimeRemaining.ToString("mm':'ss")</p>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h5 class="text-center">Shop Information</h5>
+                        <p class="text-center"><strong>Shop Name:</strong> @Model.ShopName</p>
+                        @if (Model.ShopAddress != null)
+                        {
+                            <p class="text-center"><strong>Shop Address:</strong> @Model.ShopAddress.House, @Model.ShopAddress.StreetNo, @Model.ShopAddress.WardNo, @Model.ShopAddress.Thana, @Model.ShopAddress.District, @Model.ShopAddress.Division</p>
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="text-center">Customer Information</h5>
+                         <p class="text-center"><strong>Customer Name:</strong> @Model.CustomerName</p> 
+                        
+                        @if (Model.CutomerCurrentAddress != null)
+                        {
+                            <p class="text-center"><strong> Address:</strong> @Model.CutomerCurrentAddress.House, @Model.CutomerCurrentAddress.StreetNo, @Model.CutomerCurrentAddress.WardNo, @Model.CutomerCurrentAddress.Thana, @Model.CutomerCurrentAddress.District, @Model.CutomerCurrentAddress.Division</p>
+                        }
+                        <p class="text-center"><strong>Customer Phone:</strong> @Model.CustomerPhone</p>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6 text-center">
+                        <p><strong>Estimated Delivery Time:</strong> @Model.DeliveryTime.ToString(@"d\.hh\:mm")</p>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <p><strong>Estimated Revenue:</strong> @Model.Revenue</p>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-12 text-center">
+                        <p><strong>Time Remaining:</strong> <span id="time-remaining">@Model.TimeRemaining.ToString("mm':'ss")</span></p>
+                    </div>
+                </div>
+
                 <hr />
+
                 <div class="text-center">
-                    @*                     <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("CreateDeliveryForAcceptedOrder", "Order")'">Accept Offer</button> *@
-                    <a asp-area="Rider" asp-controller="RiderOffer" asp-action="CreateDeliveryForAcceptedOrder" class="btn btn-primary">Accept Offer</a>
-                    <button type="button" class="btn btn-secondary" onclick="window.location.reload(true)">Next Offer</button>
+                    <a asp-area="Rider" asp-controller="RiderOffer" asp-action="CreateDeliveryForAcceptedOrder" class="btn btn-primary " style="width: 150px;">Accept Offer</a>
+                    <button type="button" class="btn btn-secondary" style="width: 150px;" onclick="window.location.reload(true)">Next Offer</button>
                 </div>
             </div>
         </div>
@@ -68,11 +103,85 @@
 }
 else
 {
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
                 <p>No offer available.</p>
             </div>
         </div>
     </div>
 }
+
+<style>
+    .top-bar {
+        width: 100%;
+        background: #1cb252;
+        color: black;
+    }
+
+        
+    .card {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+        transform: translateY(-1px);
+        transition: all 0.2s ease;
+        margin-top: 30px;
+    }
+
+       
+
+    h4 {
+        background-color: #8765;
+        color: black;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    h5 {
+        background-color: #28a745;
+        color: white;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    .img-fluid {
+        max-width: 150px;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+</style>
+
+
+<script>
+
+    setTimeout(function () {
+        window.location.reload(true);
+    }, 60000); 
+
+
+    function startCountdown(duration) {
+        var timer = duration, minutes, seconds;
+        var interval = setInterval(function () {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            document.getElementById('time-remaining').textContent = minutes + ":" + seconds;
+
+            if (--timer < 0) {
+                clearInterval(interval);
+                document.getElementById('time-remaining').textContent = "00:00"; // Timer ends at 00:00
+            }
+        }, 1000);
+    }
+
+    // Start the countdown with the remaining seconds
+    window.onload = function () {
+        var timeRemaining = @Model.TimeRemaining.TotalSeconds; // Total seconds remaining
+        startCountdown(timeRemaining);
+    };
+</script>

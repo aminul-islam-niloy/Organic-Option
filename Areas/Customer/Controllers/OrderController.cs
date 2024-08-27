@@ -43,13 +43,6 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
 
-
-
-
-
-        //calculate Distance and Charge
-    
-
         public static double CalculateBaseCharge(double distance)
         {
             if (distance <= 5) return 50;
@@ -99,17 +92,38 @@ namespace OnlineShop.Areas.Customer.Controllers
             {
                 additionalCharge = product.QuantityInCart * 1000;
             }
-            else if (product.ProductTypes.ProductType == "Crops" && product.QuantityType == QuantityType.Kg)
+            else if ( product.QuantityType == QuantityType.Item)
             {
-                if (product.QuantityInCart <= 50) additionalCharge = 50;
+                if (product.QuantityInCart <= 5) additionalCharge = 0;
+                else if (product.QuantityInCart <= 40) additionalCharge = 50;
                 else if (product.QuantityInCart <= 100) additionalCharge = 100;
                 else if (product.QuantityInCart <= 500) additionalCharge = 200;
                 else if (product.QuantityInCart <= 1000) additionalCharge = 400;
                 else additionalCharge = 600;
             }
-            else if (product.ProductTypes.ProductType == "Liquid" && product.QuantityType == QuantityType.Liter)
+
+            else if (product.ProductTypes.ProductType == "Fruits" && product.QuantityType == QuantityType.Kg)
             {
-                if (product.QuantityInCart <= 50) additionalCharge = 50;
+                if (product.QuantityInCart <= 5) additionalCharge = 0;
+                else if (product.QuantityInCart <= 40) additionalCharge = 50;
+                else if (product.QuantityInCart <= 100) additionalCharge = 100;
+                else if (product.QuantityInCart <= 500) additionalCharge = 200;
+                else if (product.QuantityInCart <= 1000) additionalCharge = 400;
+                else additionalCharge = 600;
+            }
+            else if ( product.QuantityType == QuantityType.Kg)
+            {
+                if (product.QuantityInCart <= 5) additionalCharge = 0;
+                else if (product.QuantityInCart <= 40) additionalCharge = 50;
+                else if (product.QuantityInCart <= 100) additionalCharge = 100;
+                else if (product.QuantityInCart <= 500) additionalCharge = 200;
+                else if (product.QuantityInCart <= 1000) additionalCharge = 400;
+                else additionalCharge = 600;
+            }
+            else if (product.ProductTypes.ProductType == "Dairy" && product.QuantityType == QuantityType.Liter)
+            {
+                if (product.QuantityInCart <= 5) additionalCharge = 0;
+                else if (product.QuantityInCart <= 40) additionalCharge = 50;
                 else if (product.QuantityInCart <= 100) additionalCharge = 100;
                 else if (product.QuantityInCart <= 500) additionalCharge = 300;
                 else if (product.QuantityInCart <= 1000) additionalCharge = 500;
