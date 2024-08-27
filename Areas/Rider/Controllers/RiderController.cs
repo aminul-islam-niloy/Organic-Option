@@ -38,7 +38,7 @@ namespace OrganicOption.Areas.Rider.Controllers
         public async Task<IActionResult> Riders()
         {
 
-            // Retrieve all shops in FarmerShop
+            // Retrieve all Rider
             var riders = await _context.RiderModel.Include(f => f.RiderAddress).ToListAsync();
 
             return View(riders);
@@ -65,7 +65,7 @@ namespace OrganicOption.Areas.Rider.Controllers
 
             if (riders == null || !riders.Any())
             {
-                return RedirectToAction(nameof(CreateRider)); // Current user does not have any riders
+                return RedirectToAction(nameof(CreateRider)); 
             }
 
             return View(riders);
@@ -80,7 +80,6 @@ namespace OrganicOption.Areas.Rider.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateRider(RiderModel rider)
         {
-         
             var currentUser = await _userManager.GetUserAsync(User);
 
             var existingRider = await _context.RiderModel.FirstOrDefaultAsync(rider => rider.RiderUserId == currentUser.Id);
@@ -236,7 +235,7 @@ namespace OrganicOption.Areas.Rider.Controllers
                     await transaction.RollbackAsync();
                     
                     ModelState.AddModelError(string.Empty, "Failed to start shift. Please try again.");
-                    return View(existingRider); // Return to the view to display the error
+                    return View(existingRider); 
                 }
             }
 
@@ -321,7 +320,7 @@ namespace OrganicOption.Areas.Rider.Controllers
                 }
                 catch (Exception)
                 {
-                    // Rollback the transaction if there is an exception
+                    
                     await transaction.RollbackAsync();
 
                     ModelState.AddModelError(string.Empty, "Failed to start shift. Please try again.");
