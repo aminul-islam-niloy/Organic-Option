@@ -385,7 +385,7 @@ namespace OrganicOption.Areas.Rider.Controllers
                     OrderId = offer.OrderId,
                     RiderId = existingRider.Id,
                     OrderCondition = OrderCondition.OrderTaken,
-                    PayableMoney = isPaymentByCard ? 0 : totalOrderAmount,
+                    PayableMoney = isPaymentByCard ? 0 : totalOrderAmount + offer.Revenue,
                     ProductDetails = string.Join(", ", offer.ProductDetails.Select(product => product.ProductName)),
                     CustomerAddress = offer.CustomerAddress,
                     DelivyAddress = offer.CustomerAddress,
@@ -430,6 +430,7 @@ namespace OrganicOption.Areas.Rider.Controllers
                     _db.Deliveries.Add(delivery);
                     await _db.SaveChangesAsync();
                     ViewBag.ShopAddress = offer.ShopAddress;
+                    ViewBag.CustomerAddress= offer.CutomerCurrentAddress;
                     HttpContext.Session.Remove("OfferData");
 
                     return View(delivery);

@@ -1,42 +1,50 @@
 ﻿@model OrganicOption.Models.Rider_Section.Delivery
 
-
 <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
 <style>
     body {
         font-family: Arial, sans-serif;
     }
 
-
-
-    .details, .map-container {
+    .card {
+        margin-bottom: 20px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         padding: 15px;
         border-radius: 8px;
         background: white;
+    }
+
+    .top-bar {
+        width: 100%;
+        background: #1cb252;
+        color: black;
         margin-bottom: 20px;
+        padding: 10px;
+    }
+
+    .top-bar .nav-item {
+        margin-right: 20px;
+    }
+
+    .card Heading {
+        margin: 10px;
+        padding: 5px;
+        text-align: center;
+        background-color: gray;
+        color: white;
+        border-radius: 5px;
     }
 
     .details {
-        flex: 1 1 300px;
-    }
-
-    .map-container {
-        flex: 2 1 500px;
-    }
-
-    .card {
         margin-bottom: 20px;
     }
 
-        .card h4 {
-            margin: 10px;
-            padding: 5px;
-            text-align: justify-all;
-        }
-
-
+    .map-container {
+        height: 500px;
+        margin-bottom: 20px;
+    }
 
     #travel-mode-dropdown {
         top: 10px;
@@ -46,77 +54,94 @@
         padding: 5px;
         border: 1px solid black;
     }
+
+ 
 </style>
 
+<div class="top-bar text-dark text-center">
+    <ul class="nav justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#"><i class="fas fa-home"></i> Dashboard</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#"><i class="fas fa-list"></i> My Orders</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#"><i class="fas fa-chart-bar"></i> Performance</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#"><i class="fas fa-wallet"></i> Wallet</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#"><i class="fas fa-cog"></i> Settings</a>
+        </li>
+    </ul>
+</div>
 
 <div class="container">
+    <div class="card">
+        <h4>Delivery Details</h4>
 
-    <div class="row">
+        <div class="row">
+            <!-- Details Section -->
+            <div class="col-md-4 details">
+                <h4>Farmer Shop Details</h4>
+                <p>Shop Name: @Model.ShopName</p>
+                <p>Shop Contract: @Model.ShopContract</p>
 
-        <div class="col-md-4">
+                <p>Shop Address:</p>
+                @if (ViewBag.ShopAddress != null)
+                {
+                    <p><strong>@ViewBag.ShopAddress.House, @ViewBag.ShopAddress.StreetNo, @ViewBag.ShopAddress.WardNo,
+                        @ViewBag.ShopAddress.Thana, @ViewBag.ShopAddress.District, @ViewBag.ShopAddress.Division</strong></p>
+                }
+                else
+                {
+                    <p>No shop address available.</p>
+                }
 
-            <h4 style="text-align:center; margin:10px">Delivery Details</h4>
+                <h4>Order Details</h4>
+                <p><strong>Order ID:</strong> @Model.OrderId</p>
+                <p><strong>Product Details:</strong> @Model.ProductDetails</p>
 
-            <div class="details">
-                <div class="card" style="margin:10px">
-                    <h4>Farmer Shop Details</h4>
-                    <p>Shop Name: @Model.ShopName</p>
-                    <p>Shop Contract: @Model.ShopContract</p>
-                   @*  <p>Shop Address: @Model.ShopAddress</p> *@
-                    <h4>Shop Address:</h4>
 
-                    @if (ViewBag.ShopAddress != null)
-                    {
-                        <div>
-                            <strong>Division:</strong> @ViewBag.ShopAddress.Division <br />
-                            <strong>District:</strong> @ViewBag.ShopAddress.District <br />
-                            <strong>Thana:</strong> @ViewBag.ShopAddress.Thana <br />
-                            <strong>Ward No:</strong> @ViewBag.ShopAddress.WardNo <br />
-                            <strong>Street No:</strong> @ViewBag.ShopAddress.StreetNo <br />
-                            <strong>House:</strong> @ViewBag.ShopAddress.House <br />
+                <h4>Customer Details</h4>
+               
+                <p>Customer Address:</p>
+                @if (ViewBag.CustomerAddress != null)
+                {
+                    <p><strong>@ViewBag.CustomerAddress.House, @ViewBag.CustomerAddress.StreetNo,
+                        @ViewBag.CustomerAddress.WardNo, @ViewBag.CustomerAddress.Thana, @ViewBag.CustomerAddress.District, @ViewBag.CustomerAddress.Division</strong></p>
+                }
+                else
+                {
+                    <p>No  address available.</p>
+                }
+               
+                <p><strong>Phone Number:</strong> @Model.CustomerPhone</p>
 
-                        </div>
-                    }
-                    else
-                    {
-                        <p>No shop address available.</p>
-                    }
-                    <div style="margin:10px">
-                        <h4>Order ID: @Model.OrderId</h4>
+              
+                <p><strong>Payable Money:</strong> @Model.PayableMoney</p>
 
-                        <h4>Product Details:@Model.ProductDetails</h4>
-
-                    </div>
-
-                </div>
-                <div class="card" style="margin:10px">
-                    <h4>Customer Details</h4>
-                    <p>Customer Address: @Model.CustomerAddress</p>
-                    <p>Delivery Address: @Model.DelivyAddress</p>
-                    <p>Phone Num: @Model.CustomerPhone</p>
-                    <p>Payable Money: @Model.PayableMoney</p>
-                </div>
                 <div>
-                    <a class="btn btn-info" asp-area="Rider" asp-controller="RiderDelivery" asp-action="RunningDeliveries" style="margin-left:5px"> Running Delivary</a>
-                    <a class="btn btn-success" asp-area="Rider" asp-controller="RiderDelivery" asp-action="Index" style="margin-left:5px"> Manage Delivary</a>
+                    <a class="btn btn-info" asp-area="Rider" asp-controller="RiderDelivery" asp-action="RunningDeliveries" style="margin-right: 5px;">Running Delivery</a>
+                    <a class="btn btn-success" asp-area="Rider" asp-controller="RiderDelivery" asp-action="Index" style="margin-right: 5px;">Manage Delivery</a>
                    
                     @if (Model.OrderCondition == OrderCondition.OnDelivary)
                     {
-                        <a class="btn btn-warning" style="margin:5px" href="@Url.Action("ConfirmDelivery", "RiderDelivery", new { area = "Rider", deliveryId = @Model.Id })">Confirm Delivery</a>
+                        <a class="btn btn-warning" style="margin-top: 10px;" href="@Url.Action("ConfirmDelivery", "RiderDelivery", new { area = "Rider", deliveryId = @Model.Id })">Confirm Delivery</a>
                     }
-               
-               </div>
+                </div>
             </div>
-        </div>
-        <div class="col-md-8">
-            <div class="map-container">
-                <div id="map" style="width:100%; height:500px"></div>
+
+            <!-- Map Section -->
+            <div class="col-md-8 map-container">
+                <div id="map" style="width:100%; height:100%;"></div>
                 <div id="status-message" style="margin-top: 20px; color: red;"></div>
 
                 <div id="travel-mode-dropdown">
                     <label for="travelMode">Select Travel Mode:</label>
                     <select id="travelMode">
-
                         <option value="foot-walking">Walking</option>
                         <option value="foot-walking">Bike</option>
                         <option value="foot-walking">Track</option>
@@ -126,9 +151,6 @@
             </div>
         </div>
     </div>
-
-
-
 </div>
 
 <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
