@@ -1,6 +1,31 @@
 ﻿@model IEnumerable<OrganicOption.Models.Rider_Section.Delivery>
-<br />
-<h3>Currently Running Deliveries</h3>
+
+
+<div class="top-bar text-dark text-center">
+    <ul class="nav justify-content-center">
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#"><i class="fas fa-home"></i> Dashboard</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#"><i class="fas fa-list"></i> My Orders</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#"><i class="fas fa-chart-bar"></i> Performance</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#"><i class="fas fa-wallet"></i> Wallet</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-light" href="#"><i class="fas fa-cog"></i> Settings</a>
+        </li>
+    </ul>
+</div>
+
+<div class="container">
+
+
+
+<h4>Currently Running Deliveries</h4>
 <br />
 @if (Model.Any())
 {
@@ -37,5 +62,37 @@
 }
 else
 {
-    <p>No Running Order </p>
+    <h4>No Running Order </h4>
 }
+</div>
+
+<style>
+    .card {
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        border-radius: 8px;
+        background: white;
+    }
+
+    .top-bar {
+        width: 100%;
+        background: #1cb252;
+        color: black;
+        margin-bottom: 20px;
+        padding: 10px;
+    }
+
+        .top-bar .nav-item {
+            margin-right: 20px;
+        }
+
+    .card h4 {
+        margin: 10px;
+        padding: 5px;
+        text-align: center;
+        background-color: gray;
+        color: white;
+        border-radius: 5px;
+    }
+</style>
