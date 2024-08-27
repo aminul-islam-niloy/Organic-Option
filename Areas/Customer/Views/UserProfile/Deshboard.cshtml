@@ -51,17 +51,17 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
-<h3>User Dashboard</h3>
-
-<p>Welcome to your dashboard! Here you can manage your profile:</p>
-
-<br />
 
 
 
 <div class="container">
 
-    <div class="row mt-5">
+    <h3 class="mt-3">User Dashboard</h3>
+
+    <br />
+
+
+    <div class="row ">
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body text-center">
@@ -212,12 +212,12 @@
                         }
                     </dl>
 
-
+@* 
                     <form id="update-location-form" method="post" asp-area="Customer" asp-controller="UserProfile" asp-action="UpdateLocation">
                         <input type="hidden" id="latitude" name="latitude" />
                         <input type="hidden" id="longitude" name="longitude" />
                         <button type="button" class="btn btn-success" onclick="updateLocation()">Update Location</button>
-                    </form>
+                    </form> *@
 
 
 
