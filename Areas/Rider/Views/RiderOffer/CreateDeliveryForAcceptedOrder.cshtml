@@ -3,60 +3,6 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
-<style>
-    body {
-        font-family: Arial, sans-serif;
-    }
-
-    .card {
-        margin-bottom: 20px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        padding: 15px;
-        border-radius: 8px;
-        background: white;
-    }
-
-    .top-bar {
-        width: 100%;
-        background: #1cb252;
-        color: black;
-        margin-bottom: 20px;
-        padding: 10px;
-    }
-
-    .top-bar .nav-item {
-        margin-right: 20px;
-    }
-
-    .card Heading {
-        margin: 10px;
-        padding: 5px;
-        text-align: center;
-        background-color: gray;
-        color: white;
-        border-radius: 5px;
-    }
-
-    .details {
-        margin-bottom: 20px;
-    }
-
-    .map-container {
-        height: 500px;
-        margin-bottom: 20px;
-    }
-
-    #travel-mode-dropdown {
-        top: 10px;
-        right: 10px;
-        z-index: 1000;
-        background: white;
-        padding: 5px;
-        border: 1px solid black;
-    }
-
- 
-</style>
 
 <div class="top-bar text-dark text-center">
     <ul class="nav justify-content-center">
@@ -89,7 +35,7 @@
                 <p>Shop Name: @Model.ShopName</p>
                 <p>Shop Contract: @Model.ShopContract</p>
 
-                <p>Shop Address:</p>
+                <p>Shop Address:
                 @if (ViewBag.ShopAddress != null)
                 {
                     <p><strong>@ViewBag.ShopAddress.House, @ViewBag.ShopAddress.StreetNo, @ViewBag.ShopAddress.WardNo,
@@ -99,6 +45,7 @@
                 {
                     <p>No shop address available.</p>
                 }
+                </p>
 
                 <h4>Order Details</h4>
                 <p><strong>Order ID:</strong> @Model.OrderId</p>
@@ -107,7 +54,7 @@
 
                 <h4>Customer Details</h4>
                
-                <p>Customer Address:</p>
+                <p>Customer Address:
                 @if (ViewBag.CustomerAddress != null)
                 {
                     <p><strong>@ViewBag.CustomerAddress.House, @ViewBag.CustomerAddress.StreetNo,
@@ -117,6 +64,7 @@
                 {
                     <p>No  address available.</p>
                 }
+                </p>
                
                 <p><strong>Phone Number:</strong> @Model.CustomerPhone</p>
 
@@ -228,3 +176,57 @@
         }
     });
 </script>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    .card {
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        border-radius: 8px;
+        background: white;
+    }
+
+    .top-bar {
+        width: 100%;
+        background: #1cb252;
+        color: black;
+        margin-bottom: 20px;
+        padding: 10px;
+    }
+
+        .top-bar .nav-item {
+            margin-right: 20px;
+        }
+
+    .card h4 {
+        margin: 10px;
+        padding: 5px;
+        text-align: center;
+        background-color: gray;
+        color: white;
+        border-radius: 5px;
+    }
+
+    .details {
+        margin-bottom: 20px;
+    }
+
+    .map-container {
+        height: 500px;
+        margin-bottom: 20px;
+    }
+
+    #travel-mode-dropdown {
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+        background: white;
+        padding: 5px;
+        border: 1px solid black;
+    }
+
+</style>

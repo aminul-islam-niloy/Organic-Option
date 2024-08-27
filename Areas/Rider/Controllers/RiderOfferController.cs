@@ -153,22 +153,7 @@ namespace OrganicOption.Areas.Rider.Controllers
             return null;
         }
 
-        private double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
-        {
-            const double R = 6371e3; // Earth's radius in meters
-            var φ1 = lat1 * Math.PI / 180; // φ, λ in radians
-            var φ2 = lat2 * Math.PI / 180;
-            var Δφ = (lat2 - lat1) * Math.PI / 180;
-            var Δλ = (lon2 - lon1) * Math.PI / 180;
-
-            var a = Math.Sin(Δφ / 2) * Math.Sin(Δφ / 2) +
-                    Math.Cos(φ1) * Math.Cos(φ2) *
-                    Math.Sin(Δλ / 2) * Math.Sin(Δλ / 2);
-            var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-
-            var distance = R * c; //  meters
-            return distance / 1000; //  km
-        }
+   
 
         // available rider within 115 km of the FarmerShop
         private async Task<RiderModel> FindAvailableRider(double shopLat, double shopLon)
@@ -203,7 +188,44 @@ namespace OrganicOption.Areas.Rider.Controllers
             return degrees * Math.PI / 180;
         }
 
-    
+
+        public static double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
+        {
+            const double R = 6371; // Radius of the Earth in kilometers
+            double dLat = ToRadians(lat2 - lat1);
+            double dLon = ToRadians(lon2 - lon1);
+            double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                       Math.Cos(ToRadians(lat1)) * Math.Cos(ToRadians(lat2)) *
+                       Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            return R * c; // Distance in kilometers
+        }
+
+        private static double ToRadians(double angle)
+        {
+            return angle * (Math.PI / 180);
+        }
+
+
+
+        //private double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
+        //{
+        //    const double R = 6371e3; // Earth's radius in meters
+        //    var φ1 = lat1 * Math.PI / 180; // φ, λ in radians
+        //    var φ2 = lat2 * Math.PI / 180;
+        //    var Δφ = (lat2 - lat1) * Math.PI / 180;
+        //    var Δλ = (lon2 - lon1) * Math.PI / 180;
+
+        //    var a = Math.Sin(Δφ / 2) * Math.Sin(Δφ / 2) +
+        //            Math.Cos(φ1) * Math.Cos(φ2) *
+        //            Math.Sin(Δλ / 2) * Math.Sin(Δλ / 2);
+        //    var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+
+        //    var distance = R * c; //  meters
+        //    return distance / 1000; //  km
+        //}
+
+
         private TimeSpan EstimateDeliveryTime(double distanceKm)
         {
             double averageSpeedKmph = 30.0;
