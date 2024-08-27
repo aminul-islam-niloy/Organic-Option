@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineShop.Data;
 
@@ -11,9 +12,10 @@ using OnlineShop.Data;
 namespace OrganicOption.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240827124618_DelivaryAddressModification")]
+    partial class DelivaryAddressModification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -752,10 +754,13 @@ namespace OrganicOption.Migrations
                     b.Property<string>("CustomerAddress")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CustomerCurrentAddressId")
+                    b.Property<string>("CustomerPhone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CustomerPreAddId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CustomerPhone")
+                    b.Property<string>("CustomercPreAddId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("DeliveryLat")
@@ -797,11 +802,14 @@ namespace OrganicOption.Migrations
                     b.Property<int?>("RiderModelId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ShopContract")
+                    b.Property<string>("ShopAddressId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ShopCurrentAddressId")
+                    b.Property<int?>("ShopAddressId1")
                         .HasColumnType("int");
+
+                    b.Property<string>("ShopContract")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("ShopLat")
                         .HasColumnType("float");
@@ -814,7 +822,7 @@ namespace OrganicOption.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerCurrentAddressId");
+                    b.HasIndex("CustomerPreAddId");
 
                     b.HasIndex("FarmerShopId");
 
@@ -822,7 +830,7 @@ namespace OrganicOption.Migrations
 
                     b.HasIndex("RiderModelId");
 
-                    b.HasIndex("ShopCurrentAddressId");
+                    b.HasIndex("ShopAddressId1");
 
                     b.ToTable("Deliveries");
                 });
@@ -1212,9 +1220,9 @@ namespace OrganicOption.Migrations
 
             modelBuilder.Entity("OrganicOption.Models.Rider_Section.Delivery", b =>
                 {
-                    b.HasOne("OrganicOption.Models.Address", "CustomerCurrentAddress")
+                    b.HasOne("OrganicOption.Models.Address", "CustomerPreAdd")
                         .WithMany()
-                        .HasForeignKey("CustomerCurrentAddressId");
+                        .HasForeignKey("CustomerPreAddId");
 
                     b.HasOne("OrganicOption.Models.FarmerShop", null)
                         .WithMany("Deliveries")
@@ -1230,15 +1238,15 @@ namespace OrganicOption.Migrations
                         .WithMany("Deliveries")
                         .HasForeignKey("RiderModelId");
 
-                    b.HasOne("OrganicOption.Models.Address", "ShopCurrentAddress")
+                    b.HasOne("OrganicOption.Models.Address", "ShopAddress")
                         .WithMany()
-                        .HasForeignKey("ShopCurrentAddressId");
+                        .HasForeignKey("ShopAddressId1");
 
-                    b.Navigation("CustomerCurrentAddress");
+                    b.Navigation("CustomerPreAdd");
 
                     b.Navigation("Order");
 
-                    b.Navigation("ShopCurrentAddress");
+                    b.Navigation("ShopAddress");
                 });
 
             modelBuilder.Entity("OrganicOption.Models.Rider_Section.RiderModel", b =>

@@ -365,6 +365,7 @@ namespace OrganicOption.Areas.Rider.Controllers
             if (offer != null)
             {
                 var order = await _db.Orders
+                    .Include(o => o.CustomerAddress)
                     .Include(o => o.OrderDetails)
                         .ThenInclude(od => od.Product)
                             .ThenInclude(p => p.FarmerShop)
@@ -388,11 +389,11 @@ namespace OrganicOption.Areas.Rider.Controllers
                     ProductDetails = string.Join(", ", offer.ProductDetails.Select(product => product.ProductName)),
                     CustomerAddress = offer.CustomerAddress,
                     DelivyAddress = offer.CustomerAddress,
-                    //CustomerPreAdd = offer.CutomerCurrentAddress,
+                    //CustomerCurrentAddress = offer.CutomerCurrentAddress,
                     CustomerPhone = offer.CustomerPhone,
                     ShopName = offer.ShopName,
                     ShopContract = offer.ShopContract,
-                    //ShopAddress = offer.ShopAddress,
+                    //ShopCurrentAddress = offer.ShopAddress,
                     ShopLat = offer.letetude,
                     ShopLon = offer.longatude,
                     DeliveryLat = order.Latitude,
@@ -423,6 +424,9 @@ namespace OrganicOption.Areas.Rider.Controllers
                     order.IsOfferedToRider = true;
                     rider.OnDeliaryByOffer = true;  
                     order.OrderCondition = OrderCondition.OrderTaken;
+                    //delivery.ShopCurrentAddress = offer.ShopAddress;
+                    //delivery.CustomerCurrentAddress = offer.CutomerCurrentAddress;
+
                     _db.Deliveries.Add(delivery);
                     await _db.SaveChangesAsync();
                     ViewBag.ShopAddress = offer.ShopAddress;

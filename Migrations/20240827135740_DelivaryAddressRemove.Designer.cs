@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineShop.Data;
 
@@ -11,9 +12,10 @@ using OnlineShop.Data;
 namespace OrganicOption.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240827135740_DelivaryAddressRemove")]
+    partial class DelivaryAddressRemove
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -752,9 +754,6 @@ namespace OrganicOption.Migrations
                     b.Property<string>("CustomerAddress")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CustomerCurrentAddressId")
-                        .HasColumnType("int");
-
                     b.Property<string>("CustomerPhone")
                         .HasColumnType("nvarchar(max)");
 
@@ -800,9 +799,6 @@ namespace OrganicOption.Migrations
                     b.Property<string>("ShopContract")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ShopCurrentAddressId")
-                        .HasColumnType("int");
-
                     b.Property<double>("ShopLat")
                         .HasColumnType("float");
 
@@ -814,15 +810,11 @@ namespace OrganicOption.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerCurrentAddressId");
-
                     b.HasIndex("FarmerShopId");
 
                     b.HasIndex("OrderId");
 
                     b.HasIndex("RiderModelId");
-
-                    b.HasIndex("ShopCurrentAddressId");
 
                     b.ToTable("Deliveries");
                 });
@@ -1212,10 +1204,6 @@ namespace OrganicOption.Migrations
 
             modelBuilder.Entity("OrganicOption.Models.Rider_Section.Delivery", b =>
                 {
-                    b.HasOne("OrganicOption.Models.Address", "CustomerCurrentAddress")
-                        .WithMany()
-                        .HasForeignKey("CustomerCurrentAddressId");
-
                     b.HasOne("OrganicOption.Models.FarmerShop", null)
                         .WithMany("Deliveries")
                         .HasForeignKey("FarmerShopId");
@@ -1230,15 +1218,7 @@ namespace OrganicOption.Migrations
                         .WithMany("Deliveries")
                         .HasForeignKey("RiderModelId");
 
-                    b.HasOne("OrganicOption.Models.Address", "ShopCurrentAddress")
-                        .WithMany()
-                        .HasForeignKey("ShopCurrentAddressId");
-
-                    b.Navigation("CustomerCurrentAddress");
-
                     b.Navigation("Order");
-
-                    b.Navigation("ShopCurrentAddress");
                 });
 
             modelBuilder.Entity("OrganicOption.Models.Rider_Section.RiderModel", b =>

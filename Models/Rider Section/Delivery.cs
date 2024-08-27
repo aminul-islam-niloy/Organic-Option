@@ -17,12 +17,21 @@ namespace OrganicOption.Models.Rider_Section
         public PaymentCondition PaymentCondition { get; set; }
         public decimal PayableMoney { get; set; }
         public int RiderId { get; set; }
-      
+
         public int OrderId { get; set; }
         public Order Order { get; set; }
 
-        public Address ShopAddress { get; set; }    
-        public Address CustomerPreAdd { get; set; }    
+        //public string ShopAddress { get; set; }
+        //public Address ShopAddress { get; set; }
+
+        //public string CustomerPreAdd { get; set; }
+        //public Address CustomerPreAdd { get; set; }
+
+  
+        public Address ShopCurrentAddress {get;set ;}
+        public Address CustomerCurrentAddress {get; set; }
+        
+
         public string ShopName { get; set; }    
         public string ShopContract { get; set; }
         public DateTime OrderDeliveredDate { get; set; }
