@@ -5,12 +5,15 @@
 }
 <br />
 
+<div class="container mt-2">
+    <a href="javascript:history.back()" class="btn btn-secondary mb-3"><i class="fa fa-arrow-left"></i> Back</a>
+
 @if (Model.Any())
 {
 
     
-    <div class="row container no-gutters shop_wrapper">
-        <h3 class="mt-2 mb-2" style="font-size:30px">@title</h3>
+    <div class="row  no-gutters shop_wrapper mb-3">
+        <h4 class="mt-4 mb-2" style="font-size:25px">@title</h4>
 
         @foreach (var product in Model)
         {
@@ -53,6 +56,8 @@
 }
 else
 {
-    <h3 style="margin:30px;font-size:30px">No Product Avalable </h3>
+    <h4 style="margin:30px;font-size:30px">No Product Avalable </h4>
 }
+
+</div>
 
