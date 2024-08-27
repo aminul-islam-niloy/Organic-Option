@@ -77,7 +77,7 @@ namespace OrganicOption.Areas.Rider.Controllers
         [Authorize(Roles = "Rider")]
         private async Task<RiderOfferViewModel> GetOfferForRider()
         {
-            // Retrieve the orders that are on the list and not yet offered to a rider
+            // orders that are on the list and not yet offered to a rider
             var ordersOnList = await _db.Orders
                 .Include(o => o.OrderDetails)
                     .ThenInclude(od => od.Product)
@@ -93,7 +93,7 @@ namespace OrganicOption.Areas.Rider.Controllers
 
                 if (order != null)
                 {
-                    // Retrieve the FarmerShop location details
+                    // Retrieve the FarmerShop 
                     var farmerShopId = order.OrderDetails
                         .Select(od => od.Product.FarmerShopId)
                         .FirstOrDefault();
@@ -105,7 +105,7 @@ namespace OrganicOption.Areas.Rider.Controllers
 
                     if (shopLocation != null)
                     {
-                        // Now that shopLocation is initialized, we can find an available rider
+                        
                         var availableRider = await FindAvailableRider(shopLocation.Latitude, shopLocation.Longitude);
 
                         if (availableRider != null)
@@ -162,11 +162,11 @@ namespace OrganicOption.Areas.Rider.Controllers
                     Math.Sin(Δλ / 2) * Math.Sin(Δλ / 2);
             var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
 
-            var distance = R * c; // in meters
-            return distance / 1000; // in kilometers
+            var distance = R * c; //  meters
+            return distance / 1000; //  km
         }
 
-        // Find an available rider within 15 km of the FarmerShop
+        // available rider within 115 km of the FarmerShop
         private async Task<RiderModel> FindAvailableRider(double shopLat, double shopLon)
         {
 
@@ -199,22 +199,19 @@ namespace OrganicOption.Areas.Rider.Controllers
             return degrees * Math.PI / 180;
         }
 
-        // delivery time based on distance
+    
         private TimeSpan EstimateDeliveryTime(double distanceKm)
         {
-            //  average rider speed  30 km/h
             double averageSpeedKmph = 30.0;
-
-            // Calculate time in minutes
             double timeInMinutes = (distanceKm / averageSpeedKmph) * 60;
 
             // Add a buffer time 
-            timeInMinutes += 10.0;
+            timeInMinutes += 7.0;
 
             return TimeSpan.FromMinutes(timeInMinutes);
         }
 
-        //  delivery charges based on distance and product type
+  
         private decimal CalculateEarnings(Order order, double distanceKm)
         {
             decimal baseDeliveryCharge = CalculateBaseDeliveryCharge(distanceKm);
@@ -253,7 +250,7 @@ namespace OrganicOption.Areas.Rider.Controllers
             }
         }
 
-        // Method to calculate additional charges based on the product type and quantity
+        //  additional charges based on the product type and quantity
         private decimal CalculateProductBasedCharge(Order order)
         {
             decimal additionalCharge = 0m;
@@ -262,7 +259,7 @@ namespace OrganicOption.Areas.Rider.Controllers
             {
                 if (orderDetail?.Product?.ProductTypes == null)
                 {
-                    // Handle the null case, you might want to log this or skip to the next iteration
+                    //  skip to the next iteration
                     continue;
                 }
 
@@ -272,7 +269,7 @@ namespace OrganicOption.Areas.Rider.Controllers
             return additionalCharge;
         }
 
-        // Method to calculate additional charge based on product type and quantity
+        // calculate additional charge based on product type and quantity
         private decimal CalculateAdditionalCharge(Products product, decimal quantity)
         {
             switch (product.ProductTypes.ProductType)
@@ -287,14 +284,18 @@ namespace OrganicOption.Areas.Rider.Controllers
                     return CalculateLiquidCharge(quantity);
 
                 default:
-                    return 0m; // No additional charge for unknown product types
+                    return 0m; 
             }
         }
 
-        // Method to calculate additional charge for crops based on quantity (in Kg)
+        // additional charge for crops based on quantity (in Kg)
         private decimal CalculateCropsCharge(decimal quantityKg)
         {
-            if (quantityKg <= 50)
+            if(quantityKg <= 10)
+            {
+                return 0m;
+            }
+            else if (quantityKg <= 50)
             {
                 return 50m;
             }
@@ -316,10 +317,14 @@ namespace OrganicOption.Areas.Rider.Controllers
             }
         }
 
-        // Method to calculate additional charge for liquids based on quantity (in Liters)
+        //  charge for liquids based on quantity (in Liters)
         private decimal CalculateLiquidCharge(decimal quantityLiters)
         {
-            if (quantityLiters <= 50)
+            if(quantityLiters <= 10)
+            {
+                return 0m;
+            }
+            else if (quantityLiters <= 50)
             {
                 return 50m;
             }
@@ -351,7 +356,6 @@ namespace OrganicOption.Areas.Rider.Controllers
 
             var existingRider = await _db.RiderModel.FirstOrDefaultAsync(rider => rider.RiderUserId == riderId);
 
-            // Retrieve offer data from session
             var offer = HttpContext.Session.Get<RiderOfferViewModel>("OfferData");
 
             if (offer != null)
@@ -369,9 +373,7 @@ namespace OrganicOption.Areas.Rider.Controllers
 
                 decimal totalOrderAmount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
 
-
                 bool isPaymentByCard = order.OrderDetails.Any(od => od.PaymentMethods == PaymentMethods.Card) || order.PaymentMethods == PaymentMethods.Card;
-
 
                 var delivery = new Delivery
                 {
@@ -401,8 +403,6 @@ namespace OrganicOption.Areas.Rider.Controllers
                         orDesin.OrderCondition = OrderCondition.OrderTaken;
 
                     }
-                    
-
                     foreach (var orderDetail in order.OrderDetails)
                     {
                         var product = orderDetail.Product;
@@ -437,11 +437,6 @@ namespace OrganicOption.Areas.Rider.Controllers
                 return RedirectToAction("Index", "RiderDelivery", new { area = "Rider" });
             }
         }
-
-
-
-
-
 
 
 
