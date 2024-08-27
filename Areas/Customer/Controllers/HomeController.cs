@@ -406,7 +406,7 @@ namespace OnlineShop.Areas.Customer.Controllers
 
 
 
-   
+        [Authorize(Roles = "Customer")]
         [HttpPost]
         [ActionName("Detail")]
         public ActionResult ProductDetail(int? id, int quantityInCart)
