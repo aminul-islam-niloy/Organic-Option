@@ -314,7 +314,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                         Quantity = od.Quantity
                     }).ToList(),
                     TotalPrice = g.Sum(od => od.Product.Price * od.Quantity)
-                }).ToList();
+                }).OrderByDescending(g => g.OrderDate).ToList();
 
             return View(orders);
         }
@@ -390,7 +390,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                         Quantity = od.Quantity
                     }).ToList(),
                     TotalPrice = g.Sum(od => od.Product.Price * od.Quantity)
-                }).ToList();
+                }).OrderByDescending(g => g.OrderDate).ToList();
 
             return View(orders);
         }

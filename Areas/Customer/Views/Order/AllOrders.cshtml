@@ -4,8 +4,8 @@
     ViewData["Title"] = "All Orders";
 }
 
-<div class="container-fluid">
-    <h3 class="text-center mb-4">All Orders</h3>
+<div class="container">
+    <h4 class="text-center mb-4" style="font-size:25px">All Orders</h4>
 
     <form method="post" class="mb-4">
         <div class="row">
@@ -35,23 +35,39 @@
                 <th>Order Date</th>
                 <th>Total Price</th>
                 <th>Order Status</th>
+    
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var order in Model)
             {
+         
+                
                 <tr>
                     <td>@order.OrderNo</td>
                     <td>@order.OrderDate.ToString("yyyy-MM-dd HH:mm")</td>
                     <td>@order.TotalPrice ৳</td>
                     <td>@order.OrderCondition</td>
-                    <td>
-                        <a href="@Url.Action("OrderDetails", new { id = order.OrderId })" class="btn btn-info">Details</a>
-                        <form method="post" asp-action="Delete" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                    <td style="justify-content:center">
+                        @{
+                            if(order.OrderCondition == OrderCondition.Delivered){
+                                <a href="@Url.Action("OrderDetails", new { id = order.OrderId })" class="btn btn-success justify-content-center" style="margin-left:35px">Details</a>
+                            }
+                            else if(order.OrderCondition == OrderCondition.OrderTaken)
+                            {
+                                <a href="@Url.Action("OrderDetails", new { id = order.OrderId })" class="btn btn-warning justify-content-center" style="margin-left:35px">Details</a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("OrderDetails", new { id = order.OrderId })" class="btn btn-info justify-content-center" style="margin-left:35px">Details</a>
+                            }
+                        }
+                       
+                        @* <form method="post" asp-action="Delete" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this item?');">
                             <input type="hidden" name="id" value="@order.OrderId" />
-                            @*  <button type="submit" class="btn btn-danger">Delete</button> *@
-                        </form>
+                              <button type="submit" class="btn btn-danger">Delete</button> 
+                        </form> *@
                     </td>
                 </tr>
             }
