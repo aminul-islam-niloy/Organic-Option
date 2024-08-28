@@ -28,7 +28,7 @@
         </div>
     </form>
 
-    <table class="table table-bordered mt-4">
+    <table class="table table-bordered mt-4" id="myTable">
         <thead class="thead-dark">
             <tr>
                 <th>Order ID</th>
@@ -74,3 +74,35 @@
         </tbody>
     </table>
 </div>
+
+
+@section scripts {
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/alertify.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css" />
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+
+        $(function () {
+            var save = '@TempData["save"]'
+            if (save != '') {
+                alertify.success(save);
+            }
+            var edit = '@TempData["edit"]'
+            if (edit != '') {
+                alertify.success(edit);
+            }
+            var del = '@TempData["delete"]'
+            if (del != '') {
+                alertify.error(del);
+            }
+        });
+
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+    </script>
+}

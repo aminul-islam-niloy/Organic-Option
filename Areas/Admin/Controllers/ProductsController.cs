@@ -35,18 +35,37 @@ namespace OnlineShop.Areas.Admin.Controllers
         }
 
         //POST Index action method
+
+        //public IActionResult Index(decimal? lowAmount, decimal? largeAmount)
+        //{
+        //    var products = _db.Products.Include(c => c.ProductTypes).Include(c => c.SpecialTag)
+        //        .Where(c => c.Price >= lowAmount && c.Price <= largeAmount).ToList();
+        //    if (lowAmount == null || largeAmount == null)
+        //    {
+        //        products = _db.Products.Include(c => c.ProductTypes).Include(c => c.SpecialTag).ToList();
+        //    }
+
+
+
+
+        //    return View(products);
+        //}
+
+
         [HttpPost]
-        public IActionResult Index(decimal? lowAmount, decimal? largeAmount)
+        public IActionResult Index(decimal? lowAmount, decimal? largeAmount, string searchQuery)
         {
-            var products = _db.Products.Include(c => c.ProductTypes).Include(c => c.SpecialTag)
-                .Where(c => c.Price >= lowAmount && c.Price <= largeAmount).ToList();
-            if (lowAmount == null || largeAmount == null)
+            var products = _db.Products.Include(c => c.ProductTypes).Include(c => c.SpecialTag).ToList();
+
+            if (lowAmount != null && largeAmount != null)
             {
-                products = _db.Products.Include(c => c.ProductTypes).Include(c => c.SpecialTag).ToList();
+                products = products.Where(c => c.Price >= lowAmount && c.Price <= largeAmount).ToList();
             }
 
-
-
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                products = products.Where(c => c.Name.Contains(searchQuery)).ToList();
+            }
 
             return View(products);
         }

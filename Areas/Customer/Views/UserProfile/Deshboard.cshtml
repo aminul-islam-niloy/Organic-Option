@@ -154,6 +154,9 @@
 
                             <dt class="col-sm-4">Other Setting:</dt>
                             <dd class="col-sm-8">   <a asp-area="Identity" class="btn btn-danger" style="margin-left:10px" asp-page="/Account/Manage/ChangePassword" title="Manage"> Password Section</a> </dd>
+
+                            <dt class="col-sm-4">Discount:</dt>
+                            <dd class="col-sm-8">  <a asp-action="SetDiscount" class="btn btn-info"><i class="fas fa-plus"></i>&nbsp; Set Discount</a></dd>
                         }
                         @if (User.IsInRole("SuperAdmin"))
                         {
