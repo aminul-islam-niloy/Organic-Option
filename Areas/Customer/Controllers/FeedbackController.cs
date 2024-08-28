@@ -17,13 +17,12 @@ namespace OrganicOption.Areas.Customer.Controllers
             _context = context;
         }
 
-        // GET: Feedback/Create
+
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Feedback/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Comment,Name,Email")] FeedBack feedback)
@@ -32,18 +31,27 @@ namespace OrganicOption.Areas.Customer.Controllers
             {
                 _context.Add(feedback);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(ThankYou));
+
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    return RedirectToAction(nameof(ThankYou));
+                }
             }
+
             return View(feedback);
         }
 
-        // GET: Feedback/ThankYou
+
         public IActionResult ThankYou()
         {
-            return View();
+            return PartialView(); 
         }
 
-   
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             return View( _context.FeedBack.ToList());
