@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 namespace OrganicOption.Areas.Farmer.Controllers
 {
     [Area("Farmer")]
-    [Authorize(Roles = "Farmer")]
+    [Authorize(Roles = "Farmer,Admin")]
     public class FarmerShopController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -37,8 +37,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> AllShop()
         {
-       
-            // Retrieve all shops in FarmerShop
+
             var farmerShops = await _context.FarmerShop.ToListAsync();
 
             return View(farmerShops);
@@ -136,10 +135,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(FarmerShop farmerShop, IFormFile coverPhoto)
         {
-            //if (ModelState.IsValid)
-            //{
-          
-            // Handle the cover photo upload
+     
             if (coverPhoto != null && coverPhoto.Length > 0)
                 {
                     using (var stream = new MemoryStream())
@@ -154,20 +150,19 @@ namespace OrganicOption.Areas.Farmer.Controllers
             var existingShop = await _context.FarmerShop.FirstOrDefaultAsync(shop => shop.FarmerUserId == currentUser.Id);
             if (existingShop != null)
             {
-                // Redirect the user or display a message indicating they cannot create another shop
-                return RedirectToAction(nameof(ShopExist)); // Example: Redirect to an error page indicating that the user already has a shop
+                
+                return RedirectToAction(nameof(ShopExist)); 
             }
 
             farmerShop.FarmerUser = (OnlineShop.Models.ApplicationUser)currentUser;
                 //farmerShop.FarmerUserId = User.Identity.Name;
 
-                // Add the farmer shop to the database
+                
                 _context.FarmerShop.Add(farmerShop);
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
-            //}
-            //return View(farmerShop);
+            
         }
 
 
@@ -235,7 +230,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
             shopToUpdate.ShopAddress.StreetNo = farmerShop.ShopAddress.StreetNo;
             shopToUpdate.ShopAddress.House = farmerShop.ShopAddress.House;
 
-            // Handle file upload for CoverPhoto
+     
             if (coverPhoto != null && coverPhoto.Length > 0)
             {
                 using (var stream = new MemoryStream())
@@ -265,33 +260,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> EditOpenStatus(int id, bool IsShopOpen)
-        //{
-        //    var shopToUpdate = await _context.FarmerShop.FindAsync(id);
-        //    if (shopToUpdate == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    // Update the IsShopOpen status
-        //    shopToUpdate.IsShopOpen = IsShopOpen;
-
-        //    try
-        //    {
-        //        _context.Update(shopToUpdate);
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateException)
-        //    {
-        //        // Handle the exception if needed (e.g., log it, show a message, etc.)
-        //        // Return a view or handle the exception as appropriate
-        //    }
-
-        //    return RedirectToAction(nameof(Index));
-        //}
-
+        
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -312,9 +281,6 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
-
-
 
 
 
@@ -380,28 +346,22 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
                 var currentUser = await _userManager.GetUserAsync(User);
 
-                // Retrieve the FarmerShopId associated with the current user
+            
                 var currentShop = await _context.FarmerShop.FirstOrDefaultAsync(shop => shop.FarmerUserId == currentUser.Id);
                 if (currentShop != null)
                 {
-                    // FarmerShop found, set its ID for the product being created
                     product.FarmerShopId = currentShop.Id;
                 }
 
                 product.CreationTime = DateTime.Now;
-                //product.ExpirationTime = product.ExpirationTime.Date + product.ExpirationTime.TimeOfDay;
-
-             //   DateTime combinedExpirationTime = ExpirationTime.Date + ExpirationTime.TimeOfDay;
-
-                // Handle the ExpirationTime
+                
                 if (product.ExpirationTime < DateTime.Now)
                 {
                     ModelState.AddModelError(nameof(product.ExpirationTime), "Expiration time cannot be in the past.");
-                    // Return the view with the validation error
+            
                     return View(product);
                 } 
 
-                //Product add Section
 
                 var searchProduct = _context.Products.FirstOrDefault(c => c.Name == product.Name);
                 if (searchProduct != null)
@@ -414,7 +374,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
                 if (ImagesSmall != null && ImagesSmall.Count > 0)
                 {
-                    product.ImagesSmall = new List<ProductImage>(); // Initialize the collection
+                    product.ImagesSmall = new List<ProductImage>(); 
 
                     foreach (var image in ImagesSmall)
                     {
@@ -422,7 +382,6 @@ namespace OrganicOption.Areas.Farmer.Controllers
                         {
                             var imagePath = Path.Combine(_webHostEnvironment.WebRootPath + "/Images", Path.GetFileName(image.FileName));
 
-                            // Ensure the directory exists
                             Directory.CreateDirectory(Path.GetDirectoryName(imagePath));
 
                             using (var fileStream = new FileStream(imagePath, FileMode.Create))
@@ -442,18 +401,17 @@ namespace OrganicOption.Areas.Farmer.Controllers
                 }
                 else
                 {
-                    product.ImagesSmall = new List<ProductImage>(); // Ensure collection is initialized
+                    product.ImagesSmall = new List<ProductImage>(); 
                 }
 
                 // Check if there are any images in ImagesSmall collection
                 if (product.ImagesSmall != null && product.ImagesSmall.Any())
                 {
-                    // Set the Image property to the path of the first image
+                    // Set  Image property to the path of the first image
                     product.Image = product.ImagesSmall.First().ImagePath;
                 }
 
 
-                // Add the product to the database
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
 
@@ -461,11 +419,11 @@ namespace OrganicOption.Areas.Farmer.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // If ModelState is not valid, return the view with the model
             return View(product);
         }
 
 
+        [Authorize(Roles = "Farmer,Admin")]
 
         public IActionResult EditProduct(int Id)
         {
@@ -485,7 +443,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
         }
 
-
+        [Authorize(Roles = "Farmer,Admin")]
         [HttpPost]
         public async Task<IActionResult> EditProduct(Products product, List<IFormFile> ImagesSmall)
         {
@@ -509,12 +467,9 @@ namespace OrganicOption.Areas.Farmer.Controllers
                 if (product.ExpirationTime < DateTime.Now)
                 {
                     ModelState.AddModelError(nameof(product.ExpirationTime), "Expiration time cannot be in the past.");
-                    // Return the view with the validation error
+                   
                     return View(product);
                 }
-
-            
-
 
                 if (ImagesSmall != null && ImagesSmall.Count > 0)
                 {
@@ -566,10 +521,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
         }
 
 
-
-
-
-        //GET Details Action Method
+        [Authorize(Roles = "Farmer,Admin")]
         public ActionResult ProductDetails(int? id)
         {
             ViewData["productTypeId"] = new SelectList(_context.ProductTypes.ToList(), "Id", "ProductType");
@@ -583,7 +535,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
             var product = _context.Products
                 .Include(p => p.ProductTypes)
                 .Include(p => p.SpecialTag)
-                .Include(p => p.ImagesSmall) // Include the collection of images
+                .Include(p => p.ImagesSmall) 
                 .FirstOrDefault(p => p.Id == id);
 
             if (product == null)
@@ -595,8 +547,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
         }
 
 
-        //GET Delete Action Method
-
+        [Authorize(Roles = "Farmer,Admin")]
         public ActionResult ProductDelete(int? id)
         {
             ViewData["productTypeId"] = new SelectList(_context.ProductTypes.ToList(), "Id", "ProductType");
@@ -615,8 +566,8 @@ namespace OrganicOption.Areas.Farmer.Controllers
             return View(product);
         }
 
-        //POST Delete Action Method
 
+        [Authorize(Roles = "Farmer,Admin")]
         [HttpPost]
         [ActionName("ProductDelete")]
         public async Task<IActionResult> DeleteConfirm(int? Id)
@@ -643,17 +594,17 @@ namespace OrganicOption.Areas.Farmer.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Shop(int shopId)
         {
-            // Check if the data is already cached
+            //  data is already cached
             if (!_cache.TryGetValue($"farmerShop_{shopId}", out FarmerShop farmerShop))
             {
-                // Data is not in cache, so retrieve it from the database
+               
                 farmerShop = await _context.FarmerShop
                     .Include(fs => fs.Products)
                     .Include(fs=>fs.ShopAddress)
                     .FirstOrDefaultAsync(fs => fs.Id == shopId);
                 if (farmerShop == null)
                 {
-                    return NotFound(); // Shop not found
+                    return NotFound();
                 }
 
                 // Cache the data for 5 minutes
@@ -676,7 +627,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
              .ToList();
 
 
-            // Now retrieve products for the specific shop and categorize them
+            //  retrieve products for the specific shop and categorize 
             var viewModel = new ShopViewModel
             {
                 FarmerShop = farmerShop,
@@ -703,14 +654,13 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             if (!_cache.TryGetValue(cacheKey, out IEnumerable<Products> cachedProducts))
             {
-                // Data is not in cache, so retrieve it from the database
+                // Data is not in cache, retrieve it from the database
                 cachedProducts = _context.Products
-                    .Where(p => p.ProductTypes.ProductType == category && p.FarmerShopId == shopId) // Filter by category and shop ID
+                    .Where(p => p.ProductTypes.ProductType == category && p.FarmerShopId == shopId) 
                     .Include(p => p.ProductTypes)
                     .Include(p => p.SpecialTag)
                     .ToList();
 
-                // Cache the data for 5 minutes
                 _cache.Set(cacheKey, cachedProducts, TimeSpan.FromMinutes(5));
             }
 
@@ -730,7 +680,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
         [AllowAnonymous]
         public IActionResult CreateReview(string farmerShopId)
         {
-            ViewBag.FarmerShopId = farmerShopId; // Pass the FarmerShop ID to the view
+            ViewBag.FarmerShopId = farmerShopId;
             return View();
         }
 
@@ -765,14 +715,9 @@ namespace OrganicOption.Areas.Farmer.Controllers
             }
 
             return RedirectToAction("Shop", new { shopId = review.FarmerShopId });
-        
 
-
-            
 
         }
-
-
 
 
     }

@@ -38,8 +38,9 @@
                         <td>@item.Quantity</td>
                         <td style="width: 150px">
                             <div class="btn-group">
-                                <a asp-action="Details" class="btn btn-success" asp-route-id="@item.Id"><i class="fas fa-list-ul"></i></a>
-                                <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id"><i class="fas fa-trash-alt"></i></a>
+                                <a asp-action="EditProduct" asp-area="Farmer" asp-controller="FarmerShop" class="btn btn-success" asp-route-id="@item.Id"><i class="fas fa-edit-ul"></i></a>
+                                <a asp-action="ProductDetails" asp-area="Farmer" asp-controller="FarmerShop" class="btn btn-success" asp-route-id="@item.Id"><i class="fas fa-list-ul"></i></a>
+                                <a asp-action="ProductDelete" asp-area="Farmer" asp-controller="FarmerShop" class="btn btn-danger" asp-route-id="@item.Id"><i class="fas fa-trash-alt"></i></a>
                             </div>
                         </td>
                     </tr>
