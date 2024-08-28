@@ -1,9 +1,9 @@
 ﻿@model IEnumerable<OrganicOption.Models.WithdrawalHistory>
 
-<div class="container">
-    <h3>Withdrawal Requests</h3>
+<div class="container mt-3" >
+    <h4 class="text-center mt-2 mb-2" style="font-size:20px">Withdrawal Requests</h4>
 
-    <table class="table">
+    <table class="table table-responsive" id="myTable">
         <thead>
             <tr>
                 <th>User</th>
@@ -45,3 +45,18 @@
         </tbody>
     </table>
 </div>
+@section scripts {
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css" />
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Initialize DataTable on the table element
+            $('#myTable table').DataTable();
+        });
+    </script>
+}

@@ -36,11 +36,7 @@ namespace OrganicOption.Areas.Admin.Controllers
                      .Where(w => !w.IsConfirmed)
                 .ToList();
 
-            //foreach (var request in withdrawalRequests)
-            //{
-            //    // Ensure that _userManager is of type UserManager<ApplicationUser>
-            //    request.User = await _userManager.FindByIdAsync(request.UserId) as ApplicationUser;
-            //}
+          
             return View(withdrawalRequests);
         }
 
@@ -76,7 +72,7 @@ namespace OrganicOption.Areas.Admin.Controllers
                     return RedirectToAction("AdminViewWithdrawals");
                 }
 
-                // Deduct from Revenue first, then from Due if necessary
+              
                 if (rider.Revenue >= request.Amount)
                 {
                     rider.Revenue -= request.Amount;
@@ -129,7 +125,7 @@ namespace OrganicOption.Areas.Admin.Controllers
                 .OrderBy(w => w.ConfirmDate)
                 .ToList();
 
-            // Pass data to the view
+         
             ViewBag.TotalRevenue = totalRevenue;
             return View(confirmedWithdrawals);
         }

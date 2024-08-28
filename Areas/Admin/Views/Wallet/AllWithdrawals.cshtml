@@ -1,42 +1,66 @@
 ﻿@model IEnumerable<OrganicOption.Models.WithdrawalHistory>
 <br />
 <div class="container">
-    <h3 class="justify-content-center text-center">Admin Total Revenue : @ViewBag.TotalRevenue ৳
-    </h3>
+    <!-- Admin Total Revenue -->
+    <h3 class="text-center">Admin Total Revenue: @ViewBag.TotalRevenue ৳</h3>
     <br />
-    <h4 class="justify-content-center text-center">Confirmed Withdrawals in @DateTime.Now.ToString("MMMM yyyy")</h4>
+    <!-- Confirmed Withdrawals -->
+    <h4 class="text-center">Confirmed Withdrawals in @DateTime.Now.ToString("MMMM yyyy")</h4>
     <br />
 
-    <a href="@Url.Action("AdminViewWithdrawals", "Wallet")" style="margin-left:110px" class="btn btn-primary">Manage Withdraw</a>
-    <br />
+    <!-- Button aligned to the right -->
+    <div class="d-flex justify-content-end mb-3">
+        <a href="@Url.Action("AdminViewWithdrawals", "Wallet")" class="btn btn-primary">Manage Withdraw</a>
+    </div>
+
+    <!-- Conditional Content -->
     @if (!Model.Any())
     {
         <p>No confirmed withdrawals for this month.</p>
     }
     else
     {
-        <table class="table table-responsive table-bordered">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>User</th>
-                    <th>Type</th>
-                    <th>Amount</th>
-                    <th>Confirmed By</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var request in Model)
-                {
+        <!-- Responsive Table -->
+        <div class="table table-responsive" id="myTable">
+            <table class="table table-bordered">
+                <thead>
                     <tr>
-                        <td>@request.ConfirmDate?.ToString("dd-MM-yyyy")</td>
-                        <td>@request.UserId</td>
-                        <td>@request.UserType</td>
-                        <td>@request.Amount ৳ </td>
-                        <td>@request.AdminId</td>
+                        <th>Date</th>
+                        <th>User</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Confirmed By</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var request in Model)
+                    {
+                        <tr>
+                            <td>@request.ConfirmDate?.ToString("dd-MM-yyyy")</td>
+                            <td>@request.UserId</td>
+                            <td>@request.UserType</td>
+                            <td>@request.Amount ৳ </td>
+                            <td>@request.AdminId</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     }
 </div>
+
+@section scripts {
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css" />
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Initialize DataTable on the table element
+            $('#myTable table').DataTable();
+        });
+    </script>
+}
