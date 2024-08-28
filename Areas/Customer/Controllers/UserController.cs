@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data;
 using OnlineShop.Models;
 using System;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 namespace OnlineShop.Areas.Customer.Controllers
 {
     [Area("Customer")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,SuperAdmin")]
     public class UserController : Controller
     {
         UserManager<IdentityUser> _userManager;
@@ -22,10 +23,10 @@ namespace OnlineShop.Areas.Customer.Controllers
             _userManager = userManager;
             _db = db;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             //var dd = _userManager.GetUserId(HttpContext.User);
-            return View(_db.ApplicationUser.ToList());
+            return View(await _db.ApplicationUser.ToListAsync());
         }
 
 
