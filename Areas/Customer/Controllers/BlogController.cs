@@ -13,6 +13,7 @@ using System.IO;
 namespace OrganicOption.Areas.Customer.Controllers
 {
     [Area("Customer")]
+    [Authorize(Roles = "Admin")]
     public class BlogController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -24,7 +25,7 @@ namespace OrganicOption.Areas.Customer.Controllers
             _hostEnvironment = hostEnvironment;
         }
 
-
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             return View(await _context.BlogPosts.ToListAsync());
@@ -35,7 +36,7 @@ namespace OrganicOption.Areas.Customer.Controllers
             return View(await _context.BlogPosts.ToListAsync());
         }
 
-
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -88,7 +89,7 @@ namespace OrganicOption.Areas.Customer.Controllers
             return View(blogPost);
         }
 
-        // GET: Blog/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -150,7 +151,7 @@ namespace OrganicOption.Areas.Customer.Controllers
             return View(blogPost);
         }
 
-        // GET: Blog/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

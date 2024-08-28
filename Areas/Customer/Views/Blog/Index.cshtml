@@ -1,24 +1,74 @@
 ﻿@model IEnumerable<OrganicOption.Models.Blogs.BlogPost>
 
-<div class="container mt-10">
-    <h4>Blog Posts</h4>
+<div class="container mt-4">
     <div class="row">
         @foreach (var post in Model)
         {
-                <div class=" card col-md-4 " style=" margin:10px; padding:10px">
-            
-                        <img src="@post.Image" class="card-img-top" style="max-width: 60%;  height: auto;" alt="@post.Title">
-                
-                    <div class="card-body">
-                        <h5 class="card-title">@post.Title</h5>
-                        <p class="card-text">@post.ShortDescription</p>
-                        <p class="card-text"><small class="text-muted">Posted on @post.PostedDate.ToString("MMMM dd, yyyy")</small></p>
-                        <a href="@Url.Action("Details", new { id = post.Id })" class="btn btn-primary">Read More</a>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <a href="@Url.Action("Details", new { id = post.Id })" class="d-block">
+                        <img src="@post.Image" class="card-img-top img-fluid" alt="@post.Title" style="height: 200px; object-fit: cover;">
+                    </a>
+                    <div class="card-body d-flex flex-column">
+                        <h4 class="card-title">@post.Title</h4>
+                        <p class="card-text flex-grow-1">@post.ShortDescription</p>
+                        <p class="card-text text-muted"><small>Posted on @post.PostedDate.ToString("MMMM dd, yyyy")</small></p>
+                        <a href="@Url.Action("Details", new { id = post.Id })" class="btn btn-primary btn-block mt-3">Read More</a>
                     </div>
                 </div>
-     
-             
-
+            </div>
         }
     </div>
 </div>
+
+<style>
+    .card {
+        border-radius: 0.375rem;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+    .card-img-top {
+        width: 100%;
+        height: auto;
+    }
+
+    .card-body {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .btn-block {
+        width: 100%;
+    }
+
+    .img-fluid {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .d-block {
+        display: block;
+    }
+
+    .d-flex {
+        display: flex;
+    }
+
+    .flex-column {
+        flex-direction: column;
+    }
+
+    .flex-grow-1 {
+        flex-grow: 1;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+</style>

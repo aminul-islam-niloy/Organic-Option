@@ -1,23 +1,26 @@
 ﻿@model IEnumerable<OrganicOption.Models.Blogs.BlogPost>
 
 <div class="container mt-4">
-    <h2 class="text-center">Manage Blog Posts</h2>
+    <h3 class="text-center text-info mb-4">Manage Blog Posts</h3>
 
     <a asp-action="Create" class="btn btn-primary mb-3">Add New Blog Post</a>
 
     <div class="row">
         @foreach (var item in Model)
         {
-            <div class="col-md-4 mb-4">
-                <div class="card h-60">
-                    <img src="@item.Image" class="card-img-top" style="width:60%; height:auto" alt="@item.Title">
-                    <div class="card-body">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100 border shadow-sm">
+                    <!-- Image spans the full width of the card -->
+                    <img src="@item.Image" class="card-img-top" style="width: 100%; height: 200px; object-fit: cover;" alt="@item.Title">
+                    <div class="card-body text-center">
                         <h5 class="card-title">@item.Title</h5>
                         <p class="card-text">@item.ShortDescription</p>
                         <p class="text-muted">Posted on @item.PostedDate.ToString("MMMM dd, yyyy")</p>
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">View</a>
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary mx-1">View</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary mx-1">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger mx-1">Delete</a>
                     </div>
                 </div>
             </div>

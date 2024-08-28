@@ -1,32 +1,29 @@
 ﻿@model OrganicOption.Models.Blogs.BlogPost
-<br />
-<div class="container">
-    <h3 class="display-7 mt-4 text-center">@Model.Title</h3>
 
-    <!-- Main Image -->
+<div class="container mt-5">
+    <h4 class=" text-center mb-4" style="font-size:30px">@Model.Title</h4>
+
     <div class="text-center mb-4">
-        <img src="@Model.Image" class="img-fluid rounded shadow" alt="@Model.Title" style="max-width: 100%; height: auto;" />
+        <img src="@Model.Image" class="img-fluid rounded shadow-sm" alt="@Model.Title" style="max-width: 100%; height: 300px;" />
     </div>
 
-    <!-- Posted Date -->
-    <p class="text-muted">Posted on @Model.PostedDate.ToString("MMMM dd, yyyy")</p>
+    <p class="text-muted text-center mb-4">Posted on @Model.PostedDate.ToString("MMMM dd, yyyy")</p>
 
-    <!-- Full Description with different styles -->
-    <div class="full-description mt-4">
+    <div class="full-description">
         @Html.Raw(Model.FullDescription)
     </div>
 
-    <!-- Back to List Button -->
-    <div class="mt-5">
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <div class="text-center mt-5">
+        <a asp-action="Index" class="btn btn-secondary ">Back to List</a>
     </div>
 </div>
 
 <style>
     .full-description p {
         margin-bottom: 1.5rem;
-        font-size: 1.1rem;
+        font-size: 1.125rem;
         line-height: 1.6;
+        color: #212529;
     }
 
     .full-description h3 {
@@ -49,5 +46,7 @@
         padding: 1rem;
         background: #f8f9fa;
         border-left: 4px solid #343a40;
+        color: #495057;
+        font-style: italic;
     }
 </style>
