@@ -11,7 +11,7 @@ namespace OnlineShop.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class ProductTypesController : Controller
     {
-        //dbset property access and it called when we try to modify this Page
+        
         private ApplicationDbContext _db;
         public ProductTypesController(ApplicationDbContext context)
         {
@@ -75,7 +75,6 @@ namespace OnlineShop.Areas.Admin.Controllers
             return View(productTypes);
         }
 
-        //GET Details Action Method
 
         public ActionResult Details(int? id)
         {
@@ -92,7 +91,6 @@ namespace OnlineShop.Areas.Admin.Controllers
             return View(productType);
         }
 
-        //POST Edit Action Method
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -103,8 +101,6 @@ namespace OnlineShop.Areas.Admin.Controllers
         }
 
 
-
-        //GET Delete Action Method
 
         public ActionResult Delete(int? id)
         {
@@ -122,7 +118,6 @@ namespace OnlineShop.Areas.Admin.Controllers
         }
 
 
-        //POST Delete Action Method
 
         [HttpPost]
         [ValidateAntiForgeryToken]
