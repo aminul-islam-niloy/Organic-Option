@@ -1,7 +1,7 @@
 ﻿﻿@{
     ViewData["Title"] = "Index";
 }
-
+<div class="container">
 <br />
 <div class="row">
     <div class="col-6">
@@ -19,7 +19,7 @@
 </div>
 <br />
 <div>
-    <table class="table table-striped border">
+        <table class="table table-striped border" id="myTable">
         <tr class="table-info">
             <th>
                 Name
@@ -46,24 +46,19 @@
         }
     </table>
 </div>
+</div>
 
 
-@section scripts{
+@* @section scripts {
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/alertify.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css" />
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+
     <script type="text/javascript">
-        $(function () {
-            var save = '@TempData["save"]'
-            if (save != '') {
-                alertify.success(save);
-            }
-            var edit = '@TempData["edit"]'
-            if (edit != '') {
-                alertify.success(edit);
-            }
-            var del = '@TempData["delete"]'
-            if (del != '') {
-                alertify.error(del);
-            }
-        })
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+
     </script>
 }
+ *@
