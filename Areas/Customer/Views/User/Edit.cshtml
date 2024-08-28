@@ -129,25 +129,7 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
-    <script>
-        $(document).ready(function () {
-            $("#user-form").validate({
-                rules: {
-                    UserName: {
-                        required: true,
-                    },
-                    PasswordHash: {
-                        required: true,
-                    }
-                },
-                messages: {
-                    UserName: "Enter your email",
-                    PasswordHash: "Enter your password"
-                }
-
-            });
-        });
-    </script>
+   
 }
 
 

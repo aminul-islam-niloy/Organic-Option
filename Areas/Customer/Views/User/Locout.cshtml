@@ -1,80 +1,56 @@
 ﻿@model OnlineShop.Models.ApplicationUser
 
-
 @{
-    ViewData["Title"] = "Locout";
+    ViewData["Title"] = "Logout";
 }
 <br />
 
-<h2 class="text-info">Locout user</h2>
-<form asp-action="Locout" method="post" id="user-form" enctype="multipart/form-data">
-    <div class="p-4 rounded border">
-        <div asp-validation-summary="ModelOnly" class="text-danger">
-        </div>
-        <input type="hidden" asp-for="Id" value="@Model.Id" />
-        <h3>@ViewBag.message</h3>
-        <h3>Do you want to locout this user ?</h3>
-        <br />
-        <div class="form-group row">
-            <div class="col-2">
-                <label asp-for="UserName"></label>
-            </div>
-            <div class="col-5">
-                <input asp-for="UserName" class="form-control" readonly="readonly" />
-            </div>
-            <span asp-validation-for="UserName" class="text-danger"></span>
-        </div>
+<div class="d-flex justify-content-center">
+    <div class=" col-md-4 col-lg-4">
+        <h4 class="text-info text-center">Logout User</h4>
+        <form asp-action="Logout" method="post" id="user-form" enctype="multipart/form-data">
+            <div class="p-4 rounded border">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" value="@Model.Id" />
+                <h4>@ViewBag.message</h4>
+                <h4 class="text-center">Do you want to logout this user?</h4>
+                <br />
 
-        <div class="form-group row">
-            <div class="col-2">
-                <label asp-for="FirstName"></label>
-            </div>
-            <div class="col-5">
-                <input asp-for="FirstName" class="form-control" readonly="readonly" />
-            </div>
-            <span asp-validation-for="FirstName" class="text-danger"></span>
-        </div>
-        <div class="form-group row">
-            <div class="col-2">
-                <label asp-for="LastName"></label>
-            </div>
-            <div class="col-5">
-                <input asp-for="LastName" class="form-control" readonly="readonly" />
-            </div>
-            <span asp-validation-for="LastName" class="text-danger"></span>
-        </div>
+                <div class="form-group row">
+                    <label asp-for="UserName" class="col-4 col-form-label"></label>
+                    <div class="col-8">
+                        <input asp-for="UserName" class="form-control" readonly />
+                    </div>
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
 
-        <div class="form-group">
-            <input type="submit" class="btn btn-primary" value="Locout" />
-            <a asp-action="Index" class="btn btn-success">Back to List</a>
-        </div>
+                <div class="form-group row">
+                    <label asp-for="FirstName" class="col-4 col-form-label"></label>
+                    <div class="col-8">
+                        <input asp-for="FirstName" class="form-control" readonly />
+                    </div>
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group row">
+                    <label asp-for="LastName" class="col-4 col-form-label"></label>
+                    <div class="col-8">
+                        <input asp-for="LastName" class="form-control" readonly />
+                    </div>
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group text-center mt-5">
+                    <input type="submit" class="btn btn-primary" value="Logout" />
+                    <a asp-action="Index" class="btn btn-success">Back to List</a>
+                </div>
+            </div>
+        </form>
     </div>
-</form>
+</div>
 
-@section Scripts{
+@section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
-    <script>
-        $(document).ready(function () {
-            $("#user-form").validate({
-                rules: {
-                    UserName: {
-                        required: true,
-                    },
-                    PasswordHash: {
-                        required: true,
-                    }
-                },
-                messages: {
-                    UserName: "Enter your email",
-                    PasswordHash: "Enter your password"
-                }
-
-            });
-        });
-    </script>
 }
-
-

@@ -22,7 +22,7 @@ namespace OnlineShop.Areas.Admin.Controllers
     public class ProductsController : Controller
     {
 
-        private ApplicationDbContext _db;
+        private readonly ApplicationDbContext _db;
         private readonly IWebHostEnvironment _webHostEnvironment;
         public ProductsController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
         {

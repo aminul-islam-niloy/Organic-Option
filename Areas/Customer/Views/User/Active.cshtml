@@ -3,9 +3,10 @@
 @{
     ViewData["Title"] = "Edit";
 }
-<br />
+<div class="container">
 
-<h2 class="text-info">Edit user</h2>
+<h4 class="text-info">Active user</h4>
+<br />
 <form asp-action="Active" method="post" id="user-form" enctype="multipart/form-data">
     <div class="p-4 rounded border">
         <div asp-validation-summary="ModelOnly" class="text-danger">
@@ -41,13 +42,15 @@
             <span asp-validation-for="LastName" class="text-danger"></span>
         </div>
 
-        <div class="form-group">
+        <div class="form-group mt-3">
             <input type="submit" class="btn btn-primary" value="Active" />
 
             <a asp-action="Index" class="btn btn-success">Back to List</a>
         </div>
     </div>
 </form>
+
+</div>
 
 @section Scripts{
     @{

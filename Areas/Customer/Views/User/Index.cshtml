@@ -5,16 +5,15 @@
 @{
     ViewData["Title"] = "Index";
 }
+<div class="container">
 
-
-<br />
-<div class="row">
-    <div class="col-lg-6">
-        <h2 class="text-info">User List</h2>
+<div class="row mt-2">
+    <div class="col-lg-12">
+        <h4  style="font-size:25px"class="text-info text-center">User List</h4>
     </div>
-    <div class="col-lg-6 text-right">
+   @*  <div class="col-lg-6 text-right">
         <a asp-action="Create" class="btn btn-info"><i class="fas fa-plus"></i>&nbsp; New User</a>
-    </div>
+    </div> *@
 </div>
 <br />
 <div>
@@ -56,9 +55,7 @@
                             <a asp-action="Active" class="btn btn-primary" asp-route-id="@item.Id">
                                 <i class="far fa-edit"></i>
                             </a>
-                            <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id">
-                                <i class="fas fa-trash-alt"></i>
-                            </a>
+                           
                         </div>
 
                     </td>
@@ -80,6 +77,7 @@
             </tr> 
         }
     </table>
+</div>
 </div>
 
 @section scripts{

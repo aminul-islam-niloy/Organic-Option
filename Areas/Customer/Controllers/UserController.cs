@@ -24,7 +24,7 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
         public IActionResult Index()
         {
-            var dd = _userManager.GetUserId(HttpContext.User);
+            //var dd = _userManager.GetUserId(HttpContext.User);
             return View(_db.ApplicationUser.ToList());
         }
 

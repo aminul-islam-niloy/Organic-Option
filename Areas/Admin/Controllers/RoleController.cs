@@ -34,7 +34,7 @@ namespace OnlineShop.Areas.Admin.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -51,7 +51,7 @@ namespace OnlineShop.Areas.Admin.Controllers
                 ViewBag.name = name;
                 return View();
             }
-            //role type object accept
+  
             var result = await _roleManager.CreateAsync(role);
             if (result.Succeeded)
             {
@@ -131,7 +131,7 @@ namespace OnlineShop.Areas.Admin.Controllers
         }
 
 
-        public async Task<IActionResult> Assign()
+        public IActionResult Assign()
         {
 
             ViewData["UserId"] = new SelectList(_db.ApplicationUser.Where(f => f.LockoutEnd < DateTime.Now || f.LockoutEnd == null).ToList(), "Id", "UserName");
@@ -177,12 +177,6 @@ namespace OnlineShop.Areas.Admin.Controllers
             ViewBag.UserRoles = result;
             return View();
         }
-
-
-        // UPDATE AspNetUsers SET EmailConfirmed = 1;
-
-
-
 
 
 
