@@ -697,6 +697,12 @@ textarea:-ms-input-placeholder {
     min-width: 120px;
 }
 
+.ProductCategory-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+
 
 
 

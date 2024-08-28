@@ -3,13 +3,13 @@
 @{
 }
 
-<br/>
-<br/>
-<br/>
-<br/>
+<div class="container ">
+    <button class="btn btn-secondary ProductCategory-back-btn" onclick="window.history.back();">
+        <i class="fa-solid fa-arrow-left"></i> Back
+    </button>
 
-
-<h2 class="text-info">Delete Tags</h2>
+  <div class="container ProductCategory-container">
+<h4 class="text-info">Delete sub-Category</h4>
 
 <form asp-action="Delete" method="post">
     <div class="p-4 rounded border">
@@ -25,12 +25,15 @@
             </div>
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
-        <div class="form-group">
+        <div class="form-group mt-3">
             <input type="submit" class="btn btn-danger" value="Delete" />
             <a asp-action="Index" class="btn btn-success">Back to List</a>
         </div>
     </div>
 </form>
+
+</div>
+</div>
 
 
 

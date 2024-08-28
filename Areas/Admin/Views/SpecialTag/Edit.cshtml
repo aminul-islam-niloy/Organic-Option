@@ -3,52 +3,38 @@
 @{
 }
 
-<br/>
-<br/>
-<br/>
-<br/>
+<div class="container">
+    <button class="btn btn-secondary mb-3" onclick="window.history.back();">
+        <i class="fa-solid fa-arrow-left"></i> Back
+    </button>
 
-<h2 class="text-info">Edit Tag </h2>
+    <div class="container ProductCategory-container">
+        <h3 class="text-info mb-4 text-center">Edit Sub Category</h3>
 
-<div>
-    <form asp-action="Edit" method="post">
+        <form asp-action="Edit" method="post">
+            <div class="p-4 rounded border">
+                <input type="hidden" asp-for="Id" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <div class="p-4 rounded border">
-            <input type="hidden" asp-for="Id"/>
-            <div asp-validation-summary="ModelOnly" class="text-danger">
-            </div>
-            <div class="form-group row">
-                <div class="col-cl-6">
-                    <label asp-for="Name"></label>
+                <div class="form-group mb-3 row">
+                    <label asp-for="Name" class="col-sm-4 col-form-label text-sm-right">Name</label>
+                    <div class="col-sm-8">
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="col-cl-6">
-                    <input asp-for="Name" class="form-control" />
+
+                <div class="form-group text-center">
+                    <input type="submit" class="btn btn-primary mx-2" value="Update" />
+                    <a asp-action="Index" class="btn btn-success mx-2">Back to List</a>
                 </div>
-                <span asp-validation-for="Name" class="text-danger"></span>
-
-
             </div>
-
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Update" />
-                <a asp-action="Index" class="btn btn-success">Back to List</a>
-               
-            </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
 
-
-
-
-@section Scripts{
+@section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-
-
-
-
-
-
