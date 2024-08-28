@@ -1,4 +1,8 @@
 ﻿@model OnlineShop.Models.ProductTypes
+<div class="container">
+<button class="btn btn-secondary ProductCategory-back-btn" onclick="window.history.back();">
+    <i class="fa-solid fa-arrow-left"></i> Back
+</button>
 
 <br />
 <div class="row">
@@ -17,13 +21,14 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary">Create </button>
                     <a asp-action="Index" class="btn btn-success">Back to List</a>
                 </div>
             </div>
         </form>
     </div>
     <div class="col-lg-3"></div>
+</div>
 </div>
 
 

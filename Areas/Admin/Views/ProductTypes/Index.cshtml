@@ -1,63 +1,51 @@
 ﻿@using OnlineShop.Models
 @model IEnumerable<ProductTypes>
 
-@{
-}
 
-<br/>
+<div class="container">
+    <button class="btn btn-secondary ProductCategory-back-btn" onclick="window.history.back();">
+        <i class="fa-solid fa-arrow-left"></i> Back
+    </button>
 
-<div class="row"> 
-
+<div class="row ProductCategory-row mb-4">
     <div class="col-6">
-        <h3 class="text-info"> Product Catagory List</h3>
+        <h4 class="ProductCategory-heading text-info">Product Category List</h4>
     </div>
-    <div class="col-6 text-right">
-        <a asp-action="Create" class="btn btn-info"><i class="fa-solid fa-plus"></i> New Product Type  </a>
-    </div>
-    <div> </div>
-
-    <div class="col-cl-6">
-        <h2 class="text-info"> </h2>
+    <div class="col-6 text-right justify-content-end">
+        <a asp-action="Create" class="btn btn-info ProductCategory-new-btn">
+            <i class="fa-solid fa-plus"></i> New Product Type
+        </a>
     </div>
 </div>
 
-<br />
-
-
-<div >
-    <table class="table table-striped border">
-        <tr class="table-info">
-
-            <th>
-                @Html.DisplayNameFor(c => c.ProductType)
-            </th>
-            <th></th>
-            <th></th>
-            <th></th>
-          
-        
-
-        </tr>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.ProductType</td>
-                <td> <p>    </p></td>
-                <td>
-                    <partial name="_ButtonView" model="@item.Id" />
-                </td>
-
-              
-              
+    <div class="ProductCategory-table-wrapper" >
+    <table class="table table-striped border ProductCategory-table" >
+        <thead>
+            <tr class="table-info ProductCategory-table-header">
+                <th>@Html.DisplayNameFor(c => c.ProductType)</th>
+                <th></th>
+                <th></th>
+                <th></th>
             </tr>
-        }
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductType</td>
+                    <td></td>
+                    <td>
+                        <partial name="_ButtonView" model="@item.Id" />
+                    </td>
+                </tr>
+            }
+        </tbody>
     </table>
 </div>
 
+</div>
 
-@* TempData["delete"] = "Product type has been deleted"; *@
-
- @section scripts{
+@section scripts {
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/alertify.min.js"></script>
     <script type="text/javascript">
         $(function () {
@@ -75,5 +63,4 @@
             }
         })
     </script>
-
 }

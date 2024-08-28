@@ -31,6 +31,10 @@
     
    #37a366 
 
+
+
+    /*admin section product category*   621/
+
 -----------------------------------------------------------------------------------*/
 @import url("https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i|Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,900,900i");
 * {
@@ -614,6 +618,92 @@ textarea:-ms-input-placeholder {
   display: block;
   margin-bottom: 10px;
 }
+
+
+
+
+/*admin section product category*/
+
+
+.ProductCategory-row {
+    margin-bottom: 1.5rem;
+}
+
+.ProductCategory-heading {
+    font-size: 1.5rem;
+}
+
+.ProductCategory-new-btn {
+    margin-top: 0.5rem;
+    white-space: nowrap;
+}
+
+.ProductCategory-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.ProductCategory-table {
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.ProductCategory-table-header th {
+    text-align: left;
+}
+
+.ProductCategory-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+    .ProductCategory-back-btn i {
+        font-size: 1rem;
+    }
+
+.ProductCategory-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.ProductCategory-back-btn-wrapper {
+    margin-bottom: 1rem;
+}
+
+.ProductCategory-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ProductCategory-details {
+    width: 100%;
+}
+
+    .ProductCategory-details dl dt,
+    .ProductCategory-details dl dd {
+        text-align: left;
+    }
+
+.ProductCategory-form .form-group {
+    display: flex;
+    justify-content: center;
+}
+
+.ProductCategory-form .btn {
+    min-width: 120px;
+}
+
+
+
+
+
+
+
+
 
 /* searchbox css on nav menu  */
 /* Search Form Container */

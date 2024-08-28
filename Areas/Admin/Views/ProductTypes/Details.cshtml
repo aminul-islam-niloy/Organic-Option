@@ -2,77 +2,40 @@
 @{
     ViewData["Title"] = "Details";
 }
-<br />
 
-
-
-<h3 class="text-info">Product Type Details</h3>
-<div>
-
-    <br />
-    <br/>
-</div>
-<form asp-action="Details" method="post">
-    <div class="p-4 rounded border">
-        <div asp-validation-summary="ModelOnly" class="text-danger">
-
-        </div>
-       @*  <div class="form-group row">
-            <div class="col-2">
-                <label asp-for="ProductType"></label>
-            </div>
-            <div class="col-5">
-                <input asp-for="ProductType" readonly="readonly" class="form-control" />
-            </div>
-            <span asp-validation-for="ProductType" class="text-danger"></span>
-        </div> *@
-
-        <dl class="row">
-            <dt class="col-sm-6">
-                @Html.DisplayNameFor(model => model.ProductType)
-            </dt>
-            <dd class="col-sm-6">
-                @Html.DisplayFor(model => model.ProductType)
-            </dd>
-
-        </dl>
-
-
-
-        <div class="form-group">
-
-           @*  <a asp-action="Edit" asp-route-id="@Model.Id" class="btn  btn-primary">Edit</a> *@
-            <a type="button" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
-            
-            <a asp-action="Index" class="btn btn-success">Back to List</a>
-
-            @*<input type="submit" class="btn btn-success" value="Back to List" />*@
-        </div>
+<div class="container">
+    <div class="ProductCategory-back-btn-wrapper ">
+        <button class="btn btn-secondary ProductCategory-back-btn" onclick="window.history.back();">
+            <i class="fa-solid fa-arrow-left"></i> Back
+        </button>
     </div>
-</form>
+    <div class="container  ProductCategory-container">
+    <h4 class="text-info text-center my-4">Product Type Details</h4>
 
-@section Scripts{
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <form asp-action="Details" method="post" class="ProductCategory-form">
+        <div class="p-4 rounded border ProductCategory-details">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <dl class="row mb-4">
+                <dt class="col-sm-6 text-right">
+                    @Html.DisplayNameFor(model => model.ProductType)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.ProductType)
+                </dd>
+            </dl>
+
+            <div class="form-group text-center">
+                <a type="button" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary mx-2">Edit</a>
+                <a asp-action="Index" class="btn btn-success mx-2">Back to List</a>
+            </div>
+        </div>
+    </form>
+</div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
-
-<br />
-@* 
-<div>
-    <h4>PersonInfo</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProductType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProductType)
-        </dd>
-       
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
- *@
-
