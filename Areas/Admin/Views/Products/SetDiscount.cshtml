@@ -1,17 +1,27 @@
 ﻿@model OnlineShop.Models.Products
+<div class="container">
+    <button class="btn btn-secondary ProductCategory-back-btn" onclick="window.history.back();">
+        <i class="fa-solid fa-arrow-left"></i> Back
+    </button>
 
-<h4>Set Discount</h4>
-
-<form asp-action="SetDiscount" method="post">
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" asp-for="IsRamadan" />
-        <label class="form-check-label" asp-for="IsRamadan">Is Ramadan</label>
+    <div class="container d-flex justify-content-center align-items-center min-vh-40 ">
+        <div class="card shadow-sm" style="width: 100%; max-width: 400px;">
+            <div class="card-body">
+                <h4 class="card-title text-center">Set Discount</h4>
+                <form asp-action="SetDiscount" method="post">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" asp-for="IsRamadan" style="width:20px;height:20px" />
+                        <label style="font-size:20px; margin-left: 10px" class="form-check-label" asp-for="IsRamadan">Is Ramadan</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" asp-for="IsEid" style="width:20px; height:20px" />
+                        <label style="font-size:20px; margin-left: 10px" class="form-check-label" asp-for="IsEid">Is Eid</label>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" asp-for="IsEid" />
-        <label class="form-check-label" asp-for="IsEid">Is Eid</label>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+</div>
