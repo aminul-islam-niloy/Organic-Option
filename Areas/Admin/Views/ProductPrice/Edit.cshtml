@@ -1,26 +1,36 @@
 ﻿@model OrganicOption.Models.Blogs.ProductPrice
 
-<br />
+<div class="container mt-4">
+    <h3 class="text-center text-info mb-4">Update Product Price</h3>
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <form asp-action="Edit">
+                        <div class="form-group">
+                            <label asp-for="ProductName" class="control-label"></label>
+                            <input asp-for="ProductName" class="form-control" />
+                            <span asp-validation-for="ProductName" class="text-danger"></span>
+                        </div>
 
-<h3>Update Product Price</h3>
-<br />
-<form asp-action="Edit">
-    <div class="form-group">
-        <label asp-for="ProductName" class="control-label"></label>
-        <input asp-for="ProductName" class="form-control" />
-        <span asp-validation-for="ProductName" class="text-danger"></span>
+                        <div class="form-group">
+                            <label asp-for="Price" class="control-label"></label>
+                            <input asp-for="Price" class="form-control" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="ProductTypeId" class="control-label"></label>
+                            <select asp-for="ProductTypeId" asp-items="ViewBag.productTypeId" class="form-control"></select>
+                            <span asp-validation-for="ProductTypeId" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group text-center mt-3">
+                            <input type="submit" value="Update" class="btn btn-primary px-5" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Price" class="control-label"></label>
-        <input asp-for="Price" class="form-control" />
-        <span asp-validation-for="Price" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="ProductTypeId" class="control-label"></label>
-        <select asp-for="ProductTypeId" asp-items="ViewBag.productTypeId" class="form-control"></select>
-        <span asp-validation-for="ProductTypeId" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Update" class="btn btn-primary" />
-    </div>
-</form>
+</div>

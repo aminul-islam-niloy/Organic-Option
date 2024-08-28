@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace OrganicOption.Areas.Admin.Controllers
 {
     [Area("Admin")]
-
+    [Authorize(Roles = "Admin")]
     public class ProductPriceController : Controller
     {
   
@@ -122,6 +122,7 @@ namespace OrganicOption.Areas.Admin.Controllers
             return View(groupedProductPrices);
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> TodayPrice()
         {
             // Retrieve the data from the database
