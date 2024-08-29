@@ -1,4 +1,4 @@
-﻿@model OrderDetailsViewModel
+﻿ @model OrderDetailsViewModel
 
 <div class="container mt-2">
     <a href="javascript:history.back()" class="btn btn-secondary mb-2"><i class="fa fa-arrow-left"></i> Back</a>
@@ -8,12 +8,12 @@
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-10">
             <!-- Single Card for All Information -->
-            <div class="card mb-3  shadow-sm" id="printable-card">
+            <div class="card mb-3 shadow-sm" id="printable-card">
                 <div class="card-body">
                     <table class="table table-bordered">
                         <tbody>
                             <!-- Customer Information -->
-                            <tr class="justify-content-center text-center text-white " style="background:#37cd4a;">
+                            <tr class="justify-content-center text-center text-white" style="background:#37cd4a;">
                                 <th colspan="2">Customer Information</th>
                             </tr>
                             <tr>
@@ -46,8 +46,9 @@
                                 </tr>
                             }
 
+
                             <!-- Shop Information -->
-                            <tr class="justify-content-center text-center text-white " style="background:#b3b3b3;">
+                            <tr class="justify-content-center text-center text-white" style="background:#b3b3b3;">
                                 <th colspan="2">Shop Information</th>
                             </tr>
                             <tr>
@@ -80,7 +81,7 @@
                             }
 
                             <!-- Rider Information -->
-                            <tr class="justify-content-center text-center text-white " style="background:#37cd4a;">
+                            <tr class="justify-content-center text-center text-white" style="background:#37cd4a;">
                                 <th colspan="2">Rider Information</th>
                             </tr>
                             <tr>
@@ -113,7 +114,7 @@
                             }
 
                             <!-- Order Information -->
-                            <tr class="justify-content-center text-center text-white " style="background:#b3b3b3;">
+                            <tr class="justify-content-center text-center text-white" style="background:#b3b3b3;">
                                 <th colspan="2">Order Information</th>
                             </tr>
                             <tr>
@@ -133,7 +134,7 @@
                             </tr>
 
                             <!-- Products Information -->
-                            <tr class="justify-content-center text-center text-white " style="background:#37cd4a;">
+                            <tr class="justify-content-center text-center text-white" style="background:#37cd4a;">
                                 <th colspan="2">Products</th>
                             </tr>
                             @foreach (var product in Model.Products)
@@ -193,14 +194,12 @@
         justify-content: center;
     }
 
+    /* Hide all elements except the card during print */
+ 
 </style>
 
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $('#print-button').on('click', function () {
-            window.print();
-        });
+    document.getElementById("print-button").addEventListener("click", function () {
+        window.print();
     });
 </script>
