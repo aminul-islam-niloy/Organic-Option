@@ -32,13 +32,13 @@ namespace OnlineShop.Areas.Customer.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var user = await _db.ApplicationUser.FirstOrDefaultAsync(c => c.Id == id);
             if (user == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             // Check if the current user is authorized to view the details
@@ -63,7 +63,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             var user = await _db.ApplicationUser.FirstOrDefaultAsync(c => c.Id == id);
             if (user == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             return View(user);
@@ -87,7 +87,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             var userInfo = _db.ApplicationUser.FirstOrDefault(c => c.Id == user.Id);
             if (userInfo == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             userInfo.Latitude = latitude;
@@ -112,7 +112,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             var userInfo = _db.ApplicationUser.FirstOrDefault(c => c.Id == user.Id);
             if (userInfo == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             userInfo.FirstName = user.FirstName;
             userInfo.LastName = user.LastName;
@@ -154,7 +154,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             var user = await _db.ApplicationUser.FirstOrDefaultAsync(c => c.Id == id);
             if (user == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             return View(user);
@@ -173,7 +173,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             var userInfo = _db.ApplicationUser.FirstOrDefault(c => c.Id == user.Id);
             if (userInfo == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
 
             }
             _db.ApplicationUser.Remove(userInfo);
@@ -191,13 +191,13 @@ namespace OnlineShop.Areas.Customer.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var user = await _db.ApplicationUser.FirstOrDefaultAsync(c => c.Id == id);
             if (user == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             return View(user);
@@ -209,13 +209,13 @@ namespace OnlineShop.Areas.Customer.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var userInfo = await _db.ApplicationUser.FirstOrDefaultAsync(c => c.Id == user.Id);
             if (userInfo == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             userInfo.LockoutEnd = DateTime.Now.AddDays(1);
@@ -239,13 +239,13 @@ namespace OnlineShop.Areas.Customer.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var user = await _db.ApplicationUser.FirstOrDefaultAsync(c => c.Id == id);
             if (user == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
 
@@ -259,13 +259,13 @@ namespace OnlineShop.Areas.Customer.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var userInfo = await _db.ApplicationUser.FirstOrDefaultAsync(c => c.Id == user.Id);
             if (userInfo == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             userInfo.LockoutEnd = null;
@@ -289,13 +289,13 @@ namespace OnlineShop.Areas.Customer.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var user = await _db.ApplicationUser.FirstOrDefaultAsync(c => c.Id == id);
             if (user == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
            

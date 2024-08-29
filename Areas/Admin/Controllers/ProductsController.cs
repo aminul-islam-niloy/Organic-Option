@@ -59,7 +59,7 @@ namespace OnlineShop.Areas.Admin.Controllers
         public IActionResult SetDiscount(Products product, bool isRamadan, bool isEid)
         {
             var products = _db.Products.Include(c => c.ProductTypes).Include(f => f.SpecialTag).ToList();
-    
+
 
             foreach (var pro in products)
             {
@@ -69,7 +69,7 @@ namespace OnlineShop.Areas.Admin.Controllers
                     pro.Discount = 10;
                     pro.DiscountPrice -= 0.10M * pro.Price;
                 }
-               else if (isEid)
+                else if (isEid)
                 {
                     pro.Discount = 15;
                     pro.DiscountPrice -= 0.15M * pro.Price;
@@ -83,11 +83,12 @@ namespace OnlineShop.Areas.Admin.Controllers
             }
 
             _db.Products.UpdateRange(products);
-            _db.SaveChanges(); 
+            _db.SaveChanges();
 
             TempData["Discount"] = "Discount Has been Set";
             return RedirectToAction(nameof(Index));
 
         }
+
     }
 }

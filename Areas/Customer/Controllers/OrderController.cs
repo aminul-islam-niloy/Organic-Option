@@ -8,7 +8,6 @@ using OnlineShop.Models;
 using OnlineShop.Payment;
 using OnlineShop.Session;
 using OrganicOption.Models;
-using OrganicOption.Models.Rider_Section;
 using OrganicOption.Service;
 using Stripe;
 using Stripe.Checkout;
@@ -437,7 +436,7 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             if (order == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
 
@@ -472,7 +471,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             var order = await _db.OrderDetails.FindAsync(id);
             if (order == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             _db.OrderDetails.Remove(order);
@@ -537,11 +536,6 @@ namespace OnlineShop.Areas.Customer.Controllers
 
 
 
-
-
-
-
-
         [Authorize(Roles = "Customer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -558,7 +552,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             var order = await _db.Orders.FirstOrDefaultAsync(o => o.OrderNo == id);
             if (order == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             _db.Orders.Remove(order);
@@ -579,7 +573,7 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             if (order == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 

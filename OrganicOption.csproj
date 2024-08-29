@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Areas\Admin\Views\Products\MyProduct.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="favicon.ico" />
   </ItemGroup>
 
@@ -58,7 +62,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Areas\Admin\Views\Products\MyProduct.cshtml" />
     <None Include="wwwroot\leaf.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\Admin\Views\Products\MyProduct.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Areas\Admin\Views\Products\MyProduct.cshtml" />
   </ItemGroup>
 
 </Project>

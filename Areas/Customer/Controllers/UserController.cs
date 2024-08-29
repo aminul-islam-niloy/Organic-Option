@@ -73,7 +73,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             var user = _db.ApplicationUser.FirstOrDefault(c => c.Id == id);
             if (user == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             return View(user);
 
@@ -85,7 +85,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             var user = _db.ApplicationUser.FirstOrDefault(c => c.Id == id);
             if (user == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             return View(user);
         }
@@ -96,7 +96,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             var userInfo = _db.ApplicationUser.FirstOrDefault(c => c.Id == user.Id);
             if (userInfo == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
 
             }
             _db.ApplicationUser.Remove(userInfo);
@@ -114,12 +114,12 @@ namespace OnlineShop.Areas.Customer.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             var user = _db.ApplicationUser.FirstOrDefault(c => c.Id == id);
             if (user == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             return View(user);
         }
@@ -130,7 +130,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             var userInfo = _db.ApplicationUser.FirstOrDefault(c => c.Id == user.Id);
             if (userInfo == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
 
             }
             userInfo.LockoutEnd = DateTime.Now.AddDays(3);
@@ -148,7 +148,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             var user = _db.ApplicationUser.FirstOrDefault(c => c.Id == id);
             if (user == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             return View(user);
         }
@@ -159,7 +159,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             var userInfo = _db.ApplicationUser.FirstOrDefault(c => c.Id == user.Id);
             if (userInfo == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
 
             }
             //userInfo.LockoutEnd = DateTime.Now.AddDays(-1);

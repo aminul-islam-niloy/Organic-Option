@@ -206,13 +206,13 @@ namespace OnlineShop.Areas.Customer.Controllers
         //    var currentUser = await _userManager.GetUserAsync(User);
         //    if (currentUser == null)
         //    {
-        //        return NotFound();
+        //           return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
         //    }
 
         //    var user = await _db.ApplicationUser.FirstOrDefaultAsync(c => c.Id == currentUser.Id);
         //    if (user == null)
         //    {
-        //        return NotFound();
+        //           return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
         //    }
 
         //    double userLatitude = user.Latitude;
@@ -269,13 +269,13 @@ namespace OnlineShop.Areas.Customer.Controllers
         //    var currentUser = await _userManager.GetUserAsync(User);
         //    if (currentUser == null)
         //    {
-        //        return NotFound();
+        //           return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
         //    }
 
         //    var user = await _db.ApplicationUser.FirstOrDefaultAsync(c => c.Id == currentUser.Id);
         //    if (user == null)
         //    {
-        //        return NotFound();
+        //           return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
         //    }
 
         //    double userLatitude = user.Latitude;
@@ -361,7 +361,7 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             if (id == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var specificProduct = _db.Products
@@ -371,14 +371,14 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             if (specificProduct == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var farmerShop = _db.FarmerShop.FirstOrDefault(f => f.Id == specificProduct.FarmerShopId);
 
             if (farmerShop == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
     
@@ -415,13 +415,13 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             if (id == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var product = _db.Products.Include(c => c.ProductTypes).FirstOrDefault(c => c.Id == id);
             if (product == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             // Check if the requested quantity can be added to the cart
@@ -456,7 +456,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             }
             else
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
 
             }
 
@@ -552,7 +552,7 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             if (order == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             return View(order);

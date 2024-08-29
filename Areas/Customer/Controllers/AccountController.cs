@@ -44,7 +44,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             return View();
 
 
-            // return RedirectToAction("SuccessRegistration", "Account"); // or any other 
+            // return RedirectToAction("SuccessRegistration", "Account"); 
         }
 
 

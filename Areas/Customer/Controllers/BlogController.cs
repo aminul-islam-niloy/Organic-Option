@@ -41,14 +41,15 @@ namespace OrganicOption.Areas.Customer.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+               
+                return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var blogPost = await _context.BlogPosts
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (blogPost == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             return View(blogPost);
@@ -94,13 +95,13 @@ namespace OrganicOption.Areas.Customer.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var blogPost = await _context.BlogPosts.FindAsync(id);
             if (blogPost == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             return View(blogPost);
         }
@@ -113,7 +114,7 @@ namespace OrganicOption.Areas.Customer.Controllers
         {
             if (id != blogPost.Id)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             if (ModelState.IsValid)
@@ -139,7 +140,7 @@ namespace OrganicOption.Areas.Customer.Controllers
                 {
                     if (!BlogPostExists(blogPost.Id))
                     {
-                        return NotFound();
+                           return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
                     }
                     else
                     {
@@ -156,14 +157,14 @@ namespace OrganicOption.Areas.Customer.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var blogPost = await _context.BlogPosts
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (blogPost == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             return View(blogPost);
