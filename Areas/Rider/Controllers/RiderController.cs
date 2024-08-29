@@ -1,16 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using OnlineShop.Data;
 using OrganicOption.Models;
 using OrganicOption.Models.Rider_Section;
 using System;
-using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -55,7 +52,7 @@ namespace OrganicOption.Areas.Rider.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             // Retrieve all riders for the current user
@@ -106,7 +103,7 @@ namespace OrganicOption.Areas.Rider.Controllers
 
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var existingRider = await _context.RiderModel
@@ -115,7 +112,7 @@ namespace OrganicOption.Areas.Rider.Controllers
 
             if (existingRider == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             return View(existingRider);
@@ -130,14 +127,14 @@ namespace OrganicOption.Areas.Rider.Controllers
 
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var existingRider = await _context.RiderModel.FirstOrDefaultAsync(r => r.RiderUserId == currentUser.Id);
 
             if (existingRider == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             existingRider.Name = rider.Name;
@@ -161,7 +158,7 @@ namespace OrganicOption.Areas.Rider.Controllers
 
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var existingRider = await _context.RiderModel
@@ -170,7 +167,7 @@ namespace OrganicOption.Areas.Rider.Controllers
 
             if (existingRider == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             // Check if the rider is currently in a shift
@@ -189,14 +186,14 @@ namespace OrganicOption.Areas.Rider.Controllers
 
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var existingRider = await _context.RiderModel.FirstOrDefaultAsync(r => r.RiderUserId == currentUser.Id);
 
             if (existingRider == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             // Start a new shift
@@ -251,7 +248,7 @@ namespace OrganicOption.Areas.Rider.Controllers
 
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var existingRider = await _context.RiderModel
@@ -260,7 +257,7 @@ namespace OrganicOption.Areas.Rider.Controllers
 
             if (existingRider == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             // Check if the rider is currently in a shift
@@ -281,14 +278,14 @@ namespace OrganicOption.Areas.Rider.Controllers
 
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var existingRider = await _context.RiderModel.FirstOrDefaultAsync(r => r.RiderUserId == currentUser.Id);
 
             if (existingRider == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             // Start a new shift

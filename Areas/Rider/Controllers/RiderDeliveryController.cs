@@ -64,7 +64,7 @@ namespace OrganicOption.Areas.Rider.Controllers
             if (delivery == null)
             {
 
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var order = await _dbContext.Orders
@@ -194,13 +194,13 @@ namespace OrganicOption.Areas.Rider.Controllers
 
             if (delivery == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var order = await _dbContext.Orders.FirstOrDefaultAsync(o => o.Id == delivery.OrderId);
             if (order == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             // Update revenue and due
