@@ -559,7 +559,10 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
 
-
+        public IActionResult ErrorPage()
+        {
+            return View();
+        }
 
 
 
