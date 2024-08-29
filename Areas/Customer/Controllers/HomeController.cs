@@ -138,9 +138,16 @@ namespace OnlineShop.Areas.Customer.Controllers
                 return View(products);
             }
 
+            if (cachedProducts == null)
+            {
+                return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
+            }
+
             // Products found in cache, return them
             return View(cachedProducts);
         }
+
+       
 
 
         // POST: Filter products based on search criteria
