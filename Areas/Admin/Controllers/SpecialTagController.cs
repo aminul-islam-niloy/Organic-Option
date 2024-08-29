@@ -51,12 +51,12 @@ namespace OnlineShop.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             var specialTag = _db.SpecialTag.Find(id);
             if (specialTag == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             return View(specialTag);
@@ -83,13 +83,13 @@ namespace OnlineShop.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var specialTag = _db.SpecialTag.Find(id);
             if (specialTag == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             return View(specialTag);
         }
@@ -112,13 +112,13 @@ namespace OnlineShop.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var specialTag = _db.SpecialTag.Find(id);
             if (specialTag == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             return View(specialTag);
         }
@@ -129,18 +129,18 @@ namespace OnlineShop.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             if (id != specialTag.Id)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var specialTags = _db.SpecialTag.Find(id);
             if (specialTags == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             if (ModelState.IsValid)
             {

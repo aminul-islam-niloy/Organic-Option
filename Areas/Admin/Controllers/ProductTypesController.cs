@@ -49,12 +49,12 @@ namespace OnlineShop.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             var productType= _db.ProductTypes.Find(id);
             if (productType == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             return View(productType);
@@ -80,13 +80,13 @@ namespace OnlineShop.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var productType = _db.ProductTypes.Find(id);
             if (productType == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             return View(productType);
         }
@@ -106,13 +106,13 @@ namespace OnlineShop.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var productType = _db.ProductTypes.Find(id);
             if (productType == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             return View(productType);
         }
@@ -125,18 +125,18 @@ namespace OnlineShop.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             if (id != productTypes.Id)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var productType = _db.ProductTypes.Find(id);
             if (productType == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             if (ModelState.IsValid)
             {

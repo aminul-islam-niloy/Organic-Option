@@ -44,7 +44,7 @@ namespace OrganicOption.Areas.Admin.Controllers
         public IActionResult ApproveWithdraw(int id)
         {
             var request = _db.withdrawalHistories.Find(id);
-            if (request == null) return NotFound();
+            if (request == null)    return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
 
             request.IsApproved = true;
             _db.SaveChanges();

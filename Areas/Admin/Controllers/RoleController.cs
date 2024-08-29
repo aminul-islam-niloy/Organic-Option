@@ -66,7 +66,7 @@ namespace OnlineShop.Areas.Admin.Controllers
             var role = await _roleManager.FindByIdAsync(id);
             if (role == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             ViewBag.id = role.Id;
             ViewBag.name = role.Name;
@@ -80,7 +80,7 @@ namespace OnlineShop.Areas.Admin.Controllers
             var role = await _roleManager.FindByIdAsync(id);
             if (role == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             role.Name = name;
             var isExist = await _roleManager.RoleExistsAsync(role.Name);
@@ -104,7 +104,7 @@ namespace OnlineShop.Areas.Admin.Controllers
             var role = await _roleManager.FindByIdAsync(id);
             if (role == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             ViewBag.id = role.Id;
             ViewBag.name = role.Name;
@@ -118,7 +118,7 @@ namespace OnlineShop.Areas.Admin.Controllers
             var role = await _roleManager.FindByIdAsync(id);
             if (role == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var result = await _roleManager.DeleteAsync(role);

@@ -58,13 +58,13 @@ namespace OrganicOption.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             PopulateProductTypesDropDownList();
             var productPrice = await _context.ProductPrices.FindAsync(id);
             if (productPrice == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
            
             return View(productPrice);
@@ -78,7 +78,7 @@ namespace OrganicOption.Areas.Admin.Controllers
         {
             if (id != productPrice.Id)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             PopulateProductTypesDropDownList();
             if (ModelState.IsValid)
@@ -93,7 +93,7 @@ namespace OrganicOption.Areas.Admin.Controllers
                 {
                     if (!ProductPriceExists(productPrice.Id))
                     {
-                        return NotFound();
+                           return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
                     }
                     else
                     {
