@@ -51,13 +51,13 @@ namespace OrganicOption.Areas.Farmer.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var user = await _context.ApplicationUser.FirstOrDefaultAsync(c => c.Id == currentUser.Id);
             if (user == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
          
@@ -109,7 +109,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             // Retrieve the shop for the current user
@@ -173,7 +173,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var farmerShop = await _context.FarmerShop
@@ -182,7 +182,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             if (farmerShop == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             return View(farmerShop);
@@ -194,7 +194,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
         {
             if (id != farmerShop.Id)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var currentUser = await _userManager.GetUserAsync(User);
@@ -207,7 +207,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             if (shopToUpdate == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             // Update the fields
@@ -249,7 +249,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
             {
                 if (!FarmerShopExists(farmerShop.Id))
                 {
-                    return NotFound();
+                       return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
                 }
                 else
                 {
@@ -269,7 +269,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
             var shopToUpdate = await _context.FarmerShop.FindAsync(id);
             if (shopToUpdate == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             shopToUpdate.IsShopOpen = IsShopOpen;
@@ -289,14 +289,14 @@ namespace OrganicOption.Areas.Farmer.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var farmerShop = await _context.FarmerShop
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (farmerShop == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             return View(farmerShop);
@@ -436,7 +436,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
                 .FirstOrDefault(c => c.Id == Id);
             if (product == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             return View(product);
 
@@ -529,7 +529,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             if (id == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var product = _context.Products
@@ -540,7 +540,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             if (product == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             return View(product);
@@ -554,14 +554,14 @@ namespace OrganicOption.Areas.Farmer.Controllers
             ViewData["TagId"] = new SelectList(_context.SpecialTag.ToList(), "Id", "Name");
             if (id == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var product = _context.Products.Include(c => c.SpecialTag).Include(c => c.ProductTypes).Include(c=>c.ImagesSmall)
                 .Where(c => c.Id == id).FirstOrDefault();
             if (product == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             return View(product);
         }
@@ -574,13 +574,13 @@ namespace OrganicOption.Areas.Farmer.Controllers
         {
             if (Id == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var product = _context.Products.FirstOrDefault(c => c.Id == Id);
             if (product == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             _context.Products.Remove(product);
@@ -604,7 +604,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
                     .FirstOrDefaultAsync(fs => fs.Id == shopId);
                 if (farmerShop == null)
                 {
-                    return NotFound();
+                       return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
                 }
 
                 // Cache the data for 5 minutes

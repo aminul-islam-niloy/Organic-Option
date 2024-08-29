@@ -116,7 +116,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             // Retrieve the shop for the current user
@@ -134,7 +134,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             var farmerShop = await _context.FarmerShop
@@ -143,7 +143,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             if (farmerShop == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             // Sort the products based on expiration time
@@ -161,7 +161,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             // Retrieve the shop for the current user
             var farmerShop = await _context.FarmerShop
@@ -199,7 +199,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             // Retrieve the farmer shop for the current user
@@ -209,7 +209,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             if (farmerShop == null)
             {
-                return NotFound(); // Handle if farmer shop not found
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" }); // Handle if farmer shop not found
             }
 
   
@@ -249,7 +249,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             // Retrieve the farmer shop for the current user
@@ -259,7 +259,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             if (farmerShop == null)
             {
-                return NotFound(); 
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" }); 
             }
 
             DateTime startDate = DateTime.Today.AddDays(-7);
@@ -301,7 +301,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             // Retrieve the farmer shop for the current user
@@ -311,7 +311,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             if (farmerShop == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             DateTime startDate = DateTime.Today.AddDays(-30);
@@ -352,7 +352,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             // Retrieve the farmer shop for the current user
@@ -362,7 +362,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             if (farmerShop == null)
             {
-                return NotFound(); 
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" }); 
             }
 
             // past 90 days and the present day
@@ -436,7 +436,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
             if (order == null)
             {
                
-                return NotFound(); 
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" }); 
             }
 
             var delivery = await _context.Deliveries
@@ -511,7 +511,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             // Retrieve the farmer shop for the current user
@@ -521,7 +521,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             if (farmerShop == null)
             {
-                return NotFound(); 
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" }); 
             }
 
             // Get the order and its details
@@ -532,7 +532,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             if (order == null)
             {
-                return NotFound();
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             // Update the order condition in the Order table
