@@ -180,7 +180,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             int rowAffected = _db.SaveChanges();
             if (rowAffected > 0)
             {
-                TempData["save"] = "User has been delete successfully";
+                
                 return RedirectToAction(nameof(System.Index));
             }
             return View(userInfo);
