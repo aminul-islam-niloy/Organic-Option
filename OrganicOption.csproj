@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <Content Remove="Areas\Admin\Views\Products\MyProduct.cshtml" />
+    <Content Remove="Views\Shared\_DashboardLayout.cshtml" />
+    <Content Remove="Views\Shared\_Layout1.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,7 +48,7 @@
     
     <PackageReference Include="Microsoft.IdentityModel.Validators" Version="7.4.1" />
     
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.17" />
     
     <PackageReference Include="Stripe.net" Version="43.19.0" />
     <PackageReference Include="X.PagedList.Mvc.Core" Version="9.1.2" />
@@ -58,11 +60,14 @@
     <Folder Include="Areas\Identity\Services\" />
     <Folder Include="Areas\Rider\Data\" />
     <Folder Include="Areas\Rider\Models\" />
+    <Folder Include="Areas\User\Data\" />
+    <Folder Include="Areas\User\Models\" />
     <Folder Include="wwwroot\Image\" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Areas\Admin\Views\Products\MyProduct.cshtml" />
+    <None Include="Views\Shared\Extra\_Layout1.cshtml" />
     <None Include="wwwroot\leaf.ico" />
   </ItemGroup>
 
@@ -72,6 +77,11 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Areas\Admin\Views\Products\MyProduct.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\_Layout1.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Shared\_Layout1.cshtml" />
   </ItemGroup>
 
 </Project>

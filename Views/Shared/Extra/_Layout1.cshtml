@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] Organic Option</title>
+   
+    <link rel="stylesheet" href="/css/cssplugins.css">
+    <link rel="stylesheet" href="/css/cssstyle.css">
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+    <script src="https://kit.fontawesome.com/238e4a8eca.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css" />
+</head>
+<body>
+    <div class="container">
+        <h3>This is starting</h3>
+    </div>
+    <div>
+        @RenderBody()
+    </div>
+
+    <!-- Plugins JS -->
+    <script src="/js/jsplugins.js"></script>
+
+    <!-- Main JS -->
+    <script src="/js/jsmain.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
