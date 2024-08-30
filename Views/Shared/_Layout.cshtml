@@ -30,7 +30,7 @@
 @inject OrganicOption.Service.NotificationService notificationService
 
 @{
-   
+
     var unreadCount = 0;
 
     if (userId != null)
@@ -46,9 +46,9 @@
     <title>@ViewData["Title"] Organic Option</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" integrity="sha384-XxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx" crossorigin="anonymous" />
-   
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-    
+
     <link rel="stylesheet" href="~/css/plugins.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
 
@@ -89,7 +89,7 @@
 
                                     @if (userRole == "SuperAdmin")
                                     {
-                                      @*   <li><a asp-area="Admin" asp-controller="Role" asp-action="Index" class="nav-link">Role User</a></li> *@
+                                        @*   <li><a asp-area="Admin" asp-controller="Role" asp-action="Index" class="nav-link">Role User</a></li> *@
 
                                         <li class="mega_items ">
                                             <a asp-area="Admin" asp-controller="Role" asp-action="Index"><i class="zmdi zmdi-shopping-basket"></i>Manage Roles <i class="zmdi zmdi-account"></i></a>
@@ -178,7 +178,7 @@
                                                             <li><a href="404.html">Error 404</a></li>
                                                         </ul>
                                                     </li>
-                                                   
+
                                                 </ul>
                                             </div>
                                         </li>
@@ -227,14 +227,14 @@
                                         </li>
                                     }
 
-                                     @if (userRole == "Customer")
+                                    @if (userRole == "Customer")
                                     {
                                         <li class="mega_items ">
                                             <a asp-area="Farmer" asp-controller="FarmerShop" asp-action="AllShop"><i class="zmdi zmdi-shopping-basket"></i> shop <i class="zmdi zmdi-caret-down"></i></a>
                                             <div class="mega_menu">
                                                 <ul class="mega_menu_inner">
                                                     <li>
-                                                        <a asp-area="Customer" asp-controller="Home" asp-action="Products" >Product</a>
+                                                        <a asp-area="Customer" asp-controller="Home" asp-action="Products">Product</a>
                                                         <ul>
                                                             <li><a href="shop-fullwidth.html">Full Width</a></li>
                                                             <li><a href="shop-fullwidth-list.html">Full Width list</a></li>
@@ -279,23 +279,23 @@
 
                                     <li>
                                         <div class="wrapper ">
-                                             <form method="post" action="@Url.Action("Products", "Home")">
-                                       
-                                            <div class="searchBar">
-                                                    <input id="searchQueryInput" type="text" name="searchString" placeholder="Search product..."  />
-                                                <button id="searchQuerySubmit" type="submit" name="searchQuerySubmit">
-                                                    <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-                                                        <path fill="#666666" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
-                                                    </svg>
-                                                </button>
-                                            </div>
+                                            <form method="post" action="@Url.Action("Products", "Home")">
+
+                                                <div class="searchBar">
+                                                    <input id="searchQueryInput" type="text" name="searchString" placeholder="Search product..." />
+                                                    <button id="searchQuerySubmit" type="submit" name="searchQuerySubmit">
+                                                        <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                                            <path fill="#666666" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
                                             </form>
                                         </div>
                                     </li>
                                     @if (userRole != "Customer" && userRole != "Rider" && userRole != "Admin" && userRole != "Farmer" && userRole != "SuperAdmin")
                                     {
                                         <li class="nav-item" style="margin-left:115px; position: relative;">
-                                          
+
                                         </li>
                                     }
 
@@ -322,24 +322,25 @@
 
                                     @if (SignInManager.IsSignedIn(User))
                                     {
-                                        <li >
+                                        <li>
                                             <a href="/Customer/UserProfile/Deshboard/@userId" title="Manage">
-                                                <i class="zmdi zmdi-account"></i> My Account <i class="zmdi zmdi-caret-down"></i></a>
-                                            
-                                                <ul class="sub_menu pages">
-                                                     <li><a asp-area="Customer" asp-controller="Home" asp-action="Cart">Checkout </a></li> 
-                                                    <li><a href="/Customer/UserProfile/Deshboard/@userId" title="Manage"> <i class="fa-solid fa-user"></i>  @UserManager.GetUserName(User)</a></li>
-                                                     <li><a asp-area="Customer" asp-controller="Home" asp-action="Cart">Shopping Cart</a></li>
-                                                    <li><a asp-area="Customer" asp-controller="Home" asp-action="Cart">Wishlist</a></li> 
-                                                    <li>
-                                                        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
+                                                <i class="zmdi zmdi-account"></i> My Account <i class="zmdi zmdi-caret-down"></i>
+                                            </a>
 
-                                                        <button class="btn btn-danger" style="width:170px; margin-top;5px "  type="submit">Logout</button>
-                                                        </form>
-                                                    </li>
-                                                </ul>
+                                            <ul class="sub_menu pages">
+                                                <li><a asp-area="Customer" asp-controller="Home" asp-action="Cart">Checkout </a></li>
+                                                <li><a href="/Customer/UserProfile/Deshboard/@userId" title="Manage"> <i class="fa-solid fa-user"></i>  @UserManager.GetUserName(User)</a></li>
+                                                <li><a asp-area="Customer" asp-controller="Home" asp-action="Cart">Shopping Cart</a></li>
+                                                <li><a asp-area="Customer" asp-controller="Home" asp-action="Cart">Wishlist</a></li>
+                                                <li>
+                                                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
+
+                                                        <button class="btn btn-danger" style="width:170px; margin-top;5px " type="submit">Logout</button>
+                                                    </form>
+                                                </li>
+                                            </ul>
                                         </li>
-                                       
+
                                     }
                                     else
                                     {
@@ -356,8 +357,6 @@
         </div>
     </header>
     <!--header area end-->
-
-
     <!--Offcanvas menu area start-->
     <div class="off_canvars_overlay"></div>
     <div class="Offcanvas_menu">
@@ -379,7 +378,7 @@
                         </div>
                         <div class="top_right">
                             <ul>
-                              
+
                                 @if (userId != null)
                                 {
                                     <li class="top_links">
@@ -403,7 +402,7 @@
                         <div class="search-container">
 
                             <form method="post" action="@Url.Action("Products", "Home")">
-                                
+
                                 <div class="search_box">
                                     <input placeholder="Search product..." type="text" name="searchString">
                                     <button type="submit"><i class="zmdi zmdi-search"></i></button>
@@ -506,7 +505,7 @@
 
     <partial name="_CookieConsentPartial" />
 
-    <div >
+    <div>
         @RenderBody()
         <hr />
 
@@ -642,7 +641,7 @@
                                 <ul>
                                     <li><a href="#">Tomatto</a></li>
                                     <li><a href="#">Potato</a></li>
-                                    
+
                                 </ul>
                             </div>
                             <div class="footer_tag_menu">
@@ -708,113 +707,73 @@
 
 
     @* <environment include="Development">
-        <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
 
     <environment exclude="Development">
-        <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
-        </script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd">
-        </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+    asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+    asp-fallback-test="window.jQuery"
+    crossorigin="anonymous"
+    integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+    asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+    crossorigin="anonymous"
+    integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd">
+    </script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
- *@
+    *@
 
 
+@* 
     <script>
-        $(document).ready(function () {
-            console.log("Document is ready");
-
-            let userInteracted = false;
-
-            function enableSound() {
-                console.log("User interaction detected");
-                userInteracted = true;
-                document.removeEventListener('click', enableSound);
-                document.removeEventListener('keypress', enableSound);
-            }
-
-            document.addEventListener('click', enableSound);
-            document.addEventListener('keypress', enableSound);
-
-            // Request permission to show notifications
-            if ('Notification' in window) {
+        document.addEventListener("DOMContentLoaded", function () {
+            if ("Notification" in window) {
                 Notification.requestPermission().then(function (permission) {
-                    console.log('Notification permission:', permission);
-                });
-            } else {
-                console.log('This browser does not support notifications.');
-            }
-
-            // Function to display browser notification
-            function displayNotification(message) {
-                if (Notification.permission === 'granted') {
-                    var notification = new Notification('New Notification', {
-                        body: message,
-                        icon: '/path/to/icon.png' // Optional: Add an icon to the notification
-                    });
-                    notification.onclick = function () {
-                        window.focus(); // Focus on the window when notification clicked
-                    };
-                }
-            }
-
-            function checkForNewNotifications() {
-                console.log("Checking for new notifications");
-                if (!userInteracted) {
-                    console.log("Waiting for user interaction to enable sound");
-                    return;
-                }
-
-                $.ajax({
-                    url: '@Url.Action("GetUnreadNotificationCount", "Notifications")',
-                    method: 'GET',
-                    success: function (data) {
-                        console.log("Successfully fetched unread notification count:", data);
-                        var currentCount = parseInt($("#notification-count").text());
-                        if (data > currentCount) {
-                            $("#notification-count").text(data);
-                            var audio = $("#notification-sound")[0];
-                            audio.play().then(() => {
-                                console.log("Sound played successfully");
-                            }).catch(function (error) {
-                                console.log("Error playing sound:", error);
+                    if (permission === "granted") {
+                        function showNotification(notification) {
+                            var notification = new Notification("New Notification", {
+                                body: notification.Message,  
+                                icon: '/sound/notification.png'
                             });
 
-                            // Display browser notification
-                            displayNotification('You have ' + data + ' unread notifications.');
+                            var audio = new Audio('/sound/notification.mp3');
+                            audio.play();
                         }
-                    },
-                    error: function (error) {
-                        console.log("Error fetching notifications:", error);
+
+                        setInterval(function () {
+                            fetch('/Customer/Notifications/GetPopLatest')
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data && data.length > 0) {
+                                        data.forEach(notification => {
+                                            showNotification(notification);
+                                        });
+                                    }
+                                });
+                        }, 10000);
                     }
                 });
             }
-
-            // Check notifications periodically
-            setInterval(checkForNewNotifications, 60000); // Check every minute (adjust as needed)
         });
-    </script>
 
+
+        </script>
+ *@
     <!-- Plugins JS -->
     <script src="/js/jsplugins.js"></script>
 
     <!-- Main JS -->
     <script src="/js/jsmain.js"></script>
 
-   @*  <script src="~/js/plugins.js"></script>
+    @*  <script src="~/js/plugins.js"></script>
     <script src="~/js/main.js"></script> *@
-@* 
+    @*
     <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/main.js" asp-append-version="true"></script>
@@ -822,13 +781,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
     @section Scripts {
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js" integrity="sha384-XxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-        <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
-        <script src="https://cdn.datatables.net/2.0.1/js/jquery.dataTables.min.js"></script>
-        <script src="~/js/plugins.js" asp-append-version="true"></script>
-        <script src="~/js/main.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js" integrity="sha384-XxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.1/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/plugins.js" asp-append-version="true"></script>
+    <script src="~/js/main.js" asp-append-version="true"></script>
     } *@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

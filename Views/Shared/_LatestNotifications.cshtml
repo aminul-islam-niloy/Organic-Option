@@ -1,0 +1,63 @@
+﻿@using System.Net.Http
+@using OnlineShop.Session
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Extensions
+@using System.Globalization
+
+@model IEnumerable<OrganicOption.Models.Notifications.Notification>
+
+@inject IHttpContextAccessor HttpContextAccessor
+
+
+@inject OrganicOption.Service.NotificationService notificationService
+
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    string userId = UserManager.GetUserId(User);
+    var unreadCount = 0;
+    if (userId != null)
+    {
+        unreadCount = notificationService.GetUnreadNotifications(userId).Count();
+    }
+}
+
+@foreach (var notification in Model)
+{
+    string roleLink = "";
+
+    if (User.IsInRole("Customer"))
+    {
+        roleLink = Url.Action("UserOrders", "Order", new { area = "Customer" });
+    }
+    else if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
+    {
+        roleLink = Url.Action("AllOrders", "Order", new { area = "Customer" }); 
+    }
+    else if (User.IsInRole("Farmer"))
+    {
+        roleLink = Url.Action("AllOrdersGroupedByDate", "Inventory", new { area = "Farmer" });
+       
+    }
+    else if (User.IsInRole("Rider"))
+    {
+        roleLink = Url.Action("RiderOrders", "Order", new { area = "Rider" }); 
+    }
+
+    if (!string.IsNullOrEmpty(roleLink))
+    {
+        <a class="dropdown-item d-flex align-items-center" href="@roleLink">
+            <div class="mr-3">
+                <div class="icon-circle bg-primary">
+                    <i class="fa-solid fa-suitcase"></i>
+                </div>
+            </div>
+            <div>
+                <div class="small text-gray-500">@notification.DateCreated.ToString("MMMM dd, yyyy")</div>
+                <span class="font-weight-bold">@notification.Message</span>
+            </div>
+        </a>
+    }
+}

@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\NewFolder\**" />
+    <Content Remove="wwwroot\NewFolder\**" />
+    <EmbeddedResource Remove="wwwroot\NewFolder\**" />
+    <None Remove="wwwroot\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Areas\Admin\Views\Products\MyProduct.cshtml" />
     <Content Remove="Views\Shared\_DashboardLayout.cshtml" />
     <Content Remove="Views\Shared\_Layout1.cshtml" />
