@@ -67,26 +67,26 @@ namespace OrganicOption.Areas.Customer.Controllers
             _notificationService.ClearAllNotifications(userId);
             return RedirectToAction("Index");
         }
-        [HttpGet]
-        public IActionResult GetPopLatest()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var notifications = _notificationService.GetUnreadNotifications(userId);
+        //[HttpGet]
+        //public IActionResult GetPopLatest()
+        //{
+        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    var notifications = _notificationService.GetUnreadNotifications(userId);
 
-            // Mark the notifications as read
-            foreach (var notification in notifications)
-            {
-                _notificationService.MarkAsRead(notification.Id);
-            }
+        //    // Mark the notifications as read
+        //    foreach (var notification in notifications)
+        //    {
+        //        _notificationService.MarkAsRead(notification.Id);
+        //    }
 
-            var notificationData = notifications.Select(n => new {
-                n.Id,
-                n.Message,  
-                n.DateCreated
-            }).ToList();
+        //    var notificationData = notifications.Select(n => new {
+        //        n.Id,
+        //        n.Message,  
+        //        n.DateCreated
+        //    }).ToList();
 
-            return Json(notificationData);
-        }
+        //    return Json(notificationData);
+        //}
 
 
     }

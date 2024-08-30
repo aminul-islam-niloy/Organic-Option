@@ -323,19 +323,19 @@
                                     @if (SignInManager.IsSignedIn(User))
                                     {
                                         <li>
-                                            <a href="/Customer/UserProfile/Deshboard/@userId" title="Manage">
-                                                <i class="zmdi zmdi-account"></i> My Account <i class="zmdi zmdi-caret-down"></i>
+                                            <a href="/User/Deshboard/Index" title="Manage">
+                                                <i class="zmdi zmdi-account"></i> Deshboard <i class="zmdi zmdi-caret-down"></i>
                                             </a>
 
                                             <ul class="sub_menu pages">
-                                                <li><a asp-area="Customer" asp-controller="Home" asp-action="Cart">Checkout </a></li>
+                                                
                                                 <li><a href="/Customer/UserProfile/Deshboard/@userId" title="Manage"> <i class="fa-solid fa-user"></i>  @UserManager.GetUserName(User)</a></li>
-                                                <li><a asp-area="Customer" asp-controller="Home" asp-action="Cart">Shopping Cart</a></li>
-                                                <li><a asp-area="Customer" asp-controller="Home" asp-action="Cart">Wishlist</a></li>
+                                                <li><a href="/Customer/UserProfile/Deshboard/@userId" title="Manage"> <i class="fa-solid fa-user"></i>  Setting</a></li>
+                                                <li><a href="/Customer/UserProfile/Deshboard/@userId" title="Manage"> <i class="fa-solid fa-user"></i>  Profile</a></li>
                                                 <li>
                                                     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
 
-                                                        <button class="btn btn-danger" style="width:170px; margin-top;5px " type="submit">Logout</button>
+                                                        <button class="btn btn-danger" style="width:170px; margin-top:5px " type="submit">Logout</button>
                                                     </form>
                                                 </li>
                                             </ul>
@@ -743,6 +743,25 @@
 
         </script>
  *@
+
+    <script>
+        function loadNotifications() {
+            $.ajax({
+                url: '/Customer/Notifications/GetLatest',
+                type: 'GET',
+                success: function (data) {
+                    $('#notificationsContainer').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching notifications:', error);
+                }
+            });
+        }
+
+
+    </script>
+
+
     <!-- Plugins JS -->
     <script src="/js/jsplugins.js"></script>
 
