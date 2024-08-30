@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<OrganicOption.Models.Notifications.Notification>
 
 <div class="container mt-5">
-    <h4 class="text-center mb-4" style="font-size: 2rem;">All Notifications</h4>
+    <h4 class="text-center mb-4" style="font-size: 1.2rem;">All Notifications</h4>
 
     @if (!string.IsNullOrEmpty(ViewBag.Message))
     {
@@ -23,10 +23,10 @@
                 @foreach (var notification in Model)
                 {
                     <tr>
-                        <td style="font-size: 1.1rem; text-align: left; padding-left: 20px;">
+                        <td style="font-size: 1.0rem; text-align: left; padding-left: 20px;">
                             @notification.Message
                         </td>
-                        <td style="font-size: 1.1rem; text-align: center;">
+                        <td style="font-size: 1.0rem; text-align: center;">
                             @notification.DateCreated.ToString("g")
                         </td>
                         
@@ -37,7 +37,7 @@
     </div>
 
     <div class="text-center mt-4">
-        <a asp-area="Customer" asp-controller="Notifications" asp-action="ClearAllNotifications" class="btn btn-danger btn-lg">
+        <a asp-area="Customer" asp-controller="Notifications" asp-action="ClearAllNotifications" class="btn btn-danger ">
             Clear All Notifications
         </a>
     </div>

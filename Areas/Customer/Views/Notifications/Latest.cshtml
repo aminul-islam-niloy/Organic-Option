@@ -1,27 +1,27 @@
 ﻿@model IEnumerable<OrganicOption.Models.Notifications.Notification>
 
 <div class="container mt-5">
-    <h4 class="text-center mb-4" style="font-size: 2rem;">Latest Notifications</h4>
+    <h4 class="text-center mb-4" style="font-size: 1.3rem;">Latest Notifications</h4>
     <div class="table-responsive">
         <table class="table table-bordered">
             <thead>
                 <tr class="table-primary">
-                    <th style="font-size: 1.2rem; text-align: left;">Message</th>
-                    <th style="font-size: 1.2rem; text-align: center;">Date</th>
-                    <th style="font-size: 1.2rem; text-align: right;">Action</th>
+                    <th style="font-size: 1.0rem; text-align: left;">Message</th>
+                    <th style="font-size: 1.0rem; text-align: center;">Date</th>
+                    <th style="font-size: 1.0rem; text-align: right;">Action</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var notification in Model)
                 {
                     <tr>
-                        <td style="font-size: 1.1rem; text-align: left; padding-left: 20px;">
+                        <td style="font-size: 1rem; text-align: left; padding-left: 20px;">
                             @notification.Message
                         </td>
-                        <td style="font-size: 1.1rem; text-align: center;">
+                        <td style="font-size: 1rem; text-align: center;">
                             @notification.DateCreated.ToString("g")
                         </td>
-                        <td style="font-size: 1.1rem; text-align: right; padding-right: 20px;">
+                        <td style="font-size: 1rem; text-align: right; padding-right: 20px;">
                             <a href="@Url.Action("MarkAsRead", "Notifications", new { id = notification.Id })" class="btn btn-outline-success btn-sm">
                                 Mark as read
                             </a>
@@ -32,6 +32,6 @@
         </table>
     </div>
     <div class="text-center mt-4">
-        <a asp-area="Customer" asp-controller="Notifications" class="btn btn-danger btn-lg" asp-action="Index">View All Notifications</a>
+        <a asp-area="Customer" asp-controller="Notifications" class="btn btn-danger " asp-action="Index">View All Notifications</a>
     </div>
 </div>
