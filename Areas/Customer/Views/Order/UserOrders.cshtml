@@ -1,6 +1,6 @@
 ﻿@model List<UserOrdersViewModel>
 
-<h3 class="text-center mt-5 mb-5">My Orders</h3>
+<h3 class="text-center mt-3 mb-3">My Orders</h3>
 
 <style>
     /* Custom CSS */
@@ -40,74 +40,71 @@
         height: 10px;
     }
 </style>
+<div class="container">
 
-@foreach (var order in Model)
-{
-    <div class="card mb-6">
-        <div class="card-header">
-            <div class="row">
-                <div class="col-md-6 text-center justify-content-center">
-                    <h4 style="margin-bottom:15px; margin-top:15px">Order Status</h4>
-                    <div class="progress mb-4">
-                        <div id="progress-bar-@order.OrderNo" class="progress-bar bg-success" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+
+    @foreach (var order in Model)
+    {
+        <div class="card mb-6 mt-3 mb-2">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-6 text-center justify-content-center">
+                        <h4 style="margin-bottom:15px; margin-top:15px">Order Status</h4>
+                        <div class="progress mb-4">
+                            <div id="progress-bar-@order.OrderNo" class="progress-bar bg-success" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col progress-step">
+                                <div id="icon-confirmed-@order.OrderNo" class="icon-circle bg-light text-dark mb-2">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                                <p>Onlist</p>
+                            </div>
+                           
+                            <div class="col progress-step">
+                                <div id="icon-quality-@order.OrderNo" class="icon-circle bg-light text-dark mb-2">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <p>Order Taken</p>
+                            </div>
+                            <div class="col progress-step">
+                                <div id="icon-dispatched-@order.OrderNo" class="icon-circle bg-light text-dark mb-2">
+                                    <i class="fas fa-truck"></i>
+                                </div>
+                                <p>On Delivary</p>
+                            </div>
+                            <div class="col progress-step">
+                                <div id="icon-delivered-@order.OrderNo" class="icon-circle bg-light text-dark mb-2">
+                                    <i class="fas fa-home"></i>
+                                </div>
+                                <p>Delivered</p>
+                            </div>
+                        </div>
+                        @*   <h5>Order Condition: @order.OrderCondition</h5> *@
                     </div>
-                    <div class="row text-center">
-                        <div class="col progress-step">
-                            <div id="icon-confirmed-@order.OrderNo" class="icon-circle bg-light text-dark mb-2">
-                                <i class="fas fa-shopping-cart"></i>
-                            </div>
-                            <p>Onlist</p>
-                        </div>
-                        <div class="col progress-step">
-                            <div id="icon-processing-@order.OrderNo" class="icon-circle bg-light text-dark mb-2">
-                                <i class="fas fa-cogs"></i>
-                            </div>
-                            <p>Processing</p>
-                        </div>
-                        <div class="col progress-step">
-                            <div id="icon-quality-@order.OrderNo" class="icon-circle bg-light text-dark mb-2">
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-                            <p>Order Taken</p>
-                        </div>
-                        <div class="col progress-step">
-                            <div id="icon-dispatched-@order.OrderNo" class="icon-circle bg-light text-dark mb-2">
-                                <i class="fas fa-truck"></i>
-                            </div>
-                            <p>On Delivary</p>
-                        </div>
-                        <div class="col progress-step">
-                            <div id="icon-delivered-@order.OrderNo" class="icon-circle bg-light text-dark mb-2">
-                                <i class="fas fa-home"></i>
-                            </div>
-                            <p>Delivered</p>
-                        </div>
+                    <div class="col-md-3 text-center">
+
+                        @*     <p><strong>Order No:</strong> @order.OrderNo</p> *@
+                        <p><strong>Order Date:</strong> @order.OrderDate.ToShortDateString()</p>
+                        <p><strong>Delivary Charge:</strong> @order.DeliveryCharge ৳</p>
+                        <p><strong>Total Price:</strong> @order.TotalPrice ৳</p>
                     </div>
-                    @*   <h5>Order Condition: @order.OrderCondition</h5> *@
-                </div>
-                <div class="col-md-3 text-center">
+                    <div class="col-md-3 text-center">
+                        <h5 style="margin-bottom:15px; margin-top:15px">Action</h5>
 
-                @*     <p><strong>Order No:</strong> @order.OrderNo</p> *@
-                    <p><strong>Order Date:</strong> @order.OrderDate.ToShortDateString()</p>
-                    <p><strong>Delivary Charge:</strong> @order.DeliveryCharge ৳</p>
-                    <p><strong>Total Price:</strong> @order.TotalPrice ৳</p>
-                </div>
-                <div class="col-md-3 text-center">
-                    <h5 style="margin-bottom:15px; margin-top:15px">Action</h5>
-
-                    @{
-                        if (order.OrderCondition == OrderCondition.Onlist || order.OrderCondition == OrderCondition.OrderTaken)
-                        {
-                            <button class="btn btn-secondary" style="margin:5px"; disabled>Cancel Order</button>
+                        @{
+                            if (order.OrderCondition == OrderCondition.Onlist || order.OrderCondition == OrderCondition.OrderTaken)
+                            {
+                                <button class="btn btn-secondary" style="margin:5px" ; disabled>Cancel Order</button>
+                            }
                         }
-                    }
 
-                    @{
-                        if (order.OrderCondition == OrderCondition.OnDelivary )
-                        {
-                            <button class="btn btn-secondary" style="margin:5px;" disabled> Order Track</button>
+                        @{
+                            if (order.OrderCondition == OrderCondition.OnDelivary)
+                            {
+                                <button class="btn btn-secondary" style="margin:5px;" disabled> Order Track</button>
+                            }
                         }
-                    }
 
                         @{
                             @if (order.OrderCondition == OrderCondition.Delivered)
@@ -123,74 +120,80 @@
 
                                 <button class="btn btn-secondary " style=" margin-left:5px" disabled>Return Order</button>
                     // <a asp-controller="Review" style="width:180px;height:40px; margin-left:5px" asp-action="Create" asp-route-shopId="@order.ShopId" class="btn btn-success">Review Farmer Shop</a>
-                            <a class="btn btn-warning" style="width:180px;height:40px; margin-left:5px" href="@Url.Action("CreateReview", "FarmerShop", new { area = "Farmer", farmerShopId = order.ShopId })">Review  Shop</a>
+                                <a class="btn btn-warning" style="width:180px;height:40px; margin-left:5px" href="@Url.Action("CreateReview", "FarmerShop", new { area = "Farmer", farmerShopId = order.ShopId })">Review  Shop</a>
                             }
                         }
-               
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Product ID</th>
+                                <th>Product Name</th>
+                                <th>Price</th>
+                                <th>Image</th>
+                                <th>Quantity</th>
+                                <th>Payment Method</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var orderDetail in order.OrderDetails)
+                            {
+                                <tr>
+                                    <td>@orderDetail.ProductId</td>
+                                    <td>@orderDetail.ProductName</td>
+                                    <td>@orderDetail.Price ৳</td>
+                                    <td><img src="~/@orderDetail.ProductImage" alt="Product Image" class="img-thumbnail" style="max-width: 70px; max-height: 70px;" /></td>
+                                    <td>@orderDetail.Quantity</td>
+                                    <td>@orderDetail.PaymentMethods</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Product ID</th>
-                            <th>Product Name</th>
-                            <th>Price</th>
-                            <th>Image</th>
-                            <th>Quantity</th>
-                            <th>Payment Method</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var orderDetail in order.OrderDetails)
-                        {
-                            <tr>
-                                <td>@orderDetail.ProductId</td>
-                                <td>@orderDetail.ProductName</td>
-                                <td>@orderDetail.Price ৳</td>
-                                <td><img src="~/@orderDetail.ProductImage" alt="Product Image" class="img-thumbnail" style="max-width: 70px; max-height: 70px;" /></td>
-                                <td>@orderDetail.Quantity</td>
-                                <td>@orderDetail.PaymentMethods</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var orderCondition = "@order.OrderCondition"; // Use Razor syntax to get dynamic value from server
-            var progressBar = document.getElementById('progress-bar-@order.OrderNo');
-
-            var steps = {
-                "Onlist": { percentage: 0, icon: "icon-confirmed-@order.OrderNo" },
-                "OrderTaken": { percentage: 20, icon: "icon-quality-@order.OrderNo" },
-                "Processing": { percentage: 40, icon: "icon-processing-@order.OrderNo" },
-                "OnDelivary": { percentage: 80, icon: "icon-dispatched-@order.OrderNo" },
-                "Delivered": { percentage: 100, icon: "icon-delivered-@order.OrderNo" }
-            };
-
-            if (steps[orderCondition]) {
-                progressBar.style.width = steps[orderCondition].percentage + '%';
-                progressBar.setAttribute('aria-valuenow', steps[orderCondition].percentage);
-
-                Object.keys(steps).forEach(function (key) {
-                    var iconElement = document.getElementById(steps[key].icon);
-                    if (steps[key].percentage <= steps[orderCondition].percentage) {
-                        iconElement.classList.remove('bg-light', 'text-dark');
-                        iconElement.classList.add('bg-primary', 'text-white');
-                    } else {
-                        iconElement.classList.remove('bg-primary', 'text-white');
-                        iconElement.classList.add('bg-light', 'text-dark');
-                    }
-                });
-            }
-        });
-    </script>
-}
 
 
+   
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var orderCondition = "@order.OrderCondition"; // Use Razor syntax to get dynamic value from server
+        var progressBar = document.getElementById('progress-bar-@order.OrderNo');
+
+        var steps = {
+            "Onlist": { percentage: 12, icon: "icon-confirmed-@order.OrderNo" },
+            "OrderTaken": { percentage: 38, icon: "icon-quality-@order.OrderNo" },
+            
+            "OnDelivary": { percentage: 64, icon: "icon-dispatched-@order.OrderNo" },
+            "Delivered": { percentage: 100, icon: "icon-delivered-@order.OrderNo" }
+        };
+
+        if (steps[orderCondition]) {
+            progressBar.style.width = steps[orderCondition].percentage + '%';
+            progressBar.setAttribute('aria-valuenow', steps[orderCondition].percentage);
+
+            Object.keys(steps).forEach(function (key) {
+                var iconElement = document.getElementById(steps[key].icon);
+                if (steps[key].percentage <= steps[orderCondition].percentage) {
+                    iconElement.classList.remove('bg-light', 'text-dark');
+                    iconElement.classList.add('bg-primary', 'text-white');
+                } else {
+                    iconElement.classList.remove('bg-primary', 'text-white');
+                    iconElement.classList.add('bg-light', 'text-dark');
+                }
+            });
+        }
+    });
+</script>
+
+
+    }
+
+</div>
