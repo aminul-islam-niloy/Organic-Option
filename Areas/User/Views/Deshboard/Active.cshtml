@@ -1,0 +1,69 @@
+﻿@model OnlineShop.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    string userId = UserManager.GetUserId(User);
+}
+
+<div class="container ">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Active Profile</h1>
+        <a asp-area="Identity" asp-page="/Account/Manage/PersonalData" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="fa-solid fa-trash text-white-50"></i> Delete all Data
+
+        </a>
+    </div>
+    <div class="card shadow-lg ">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0 text-center" >Active User Account</h4>
+        </div>
+        <div class="card-body p-5" style="font-size: 1.0rem;">
+            <form asp-action="Active" method="post" id="user-form" enctype="multipart/form-data">
+                <input type="hidden" asp-for="Id" value="@Model.Id" />
+
+                <div class="mb-4">
+                    <h4 class="text-danger">Do you want to active your account?</h4>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-4 col-form-label font-weight-normal">@Html.DisplayNameFor(model => model.UserName):</label>
+                    <div class="col-8">
+                        <p class="form-control-plaintext">@Model.UserName</p>
+                    </div>
+                </div>
+
+                <div class="form-group row mb-3">
+                    <label class="col-4 col-form-label font-weight-normal">@Html.DisplayNameFor(model => model.FirstName):</label>
+                    <div class="col-8">
+                        <p class="form-control-plaintext">@Model.FirstName</p>
+                    </div>
+                </div>
+
+                <div class="form-group row mb-4">
+                    <label class="col-4 col-form-label font-weight-normal">@Html.DisplayNameFor(model => model.LastName):</label>
+                    <div class="col-8">
+                        <p class="form-control-plaintext">@Model.LastName</p>
+                    </div>
+                </div>
+
+                <div class="form-group text-center">
+                    <input type="submit" class="btn btn-danger " value="Active Account" />
+                    <a class="btn btn-secondary" asp-area="User" asp-controller="Deshboard" asp-action="MyAccount" asp-route-id="@userId"> Back to Profile</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

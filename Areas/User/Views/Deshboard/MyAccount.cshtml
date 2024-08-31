@@ -1,0 +1,218 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+@model OnlineShop.Models.ApplicationUser
+﻿@using System.Net.Http
+@using OnlineShop.Session
+@using Microsoft.AspNetCore.Http
+@inject SignInManager<IdentityUser> SignInManager
+
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var userRole = HttpContextAccessor.HttpContext.Session.GetString("roleName");
+   
+}
+
+
+@{
+    string userId = UserManager.GetUserId(User);
+}
+
+@{
+    string UserRole = " ";
+
+
+    if (User.IsInRole("Admin"))
+    {
+        UserRole = "Admin";
+    }
+    if (User.IsInRole("SuperAdmin"))
+    {
+        UserRole = "Super Adimin";
+    }
+    if (User.IsInRole("Customer"))
+    {
+        UserRole = "Customer";
+    }
+
+    if (User.IsInRole("Farmer"))
+    {
+        UserRole = "Farmer";
+    }
+
+
+    if (User.IsInRole("Rider"))
+    {
+        UserRole = "Rider";
+    }
+
+}
+
+<div class="container">
+
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">My Account</h1>
+        <a asp-area="User"  asp-controller="Deshboard"  asp-action="Edit" asp-route-id="@userId" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="fa-regular fa-pen-to-square text-white-50"></i> Edit Profile
+           
+        </a>
+    </div>
+
+    <div class="row ">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    @if (Model.ProfilePicture != null)
+                    {
+                        <img src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.ProfilePicture))" class="img-fluid rounded-circle mb-3" alt="Profile Picture" style="width: 190px; height: 190px;">
+                    }
+                    else
+                    {
+                        <img src="~/images/—Pngtree—online shopping logo design concept_6291755.jpg" class="img-fluid rounded-circle mb-3" alt="Default Profile Picture" style="width: 200px; height: 200px;">
+                    }
+                 
+                    <h5 class="mt-3 card-title">@UserManager.GetUserName(User)</h5>
+
+                  
+                </div>
+
+                
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h4 >Act As ( @UserRole ) </h4>
+
+                    <hr>
+                    <dl class="row " style="border:10px;">
+                        <dt class="col-sm-4">Name:</dt>
+                        <dd class="col-sm-8">@Model.FirstName    @Model.LastName</dd>
+
+                        <dt class="col-sm-4">Email:</dt>
+                        <dd class="col-sm-8">@Model.Email</dd>
+
+                        <dt class="col-sm-4">Phone Number:</dt>
+                        <dd class="col-sm-8">@Model.PhoneNumber</dd>
+
+                        <dt class="col-sm-4">Address:</dt>
+                        <dd class="col-sm-8">@Model.Address</dd>
+
+                        <dt class="col-sm-4">Date of Birth:</dt>
+                        <dd class="col-sm-8">@Model.DateOfBirth?.ToString("dd-MM-yyyy")</dd>
+                    </dl>
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+
+    <!-- New Section for Custom Cards -->
+    <div class="row mt-4">
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+            <a asp-area="User" asp-controller="Deshboard" asp-action="Lockout" asp-route-id="@userId" class="card shadow-sm custom-card">
+                <div class="card-body d-flex align-items-center">
+                    <div class="icon-part">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <div class="text-part">
+                        <h6 class="card-title">Account</h6>
+                        <h6 class="card-title">Lockout</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+            <a asp-area="User" asp-controller="Deshboard" asp-action="Active" asp-route-id="@userId" class="card shadow-sm custom-card">
+                <div class="card-body d-flex align-items-center">
+                    <div class="icon-part">
+                        <i class="fa-solid fa-hourglass-start"></i>
+                    </div>
+                    <div class="text-part">
+                        <h6 class="card-title">Active</h6>
+                        <h6 class="card-title">Account</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+            <a asp-area="User" asp-controller="Deshboard" asp-action="Delete" asp-route-id="@userId" class="card shadow-sm custom-card">
+                <div class="card-body d-flex align-items-center">
+                    <div class="icon-part">
+                        <i class="fa-solid fa-trash"></i>
+                    </div>
+                    <div class="text-part">
+                        <h6 class="card-title">Delete</h6>
+                        <h6 class="card-title">Account</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+            <a asp-area="Identity" asp-page="/Account/Manage/PersonalData" class="card shadow-sm custom-card">
+                <div class="card-body d-flex align-items-center">
+                    <div class="icon-part">
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+                    <div class="text-part">
+                        <h6 class="card-title">Manage</h6>
+                        <h6 class="card-title">Data</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .custom-card {
+        border: none;
+        border-radius: 10px;
+        text-decoration: none;
+        color: inherit;
+        height: 80px; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s ease;
+    }
+
+        .custom-card:hover {
+            background-color: #f8f9fc;
+        }
+
+    .icon-part {
+        flex: 0 0 30%; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right:10px;
+    }
+
+    .text-part {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: left;
+        margin-left:10px;
+    }
+
+    .card-title {
+        font-size: 0.9rem;
+        margin: 0;
+        line-height: 1.2; 
+    }
+
+    .card .fa-solid {
+        color: #4e73df;
+        font-size: 1.6rem;
+    }
+</style>
+
+
+

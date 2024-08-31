@@ -1,0 +1,214 @@
+﻿@model OnlineShop.Models.ApplicationUser
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    string userId = UserManager.GetUserId(User);
+}
+
+<div class="container">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Edit Profile</h1>
+        <a asp-area="Identity" asp-page="/Account/Manage/ChangePassword" class="btn d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="fa-solid fa-key text-white-50"></i> Change Password
+        </a>
+    </div>
+    <div class="row ">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+
+                <div class="card-body">
+                    <form asp-action="Edit" method="post" id="user-form" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" value="@Model.Id" />
+                        <h3 class="text-center">@ViewBag.message</h3>
+
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="form-group row space_up mt-2">
+                                    <label asp-for="FirstName" class="col-4 col-form-label">First Name</label>
+                                    <div class="col-8">
+                                        <input asp-for="FirstName" class="form-control" />
+                                    </div>
+                                    <span asp-validation-for="FirstName" class="text-danger col-12"></span>
+                                </div>
+                                <div class="form-group row space_up mt-2">
+                                    <label asp-for="LastName" class="col-4 col-form-label">Last Name</label>
+                                    <div class="col-8">
+                                        <input asp-for="LastName" class="form-control" />
+                                    </div>
+                                    <span asp-validation-for="LastName" class="text-danger col-12"></span>
+                                </div>
+                                <div class="form-group row space_up mt-2">
+                                    <label asp-for="Email" class="col-4 col-form-label">Email</label>
+                                    <div class="col-8">
+                                        <input asp-for="Email" class="form-control" />
+                                    </div>
+                                    <span asp-validation-for="Email" class="text-danger col-12"></span>
+                                </div>
+                                <div class="form-group row mt-2">
+                                    <label asp-for="PhoneNumber" class="col-4 col-form-label">Phone Number</label>
+                                    <div class="col-8">
+                                        <input asp-for="PhoneNumber" class="form-control" />
+                                    </div>
+                                    <span asp-validation-for="PhoneNumber" class="text-danger col-12"></span>
+                                </div>
+                                <div class="form-group row mt-2">
+                                    <label asp-for="DateOfBirth" class="col-4 col-form-label">Date of Birth</label>
+                                    <div class="col-8">
+                                        <input asp-for="DateOfBirth" type="date" class="form-control" />
+                                    </div>
+                                    <span asp-validation-for="DateOfBirth" class="text-danger col-12"></span>
+                                </div>
+                                <div class="form-group row mt-2">
+                                    <label asp-for="Address" class="col-4 col-form-label">Address</label>
+                                    <div class="col-8">
+                                        <input asp-for="Address" class="form-control" />
+                                    </div>
+                                    <span asp-validation-for="Address" class="text-danger col-12"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 text-center mt-2">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group">
+                                    <label asp-for="ProfilePicture" class="d-block"></label>
+                                    @if (Model.ProfilePicture != null)
+                                    {
+                                        <img id="profilePicture" style="width:200px;height:200px; object-fit:cover" src="data:image/*;base64,@(Convert.ToBase64String(Model.ProfilePicture))">
+                                    }
+                                    else
+                                    {
+                                        <img id="profilePicture" style="width:200px;height:200px; object-fit:cover" src="">
+                                    }
+                                    <input type="file"
+                                           accept=".png,.jpg,.jpeg,.gif,.tif"
+                                           asp-for="ProfilePicture"
+                                           class="form-control mt-2"
+                                           onchange="document.getElementById('profilePicture').src = window.URL.createObjectURL(this.files[0])" />
+                                    <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="form-group text-center">
+                            <input type="submit" class="btn btn-primary" value="Update" />
+                            <a class="btn btn-secondary" asp-area="User" asp-controller="Deshboard" asp-action="MyAccount" asp-route-id="@userId"> Back to Profile</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- New Section for Custom Cards -->
+    <div class="row mt-4">
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+            <a asp-area="User" asp-controller="Deshboard" asp-action="Lockout" asp-route-id="@userId" class="card shadow-sm custom-card">
+                <div class="card-body d-flex align-items-center">
+                    <div class="icon-part">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <div class="text-part">
+                        <h6 class="card-title">Account</h6>
+                        <h6 class="card-title">Lockout</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+            <a asp-area="User" asp-controller="Deshboard" asp-action="Active" asp-route-id="@userId" class="card shadow-sm custom-card">
+                <div class="card-body d-flex align-items-center">
+                    <div class="icon-part">
+                        <i class="fa-solid fa-hourglass-start"></i>
+                    </div>
+                    <div class="text-part">
+                        <h6 class="card-title">Active</h6>
+                        <h6 class="card-title">Account</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+            <a asp-area="User" asp-controller="Deshboard" asp-action="Delete" asp-route-id="@userId" class="card shadow-sm custom-card">
+                <div class="card-body d-flex align-items-center">
+                    <div class="icon-part">
+                        <i class="fa-solid fa-trash"></i>
+                    </div>
+                    <div class="text-part">
+                        <h6 class="card-title">Delete</h6>
+                        <h6 class="card-title">Account</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 mb-3">
+            <a asp-area="Identity" asp-page="/Account/Manage/PersonalData" class="card shadow-sm custom-card">
+                <div class="card-body d-flex align-items-center">
+                    <div class="icon-part">
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+                    <div class="text-part">
+                        <h6 class="card-title">Manage</h6>
+                        <h6 class="card-title">Data</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .custom-card {
+        border: none;
+        border-radius: 10px;
+        text-decoration: none;
+        color: inherit;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s ease;
+    }
+
+        .custom-card:hover {
+            background-color: #f8f9fc;
+        }
+
+    .icon-part {
+        flex: 0 0 30%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+    }
+
+    .text-part {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: left;
+        margin-left: 10px;
+    }
+
+    .card-title {
+        font-size: 0.9rem;
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    .card .fa-solid {
+        color: #4e73df;
+        font-size: 1.6rem;
+    }
+</style>
+
+
