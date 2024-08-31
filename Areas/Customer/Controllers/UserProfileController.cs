@@ -69,34 +69,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             return View(user);
         }
 
-        [AllowAnonymous]
-        [HttpPost]
-        public async Task<IActionResult> UpdateLocation(double latitude, double longitude)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _userManager.FindByIdAsync(userId);
-
-
-            var currentUser = await _userManager.GetUserAsync(User);
-            if (currentUser == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-    
-
-            var userInfo = _db.ApplicationUser.FirstOrDefault(c => c.Id == user.Id);
-            if (userInfo == null)
-            {
-                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
-            }
-
-            userInfo.Latitude = latitude;
-            userInfo.Longitude = longitude;
-
-            await _userManager.UpdateAsync(userInfo);
-
-            return RedirectToAction("Index", "Home");
-        }
+   
 
         [HttpPost]
         public async Task<IActionResult> Edit(ApplicationUser user, IFormFile profilePicture)
@@ -140,6 +113,36 @@ namespace OnlineShop.Areas.Customer.Controllers
             }
             return View(userInfo);
          
+        }
+
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> UpdateLocation(double latitude, double longitude)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId);
+
+
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+
+            var userInfo = _db.ApplicationUser.FirstOrDefault(c => c.Id == user.Id);
+            if (userInfo == null)
+            {
+                return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
+            }
+
+            userInfo.Latitude = latitude;
+            userInfo.Longitude = longitude;
+
+            await _userManager.UpdateAsync(userInfo);
+
+            return RedirectToAction("Index", "Home");
         }
 
         public async Task<IActionResult> Delete(string id)

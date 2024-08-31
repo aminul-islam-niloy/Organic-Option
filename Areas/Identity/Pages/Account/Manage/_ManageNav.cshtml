@@ -2,16 +2,63 @@
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
-<ul class="nav nav-pills nav-stacked">
-    <li class="@ManageNavPages.IndexNavClass(ViewContext)"><a asp-page="./Index">Profile</a></li>
-    <li class="@ManageNavPages.ChangePasswordNavClass(ViewContext)"><a id="change-password" asp-page="./ChangePassword">Password</a></li>
-    @if (hasExternalLogins)
-    {
-        <li class="@ManageNavPages.ExternalLoginsNavClass(ViewContext)"><a id="external-login" asp-page="./ExternalLogins">External logins</a></li>
-    }
-    <li class="@ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)"><a asp-page="./TwoFactorAuthentication">Two-factor authentication</a></li>
-    <li class="@ManageNavPages.PersonalDataNavClass(ViewContext)"><a asp-page="./PersonalData">Personal data</a></li>
 
-   
- 
-</ul>
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
+﻿@using System.Net.Http
+@using OnlineShop.Session
+@using Microsoft.AspNetCore.Http
+@inject SignInManager<IdentityUser> SignInManager
+
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var userRole = HttpContextAccessor.HttpContext.Session.GetString("roleName");
+
+}
+
+
+@{
+    string userId = UserManager.GetUserId(User);
+}
+
+<div class="profile-nav-container p-3 bg-light rounded">
+    <ul class="nav nav-pills flex-column">
+        <li class="nav-item mt-2">
+            <a class="nav-link active" asp-page="./Index">Profile</a>
+        </li>
+        <li class="nav-item mt-2">
+            <a class="nav-link" asp-page="./ChangePassword">Password</a>
+        </li>
+        @if (hasExternalLogins)
+        {
+            <li class="nav-item mt-2">
+                <a class="nav-link" asp-page="./ExternalLogins">External Logins</a>
+            </li>
+        }
+        <li class="nav-item mt-2">
+            <a class="nav-link" asp-page="./TwoFactorAuthentication">Two-Factor Authentication</a>
+        </li>
+        <li class="nav-item mt-2">
+            <a class="nav-link" asp-page="./PersonalData">Personal Data</a>
+        </li>
+    </ul>
+    <div class="text-center mt-3">
+        <button class="btn btn-primary">Save Changes</button>
+        <a asp-area="User" asp-controller="Deshboard" asp-action="Edit" asp-route-id="@userId" class="d-none d-sm-inline-block btn btn-info shadow-sm mt-2">
+            <i class="fa-regular fa-pen-to-square text-white-50"></i> Back To Edit Profile
+
+        </a>
+    </div>
+</div>
+
+<style>
+    .profile-nav-container {
+        max-width: 300px;
+        margin: auto;
+    }
+
+    .nav-link {
+        text-align: left;
+        padding-left: 15px;
+    }
+</style>

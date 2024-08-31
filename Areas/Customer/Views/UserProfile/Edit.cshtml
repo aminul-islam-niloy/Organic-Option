@@ -13,12 +13,17 @@
 }
 
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Edit Profile</h1>
+        <a asp-area="Identity" asp-page="/Account/Manage/ChangePassword" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="fa-solid fa-key text-white-50"></i> Change Password
+
+        </a>
+    </div>
+    <div class="row ">
+        <div class="col-lg-12 col-md-12">
             <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title text-info text-center">Update User Information</h3>
-                </div>
+               
                 <div class="card-body">
                     <form asp-action="Edit" method="post" id="user-form" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -104,18 +109,12 @@
         </div>
     </div>
     <br />
-    <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10 text-center">
-            <h4>Other Settings</h4>
-            <br />
-            <a asp-area="Identity" asp-page="/Account/Manage/ChangePassword" class="btn btn-primary"title="Manage">Password Section</a>
-        </div>
-    </div>
+    
 </div>
 
 <style>
     .space_up {
-        margin_top: 5px;
+        margin-top: 5px;
     }
 </style>
                         
