@@ -164,11 +164,11 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Pages
+                Shop
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+          @*   <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                    aria-expanded="true" aria-controls="collapsePages">
                     <i class="fas fa-fw fa-folder"></i>
@@ -186,23 +186,85 @@
                         <a class="collapse-item" href="blank.html">Blank Page</a>
                     </div>
                 </div>
-            </li>
+            </li> *@
 
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span>
+             @if (userRole == "Customer")
+            {
+
+                <!-- Nav Item - Charts -->
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Customer"  asp-controller="Order"  asp-action="UserOrders">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        <span>Orders</span>
+                    </a>
+                </li>
+
+                <!-- Nav Item - Tables -->
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Customer" asp-controller="Order" asp-action="UserOrders">
+                    <i class="fa-solid fa-heart"></i>
+                    <span>Wish List</span>
                 </a>
             </li>
+            }
+            @if (userRole == "Farmer")
+            {
 
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>List</span>
-                </a>
-            </li>
+                <!-- Nav Item - Charts -->
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Farmer" asp-controller="FarmerShop" asp-action="Index">
+                        <i class="fa-solid fa-shop"></i>
+                        <span>My Shop</span>
+                    </a>
+                </li>
+
+                <!-- Nav Item - Tables -->
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Farmer" asp-controller="Inventory" asp-action="AllOrdersGroupedByDate">
+                        <i class="fa-solid fa-truck-moving"></i>
+                        <span>Orders </span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Farmer" asp-controller="Inventory" asp-action="Index">
+                        <i class="fa-solid fa-cart-flatbed"></i>
+                        <span>Inventory </span>
+                    </a>
+                </li>
+
+               
+            }
+
+            @if (userRole == "Rider")
+            {
+
+                <!-- Nav Item - Charts -->
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Rider"  asp-controller="Rider" asp-action="Index">
+                        <i class="fa-solid fa-truck"></i>
+                        <span>My Ride</span>
+                    </a>
+                </li>
+
+                <!-- Nav Item - Tables -->
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Rider" asp-controller="RiderDelivery" asp-action="Index">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        <span>Delivary </span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Rider" asp-controller="Rider" asp-action="RiderDashboard">
+                        <i class="fa-solid fa-cart-flatbed"></i>
+                        <span>Wallet </span>
+                    </a>
+                </li>
+
+
+            }
+
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
