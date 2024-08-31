@@ -265,6 +265,57 @@
 
             }
 
+            @if (userRole == "Admin")
+            {
+
+                <!-- Nav Item - Charts -->
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Customer"  asp-controller="User" asp-action="Index">
+                        <i class="fa-solid fa-people-roof"></i>
+                        <span>Manage User</span>
+                    </a>
+                </li>
+
+         
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Customer" asp-controller="Order" asp-action="AllOrders">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        <span>All Orders  </span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Customer"  asp-controller="Blog" asp-action="BlogManager">
+                        <i class="fa-brands fa-square-font-awesome"></i>
+                        <span>Market Place  </span>
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Admin"  asp-controller="Wallet" asp-action="AllWithdrawals">
+                        <i class="fa-solid fa-cart-flatbed"></i>
+                        <span>Wallet </span>
+                    </a>
+                </li>
+
+
+            }
+
+
+            @if (userRole == "SuperAdmin")
+            {
+
+                <!-- Nav Item - Charts -->
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Admin" asp-controller="Role" asp-action="Index">
+                        <i class="fa-solid fa-people-roof"></i>
+                        <span>Manage Role</span>
+                    </a>
+                </li>
+
+
+            }
+
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
