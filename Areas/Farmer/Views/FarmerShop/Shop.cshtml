@@ -6,19 +6,19 @@
     <div class= "  row" >
         @if (Model.FarmerShop.CoverPhoto != null)
         {
-            <img src="data:image;base64,@Convert.ToBase64String(Model.FarmerShop.CoverPhoto)" class="img-fluid" alt="Cover Photo" style=" border-radius:10px; width:1200px;height:300px" />
+            <img src="data:image;base64,@Convert.ToBase64String(Model.FarmerShop.CoverPhoto)" class="img-fluid" alt="Cover Photo" style=" border-radius:10px; width:1200px;height:270px" />
         }
         else
         {
             <p>No cover photo available</p>
         }
-        <div class="col-md-4 mt-50" style="margin:10px">
+        <div class="col-md-5 mt-50" style="margin:10px">
             <h3>@Model.FarmerShop.ShopName</h3>
             <h4> Phone: @Model.FarmerShop.ContractInfo</h4>
             <p><strong>Shop is :</strong> @(Model.FarmerShop.IsShopOpen ? "Open" : "Closed")</p>
         </div>
 
-        <div class="col-md-3 mt-30">
+        <div class="col-md-4 mt-30 mb-10">
             <h4>Shop Address</h4>
             @if (Model.FarmerShop.ShopAddress != null)
             {
@@ -30,7 +30,12 @@
                     <span id="StreetNo">@Html.DisplayFor(modelItem => Model.FarmerShop.ShopAddress.StreetNo)</span><br />
 
                     <label for="WardNo">Ward No:</label>
-                    <span id="WardNo">@Html.DisplayFor(modelItem => Model.FarmerShop.ShopAddress.WardNo)</span><br />
+                    <span id="WardNo">@Html.DisplayFor(modelItem => Model.FarmerShop.ShopAddress.WardNo)</span>
+               
+                    <span id="Thana">@Html.DisplayFor(modelItem => Model.FarmerShop.ShopAddress.Thana)</span>
+
+                  
+                    <span id="District">@Html.DisplayFor(modelItem => Model.FarmerShop.ShopAddress.District)</span>
 
                 </div>
             }
@@ -40,28 +45,10 @@
             }
         </div>
 
-        <div class="col-md-3 mt-30">
-          
-            @if (Model.FarmerShop.ShopAddress != null)
-            {
-                <div style="margin-left:40px">
+   
 
-                    <label for="Thana">Thana:</label>
-                    <span id="Thana">@Html.DisplayFor(modelItem => Model.FarmerShop.ShopAddress.Thana)</span><br />
-
-                    <label for="District">District:</label>
-                    <span id="District">@Html.DisplayFor(modelItem => Model.FarmerShop.ShopAddress.District)</span><br />
-
-                    <label for="Division">Division:</label>
-                    <span id="Division">@Html.DisplayFor(modelItem => Model.FarmerShop.ShopAddress.Division)</span><br />
-                </div>
-            }
-
-
-        </div>
-
-        <div class="col-md-2 mt-30">
-            <p><strong> Rating:</strong> @Model.FarmerShop.OverallRating ( @Model.FarmerShop.TotalReviews reviews)</p>
+        <div class="col-2 col-md-2 mt-30">
+            <p><strong> Rating:</strong> @Model.FarmerShop.OverallRating.ToString("F2") ( @Model.FarmerShop.TotalReviews reviews)</p>
             <div>
                 @{
                     double rating = Model.FarmerShop.OverallRating;
