@@ -28,6 +28,7 @@ namespace OnlineShop.Data
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<FarmerShop> FarmerShop { get; set; }
         public DbSet<ShopReview> ShopReview { get; set; }
+        public DbSet<Favorite> Favorite { get; set; }
 
         public DbSet<InventoryItem> InventoryItem { get; set; }
 

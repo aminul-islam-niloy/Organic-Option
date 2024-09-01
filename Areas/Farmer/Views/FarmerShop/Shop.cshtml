@@ -16,6 +16,10 @@
             <h3>@Model.FarmerShop.ShopName</h3>
             <h4> Phone: @Model.FarmerShop.ContractInfo</h4>
             <p><strong>Shop is :</strong> @(Model.FarmerShop.IsShopOpen ? "Open" : "Closed")</p>
+
+          
+           
+
         </div>
 
         <div class="col-md-4 mt-30 mb-10">
@@ -71,6 +75,9 @@
                         <i class="fa fa-star-o"></i>
                     }
                 }
+            </div>
+            <div class="mt-2">
+                <button class="btn btn-outline-secondary btn-sm add-to-favorites" data-shop-id="@Model.FarmerShop.Id"><i class="fa fa-heart-o"></i> Add to Favorites</button>
             </div>
         </div>
 
@@ -626,3 +633,26 @@ else
             color: #f39c12;
         }
 </style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $(document).on('click', '.add-to-favorites', function () {
+            var shopId = $(this).data('shop-id');
+            console.log("Shop ID: " + shopId);
+
+            $.ajax({
+                url: '@Url.Action("AddToFavorites", "Favorites", new { area = "Customer" })',
+                type: 'POST',
+                data: { shopId: shopId },
+                success: function () {
+                    alert('Shop added to favorites.');
+                },
+                error: function () {
+                    alert('Error occurred while adding shop to favorites.');
+                }
+            });
+        });
+    });
+  </script>

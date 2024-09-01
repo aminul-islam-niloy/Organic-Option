@@ -1,25 +1,12 @@
-﻿<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <form method="get" action="@Url.Action("FarmerShop", "FarmerShop")" class="d-flex align-items-center" style="margin:10px;padding:10px">
-                <div class="form-group flex-grow-1 mb-0">
-                    <label for="range" class="sr-only">Select Range:</label>
-                    <select class="form-control" id="range" name="range">
-                        <option value="7">7 km</option>
-                        <option value="15">15 km</option>
-                        <option value="30">30 km</option>
-                        <option value="100000">30 km +</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary ml-2" style="margin: 7px">Filter</button>
-            </form>
-        </div>
-    </div>
+﻿@model List<OrganicOption.Models.FarmerShop>
 
+<div class="container mt-3">
+    <h4 class="mb-4 text-center" style="font-size:24px">My Favorites</h4>
     <div class="row">
         @foreach (var shop in Model)
         {
             <div class="col-md-4 mb-4">
+            
                 <a href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = shop.Id })" class="card-link">
                     <div class="card shadow-sm rounded h-100">
                         @if (shop.CoverPhoto != null)
@@ -37,7 +24,9 @@
                             <div>
                                 <h5 class="card-title mb-1">@shop.ShopName</h5>
                                 <p class="mb-0 text-muted">Shop is  @(shop.IsShopOpen ? "Open" : "Closed")</p>
+                                
                             </div>
+                            
                             <div class="text-right">
                                 <p class="mb-1"><strong>Rating:</strong> @shop.OverallRating.ToString("F2")</p>
                                 <div class="rating-stars">
@@ -63,18 +52,14 @@
                                         }
                                     }
                                 </div>
-
-
+                               
                             </div>
-
-                            <div class="position-absolute top-0 end-0 m-3">
-                                <button class="btn btn-outline-secondary btn-sm add-to-favorites" data-shop-id="@shop.Id"><i class="fas fa-plus"></i> Add to Favorites</button>
-                            </div>
-
                         </div>
+                        <div class="card-footer text-center justify-content-center">
+                            <button class="btn btn-danger  remove-from-favorites" data-shop-id="@shop.Id"> Remove From Favorite </button>
                         </div>
+                    </div>
                 </a>
-
             </div>
         }
     </div>
@@ -103,24 +88,21 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    $(document).ready(function () {
-        $(document).on('click', '.add-to-favorites', function () {
-            var shopId = $(this).data('shop-id');
-            // console.log("Shop ID: " + shopId);
+    $(document).on('click', '.remove-from-favorites', function () {
+        var shopId = $(this).data('shop-id');
+        // console.log(shopId);  
 
-            $.ajax({
-                url: '@Url.Action("AddToFavorites", "Favorites", new { area = "Customer" })',
-                type: 'POST',
-                data: { shopId: shopId },
-                success: function () {
-                    // alert('Shop added to favorites.');
-                },
-                error: function () {
-                    alert('Error occurred while adding shop to favorites.');
-                }
-            });
+        $.ajax({
+            url: '@Url.Action("RemoveFromFavorites", "Favorites", new { area = "Customer" })',
+            type: 'POST',
+            data: { shopId: shopId },
+            success: function () {
+                // alert('Shop removed from favorites.');
+                location.reload(); 
+            },
+            error: function () {
+                alert('Error : removing shop from favorites.');
+            }
         });
     });
 </script>
-
-
