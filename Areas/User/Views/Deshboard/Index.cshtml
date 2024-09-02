@@ -1,4 +1,24 @@
-﻿ <!-- Main Content -->
+﻿ @using System.Net.Http
+@using OnlineShop.Session
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Extensions
+@using System.Globalization
+
+
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var userRole = HttpContextAccessor.HttpContext.Session.GetString("roleName");
+    int count = 0;
+    List<Products> products = HttpContextAccessor.HttpContext.Session.Get<List<Products>>("products");
+    if (products == null)
+    {
+        products = new List<Products>();
+    }
+    count = products.Count();
+}
+
+
+<!-- Main Content -->
 <div id="content">
 
 
@@ -106,6 +126,105 @@
             </div>
           
 
+        </div>
+
+
+        <div>
+            @if (User.IsInRole("Admin"))
+            {
+
+
+               
+                <dd class="col-sm-8"> <a asp-area="Admin" style="margin-left:10px" asp-controller="Products" asp-action="Index" class="btn btn-success">Manage Products</a></dd>
+
+       
+                <dd class="col-sm-8"> <a asp-area="Admin" style="margin-left:10px" asp-controller="ProductTypes" asp-action="Index" class="btn btn-success">Manage Catagory</a></dd>
+
+           
+                <dd class="col-sm-8"> <a asp-area="Admin" style="margin-left:10px" asp-controller="SpecialTag" asp-action="Index" class="btn btn-success">Manage Tags</a></dd>
+
+          
+                <dd class="col-sm-8"> <a asp-area="Customer" style="margin-left:10px" asp-controller="Order" asp-action="AllOrders" class="btn btn-success"><i class="fa-solid fa-bag-shopping"></i>Manage Orders</a></dd>
+           
+                <dd class="col-sm-8"> <a asp-area="Customer" style="margin-left:10px" class="btn btn-info" asp-controller="User" asp-action="Index" class="nav-link">Manage User</a> </dd>
+                
+                <dd class="col-sm-8"> <a asp-area="Rider" style="margin-left:10px" class="btn btn-info" asp-controller="Rider" asp-action="Riders" class="nav-link">Manage Rider</a> </dd>
+
+
+       
+                <dd class="col-sm-8"> <a asp-area="Admin" style="margin-left:10px" class="btn btn-info" asp-controller="Wallet" asp-action="AllWithdrawals" class="nav-link">Wallet</a> </dd>
+
+               
+                <dd class="col-sm-8"> <a asp-area="Customer" style="margin-left:10px" class="btn btn-info" asp-controller="Blog" asp-action="BlogManager" class="nav-link">Blog Manage</a> </dd>
+
+            
+                <dd class="col-sm-8"> <a asp-area="Admin" style="margin-left:10px" class="btn btn-info" asp-controller="ProductPrice" asp-action="Index" class="nav-link">Product Price</a> </dd>
+
+
+                <dt class="col-sm-4">Other Setting:</dt>
+                <dd class="col-sm-8">   <a asp-area="Identity" class="btn btn-danger" style="margin-left:10px" asp-page="/Account/Manage/ChangePassword" title="Manage"> Password Section</a> </dd>
+
+               
+                <dd class="col-sm-8">  <a asp-action="Index" asp-area="Customer" asp-controller="Feedback" class="btn btn-info"><i class="fas fa-plus"></i> Feedback manage list</a></dd>
+
+       
+                <dd class="col-sm-8">  <a asp-action="SetDiscount" asp-area="Admin" asp-controller="Products" class="btn btn-info"><i class="fas fa-plus"></i>&nbsp; Set Discount</a></dd>
+            }
+            @if (User.IsInRole("SuperAdmin"))
+            {
+
+
+                <dd class="col-sm-8"> <a asp-area="Admin" style="margin-left:10px" asp-controller="Role" asp-action="Index" class="btn btn-success"> Manage Role</a></dd>
+
+                <dd class="col-sm-8"> <a asp-area="Customer" style="margin-left:10px" class="btn btn-info" asp-controller="User" asp-action="Index" class="nav-link">Manage User</a> </dd>
+                
+                <dd class="col-sm-8">   <a asp-area="Identity" class="btn btn-danger" style="margin-left:10px" asp-page="/Account/Manage/ChangePassword" title="Manage"> Password Section</a> </dd>
+            }
+            @if (User.IsInRole("Farmer"))
+            {
+
+            
+                <dd class="col-sm-8"> <a asp-area="Farmer" style="margin-left:10px" class="btn btn-info" asp-controller="FarmerShop" asp-action="Index" class="nav-link">Manage Shop</a> </dd>
+            
+                <dd class="col-sm-8">   <a asp-area="Identity" class="btn btn-danger" style="margin-left:10px" asp-page="/Account/Manage/ChangePassword" title="Manage"> Password Section</a> </dd>
+            }
+
+            @if (User.IsInRole("Rider"))
+            {
+
+                <dt class="col-sm-4">Manage Rides:</dt>
+                <dd class="col-sm-8"> <a asp-area="Rider" style="margin-left:10px" class="btn btn-info" asp-controller="Rider" asp-action="Index" class="nav-link"> My Ride</a> </dd>
+
+
+
+              
+                <dd class="col-sm-8">
+                    <a asp-area="Rider" asp-controller="RiderDelivery" asp-action="Index" class="nav-link">Manage Ride</a>
+                </dd>
+
+           
+                <dd class="col-sm-8">
+                    <a asp-area="Rider" asp-controller="Rider" asp-action="RiderDashboard" class="nav-link">Manage Wallet</a>
+                </dd>
+
+
+                <dt class="col-sm-4">Other Setting:</dt>
+                <dd class="col-sm-8">   <a asp-area="Identity" class="btn btn-danger" style="margin-left:10px" asp-page="/Account/Manage/ChangePassword" title="Manage"> Password Section</a> </dd>
+            }
+
+
+            else if (User.IsInRole("Customer"))
+            {
+
+                <dt class="col-sm-4">Go to Cart:</dt>
+                <dd class="col-sm-8">
+                    <a asp-area="Customer" style="margin-left:10px" asp-controller="Home" class="btn btn-success width:20px;padding:2px;" asp-action="Cart" class="nav-link"><i class="fas fa-shopping-cart"></i> (@count) Cart</a>
+                </dd>
+                <dt class="col-sm-4">Order History:</dt>
+                <dd class="col-sm-8"> <a asp-area="Customer" style="margin-left:10px" asp-controller="Order" class="btn btn-info width:20px;padding:2px;" asp-action="UserOrders" class="nav-link"><i class="fa-solid fa-suitcase"></i> My Orders</a></dd>
+                <dt class="col-sm-4">Other Setting:</dt>
+                <dd class="col-sm-8">   <a asp-area="Identity" class="btn btn-danger width:20px;padding:2px;" style="margin-left:10px" asp-page="/Account/Manage/ChangePassword" title="Manage"> Password Section</a> </dd>
+            }
         </div>
 
         <!-- Content Row -->

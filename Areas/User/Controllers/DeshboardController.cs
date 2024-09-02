@@ -295,7 +295,47 @@ namespace OrganicOption.Areas.User.Controllers
 
 
 
+        public async Task<IActionResult> MyDashboard()
+        {
 
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
+            }
+
+            var user = await _db.ApplicationUser.FirstOrDefaultAsync(c => c.Id == currentUser.Id);
+            if (user == null)
+            {
+                return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
+            }
+
+
+            if (currentUser.Id != user.Id)
+            {
+                return Forbid();
+            }
+
+           
+            if (User.IsInRole("Admin"))
+            {
+                
+            }
+            else if (User.IsInRole("Farmer"))
+            {
+                
+            }
+            else if (User.IsInRole("Rider"))
+            {
+               
+            }
+            else if (User.IsInRole("Customer"))
+            {
+                
+            }
+
+            return View(user);
+        }
 
 
 

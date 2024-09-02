@@ -1,0 +1,364 @@
+﻿ @using System.Net.Http
+@using OnlineShop.Session
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Http.Extensions
+@using System.Globalization
+
+
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+
+    int count = 0;
+    List<Products> products = HttpContextAccessor.HttpContext.Session.Get<List<Products>>("products");
+    if (products == null)
+    {
+        products = new List<Products>();
+    }
+    count = products.Count();
+}
+
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    string userId = UserManager.GetUserId(User);
+}
+
+
+
+@{
+    var userRole = HttpContextAccessor.HttpContext.Session.GetString("roleName");
+}
+
+<div id="content">
+    <div class="container-fluid">
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+            <a asp-area="User" asp-controller="Deshboard" asp-action="Edit" asp-route-id="@userId" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                <i class="fa-regular fa-pen-to-square text-white-50"></i> Edit Profile
+
+            </a>
+        </div>
+
+        <div class="row">
+
+            @if (User.IsInRole("Customer"))
+            {
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <a asp-area="Customer" asp-controller="Home" asp-action="Cart" class="card-link">
+                        <div class="card border-left-primary shadow h-100 py-2" style="border-left-color: #007bff;">
+                            <!-- Change the left border color -->
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">My Cart <span style="color:#c14b4b">@count</span></div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-shopping-cart fa-2x" style="color: #FF6347;"></i> <!-- Change the icon color -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <a asp-area="Customer" asp-controller="Order" asp-action="UserOrders" class="card-link">
+                        <div class="card border-left-success shadow h-100 py-2" style="border-left-color: #28a745;">
+                            <!-- Change the left border color -->
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">My Orders</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-truck fa-2x" style="color: #20c997;"></i> <!-- Change the icon color -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <a asp-area="Customer" asp-controller="Favorites" asp-action="FavoriteShop" class="card-link">
+                        <div class="card border-left-danger shadow h-100 py-2" style="border-left-color: #dc3545;">
+                            <!-- Change the left border color -->
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">My Favorite</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-heart fa-2x" style="color: #e83e8c;"></i> <!-- Change the icon color -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <a asp-area="user" asp-controller="Deshboard" asp-action="MyAccount" asp-route-id="@userId" class="card-link">
+                        <div class="card border-left-info shadow h-100 py-2" style="border-left-color: #17a2b8;">
+                            <!-- Change the left border color -->
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">My Account</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-user fa-2x" style="color: #28a745;"></i> <!-- Change the icon color -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+
+            @if (User.IsInRole("Farmer"))
+            {
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <a asp-area="Customer" asp-controller="Home" asp-action="Cart" class="card-link">
+                        <div class="card border-left-primary shadow h-100 py-2" style="border-left-color: #007bff;">
+                            <!-- Change the left border color -->
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">My Cart <span style="color:#c14b4b">@count</span></div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-shopping-cart fa-2x" style="color: #FF6347;"></i> <!-- Change the icon color -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <a asp-area="Customer" asp-controller="Order" asp-action="UserOrders" class="card-link">
+                        <div class="card border-left-success shadow h-100 py-2" style="border-left-color: #28a745;">
+                            <!-- Change the left border color -->
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">My Orders</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-truck fa-2x" style="color: #20c997;"></i> <!-- Change the icon color -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <a asp-area="Customer" asp-controller="Favorites" asp-action="FavoriteShop" class="card-link">
+                        <div class="card border-left-danger shadow h-100 py-2" style="border-left-color: #dc3545;">
+                            <!-- Change the left border color -->
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">My Favorite</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-heart fa-2x" style="color: #e83e8c;"></i> <!-- Change the icon color -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <a asp-area="user" asp-controller="Deshboard" asp-action="MyAccount" asp-route-id="@userId" class="card-link">
+                        <div class="card border-left-info shadow h-100 py-2" style="border-left-color: #17a2b8;">
+                            <!-- Change the left border color -->
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">My Account</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-user fa-2x" style="color: #28a745;"></i> <!-- Change the icon color -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+
+
+        </div>
+        <div>
+
+   
+            @if (User.IsInRole("Customer"))
+            {
+
+                <div class="row">
+
+                    <!-- Area Chart -->
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Order Overview</h6>
+                                <div class="dropdown no-arrow">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                         aria-labelledby="dropdownMenuLink">
+                                        <div class="dropdown-header">Order Map</div>
+                                        <a class="dropdown-item" href="#">Monthly</a>
+                                        <a class="dropdown-item" href="#">Yearly</a>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="myAreaChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+               
+            }
+            @if (User.IsInRole("Farmer"))
+            {
+                <!-- Farmer-specific content -->
+            }
+            @if (User.IsInRole("Rider"))
+            {
+
+                <dt class="col-sm-4">Manage Rides:</dt>
+                <dd class="col-sm-8"> <a asp-area="Rider" style="margin-left:10px" class="btn btn-info" asp-controller="Rider" asp-action="Index" class="nav-link"> My Ride</a> </dd>
+                <dd class="col-sm-8">
+                    <a asp-area="Rider" asp-controller="RiderDelivery" asp-action="Index" class="nav-link">Manage Ride</a>
+                </dd>
+
+                <dd class="col-sm-8">
+                    <a asp-area="Rider" asp-controller="Rider" asp-action="RiderDashboard" class="nav-link">Manage Wallet</a>
+                </dd>
+
+                <dt class="col-sm-4">Other Setting:</dt>
+                <dd class="col-sm-8">   <a asp-area="Identity" class="btn btn-danger" style="margin-left:10px" asp-page="/Account/Manage/ChangePassword" title="Manage"> Password Section</a> </dd>
+
+            }
+
+            <div class="row">
+
+                <div class="col-lg-6">
+
+                    <!-- Default Card Example -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            Default Card Example
+                        </div>
+                        <div class="card-body">
+                            This card uses Bootstrap's default styling with no utility classes added. Global
+                            styles are the only things modifying the look and feel of this default card example.
+                        </div>
+                    </div>
+
+                    <!-- Basic Card Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Basic Card Example</h6>
+                        </div>
+                        <div class="card-body">
+                            The styling for this basic card example is created by using default Bootstrap
+                            utility classes. By using utility classes, the style of the card component can be
+                            easily modified with no need for any custom CSS!
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-6">
+
+                    <!-- Dropdown Card Example -->
+                    <div class="card shadow mb-4">
+                        <!-- Card Header - Dropdown -->
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Dropdown Card Example</h6>
+                            <div class="dropdown no-arrow">
+                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                     aria-labelledby="dropdownMenuLink">
+                                    <div class="dropdown-header">Dropdown Header:</div>
+                                    <a class="dropdown-item" href="#">Action</a>
+                                    <a class="dropdown-item" href="#">Another action</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card Body -->
+                        <div class="card-body">
+                            Dropdown menus can be placed in the card header in order to extend the functionality
+                            of a basic card. In this dropdown card example, the Font Awesome vertical ellipsis
+                            icon in the card header can be clicked on in order to toggle a dropdown menu.
+                        </div>
+                    </div>
+
+                    <!-- Collapsable Card Example -->
+                    <div class="card shadow mb-4">
+                        <!-- Card Header - Accordion -->
+                        <a href="#collapseCardExample" class="d-block card-header py-3" data-toggle="collapse"
+                           role="button" aria-expanded="true" aria-controls="collapseCardExample">
+                            <h6 class="m-0 font-weight-bold text-primary">Collapsable Card Example</h6>
+                        </a>
+                        <!-- Card Content - Collapse -->
+                        <div class="collapse show" id="collapseCardExample">
+                            <div class="card-body">
+                                This is a collapsable card example using Bootstrap's built in collapse
+                                functionality. <strong>Click on the card header</strong> to see the card body
+                                collapse and expand!
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+
+            
+        </div>
+    </div>
+</div>
+
+<style>
+.card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.card-link .card:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+</style>
+
+
+
