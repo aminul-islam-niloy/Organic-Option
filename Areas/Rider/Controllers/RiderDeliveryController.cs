@@ -111,6 +111,11 @@ namespace OrganicOption.Areas.Rider.Controllers
                 return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
             }
 
+            if (period == null)
+            {
+                return RedirectToAction("Index", "RiderDelivery", new { area = "Rider" });
+            }
+
             IQueryable<Delivery> query = _dbContext.Deliveries.Where(d => d.RiderId == riderId && d.OrderCondition == OrderCondition.Delivered);
 
           

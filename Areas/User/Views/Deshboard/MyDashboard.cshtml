@@ -48,14 +48,13 @@
                 <div class="col-xl-3 col-md-6 mb-4">
                     <a asp-area="Customer" asp-controller="Home" asp-action="Cart" class="card-link">
                         <div class="card border-left-primary shadow h-100 py-2" style="border-left-color: #007bff;">
-                            <!-- Change the left border color -->
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">My Cart <span style="color:#c14b4b">@count</span></div>
                                     </div>
                                     <div class="col-auto">
-                                        <i class="fas fa-shopping-cart fa-2x" style="color: #FF6347;"></i> <!-- Change the icon color -->
+                                        <i class="fas fa-shopping-cart fa-2x" style="color: #FF6347;"></i>
                                     </div>
                                 </div>
                             </div>
@@ -66,14 +65,13 @@
                 <div class="col-xl-3 col-md-6 mb-4">
                     <a asp-area="Customer" asp-controller="Order" asp-action="UserOrders" class="card-link">
                         <div class="card border-left-success shadow h-100 py-2" style="border-left-color: #28a745;">
-                            <!-- Change the left border color -->
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">My Orders</div>
                                     </div>
                                     <div class="col-auto">
-                                        <i class="fas fa-truck fa-2x" style="color: #20c997;"></i> <!-- Change the icon color -->
+                                        <i class="fas fa-truck fa-2x" style="color: #20c997;"></i>
                                     </div>
                                 </div>
                             </div>
@@ -84,14 +82,13 @@
                 <div class="col-xl-3 col-md-6 mb-4">
                     <a asp-area="Customer" asp-controller="Favorites" asp-action="FavoriteShop" class="card-link">
                         <div class="card border-left-danger shadow h-100 py-2" style="border-left-color: #dc3545;">
-                            <!-- Change the left border color -->
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">My Favorite</div>
                                     </div>
                                     <div class="col-auto">
-                                        <i class="fas fa-heart fa-2x" style="color: #e83e8c;"></i> <!-- Change the icon color -->
+                                        <i class="fas fa-heart fa-2x" style="color: #e83e8c;"></i>
                                     </div>
                                 </div>
                             </div>
@@ -102,14 +99,13 @@
                 <div class="col-xl-3 col-md-6 mb-4">
                     <a asp-area="user" asp-controller="Deshboard" asp-action="MyAccount" asp-route-id="@userId" class="card-link">
                         <div class="card border-left-info shadow h-100 py-2" style="border-left-color: #17a2b8;">
-                            <!-- Change the left border color -->
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">My Account</div>
                                     </div>
                                     <div class="col-auto">
-                                        <i class="fas fa-user fa-2x" style="color: #28a745;"></i> <!-- Change the icon color -->
+                                        <i class="fas fa-user fa-2x" style="color: #28a745;"></i>
                                     </div>
                                 </div>
                             </div>
@@ -118,86 +114,159 @@
                 </div>
             }
 
-            @if (User.IsInRole("Farmer"))
+            @if (User.IsInRole("Rider"))
             {
+
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <a asp-area="Customer" asp-controller="Home" asp-action="Cart" class="card-link">
-                        <div class="card border-left-primary shadow h-100 py-2" style="border-left-color: #007bff;">
-                            <!-- Change the left border color -->
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">My Cart <span style="color:#c14b4b">@count</span></div>
+                    <a asp-area="Rider" asp-controller="RiderDelivary" asp-action="DeliveredOrders" asp-route-id="monthly" class="card-link">
+                    <div class="card border-left-primary shadow h-100 py-2 ">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                        This Month
                                     </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-shopping-cart fa-2x" style="color: #FF6347;"></i> <!-- Change the icon color -->
-                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">৳ 20,000</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    </a>
+                </div>
+
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <a asp-area="Rider" asp-controller="Rider" asp-action="RiderDashboard" class="card-link">
+                    <div class="card border-left-success shadow h-100 py-2 ">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                        Wallet
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">৳ 215,000</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa-solid fa-bangladeshi-taka-sign fa-2x text-gray-300"></i>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     </a>
                 </div>
 
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <a asp-area="Customer" asp-controller="Order" asp-action="UserOrders" class="card-link">
-                        <div class="card border-left-success shadow h-100 py-2" style="border-left-color: #28a745;">
-                            <!-- Change the left border color -->
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">My Orders</div>
+                    <a asp-area="Rider" asp-controller="RiderDelivery" asp-action="Index" class="card-link">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                        Delivary
                                     </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-truck fa-2x" style="color: #20c997;"></i> <!-- Change the icon color -->
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col-auto">
+                                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">25</div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="progress progress-sm mr-2">
+                                                <div class="progress-bar bg-info" role="progressbar"
+                                                     style="width: 50%" aria-valuenow="50" aria-valuemin="0"
+                                                     aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
                                     </div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    </a>    
+                </div>
+
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <a asp-area="Rider" asp-controller="Rider" asp-action="Index" class="card-link">
+                    <div class="card border-left-warning shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                       Ride Setting
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">My Ride</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fa-solid fa-truck fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     </a>
                 </div>
 
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <a asp-area="Customer" asp-controller="Favorites" asp-action="FavoriteShop" class="card-link">
-                        <div class="card border-left-danger shadow h-100 py-2" style="border-left-color: #dc3545;">
-                            <!-- Change the left border color -->
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">My Favorite</div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-heart fa-2x" style="color: #e83e8c;"></i> <!-- Change the icon color -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <a asp-area="user" asp-controller="Deshboard" asp-action="MyAccount" asp-route-id="@userId" class="card-link">
-                        <div class="card border-left-info shadow h-100 py-2" style="border-left-color: #17a2b8;">
-                            <!-- Change the left border color -->
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">My Account</div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-user fa-2x" style="color: #28a745;"></i> <!-- Change the icon color -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
             }
 
 
         </div>
         <div>
+            @if (User.IsInRole("Rider"))
+            {
+                <div class="row mb-2 text-right justify-content-end" style="gap: 10px; margin-right:12px">
+                    <a asp-area="Rider" asp-controller="RiderDelivery" asp-action="Index" class="nav-link btn  btn-primary">
+                        <i class="fa-solid fa-wrench"></i> Manage Delivary
+                    </a>
+                    <a asp-area="Rider" asp-controller="Rider" asp-action="RequestWithdraw" class="nav-link btn  btn-info">
+                        <i class="fa-solid fa-money-bill-transfer"></i>  Withdraw
+                    </a>
+                    <a asp-area="Rider" asp-controller="Rider" asp-action="EditRider" class="nav-link btn  btn-secondary">
+                        <i class="fa-solid fa-pen-to-square"></i> Edit Info
+                    </a>
+                </div>
+
 
    
+                    <div class="col-xl-12 col-lg-12">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">Order Overview</h6>
+                                <div class="dropdown no-arrow">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                         aria-labelledby="dropdownMenuLink">
+                                        <div class="dropdown-header">Order Map</div>
+                                        <a class="dropdown-item" href="#">By Revenue</a>
+                                        <a class="dropdown-item" href="#"> Delivary</a>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-area">
+                                    <canvas id="myAreaChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+            }
+
+
+
+
             @if (User.IsInRole("Customer"))
             {
 
@@ -219,7 +288,7 @@
                                         <div class="dropdown-header">Order Map</div>
                                         <a class="dropdown-item" href="#">Monthly</a>
                                         <a class="dropdown-item" href="#">Yearly</a>
-                                       
+
                                     </div>
                                 </div>
                             </div>
@@ -235,31 +304,15 @@
 
                 </div>
 
-               
+
             }
             @if (User.IsInRole("Farmer"))
             {
                 <!-- Farmer-specific content -->
             }
-            @if (User.IsInRole("Rider"))
-            {
+            
 
-                <dt class="col-sm-4">Manage Rides:</dt>
-                <dd class="col-sm-8"> <a asp-area="Rider" style="margin-left:10px" class="btn btn-info" asp-controller="Rider" asp-action="Index" class="nav-link"> My Ride</a> </dd>
-                <dd class="col-sm-8">
-                    <a asp-area="Rider" asp-controller="RiderDelivery" asp-action="Index" class="nav-link">Manage Ride</a>
-                </dd>
-
-                <dd class="col-sm-8">
-                    <a asp-area="Rider" asp-controller="Rider" asp-action="RiderDashboard" class="nav-link">Manage Wallet</a>
-                </dd>
-
-                <dt class="col-sm-4">Other Setting:</dt>
-                <dd class="col-sm-8">   <a asp-area="Identity" class="btn btn-danger" style="margin-left:10px" asp-page="/Account/Manage/ChangePassword" title="Manage"> Password Section</a> </dd>
-
-            }
-
-            <div class="row">
+            <div class="row ">
 
                 <div class="col-lg-6">
 
@@ -342,22 +395,22 @@
 
 
 
-            
+
         </div>
     </div>
 </div>
 
 <style>
-.card-link {
-    text-decoration: none;
-    color: inherit;
-}
+    .card-link {
+        text-decoration: none;
+        color: inherit;
+    }
 
-.card-link .card:hover {
-    transform: scale(1.05);
-    transition: transform 0.3s ease-in-out;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
+        .card-link .card:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease-in-out;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
 </style>
 
 

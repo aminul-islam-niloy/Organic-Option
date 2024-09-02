@@ -154,14 +154,15 @@
     
             <hr class="sidebar-divider">
 
-            <div class="sidebar-heading">
-                Shop
-            </div>
+         
 
        
 
              @if (userRole == "Customer")
             {
+                <p class="sidebar-heading">
+                    Shop
+                </p>
 
       
                 <li class="nav-item">
@@ -181,7 +182,9 @@
             }
             @if (userRole == "Farmer")
             {
-
+                <p class="sidebar-heading">
+                    Shop
+                </p>
      
                 <li class="nav-item">
                     <a class="nav-link" asp-area="Farmer" asp-controller="FarmerShop" asp-action="Index">
@@ -210,7 +213,9 @@
 
             @if (userRole == "Rider")
             {
-
+                <p class="sidebar-heading">
+                    Delivary
+                </p>
           
                 <li class="nav-item">
                     <a class="nav-link" asp-area="Rider"  asp-controller="Rider" asp-action="Index">
@@ -239,7 +244,9 @@
 
             @if (userRole == "Admin")
             {
-
+                <p class="sidebar-heading">
+                    Manage
+                </p>
         
                 <li class="nav-item">
                     <a class="nav-link" asp-area="Customer"  asp-controller="User" asp-action="Index">
@@ -276,7 +283,9 @@
 
             @if (userRole == "SuperAdmin")
             {
-
+                <p class="sidebar-heading">
+                    Manage
+                </p>
  
                 <li class="nav-item">
                     <a class="nav-link" asp-area="Admin" asp-controller="Role" asp-action="Index">
