@@ -17,6 +17,7 @@ using System.Globalization;
 using System.Configuration;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
+using OrganicOption.Models.Rider_Section;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,6 +64,8 @@ builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Str
 // Register EmailService
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddScoped<NotificationService>();
+
+builder.Services.AddScoped<RiderRepository>();
 
 // Localization configuration
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");

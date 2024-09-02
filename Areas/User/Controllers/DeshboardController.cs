@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data;
 using OnlineShop.Models;
+using OrganicOption.Models.Rider_Section;
 using System;
 using System.IO;
 using System.Linq;
@@ -19,10 +20,12 @@ namespace OrganicOption.Areas.User.Controllers
 
         UserManager<IdentityUser> _userManager;
         ApplicationDbContext _db;
-        public DeshboardController(UserManager<IdentityUser> userManager, ApplicationDbContext db)
+        private readonly RiderRepository _riderRepository;
+        public DeshboardController(UserManager<IdentityUser> userManager, ApplicationDbContext db, RiderRepository riderRepository)
         {
             _userManager = userManager;
             _db = db;
+            _riderRepository = riderRepository;
         }
 
 
@@ -297,7 +300,6 @@ namespace OrganicOption.Areas.User.Controllers
 
         public async Task<IActionResult> MyDashboard()
         {
-
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
@@ -310,32 +312,47 @@ namespace OrganicOption.Areas.User.Controllers
                 return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
-
             if (currentUser.Id != user.Id)
             {
                 return Forbid();
             }
 
-           
-            if (User.IsInRole("Admin"))
+            if (User.IsInRole("Rider"))
             {
-                
-            }
-            else if (User.IsInRole("Farmer"))
-            {
-                
-            }
-            else if (User.IsInRole("Rider"))
-            {
-               
-            }
-            else if (User.IsInRole("Customer"))
-            {
-                
-            }
+                var rider = _db.RiderModel.Include(r => r.RiderAddress).SingleOrDefault(r => r.RiderUserId == user.Id);
+                var monthlyRevenue = _riderRepository.GetMonthlyRevenue(rider.Id);
+                var totalRevenue = _riderRepository.GetTotalRevenue(rider.Id);
+                var performance = _riderRepository.GetRiderPerformance(rider.Id);
 
-            return View(user);
+                var currentMonth = DateTime.Now.ToString("MMMM");
+
+                var currentMonthPerformance = performance.FirstOrDefault(p => p.MonthName == currentMonth);
+                var currentMonthTotalDeliveries = currentMonthPerformance?.CompletedDeliveries ?? 0;
+                var currentMonthTotalRevenue = currentMonthPerformance?.EarnedRevenue ?? 0;
+
+                ViewBag.CurrentMonthTotalDeliveries = currentMonthTotalDeliveries;
+                ViewBag.CurrentMonthTotalRevenue = currentMonthTotalRevenue;
+
+                ViewBag.TotalRevenue = rider.Revenue.ToString();
+
+                //var riderDashboardViewModel = new RiderDashboardViewModel
+                //{
+                //    MonthlyRevenue = monthlyRevenue,
+                //    TotalRevenue = totalRevenue,
+                //    Performance = performance
+                //};
+
+                ViewBag.MonthlyRevenue = monthlyRevenue;
+                ViewBag.TotalRevenue = totalRevenue;
+                ViewBag.Performance = performance;
+
+                return View(user);
+            }
+           
+
+            return View(user); 
         }
+
 
 
 
