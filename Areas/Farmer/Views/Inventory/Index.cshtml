@@ -56,9 +56,9 @@
         <div class="row">
             @foreach (var product in ViewBag.TotalSoldProduct)
             {
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        <img class="card-img-top" src="~/@product.Image" alt="@product.Name" style="max-height: 250px; object-fit: cover;">
+                <div class="col-md-3 mb-4">
+                    <div class="card h-50">
+                        <img class="card-img-top" src="~/@product.Image" alt="@product.Name" style="max-height:200px; width:auto; ">
                         <div class="card-body">
                             <h5 class="card-title">@product.Name</h5>
                             <p class="card-text">Price: @product.Price Tk</p>

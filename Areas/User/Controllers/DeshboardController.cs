@@ -300,26 +300,28 @@ namespace OrganicOption.Areas.User.Controllers
 
         public async Task<IActionResult> MyDashboard()
         {
-            var currentUser = await _userManager.GetUserAsync(User);
-            if (currentUser == null)
-            {
-                return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
-            }
+            //var currentUser = await _userManager.GetUserAsync(User);
+            //if (currentUser == null)
+            //{
+            //    return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
+            //}
 
-            var user = await _db.ApplicationUser.FirstOrDefaultAsync(c => c.Id == currentUser.Id);
-            if (user == null)
-            {
-                return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
-            }
+            //var user = await _db.ApplicationUser.FirstOrDefaultAsync(c => c.Id == currentUser.Id);
+            //if (user == null)
+            //{
+            //    return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
+            //}
 
-            if (currentUser.Id != user.Id)
-            {
-                return Forbid();
-            }
+            //if (currentUser.Id != user.Id)
+            //{
+            //    return Forbid();
+            //}
 
             if (User.IsInRole("Rider"))
             {
-                var rider = _db.RiderModel.Include(r => r.RiderAddress).SingleOrDefault(r => r.RiderUserId == user.Id);
+                var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                var rider = _db.RiderModel.Include(r => r.RiderAddress).SingleOrDefault(r => r.RiderUserId == user);
                 var monthlyRevenue = _riderRepository.GetMonthlyRevenue(rider.Id);
                 var totalRevenue = _riderRepository.GetTotalRevenue(rider.Id);
                 var performance = _riderRepository.GetRiderPerformance(rider.Id);
@@ -331,7 +333,7 @@ namespace OrganicOption.Areas.User.Controllers
                 var currentMonthTotalRevenue = currentMonthPerformance?.EarnedRevenue ?? 0;
 
                 ViewBag.CurrentMonthTotalDeliveries = currentMonthTotalDeliveries;
-                ViewBag.CurrentMonthTotalRevenue = currentMonthTotalRevenue;
+                ViewBag.CurrentMonthTotalRevenue = currentMonthTotalRevenue.ToString();
 
                 ViewBag.TotalRevenue = rider.Revenue.ToString();
 
@@ -346,11 +348,27 @@ namespace OrganicOption.Areas.User.Controllers
                 ViewBag.TotalRevenue = totalRevenue;
                 ViewBag.Performance = performance;
 
-                return View(user);
+                return View();
             }
-           
 
-            return View(user); 
+            if (User.IsInRole("Rider"))
+            {
+
+                var farmerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var farmer = _db.FarmerShop.SingleOrDefault(f => f.FarmerUserId == farmerId);
+
+                var farmerShop = await _db.FarmerShop
+            .Include(f => f.ShopAddress)
+            .FirstOrDefaultAsync(m => m.Id == farmer.Id);
+
+
+
+            }
+
+
+
+
+                return View(); 
         }
 
 
