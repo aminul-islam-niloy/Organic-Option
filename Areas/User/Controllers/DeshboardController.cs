@@ -5,8 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data;
 using OnlineShop.Models;
+using OrganicOption.Models;
+using OrganicOption.Models.Farmer_Section;
 using OrganicOption.Models.Rider_Section;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
@@ -300,23 +303,7 @@ namespace OrganicOption.Areas.User.Controllers
 
         public async Task<IActionResult> MyDashboard()
         {
-            //var currentUser = await _userManager.GetUserAsync(User);
-            //if (currentUser == null)
-            //{
-            //    return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
-            //}
-
-            //var user = await _db.ApplicationUser.FirstOrDefaultAsync(c => c.Id == currentUser.Id);
-            //if (user == null)
-            //{
-            //    return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
-            //}
-
-            //if (currentUser.Id != user.Id)
-            //{
-            //    return Forbid();
-            //}
-
+            
             if (User.IsInRole("Rider"))
             {
                 var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -353,22 +340,101 @@ namespace OrganicOption.Areas.User.Controllers
                 var farmer = _db.FarmerShop.SingleOrDefault(f => f.FarmerUserId == farmerId);
 
                 var farmerShop = await _db.FarmerShop
-            .Include(f => f.ShopAddress)
-            .FirstOrDefaultAsync(m => m.Id == farmer.Id);
+                     .Include(f => f.ShopAddress)
+                     .FirstOrDefaultAsync(m => m.Id == farmer.Id);
 
                 ViewBag.TotalRevenue = farmerShop.ShopRevenue;
                 ViewBag.ShopId= farmerShop.Id;
+
+                var monthlyRevenue = GetMonthlyRevenue(farmerShop.Id);
+
+                // Get Performance Data
+                var performanceData = GetFarmerShopPerformance(farmerShop.Id);
+
+                // Pass the data to the view
+                ViewBag.MonthlyRevenue = monthlyRevenue;
+                ViewBag.Performance = performanceData;
+
+                var currentMonthRevenue = GetCurrentMonthRevenue(farmerShop.Id);
+                ViewBag.CurrentMonthRevenue = currentMonthRevenue;
+
+
                 return View();
             }
 
 
 
 
-                return View(); 
+          return View(); 
+        }
+
+        //FarmerShop Performance and Revenue
+
+        public Dictionary<int, decimal> GetMonthlyRevenue(int farmerShopId)
+        {
+            var inventoryItems = _db.InventoryItem
+                .Where(ii => ii.FarmerShopId == farmerShopId)
+                .Join(_db.Deliveries,
+                    ii => ii.OrderId,
+                    d => d.OrderId,
+                    (ii, d) => new
+                    {
+                        d.OrderAcceptTime,
+                        ii.Price,
+                        d.OrderCondition
+                    })
+                .Where(x => x.OrderCondition == OrderCondition.Delivered && x.OrderAcceptTime != null)
+                .ToList();
+
+     
+
+            // Group by month and sum up the prices
+            var monthlyRevenue = inventoryItems
+                .GroupBy(ii => ii.OrderAcceptTime.Month)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Sum(ii => ii.Price)
+                );
+
+            return monthlyRevenue;
         }
 
 
 
+        public List<FarmerShopPerformance> GetFarmerShopPerformance(int farmerShopId)
+        {
+            var performanceData = from ii in _db.InventoryItem
+                                  join d in _db.Deliveries on ii.OrderId equals d.OrderId
+                                  where ii.FarmerShopId == farmerShopId && d.OrderCondition == OrderCondition.Delivered
+                                  group ii by new { d.OrderAcceptTime.Year, d.OrderAcceptTime.Month } into g
+                                  select new FarmerShopPerformance
+                                  {
+                                      Month = g.Key.Month,
+                                      MonthName = new DateTime(g.Key.Year, g.Key.Month, 1).ToString("MMMM"),
+                                      SoldProducts = g.Count(),
+                                      EarnedRevenue = g.Sum(ii => ii.Price)
+                                  };
+
+         
+            return performanceData
+                .OrderBy(p => p.Month)
+                .ToList();
+        }
+
+
+
+
+        public decimal GetCurrentMonthRevenue(int farmerShopId)
+        {
+            var monthlyRevenue = GetMonthlyRevenue(farmerShopId);
+            var currentMonth = DateTime.Now.Month;
+
+            var currentMonthRevenue = monthlyRevenue.ContainsKey(currentMonth)
+                ? monthlyRevenue[currentMonth]
+                : 0;
+
+            return currentMonthRevenue;
+        }
 
 
 
