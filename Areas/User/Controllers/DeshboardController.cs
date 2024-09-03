@@ -337,12 +337,7 @@ namespace OrganicOption.Areas.User.Controllers
 
                 ViewBag.TotalRevenue = rider.Revenue.ToString();
 
-                //var riderDashboardViewModel = new RiderDashboardViewModel
-                //{
-                //    MonthlyRevenue = monthlyRevenue,
-                //    TotalRevenue = totalRevenue,
-                //    Performance = performance
-                //};
+              
 
                 ViewBag.MonthlyRevenue = monthlyRevenue;
                 ViewBag.TotalRevenue = totalRevenue;
@@ -351,7 +346,7 @@ namespace OrganicOption.Areas.User.Controllers
                 return View();
             }
 
-            if (User.IsInRole("Rider"))
+            if (User.IsInRole("Farmer"))
             {
 
                 var farmerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -361,8 +356,9 @@ namespace OrganicOption.Areas.User.Controllers
             .Include(f => f.ShopAddress)
             .FirstOrDefaultAsync(m => m.Id == farmer.Id);
 
-
-
+                ViewBag.TotalRevenue = farmerShop.ShopRevenue;
+                ViewBag.ShopId= farmerShop.Id;
+                return View();
             }
 
 

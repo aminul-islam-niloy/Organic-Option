@@ -251,7 +251,7 @@
                                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                             Wallet
                                         </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">৳ @* @ViewBag.TotalRevenue *@</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">৳  @ViewBag.TotalRevenue </div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fa-solid fa-bangladeshi-taka-sign fa-2x text-gray-300"></i>
@@ -323,8 +323,14 @@
                 <a asp-area="Farmer" asp-controller="Inventory" asp-action="RequestWithdraw" class="nav-link btn  btn-info">
                     <i class="fa-solid fa-money-bill-transfer"></i>  Withdraw
                 </a>
-                <a asp-area="Rider" asp-controller="Rider" asp-action="EditRider" class="nav-link btn  btn-secondary">
-                    <i class="fa-solid fa-pen-to-square"></i> Edit Info
+                <a asp-area="Admin" asp-controller="ProductPrice" asp-action="TodayPrice" class="nav-link btn  btn-success">
+                    <i class="fa-solid fa-money-check-dollar"></i>  Daily Price
+                </a>
+                <a asp-area="Farmer" asp-controller="Inventory" asp-action="ShowAllProductsByTime" class="nav-link btn  btn-warning">
+                    <i class="fa-regular fa-clock"></i> Product Time
+                </a>
+                <a asp-area="Farmer" asp-controller="FarmerShop" asp-action="Edit" asp-route-id="@ViewBag.ShopId" class="nav-link btn  btn-secondary">
+                    <i class="fa-solid fa-pen-to-square"></i> Edit Shop 
                 </a>
             </div>
 
