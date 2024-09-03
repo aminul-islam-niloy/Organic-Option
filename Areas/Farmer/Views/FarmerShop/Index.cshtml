@@ -3,71 +3,88 @@
 <br />
 
 <div class="container">
- 
-        <div class="row">
-            <!-- Left Section: Shop Cover Photo -->
-            <div class="col-md-8 mb-4">
-                @if (Model.CoverPhoto != null)
-                {
-                    <img src="data:image;base64,@Convert.ToBase64String(Model.CoverPhoto)" class="img-fluid rounded" alt="Cover Photo" />
-                }
-                else
-                {
-                    <p>No cover photo available</p>
-                }
+    <div class="row">
+
+        <div class="col-md-8 mb-4">
+            @if (Model.CoverPhoto != null)
+            {
+                <img src="data:image;base64,@Convert.ToBase64String(Model.CoverPhoto)" class="img-fluid rounded" alt="Cover Photo" />
+            }
+            else
+            {
+                <p>No cover photo available</p>
+            }
+        </div>
+
+        <div class="col-md-4 mb-4 mt-2">
+
+            <div class="card" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 1rem;">
+
+                <div class="card-header text-center" style="font-size: 1.25rem; font-weight: bold;">
+                    @Model.ShopName
+                </div>
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <p><strong>Open Status: @(Model.IsShopOpen ? "Open" : "Closed") </strong></p>
+                        <form id="shop-status-form" asp-action="EditOpenStatus" method="post" style="margin: 0;">
+                            <input type="hidden" name="Id" value="@Model.Id" />
+                            <label class="switch" style="margin: 0;">
+                                <input type="checkbox" id="IsShopOpen" name="IsShopOpen" value="true" @(Model.IsShopOpen ? "checked" : "") />
+                                <span class="slider round"></span>
+                            </label>
+                        </form>
+                    </div>
+
+                    <h4 style="margin-bottom: 1rem;">Shop Management</h4>
+                    <div class="btn-group-vertical w-100  mb-3" role="group" aria-label="Shop Management Buttons">
+                     
+                            <a asp-action="Edit" asp-controller="FarmerShop" asp-route-id="@Model.Id" class="btn btn-info mb-2">
+                            <i class="fas fa-edit"></i>&nbsp; Edit
+                        </a>
+                           @*  <a asp-action="Delete" asp-controller="FarmerShop" asp-route-id="@Model.Id" class="btn btn-danger mb-2" style="margin:7px">
+                            <i class="fas fa-trash-alt"></i>&nbsp; Delete
+                        </a> *@
+                     
+                        <a class="btn  mb-3" style="background:#40c791" href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = @Model.Id })">
+                            <i class="fas fa-box"></i>&nbsp; Visit Shop
+                        </a>
+                    </div>
+
+                    <div class="row ">
+                        <div class="btn-group d-flex">
+                     
+                            <a asp-action="Index" asp-area="Farmer" asp-controller="Inventory" class="btn  btn-sm " style=" background:#e45982 ;margin:5px">
+                                <i class="fas fa-archive"></i>&nbsp; Inventory
+                            </a>
+                    
+                            <a asp-action="AllOrdersGroupedByDate" asp-area="Farmer" asp-controller="Inventory" class="btn btn-success btn-sm " style="margin:5px">
+                                <i class="fas fa-clipboard-list"></i>&nbsp; Orders
+                            </a>
+                            </div>
+                    
+                        <div class="btn-group d-flex">
+                            <a asp-action="ShowAllProductsByTime" asp-area="Farmer" asp-controller="Inventory" class="btn btn-warning btn-sm " style="margin:5px">
+                                <i class="fas fa-clock"></i>&nbsp; Products Time
+                            </a>
+
+                            <a asp-action="AddProduct" class="btn btn-danger btn-sm " style="margin:5px">
+                                <i class="fas fa-plus"></i>&nbsp; Add Product
+                            </a>
+                        </div>
+                        
+                    </div>
+                </div>
             </div>
-
-            <!-- Right Section: Shop Information -->
-            <div class="col-md-4 mb-4">
-                <h3 class="mb-3">@Model.ShopName</h3>
-                <h4 class="mb-3">@Model.ContractInfo</h4>
-                <p><strong>Open Status:</strong> @(Model.IsShopOpen ? "Open" : "Closed")</p>
-                <h4 class="mb-3">Total Revenue: @Model.ShopRevenue</h4>
-            @*     <a href="@Url.Action("Wallet", "Inventory")" class="btn btn-primary mb-3">My Wallet</a>
-            <form asp-action="EditOpenStatus" method="post">
-                <label class="switch">
-                    <input type="checkbox" name="IsShopOpen" value="true" @(Model.IsShopOpen ? "checked" : "") />
-                    <span class="slider round"></span>
-                </label>
-
-                <input type="hidden" name="Id" value="@Model.Id" />
-                <button type="submit" class="btn btn-primary mt-3">Save</button>
-            </form> *@
-
-            <form id="shop-status-form" asp-action="EditOpenStatus" method="post">
-                <input type="hidden" name="Id" value="@Model.Id" />
-                <label class="switch">
-                    <input type="checkbox" id="IsShopOpen" name="IsShopOpen" value="true" @(Model.IsShopOpen ? "checked" : "") />
-                    <span class="slider round"></span>
-                </label>
-            </form>
-            <a asp-action="Wallet" asp-controller="Inventory" class="btn btn-warning mt-2" asp-route-id="@Model.Id">My Wallet</a>
-
-
-            </div>
-
         </div>
 
 
-        <div class="row">
-            <div class="col-md-6 mb-4">
-                <h4>Shop Management</h4>
-                <a asp-action="Edit" asp-controller="FarmerShop" class="btn btn-warning mb-2" asp-route-id="@Model.Id">Edit</a>
-                <a asp-action="Delete" asp-controller="FarmerShop" class="btn btn-danger mb-2" asp-route-id="@Model.Id">Delete</a>
-                <a class="btn btn-warning mb-3" href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = @Model.Id })">Products in Shop</a>
-            </div>
-            <div class="col-md-6 mb-4">
-                <h4>Other Information</h4>
-                <a asp-action="Index" asp-area="Farmer" asp-controller="Inventory" class="btn btn-info mb-2">Manage Inventory</a>
-                <a asp-action="AllOrdersGroupedByDate" asp-area="Farmer" asp-controller="Inventory" class="btn btn-success mb-2">Manage Orders</a>
-                <a asp-action="ShowAllProductsByTime" asp-area="Farmer" asp-controller="Inventory" class="btn btn-warning mb-2">Products by Time</a>
-                
-            </div>
-        </div>
+    </div>
 
 
-    <a asp-action="AddProduct" class="btn btn-info"><i class="fas fa-plus"></i>&nbsp; Add New Product</a>
-    <div class="table-responsive">
+    <div>
+
         <table class="table table-bordered mt-3" id="myTable">
             <thead>
                 <tr class="table-info">
@@ -121,14 +138,13 @@
             </tbody>
         </table>
     </div>
- </div>
+</div>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
         $('#IsShopOpen').change(function () {
-            // Get the form data
             var form = $('#shop-status-form');
             var formData = form.serialize();
 
@@ -137,17 +153,15 @@
                 url: form.attr('action'),
                 data: formData,
                 success: function (response) {
-                    console.log("Shop status updated successfully");
-                    // Optionally, you can show a success message or update the UI
+
                 },
                 error: function (xhr, status, error) {
-                    console.error("Error updating shop status: " + error);
-                    // Optionally, show an error message
                 }
             });
         });
     });
 </script>
+
 
 
 
@@ -173,7 +187,8 @@
         right: 0;
         bottom: 0;
         background-color: #ccc;
-        transition: 0.4s;
+        transition: .4s;
+        border-radius: 34px;
     }
 
         .slider:before {
@@ -181,10 +196,11 @@
             content: "";
             height: 26px;
             width: 26px;
+            border-radius: 50%;
             left: 4px;
             bottom: 4px;
             background-color: white;
-            transition: 0.4s;
+            transition: .4s;
         }
 
     input:checked + .slider {
@@ -195,12 +211,14 @@
             transform: translateX(26px);
         }
 
-    .slider.round {
-        border-radius: 34px;
-    }
+ /*    .btn {
+        display: inline-flex;
+        align-items: center;
+        font-size: 16px;
+    } */
 
-        .slider.round:before {
-            border-radius: 50%;
-        }
+        /* .btn i {
+            margin-right: 8px;
+        } */
+
 </style>
-
