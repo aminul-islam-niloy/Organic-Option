@@ -10,13 +10,13 @@ namespace OrganicOption.Models
         public DateTime LastSoldDate { get; set; }
         public decimal Discount { get; set; }
         public decimal DiscountPrice { get; set; }
-        public int FarmerShopId { get; set; } // Foreign key to the farmer shop
-        public virtual FarmerShop FarmerShop { get; set; } // Navigation property to the farmer shop
+        public int FarmerShopId { get; set; } 
+        public virtual FarmerShop FarmerShop { get; set; }
         public int ProductId { get; set; }
         public virtual Products Products { get; set; }
         public decimal Price { get; set; }
-        public int? OrderId { get; set; } // Nullable reference to the order ID
-        public virtual Order Order { get; set; } // Navigation property to the order
+        public int? OrderId { get; set; } 
+        public virtual Order Order { get; set; } 
 
 
     }

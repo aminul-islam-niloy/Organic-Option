@@ -30,7 +30,7 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
 
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -70,7 +70,7 @@ namespace OnlineShop.Areas.Customer.Controllers
 
         public async Task<IActionResult> Details(string id)
         {
-            var user = _db.ApplicationUser.FirstOrDefault(c => c.Id == id);
+            var user =  _db.ApplicationUser.FirstOrDefault(c => c.Id == id);
             if (user == null)
             {
                    return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });

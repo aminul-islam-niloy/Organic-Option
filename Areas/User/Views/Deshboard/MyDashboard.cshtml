@@ -229,7 +229,7 @@
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                             This Month
                                         </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">৳ @* @ViewBag.CurrentMonthTotalRevenue *@</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">৳ @ViewBag.CurrentMonthRevenue</div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -274,7 +274,7 @@
                                         </div>
                                         <div class="row no-gutters align-items-center">
                                             <div class="col-auto">
-                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">@* @ViewBag.CurrentMonthTotalDeliveries *@</div>
+                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"></div>
                                             </div>
                                             <div class="h5 mb-0 font-weight-bold " style="color: #20c997;"> Inventory </div>
 
@@ -344,19 +344,17 @@
                     <div class="card-body">
                         <h5>Total Revenue: @ViewBag.TotalRevenue</h5>
 
-                        <h6>Monthly Deliveries</h6>
-                        <div class="chart-area">
-                            <canvas id="riderDeliveriesChart"></canvas>
+                        <div class="chart-container" style="position: relative; height:40vh; width:71vw">
+                            <canvas id="revenueChart"></canvas>
                         </div>
 
-                        <h6>Monthly Revenue</h6>
-                        <div class="chart-area">
-                            <canvas id="riderRevenueChart"></canvas>
+                        <div class="chart-container" style="position: relative; height:40vh; width:70vw">
+                            <canvas id="performanceChart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
-
+            
 
         }
 
@@ -422,8 +420,6 @@
 @if (User.IsInRole("Rider"))
 {
 
-
-
     @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -484,6 +480,102 @@
                     x: {
                         type: 'category',
                         labels: labels,
+                        ticks: {
+                            maxRotation: 0,
+                            autoSkip: true
+                        }
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    </script>
+    }
+}
+
+
+
+@if (User.IsInRole("Farmer"))
+{
+    @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Extract labels and data for the Farmer Performance chart
+        var performanceData = @Html.Raw(JsonConvert.SerializeObject((IEnumerable<dynamic>)ViewBag.Performance));
+
+        // Extract labels and data from performanceData
+        var labels = performanceData.map(p => p.MonthName);
+        var soldProducts = performanceData.map(p => p.SoldProducts);
+        var earnedRevenue = performanceData.map(p => p.EarnedRevenue);
+
+        // Revenue Chart
+        var ctxRevenue = document.getElementById("revenueChart").getContext("2d");
+        var revenueChart = new Chart(ctxRevenue, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Earned Revenue",
+                    data: earnedRevenue,
+                    borderColor: "#1cc88a",
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'category',
+                        labels: labels,
+                        ticks: {
+                            maxRotation: 0,
+                            autoSkip: true
+                        }
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        // Performance Chart
+        var ctxPerformance = document.getElementById("performanceChart").getContext("2d");
+        var performanceChart = new Chart(ctxPerformance, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Order Sold",
+                        data: soldProducts,
+                        backgroundColor: "#4e73df",
+                        borderColor: "#4e73df",
+                        borderWidth: 1,
+                        fill: true,
+                        barThickness: 40
+                    },
+                    {
+                        label: "Earned Revenue",
+                        data: earnedRevenue,
+                        backgroundColor: "#1cc88a",
+                        borderColor: "#1cc88a",
+                        borderWidth: 1,
+                        fill: true,
+                        barThickness: 40
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'category',
                         ticks: {
                             maxRotation: 0,
                             autoSkip: true
