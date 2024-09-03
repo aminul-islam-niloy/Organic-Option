@@ -521,7 +521,7 @@ namespace OnlineShop.Areas.Customer.Controllers
 
                 }).ToList(),
                 ShopId = order.OrderDetails.FirstOrDefault().Product.FarmerShopId
-            }).ToList();
+            }).OrderByDescending(g => g.OrderDate).ToList();
 
             return View(viewModel);
         }
