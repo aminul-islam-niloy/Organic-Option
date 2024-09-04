@@ -314,7 +314,7 @@
             {
 
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <a asp-area="Farmer" asp-controller="Inventory" asp-action="AllOrdersGroupedByDate" class="card-link">
+                    <a asp-area="Customer" asp-controller="Order" asp-action="AllOrders" class="card-link">
                         <div class="card border-left-primary shadow h-100 py-2 ">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
@@ -322,7 +322,7 @@
                                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                             This Month
                                         </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">৳ @* @ViewBag.CurrentMonthRevenue *@</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">৳ @ViewBag.CurrentMonthRevenue </div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -334,7 +334,7 @@
                 </div>
 
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <a asp-action="Wallet" asp-controller="Inventory" asp-area="Farmer" class="card-link">
+                    <a asp-action="AdminViewWithdrawals" asp-controller="Wallet" asp-area="Admin" class="card-link">
                         <div class="card border-left-success shadow h-100 py-2 ">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
@@ -342,7 +342,7 @@
                                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                            Total Revenue
                                         </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">৳  @* @ViewBag.TotalRevenue *@ </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">৳ @ViewBag.AdminTotalRevenue </div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fa-solid fa-bangladeshi-taka-sign fa-2x text-gray-300"></i>
@@ -355,7 +355,7 @@
                 </div>
 
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <a asp-area="Farmer" asp-controller="Inventory" asp-action="Index" class="card-link">
+                    <a asp-area="Admin" asp-controller="Wallet" asp-action="AllWithdrawals" class="card-link">
                         <div class="card border-left-info shadow h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
@@ -455,29 +455,25 @@
                 </a>
             </div>
 
-
-
             <div class="col-xl-12 col-lg-12">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <h6 class="m-0 font-weight-bold text-primary">Admin Revenue</h6>
                     </div>
                     <div class="card-body">
-                        <h5>Total Revenue: @* @ViewBag.TotalRevenue *@</h5>
+                       
+                        <h6>Current Month Revenue: <span id="currentMonthRevenue"></span></h6>
 
-                        <h6>Monthly </h6>
+                        <h6>Monthly</h6>
                         <div class="chart-area">
-                            <canvas id="riderDeliveriesChart"></canvas>
-                        </div>
-
-                        <h6>Total</h6>
-                        <div class="chart-area">
-                            <canvas id="riderRevenueChart"></canvas>
+                            <canvas id="AdminRevenueChart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
 
+
+           
         }
 
 
@@ -687,10 +683,10 @@
     @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Extract labels and data for the Farmer Performance chart
+        // Extract labels and data for the Farmer 
         var performanceData = @Html.Raw(JsonConvert.SerializeObject((IEnumerable<dynamic>)ViewBag.Performance));
 
-        // Extract labels and data from performanceData
+        // Extract labels and data 
         var labels = performanceData.map(p => p.MonthName);
         var soldProducts = performanceData.map(p => p.SoldProducts);
         var earnedRevenue = performanceData.map(p => p.EarnedRevenue);
@@ -774,4 +770,54 @@
         });
     </script>
     }
+}
+
+@if (User.IsInRole("Admin"))
+{
+    @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        
+        var monthlyRevenue = @Html.Raw(JsonConvert.SerializeObject(ViewBag.MonthlyRevenue));
+
+        var labels = Object.keys(monthlyRevenue);
+        var revenueData = Object.values(monthlyRevenue);
+
+        // Admin Revenue Chart
+        var ctxAdminRevenue = document.getElementById("AdminRevenueChart").getContext("2d");
+        var adminRevenueChart = new Chart(ctxAdminRevenue, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Monthly Revenue",
+                    data: revenueData,
+                    borderColor: "#1cc88a",
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'category',
+                        labels: labels,
+                        ticks: {
+                            maxRotation: 0,
+                            autoSkip: true
+                        }
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        document.getElementById('currentMonthRevenue').innerText = @ViewBag.CurrentMonthRevenue;
+    </script>
+    }
+
 }

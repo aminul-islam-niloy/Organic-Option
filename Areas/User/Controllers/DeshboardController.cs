@@ -361,11 +361,31 @@ namespace OrganicOption.Areas.User.Controllers
 
                 return View();
             }
+            if (User.IsInRole("Admin"))
+            {
+                var totalRevenue = _db.withdrawalHistories
+               .Where(w => w.IsConfirmed)
+               .Sum(w => w.Amount);
+
+                ViewBag.AdminTotalRevenue= totalRevenue;
+
+                var monthlyRevenue = GetMonthlyRevenue();
+                var dailyRevenue = GetDailyRevenue();
+                var currentMonthRevenue = GetCurrentMonthRevenue();
+
+                ViewBag.MonthlyRevenue = monthlyRevenue;
+                ViewBag.DailyRevenue = dailyRevenue;
+                ViewBag.CurrentMonthRevenue = currentMonthRevenue;
+
+
+                return View();
+
+            }
 
 
 
 
-          return View(); 
+            return View(); 
         }
 
         //FarmerShop Performance and Revenue
@@ -437,12 +457,35 @@ namespace OrganicOption.Areas.User.Controllers
         }
 
 
+        public Dictionary<string, decimal> GetMonthlyRevenue()
+        {
+            return _db.withdrawalHistories
+                .Where(w => w.ConfirmDate.HasValue && w.ConfirmDate.Value.Year == DateTime.Now.Year)
+                .GroupBy(w => new { Month = w.ConfirmDate.Value.Month })
+                .Select(g => new
+                {
+                    Month = g.Key.Month,
+                    Revenue = g.Sum(w => w.Amount)
+                })
+                .ToDictionary(
+                    x => new DateTime(DateTime.Now.Year, x.Month, 1).ToString("MMMM"),
+                    x => x.Revenue
+                );
+        }
 
+        public decimal GetDailyRevenue()
+        {
+            return _db.withdrawalHistories
+              .Where(w => w.ConfirmDate.HasValue && w.ConfirmDate.Value.Date == DateTime.Now.Date)
+                .Sum(w => w.Amount);
+        }
 
-
-
-
-
+        public decimal GetCurrentMonthRevenue()
+        {
+            return _db.withdrawalHistories
+               .Where(w => w.ConfirmDate.HasValue && w.ConfirmDate.Value.Month == DateTime.Now.Month && w.ConfirmDate.Value.Year == DateTime.Now.Year)
+                .Sum(w => w.Amount);
+        }
 
 
 
