@@ -37,10 +37,10 @@
                     {
                         <tr>
                             <td>@request.ConfirmDate?.ToString("dd-MM-yyyy")</td>
-                            <td>@request.UserId</td>
+                            <td><a asp-action="Details" asp-controller="User" asp-area="Customer" asp-route-id="@request.UserId">@request.UserId </a> </td>
                             <td>@request.UserType</td>
                             <td>@request.Amount ৳ </td>
-                            <td>@request.AdminId</td>
+                            <td><a asp-action="Details" asp-controller="User" asp-area="Customer" asp-route-id="@request.AdminId">@request.AdminId </a></td>
                         </tr>
                     }
                 </tbody>

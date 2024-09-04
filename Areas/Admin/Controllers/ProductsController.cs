@@ -53,6 +53,10 @@ namespace OnlineShop.Areas.Admin.Controllers
             return View(products);
         }
 
+        public IActionResult SetDiscount()
+        {
+            return View();
+        }
 
 
         [HttpPost]
