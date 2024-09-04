@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data;
 using OnlineShop.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,11 +24,98 @@ namespace OnlineShop.Areas.Customer.Controllers
             _userManager = userManager;
             _db = db;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string role = null)
         {
-            //var dd = _userManager.GetUserId(HttpContext.User);
-            return View(await _db.ApplicationUser.ToListAsync());
+            if (!string.IsNullOrEmpty(role))
+            {
+                var roleId = await _db.Roles
+                    .Where(r => r.Name == role)
+                    .Select(r => r.Id)
+                    .FirstOrDefaultAsync();
+
+                var usersInRole = await _db.UserRoles
+                    .Where(ur => ur.RoleId == roleId)
+                    .Select(ur => ur.UserId)
+                    .ToListAsync();
+
+                var users = await _db.ApplicationUser
+                    .Where(u => usersInRole.Contains(u.Id))
+                    .ToListAsync();
+
+
+
+                return View(users);
+            }
+
+            var allUsers = await _db.ApplicationUser.ToListAsync();
+
+            ViewBag.TotalUsers = allUsers.Count;
+
+            ViewBag.TotalCustomers = allUsers.Count(u => _userManager.IsInRoleAsync(u, "Customer").Result);
+
+            ViewBag.TotalRiders = allUsers.Count(u => _userManager.IsInRoleAsync(u, "Rider").Result);
+
+            ViewBag.TotalFarmers = allUsers.Count(u => _userManager.IsInRoleAsync(u, "Farmer").Result);
+
+            return View(allUsers);
         }
+
+
+        public async Task<IActionResult> ApplicationUsers(string role = null)
+        {
+            // Get all users
+            var users = await _db.ApplicationUser.ToListAsync();
+
+            ViewBag.TotalUsers = users.Count;
+
+            ViewBag.TotalCustomers = users.Count(u => _userManager.IsInRoleAsync(u, "Customer").Result);
+
+            ViewBag.TotalRiders = users.Count(u => _userManager.IsInRoleAsync(u, "Rider").Result);
+
+            ViewBag.TotalFarmers = users.Count(u => _userManager.IsInRoleAsync(u, "Farmer").Result);
+
+
+            if (!string.IsNullOrEmpty(role))
+            {
+                var usersInRole = new List<ApplicationUser>();
+
+                foreach (var user in users)
+                {
+                    var userRoles = await _userManager.GetRolesAsync(user);
+                    if (userRoles.Contains(role))
+                    {
+                        usersInRole.Add(user);
+                    }
+                }
+
+                return View(usersInRole);
+            }
+
+            return View(users);
+        }
+
+        public async Task<IActionResult> ShopDetails(string id)
+        {
+         var farmerShop = await _db.FarmerShop
+       .Include(f => f.ShopAddress)
+       .FirstOrDefaultAsync(f => f.FarmerUserId == id);
+
+            return View(farmerShop);
+        }
+
+        public async Task<IActionResult> RiderDetails(string id)
+        {
+          
+            var rider = await _db.RiderModel
+                .Include(r => r.RiderAddress)
+                .FirstOrDefaultAsync(r => r.RiderUserId == id);
+
+            return View(rider);
+        }
+
+
+
+
 
 
         public IActionResult Create()

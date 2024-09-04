@@ -1,0 +1,76 @@
+﻿@model OrganicOption.Models.FarmerShop
+<div class="container mt-4">
+    <div class="  row">
+        @if (Model.CoverPhoto != null)
+        {
+            <img src="data:image;base64,@Convert.ToBase64String(Model.CoverPhoto)" class="img-fluid" alt="Cover Photo" style=" border-radius:10px; width:1200px;height:270px" />
+        }
+        else
+        {
+            <p>No cover photo available</p>
+        }
+        <div class="col-md-5 mt-50" style="margin:10px">
+            <h3>@Model.ShopName</h3>
+            <h4> Phone: @Model.ContractInfo</h4>
+            <p><strong>Shop is :</strong> @(Model.IsShopOpen ? "Open" : "Closed")</p>
+        </div>
+
+        <div class="col-md-4 mt-30 mb-10">
+            <h4>Shop Address</h4>
+            @if (Model.ShopAddress != null)
+            {
+                <div style="margin-left:40px">
+                    <label for="House">House:</label>
+                    <span id="House">@Html.DisplayFor(modelItem => Model.ShopAddress.House)</span><br />
+
+                    <label for="StreetNo">Street No:</label>
+                    <span id="StreetNo">@Html.DisplayFor(modelItem => Model.ShopAddress.StreetNo)</span><br />
+
+                    <label for="WardNo">Ward No:</label>
+                    <span id="WardNo">@Html.DisplayFor(modelItem => Model.ShopAddress.WardNo)</span>
+
+                    <span id="Thana">@Html.DisplayFor(modelItem => Model.ShopAddress.Thana)</span>
+
+
+                    <span id="District">@Html.DisplayFor(modelItem => Model.ShopAddress.District)</span>
+
+                </div>
+            }
+            else
+            {
+                <p>No address available</p>
+            }
+        </div>
+
+
+
+        <div class="col-2 col-md-2 mt-30">
+            <p><strong> Rating:</strong> @Model.OverallRating.ToString("F2") ( @Model.TotalReviews reviews)</p>
+            <div>
+                @{
+                    double rating = Model.OverallRating;
+                    int fullStars = (int)rating;
+                    double halfStarThreshold = rating - fullStars;
+                    int emptyStars = 5 - fullStars - (halfStarThreshold >= 0.5 ? 1 : 0);
+
+                    for (int i = 0; i < fullStars; i++)
+                    {
+                        <i class="fa fa-star"></i>
+                    }
+
+                    if (halfStarThreshold >= 0.5)
+                    {
+                        <i class="fa fa-star-half-o"></i>
+                    }
+
+                    for (int i = 0; i < emptyStars; i++)
+                    {
+                        <i class="fa fa-star-o"></i>
+                    }
+                }
+            </div>
+            
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,56 @@
+﻿@model OrganicOption.Models.Rider_Section.RiderModel
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h4>Rider Info</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h5>Name:@Model.Name</h5>
+                    </div>
+                    <div class="mb-3">
+                        <h5> Age:
+                            @Model.Age
+                        </h5>
+                    </div>
+                    <div class="mb-3">
+                        <h5>Phone Number:
+                            @Model.PhoneNumber
+                        </h5>
+                    </div>
+                    <div class="mb-3">
+                        <h5>NID:
+                            @Model.NID
+                        </h5>
+                    </div>
+                    <div class="mb-3">
+                        <h5>Licence:
+                            @Model.DrivingLicense
+                        </h5>
+                    </div>
+                    <div class="mb-3">
+                        <h5>Status:
+                            @(Model.RiderStatus ? "Active" : "Inactive")
+                        </h5>
+                    </div>
+                    <div class="mb-3">
+                        <h5>Address:
+                       
+                            @if (Model.RiderAddress != null)
+                            {
+                                @Model.RiderAddress.Thana  @Model.RiderAddress.District
+                                            }
+                            else
+                            {
+                                <text>No address available</text>
+                            }
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

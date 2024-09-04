@@ -1,27 +1,84 @@
 ﻿@using OnlineShop.Models;
-@using Microsoft.AspNetCore.Identity
-@inject UserManager<IdentityUser> _userManager
-@model IEnumerable<ApplicationUser>
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<IdentityUser> _userManager;
+@model IEnumerable<ApplicationUser>;
 
 @{
     ViewData["Title"] = "Index";
 }
 
 <div class="container mt-2">
-
     <a href="javascript:history.back()" class="btn btn-secondary mb-2">
         <i class="fa fa-arrow-left"></i> Back
     </a>
-    <div class="row mt-2">
+
+    <div class="row mt-2 mb-4">
         <div class="col-lg-12">
-            <h4 style="font-size:20px" class="text-info text-center">Application User List</h4>
+            <h4 style="font-size:25px" class="text-info text-center">Application Users</h4>
         </div>
-        @*  "New User" button *@
-        @* <div class="col-lg-6 text-right">
-        <a asp-action="Create" class="btn btn-info"><i class="fas fa-plus"></i>&nbsp; New User</a>
-        </div> *@
     </div>
-    <br />
+
+    <div class="row mb-5 mt-2">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4>Total Users</h4>
+                    <p>@ViewBag.TotalUsers</p>
+                    <a href="@Url.Action("Index", new { role = "" })" class="btn btn-primary">View All Users</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4>Total Customers</h4>
+                    <p>@ViewBag.TotalCustomers</p>
+                    <a href="@Url.Action("Index", new { role = "Customer" })" class="btn btn-primary">View Customers</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4>Total Riders</h4>
+                    <p>@ViewBag.TotalRiders</p>
+                    <a href="@Url.Action("Index", new { role = "Rider" })" class="btn btn-primary">View Riders</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4>Total Farmers</h4>
+                    <p>@ViewBag.TotalFarmers</p>
+                    <a href="@Url.Action("Index", new { role = "Farmer" })" class="btn btn-primary">View Farmers</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+
+        <form method="get" style="text-align:end; justify-content:end">
+            <div class="row mt-2 mb-2">
+                <div class="col-md-4">
+                    <select name="role" class="form-control" onchange="this.form.submit()">
+                        <option value="">Select Role</option>
+                        <option value="Customer">Customer</option>
+                        <option value="Rider">Rider</option>
+                        <option value="Farmer">Farmer</option>
+                        <option value="Admin">Admin</option>
+                        <option value="SuperAdmin">SuperAdmin</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+ 
+
+
     <div>
         <table class="table table-responsive" id="myTable">
             <thead>
@@ -32,24 +89,31 @@
                     <th>Phone Number</th>
                     <th>Role</th>
                     <th>Status</th>
-                    <th>Actions</th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
+
+
+
             <tbody>
                 @foreach (var item in Model)
                 {
                     var userRoles = await _userManager.GetRolesAsync(item);
                     var roles = string.Join(", ", userRoles);
+
                     <tr>
                         <td>@item.FirstName @item.LastName</td>
                         <td>@item.UserName</td>
                         <td>@item.Email</td>
                         <td>@item.PhoneNumber</td>
                         <td>@roles</td>
+                     
+
                         @if (item.LockoutEnd > DateTime.Now && item.LockoutEnd != null)
                         {
-                            <td>Inactive</td>
                             <td>
+                                <p>Inactive</p>
                                 <div class="btn-group">
                                     <a asp-action="Active" class="btn btn-primary" asp-route-id="@item.Id">
                                         <i class="far fa-edit"></i>
@@ -59,16 +123,47 @@
                         }
                         else
                         {
-                            <td>Active</td>
-                            <td style="width: 150px">
+                            <td style="width: 100px">
+                                <p>Active</p>
                                 <partial name="_PartialView" model="@item.Id" />
                             </td>
                         }
+                        <td>
+                            @if (userRoles.Contains("Farmer"))
+                            {
+                                <a asp-action="ShopDetails" asp-route-id="@item.Id" class="btn btn-info">Details</a>
+                            }
+                            else if (userRoles.Contains("Rider"))
+                            {
+                                <a asp-action="RiderDetails" asp-route-id="@item.Id" class="btn btn-success">Details</a>
+                            }
+                            else
+                            {
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
+                            }
+                        </td>
                     </tr>
                 }
+
+              
+                
             </tbody>
         </table>
     </div>
 </div>
 
+@section scripts {
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css" />
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
 
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Initialize DataTable on the table element
+            $('#myTable table').DataTable();
+        });
+    </script>
+}

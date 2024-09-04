@@ -1,0 +1,91 @@
+﻿@using OnlineShop.Models;
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<IdentityUser> _userManager;
+@model IEnumerable<ApplicationUser>;
+
+<div class="container mt-2">
+    <a href="javascript:history.back()" class="btn btn-secondary mb-2">
+        <i class="fa fa-arrow-left"></i> Back
+    </a>
+
+
+
+@{
+    ViewBag.Title = "User Overview";
+}
+
+<h4>User Overview</h4>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h4>Total Users</h4>
+                <p>@ViewBag.TotalUsers</p>
+                <a href="@Url.Action("Index", new { role = "" })" class="btn btn-primary">View All Users</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h4>Total Customers</h4>
+                <p>@ViewBag.TotalCustomers</p>
+                <a href="@Url.Action("Index", new { role = "Customer" })" class="btn btn-primary">View Customers</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h4>Total Riders</h4>
+                <p>@ViewBag.TotalRiders</p>
+                <a href="@Url.Action("Index", new { role = "Rider" })" class="btn btn-primary">View Riders</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <h4>Total Farmers</h4>
+                <p>@ViewBag.TotalFarmers</p>
+                <a href="@Url.Action("Index", new { role = "Farmer" })" class="btn btn-primary">View Farmers</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                    <td>@user.FirstName @user.LastName</td>
+                <td>@user.Email</td>
+                <td>
+                    @{
+                        var roles = await _userManager.GetRolesAsync(user);
+                        foreach (var role in roles)
+                        {
+                            <span class="text  text-dark">@role</span>
+                        }
+                    }
+                </td>
+                <td>
+                    <a href="@Url.Action("Details", new { id = user.Id })" class="btn btn-info">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
