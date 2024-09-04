@@ -383,7 +383,7 @@
 
 
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <a asp-area="Farmer" asp-controller="FarmerShop" asp-action="Index" class="card-link">
+                    <a asp-area="Customer" asp-controller="User" asp-action="Index" class="card-link">
                         <div class="card border-left-warning shadow h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
@@ -408,6 +408,79 @@
 
 
         </div>
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="row mb-2 text-right justify-content-end" style="gap: 10px; margin-right:10px">
+
+                <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="btn custom-btn btn-success">
+                    <i class="fas fa-boxes"></i>  Products
+                </a>
+
+                <a asp-area="Admin" asp-controller="ProductTypes" asp-action="Index" class="btn custom-btn btn-danger">
+                    <i class="fas fa-list"></i>  Category
+                </a>
+
+                <a asp-area="Admin" asp-controller="SpecialTag" asp-action="Index" class="btn custom-btn btn-warning">
+                    <i class="fas fa-tags"></i> Sub Category
+                </a>
+
+                <a asp-area="Customer" asp-controller="Order" asp-action="AllOrders" class="btn custom-btn btn-primary">
+                    <i class="fa-solid fa-bag-shopping"></i>All  Orders
+                </a>
+
+                <a asp-area="Customer" asp-controller="User" asp-action="Index" class="btn custom-btn btn-info">
+                    <i class="fas fa-users"></i> All User
+                </a>
+
+
+                @*
+            <a asp-area="Admin" asp-controller="Wallet" asp-action="AllWithdrawals" class="btn custom-btn btn-light">
+            <i class="fas fa-wallet"></i> Wallet
+            </a> *@
+
+                <a asp-area="Customer" asp-controller="Blog" asp-action="BlogManager" class="btn custom-btn btn-dark">
+                    <i class="fas fa-blog"></i> Blog Manage
+                </a>
+
+                <a asp-area="Admin" asp-controller="ProductPrice" asp-action="Index" class="btn custom-btn btn-success" style="background:#d54b81">
+                    <i class="fas fa-dollar-sign"></i> Product Price
+                </a>
+
+                <a asp-action="Index" asp-area="Customer" asp-controller="Feedback" class="btn custom-btn btn-info" style="background:#4bd5c2">
+                    <i class="fas fa-comments"></i> Feedback
+                </a>
+
+                <a asp-action="SetDiscount" asp-area="Admin" asp-controller="Products" class="btn custom-btn btn-danger" style="background:#936435">
+                    <i class="fas fa-percentage"></i> Set Discount
+                </a>
+            </div>
+
+
+
+            <div class="col-xl-12 col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Admin Revenue</h6>
+                    </div>
+                    <div class="card-body">
+                        <h5>Total Revenue: @* @ViewBag.TotalRevenue *@</h5>
+
+                        <h6>Monthly </h6>
+                        <div class="chart-area">
+                            <canvas id="riderDeliveriesChart"></canvas>
+                        </div>
+
+                        <h6>Total</h6>
+                        <div class="chart-area">
+                            <canvas id="riderRevenueChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+
+
         @if (User.IsInRole("Farmer"))
         {
             <div class="row mb-2 text-right justify-content-end" style="gap: 10px; margin-right:12px">
@@ -493,77 +566,7 @@
 
         }
 
-        @if (User.IsInRole("Admin"))
-        {
-            <div class="row mb-2 text-right justify-content-end"  style="gap: 10px; margin-right:10px" >
-
-                <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="btn custom-btn btn-success">
-                    <i class="fas fa-boxes"></i>  Products
-                </a>
-
-                <a asp-area="Admin" asp-controller="ProductTypes" asp-action="Index" class="btn custom-btn btn-danger">
-                    <i class="fas fa-list"></i>  Category
-                </a>
-
-                <a asp-area="Admin" asp-controller="SpecialTag" asp-action="Index" class="btn custom-btn btn-warning">
-                    <i class="fas fa-tags"></i> Sub Category
-                </a>
-
-                <a asp-area="Customer" asp-controller="Order" asp-action="AllOrders" class="btn custom-btn btn-primary">
-                    <i class="fa-solid fa-bag-shopping"></i>All  Orders
-                </a>
-
-                <a asp-area="Customer" asp-controller="User" asp-action="Index" class="btn custom-btn btn-info">
-                    <i class="fas fa-users"></i> All User
-                </a>
-
-               
-@* 
-                <a asp-area="Admin" asp-controller="Wallet" asp-action="AllWithdrawals" class="btn custom-btn btn-light">
-                    <i class="fas fa-wallet"></i> Wallet
-                </a> *@
-
-                <a asp-area="Customer" asp-controller="Blog" asp-action="BlogManager" class="btn custom-btn btn-dark">
-                    <i class="fas fa-blog"></i> Blog Manage
-                </a>
-
-                <a asp-area="Admin" asp-controller="ProductPrice" asp-action="Index" class="btn custom-btn btn-success" style="background:#d54b81">
-                    <i class="fas fa-dollar-sign"></i> Product Price
-                </a>
-
-                <a asp-action="Index" asp-area="Customer" asp-controller="Feedback" class="btn custom-btn btn-info" style="background:#4bd5c2">
-                    <i class="fas fa-comments"></i> Feedback  
-                </a>
-
-                <a asp-action="SetDiscount" asp-area="Admin" asp-controller="Products" class="btn custom-btn btn-danger" style="background:#936435">
-                    <i class="fas fa-percentage"></i> Set Discount
-                </a>
-            </div>
-
-
-
-            <div class="col-xl-12 col-lg-12">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Admin Revenue</h6>
-                    </div>
-                    <div class="card-body">
-                        <h5>Total Revenue: @* @ViewBag.TotalRevenue *@</h5>
-
-                        <h6>Monthly </h6>
-                        <div class="chart-area">
-                            <canvas id="riderDeliveriesChart"></canvas>
-                        </div>
-
-                        <h6>Total</h6>
-                        <div class="chart-area">
-                            <canvas id="riderRevenueChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        }
+        
 
 
 
