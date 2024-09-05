@@ -29,166 +29,180 @@
 }
 
 <div class="container">
+
     <form asp-action="Detail" method="post" enctype="multipart/form-data">
         <input type="hidden" asp-for="SpecificProduct.Id" />
 
+        <div class="card mt-3 shadow-sm" style="margin:7px; padding:15px; border-radius:10px;">
+            <div class="row mt-3">
 
-        <div class="row mt-5">
-    
-            <div class="col-lg-6 col-md-6">
-                <div class=" product-images" style="margin:5px">
-                    <div id="main-image" class="zoomWrapper text-center justify-content-center">
-                        <img id="zoomedImage" src="~/@Model.SpecificProduct.Image" alt="Main Product Image" class="img-fluid" style="width:80%; height:400px;" />
-                    </div>
-                    <div class="thumbnail-images mt-3 d-flex justify-content-center">
-                        <ul class="list-inline">
-                            @foreach (var image in Model.SpecificProduct.ImagesSmall)
-                            {
-                                <li class="list-inline-item">
-                                    <img src="~/@Url.Content(image.ImagePath)" alt="Thumbnail" class="img-thumbnail" style="width:100px; height:100px; cursor:pointer;" onclick="showZoomedImage(this)" />
-                                </li>
-                            }
-                        </ul>
+                <div class="col-lg-6 col-md-6">
+                    <div class=" product-images" style="margin:5px">
+                        <div id="main-image" class="zoomWrapper text-center justify-content-center">
+                            <img id="zoomedImage" src="~/@Model.SpecificProduct.Image" alt="Main Product Image" class="img-fluid" style="width:80%; height:400px;" />
+                        </div>
+                        <div class="thumbnail-images mt-3 d-flex justify-content-center">
+                            <ul class="list-inline">
+                                @foreach (var image in Model.SpecificProduct.ImagesSmall)
+                                {
+                                    <li class="list-inline-item">
+                                        <img src="~/@Url.Content(image.ImagePath)" alt="Thumbnail" class="img-thumbnail" style="width:100px; height:100px; cursor:pointer;" onclick="showZoomedImage(this)" />
+                                    </li>
+                                }
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
 
 
-            <div class="col-lg-6 col-md-6">
+                <div class="col-lg-6 col-md-6">
 
-                <div class="card mb-4" style="border-radius: 5px; border: none; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                    <div class="card-body d-flex justify-content-between align-items-center">
-                        <div>
-                            <h3 style="font-size: 16px; margin-bottom: 0;"><strong>@Model.ShopName</strong></h3>
-                            <h4  style="margin-bottom: 0;">Rating: @Model.OverallRatting.ToString("F2")</h4>
+                    <div class="card mb-4" style="border-radius: 5px; border: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                        <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
-                                @{
-                                    double rating = Model.OverallRatting;
-                                    int fullStars = (int)rating;
-                                    double halfStarThreshold = rating - fullStars;
-                                    int emptyStars = 5 - fullStars - (halfStarThreshold >= 0.5 ? 1 : 0);
+                                <h3 style="font-size: 25px; ">@Model.ShopName</h3>
+                                <div class="d-flex align-items-center">
+                                    <h4 class="me-2">Rating: @Model.OverallRatting.ToString("F2")</h4>
 
-                                    for (int i = 0; i < fullStars; i++)
-                                    {
-                                        <i class="fa fa-star text-warning"></i>
-                                    }
 
-                                    if (halfStarThreshold >= 0.5)
-                                    {
-                                        <i class="fa fa-star-half-o text-warning"></i>
-                                    }
+                                    @{
+                                        double rating = Model.OverallRatting;
+                                        int fullStars = (int)rating;
+                                        double halfStarThreshold = rating - fullStars;
+                                        int emptyStars = 5 - fullStars - (halfStarThreshold >= 0.5 ? 1 : 0);
 
-                                    for (int i = 0; i < emptyStars; i++)
-                                    {
-                                        <i class="fa fa-star-o text-warning"></i>
+                                        for (int i = 0; i < fullStars; i++)
+                                        {
+                                            <i class="fa fa-star text-warning"></i>
+                                        }
+
+                                        if (halfStarThreshold >= 0.5)
+                                        {
+                                            <i class="fa fa-star-half-o text-warning"></i>
+                                        }
+
+                                        for (int i = 0; i < emptyStars; i++)
+                                        {
+                                            <i class="fa fa-star-o text-warning"></i>
+                                        }
                                     }
-                                }
+                                </div>
+
+                            </div>
+                            <a class="btn btn-primary" style="width:200px" href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = @Model.SpecificProduct.FarmerShopId })">Visit Shop</a>
+                        </div>
+                    </div>
+
+
+                    <h1 style="font-size:25px; margin-bottom:5px">@Model.SpecificProduct.Name</h1>
+                    <div class="price-box mt-3">
+                        @if (Model.SpecificProduct.Discount > 0)
+                        {
+                            decimal discountPercentage = @Model.SpecificProduct.Discount;
+                            decimal currentPrice = @Model.SpecificProduct.Price;
+                            decimal disPrice = currentPrice * discountPercentage / 100;
+                            decimal totalNewPrice = currentPrice - disPrice;
+
+                            <span class="current-price text-info">New Price: @totalNewPrice ৳‎</span>
+                            <br />
+                            <span class="old-price text-muted">Old Price: @Model.SpecificProduct.Price ৳‎</span>
+                        }
+                        else
+                        {
+                            <span class="current-price text-info">Price: @Model.SpecificProduct.Price ৳‎</span>
+                        }
+                    </div>
+
+                    <div class="availability mt-3">
+                        @if (@Model.SpecificProduct.IsAvailable && @Model.SpecificProduct.Quantity > 0)
+                        {
+                            <span class="badge bg-warning">In Stock</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Out of Stock</span>
+                        }
+                    </div>
+
+                    <hr />
+                    <div class="product_desc mt-2">
+                        <h5>@Model.SpecificProduct.Description eget velit. Donec ac tempus ante.  sed commodo augue nisi non neque.</h5>
+                    </div>
+
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="info" role="tabpanel">
+                            <div class="product_info_content">
+                                <h5>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla.</h5>
                             </div>
                         </div>
-                        <a class="btn btn-success" href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = @Model.SpecificProduct.FarmerShopId })">Visit Shop</a>
                     </div>
-                </div>
 
-
-                <h1 style="font-size:25px; margin-bottom:5px">@Model.SpecificProduct.Name</h1>
-                <div class="price-box mt-3">
-                    @if (Model.SpecificProduct.Discount > 0)
-                    {
-                        decimal discountPercentage = @Model.SpecificProduct.Discount;
-                        decimal currentPrice = @Model.SpecificProduct.Price;
-                        decimal disPrice = currentPrice * discountPercentage / 100;
-                        decimal totalNewPrice = currentPrice - disPrice;
-
-                        <span class="current-price text-success">New Price: @totalNewPrice ৳‎</span>
-                        <br />
-                        <span class="old-price text-muted">Old Price: @Model.SpecificProduct.Price ৳‎</span>
-                    }
-                    else
-                    {
-                        <span class="current-price text-success">Price: @Model.SpecificProduct.Price ৳‎</span>
-                    }
-                </div>
-
-                <div class="availability mt-3">
-                    @if (@Model.SpecificProduct.IsAvailable && @Model.SpecificProduct.Quantity > 0)
-                    {
-                        <span class="badge bg-success">In Stock</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-danger">Out of Stock</span>
-                    }
-                </div>
-
-                <hr />
-                <div class="product_desc mt-2">
-                    <h5>@Model.SpecificProduct.Description eget velit. Donec ac tempus ante.  sed commodo augue nisi non neque.</h5>
-                </div>
-
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="info" role="tabpanel">
-                        <div class="product_info_content">
-                            <h5>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla.</h5>
-                        </div>
+                    <div class="product_variant quantity">
+                        <h4> Preservation Need? :@(Model.SpecificProduct.PreservationRequired ? "Yes" : "No") </h4>
                     </div>
-                </div>
+                    <h4>Category : @Model.SpecificProduct.ProductTypes.ProductType </h4>
+                    <div class="product_variant quantity">
+                        <h4>Quantity :@Model.SpecificProduct.Quantity  @Model.SpecificProduct.QuantityType</h4>
+                    </div>
 
-                <div class="product_variant quantity">
-                    <h4> Preservation Need? :@(Model.SpecificProduct.PreservationRequired ? "Yes" : "No") </h4>
-                </div>
-                <h4>Category : @Model.SpecificProduct.ProductTypes.ProductType </h4>
-                <div class="product_variant quantity">
-                    <h4>Quantity :@Model.SpecificProduct.Quantity  @Model.SpecificProduct.QuantityType</h4>
-                </div>
-
-                <div class="action_links">
-                    <ul>
-                        @if (Model.SpecificProduct.Quantity != 0)
-                        {
-                            if (Model.IsShopOpen)
+                    <div class="action_links">
+                        <ul>
+                            @if (Model.SpecificProduct.Quantity != 0)
                             {
-                                var existingProduct = products.FirstOrDefault(p => p.Id == Model.SpecificProduct.Id);
-                                if (existingProduct != null)
+                                if (Model.IsShopOpen)
                                 {
-                                    <li>
-                                        <button type="submit" class="btn btn-danger form-control" asp-action="RemoveToCart" asp-route-id="@Model.SpecificProduct.Id" style="width:200px">Remove from Cart</button>
-                                    </li>
+                                    var existingProduct = products.FirstOrDefault(p => p.Id == Model.SpecificProduct.Id);
+                                    if (existingProduct != null)
+                                    {
+                                        <li>
+                                            <button type="submit" class="btn btn-danger form-control" asp-action="RemoveToCart" asp-route-id="@Model.SpecificProduct.Id" style="width:200px">Remove from Cart</button>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li class="d-flex text-center" style="font-weight:600">
+                                            <input asp-for="SpecificProduct.QuantityInCart" name="quantityInCart" class="form-control" style="width:200px" type="number" min="1" max="@Model.SpecificProduct.Quantity" value="1" />
+
+                                            <input type="submit" class="btn btn-danger form-control " style="width:200px; margin-left:20px" value="Add To Cart" />
+                                        </li>
+                                    }
                                 }
                                 else
                                 {
-                                    <li>
-                                        <input asp-for="SpecificProduct.QuantityInCart" name="quantityInCart" class="form-control" style="width:200px" type="number" min="1" max="@Model.SpecificProduct.Quantity" value="1" />
-                                    </li>
-                                    <li>
-                                        <input type="submit" class="btn btn-danger form-control w-100" style="width:200px" value="Add To Cart" />
+                                    <li class="text-danger">
+                                        <h4>  Shop is closed. Contact the shop or try later.</h4>
                                     </li>
                                 }
                             }
-                            else
-                            {
-                                <li class="text-danger">
-                                    <h4>  Shop is closed. Contact the shop or try later.</h4>
-                                </li>
-                            }
-                        }
-                    </ul>
+                        </ul>
+                        <div class="text-center d-flex mt-3">
+                            <ul>
+                                <li><a class="facebook" style="width:70px;" href="#" title="facebook"><i class="fa fa-facebook"></i> Like</a></li>
+                                <li><a class="twitter" style="width:70px" href="#" title="twitter"><i class="fa fa-twitter"></i> tweet</a></li>
+                                <li><a class="pinterest" style="width:70px" href="#" title="pinterest"><i class="fa fa-pinterest"></i> save</a></li>
+                                <li><a class="google-plus" style="width:70px" href="#" title="google +"><i class="fa fa-google-plus"></i> share</a></li>
+                                <li><a class="linkedin" style="width:70px" href="#" title="linkedin"><i class="fa fa-linkedin"></i> linked</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+
                 </div>
 
             </div>
-
         </div>
 
         <br />
-
+        <a asp-action="Index" class="btn btn-success">Back to Home</a>
 
         <div class="container mt-2">
-            <hr />
 
             <div class="row">
 
-                <div class="col-md-5">
+                <div class="col-5 col-md-6">
 
-                    <h4 class="mb-2 mt-2">Distance-Based Charges</h4>
+                    <h3 class="mb-2 mt-2 " style="background:gray; font-size:20px; text-align:center; margin:5px">Distance-Based Charges</h3>
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
@@ -223,8 +237,8 @@
                 </div>
 
 
-                <div class="col-md-7">
-                    <h4 class="mt-2 mb-2">Product-Based Charges</h4>
+                <div class="col-7 col-md-6">
+                    <h3 class="mb-2 mt-2 " style="background:gray;font-size:20px; text-align:center; margin:5px">Product-Based Charges</h3>
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
@@ -291,8 +305,6 @@
 
 
             </div>
-
-            <a asp-action="Index" class="btn btn-success">Back to List</a>
 
         </div>
 
