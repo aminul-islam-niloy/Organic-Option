@@ -334,6 +334,7 @@
                                 <div class="deals_product_carousel deals_product_column2 owl-carousel">
                                     @foreach (var product in Model.Fruits)
                                     {
+                                       
                                         <div class="single_deals_product">
                                             <div class="product_thumb">
                                                 <a asp-action="Detail" asp-controller="Home" asp-route-id="@product.Id"><img src="~/@product.Image" style="height: 320px; width: 60%;  border-top:5px;" alt="Card Image"></a>
@@ -344,7 +345,7 @@
                                                     <div class="alarm_icone">
                                                         <i class="zmdi zmdi-timer"></i>
                                                     </div>
-                                                    <div data-countdown="2024/8/31"></div>
+                                                    <div data-countdown="@product.ExpirationTime"></div>
                                                 </div>
                                             </div>
                                             <div class="product_content " style="margin-top:40px">
@@ -364,6 +365,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                   
                                     }
                                 </div>
                             </div>
@@ -381,7 +383,7 @@
                                                     <div class="alarm_icone">
                                                         <i class="zmdi zmdi-timer"></i>
                                                     </div>
-                                                    <div data-countdown="2024/8/31"></div>
+                                                    <div data-countdown="@product.ExpirationTime"></div>
                                                 </div>
                                             </div>
                                             <div class="product_content " style="margin-top:40px">

@@ -28,310 +28,276 @@
 
 }
 
+<div class="container">
+    <form asp-action="Detail" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="SpecificProduct.Id" />
 
-<form asp-action="Detail" method="post" enctype="multipart/form-data">
-    <input type="hidden" asp-for="SpecificProduct.Id" />
 
-    <!--product details start-->
-    <div class="product_details mt-50 mb-50">
-        <div class="container">
-            <div class="row">
-                <!-- Left column for product images -->
-                <div class="col-lg-6 col-md-6">
-                    <div class="product-images" style="margin:30px">
-                        <div id="main-image" class="zoomWrapper">
-                            <img id="zoomedImage" src="~/@Model.SpecificProduct.Image" alt="Main Product Image" class="img-fluid" style="width:90%; height:450px;" />
+        <div class="row mt-5">
+    
+            <div class="col-lg-6 col-md-6">
+                <div class=" product-images" style="margin:5px">
+                    <div id="main-image" class="zoomWrapper text-center justify-content-center">
+                        <img id="zoomedImage" src="~/@Model.SpecificProduct.Image" alt="Main Product Image" class="img-fluid" style="width:80%; height:400px;" />
+                    </div>
+                    <div class="thumbnail-images mt-3 d-flex justify-content-center">
+                        <ul class="list-inline">
+                            @foreach (var image in Model.SpecificProduct.ImagesSmall)
+                            {
+                                <li class="list-inline-item">
+                                    <img src="~/@Url.Content(image.ImagePath)" alt="Thumbnail" class="img-thumbnail" style="width:100px; height:100px; cursor:pointer;" onclick="showZoomedImage(this)" />
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-6 col-md-6">
+
+                <div class="card mb-4" style="border-radius: 5px; border: none; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <h3 style="font-size: 16px; margin-bottom: 0;"><strong>@Model.ShopName</strong></h3>
+                            <h4  style="margin-bottom: 0;">Rating: @Model.OverallRatting.ToString("F2")</h4>
+                            <div>
+                                @{
+                                    double rating = Model.OverallRatting;
+                                    int fullStars = (int)rating;
+                                    double halfStarThreshold = rating - fullStars;
+                                    int emptyStars = 5 - fullStars - (halfStarThreshold >= 0.5 ? 1 : 0);
+
+                                    for (int i = 0; i < fullStars; i++)
+                                    {
+                                        <i class="fa fa-star text-warning"></i>
+                                    }
+
+                                    if (halfStarThreshold >= 0.5)
+                                    {
+                                        <i class="fa fa-star-half-o text-warning"></i>
+                                    }
+
+                                    for (int i = 0; i < emptyStars; i++)
+                                    {
+                                        <i class="fa fa-star-o text-warning"></i>
+                                    }
+                                }
+                            </div>
                         </div>
-                        <div class="thumbnail-images mt-3 d-flex justify-content-center">
-                            <ul class="list-inline">
-                                @foreach (var image in Model.SpecificProduct.ImagesSmall)
+                        <a class="btn btn-success" href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = @Model.SpecificProduct.FarmerShopId })">Visit Shop</a>
+                    </div>
+                </div>
+
+
+                <h1 style="font-size:25px; margin-bottom:5px">@Model.SpecificProduct.Name</h1>
+                <div class="price-box mt-3">
+                    @if (Model.SpecificProduct.Discount > 0)
+                    {
+                        decimal discountPercentage = @Model.SpecificProduct.Discount;
+                        decimal currentPrice = @Model.SpecificProduct.Price;
+                        decimal disPrice = currentPrice * discountPercentage / 100;
+                        decimal totalNewPrice = currentPrice - disPrice;
+
+                        <span class="current-price text-success">New Price: @totalNewPrice ৳‎</span>
+                        <br />
+                        <span class="old-price text-muted">Old Price: @Model.SpecificProduct.Price ৳‎</span>
+                    }
+                    else
+                    {
+                        <span class="current-price text-success">Price: @Model.SpecificProduct.Price ৳‎</span>
+                    }
+                </div>
+
+                <div class="availability mt-3">
+                    @if (@Model.SpecificProduct.IsAvailable && @Model.SpecificProduct.Quantity > 0)
+                    {
+                        <span class="badge bg-success">In Stock</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Out of Stock</span>
+                    }
+                </div>
+
+                <hr />
+                <div class="product_desc mt-2">
+                    <h5>@Model.SpecificProduct.Description eget velit. Donec ac tempus ante.  sed commodo augue nisi non neque.</h5>
+                </div>
+
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="info" role="tabpanel">
+                        <div class="product_info_content">
+                            <h5>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla.</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product_variant quantity">
+                    <h4> Preservation Need? :@(Model.SpecificProduct.PreservationRequired ? "Yes" : "No") </h4>
+                </div>
+                <h4>Category : @Model.SpecificProduct.ProductTypes.ProductType </h4>
+                <div class="product_variant quantity">
+                    <h4>Quantity :@Model.SpecificProduct.Quantity  @Model.SpecificProduct.QuantityType</h4>
+                </div>
+
+                <div class="action_links">
+                    <ul>
+                        @if (Model.SpecificProduct.Quantity != 0)
+                        {
+                            if (Model.IsShopOpen)
+                            {
+                                var existingProduct = products.FirstOrDefault(p => p.Id == Model.SpecificProduct.Id);
+                                if (existingProduct != null)
                                 {
-                                    <li class="list-inline-item">
-                                        <img src="~/@Url.Content(image.ImagePath)" alt="Thumbnail" class="img-thumbnail" style="width:120px; height:120px; cursor:pointer;" onclick="showZoomedImage(this)" />
+                                    <li>
+                                        <button type="submit" class="btn btn-danger form-control" asp-action="RemoveToCart" asp-route-id="@Model.SpecificProduct.Id" style="width:200px">Remove from Cart</button>
                                     </li>
                                 }
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right column for product details -->
-                <div class="col-lg-6 col-md-6">
-                    <div class="product_d_right">
-                        <div class="row">
-                           
-                            <div class="col-lg-8 col-md-8 text-left">
-                                <h1 style="font-size:20px; margin-bottom:5px">@Model.SpecificProduct.Name</h1>
-                                <div class="price-box mt-3">
-                                    @if (Model.SpecificProduct.Discount > 0)
-                                    {
-                                        decimal discountPercentage = @Model.SpecificProduct.Discount;
-                                        decimal currentPrice = @Model.SpecificProduct.Price;
-                                        decimal disPrice = currentPrice * discountPercentage / 100;
-                                        decimal totalNewPrice = currentPrice - disPrice;
-
-                                        <span class="current-price text-success">New Price: @totalNewPrice ৳‎</span>
-                                        <br />
-                                        <span class="old-price text-muted">Old Price: @Model.SpecificProduct.Price ৳‎</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="current-price text-success">Price: @Model.SpecificProduct.Price ৳‎</span>
-                                    }
-                                </div>
-
-                                <div class="availability mt-3">
-                                    @if (@Model.SpecificProduct.IsAvailable && @Model.SpecificProduct.Quantity > 0)
-                                    {
-                                        <span class="badge bg-success">In Stock</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-danger">Out of Stock</span>
-                                    }
-                                </div>
-                            </div>
-
-                            <div class="col-lg-4 col-md-4 text-end  justify-content-end">
-                                <p style="font-size:12px; margin-bottom: 0;"><strong>@Model.ShopName</strong></p>
-                                <a class="btn btn-success " style="margin-left:5px" href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = @Model.SpecificProduct.FarmerShopId })">Go To Shop</a>
-
-                                <div >
-                                    <p><strong> Rating:</strong> @Model.OverallRatting </p>
-                                    <div>
-                                        @{
-                                            double rating = Model.OverallRatting;
-                                            int fullStars = (int)rating;
-                                            double halfStarThreshold = rating - fullStars;
-                                            int emptyStars = 5 - fullStars - (halfStarThreshold >= 0.5 ? 1 : 0);
-
-                                            for (int i = 0; i < fullStars; i++)
-                                            {
-                                                <i class="fa fa-star"></i>
-                                            }
-
-                                            if (halfStarThreshold >= 0.5)
-                                            {
-                                                <i class="fa fa-star-half-o"></i>
-                                            }
-
-                                            for (int i = 0; i < emptyStars; i++)
-                                            {
-                                                <i class="fa fa-star-o"></i>
-                                            }
-                                        }
-                                    </div>
-                                </div>
-                            
-                            
-                            </div>
-                            
-                        </div>
-
-                        
-                      
-                        <hr />
-                        <div class="product_desc mt-2">
-                            <p>@Model.SpecificProduct.Description eget velit. Donec ac tempus ante.  sed commodo augue nisi non neque.</p>
-                        </div>
-
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active" id="info" role="tabpanel">
-                                <div class="product_info_content">
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="product_variant quantity">
-                            <label>Preservation Need? :</label>
-                            <label> @(Model.SpecificProduct.PreservationRequired ? "Yes" : "No") </label>
-                        </div>
-
-                        <div class="product_variant quantity">
-                            <label>Quantity :</label>
-                            <label>@Model.SpecificProduct.Quantity  @Model.SpecificProduct.QuantityType</label>
-                        </div>
-
-                        <div class="action_links">
-                            <ul>
-                                @if (Model.SpecificProduct.Quantity != 0)
+                                else
                                 {
-                                    if (Model.IsShopOpen)
-                                    {
-                                        var existingProduct = products.FirstOrDefault(p => p.Id == Model.SpecificProduct.Id);
-                                        if (existingProduct != null)
-                                        {
-                                            <li>
-                                                <button type="submit" class="btn btn-danger form-control" asp-action="RemoveToCart" asp-route-id="@Model.SpecificProduct.Id">Remove from Cart</button>
-                                            </li>
-                                        }
-                                        else
-                                        {
-                                            <li>
-                                                <input asp-for="SpecificProduct.QuantityInCart" name="quantityInCart" class="form-control" type="number" min="1" max="@Model.SpecificProduct.Quantity" value="1" />
-                                            </li>
-                                            <li>
-                                                <input type="submit" class="btn btn-info form-control" value="Add to Cart" />
-                                            </li>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <li class="text-danger">
-                                            Shop is closed. Contact the shop or try later.
-                                        </li>
-                                    }
+                                    <li>
+                                        <input asp-for="SpecificProduct.QuantityInCart" name="quantityInCart" class="form-control" style="width:200px" type="number" min="1" max="@Model.SpecificProduct.Quantity" value="1" />
+                                    </li>
+                                    <li>
+                                        <input type="submit" class="btn btn-danger form-control w-100" style="width:200px" value="Add To Cart" />
+                                    </li>
                                 }
-                            </ul>
-                        </div>
-
-                        <div class="product_meta">
-                            <label>Category :</label>
-                            <span>@Model.SpecificProduct.ProductTypes.ProductType</span>
-                        </div>
-
-                        <div class="priduct_social">
-                            <ul>
-                                <li><a class="facebook" href="#" title="facebook"><i class="fa fa-facebook"></i> Like</a></li>
-                                <li><a class="twitter" href="#" title="twitter"><i class="fa fa-twitter"></i> tweet</a></li>
-                                <li><a class="pinterest" href="#" title="pinterest"><i class="fa fa-pinterest"></i> save</a></li>
-                                <li><a class="google-plus" href="#" title="google +"><i class="fa fa-google-plus"></i> share</a></li>
-                                <li><a class="linkedin" href="#" title="linkedin"><i class="fa fa-linkedin"></i> linked</a></li>
-                            </ul>
-                        </div>
-
-                    </div>
-                </div>
-
-    <!--product details end-->
-
-                <br />
-
-
-                <div class="container mt-2">
-                    <hr />
-
-                    <div class="row">
-
-                        <div class="col-md-5">
-
-                            <h4 class="mb-2 mt-2">Distance-Based Charges</h4>
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Distance (km)</th>
-                                        <th>Base Delivery Charge (BDT)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>0-5</td>
-                                        <td>50</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5-10</td>
-                                        <td>100</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10-20</td>
-                                        <td>150</td>
-                                    </tr>
-                                    <tr>
-                                        <td>20-50</td>
-                                        <td>200</td>
-                                    </tr>
-                                    <tr>
-                                        <td>50+</td>
-                                        <td>300</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-
-                        </div>
-
-
-                        <div class="col-md-7">
-                            <h4 class="mt-2 mb-2">Product-Based Charges</h4>
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Product Type</th>
-                                        <th>Quantity Range</th>
-                                        <th>Additional Charge (BDT)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Cattle</td>
-                                        <td>Per cattle</td>
-                                        <td>1000</td>
-                                    </tr>
-                                    <tr>
-                                        <td rowspan="5">Crops</td>
-                                        <td>10-50 kg</td>
-                                        <td>50</td>
-                                    </tr>
-                                    <tr>
-                                        <td>50-100 kg</td>
-                                        <td>100</td>
-                                    </tr>
-                                    <tr>
-                                        <td>100-500 kg</td>
-                                        <td>200</td>
-                                    </tr>
-                                    <tr>
-                                        <td>500-1000 kg</td>
-                                        <td>400</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1000+ kg</td>
-                                        <td>600</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td rowspan="5">Liquid</td>
-                                        <td>10-50 liters</td>
-                                        <td>50</td>
-                                    </tr>
-                                    <tr>
-                                        <td>50-100 liters</td>
-                                        <td>100</td>
-                                    </tr>
-                                    <tr>
-                                        <td>100-500 liters</td>
-                                        <td>300</td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>500-1000 liters</td>
-                                        <td>500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1000+ liters</td>
-                                        <td>800</td>
-                                    </tr>
-
-                                </tbody>
-                            </table>
-
-                        </div>
-
-
-                    </div>
-
-                    <a asp-action="Index" class="btn btn-success">Back to List</a>
-
+                            }
+                            else
+                            {
+                                <li class="text-danger">
+                                    <h4>  Shop is closed. Contact the shop or try later.</h4>
+                                </li>
+                            }
+                        }
+                    </ul>
                 </div>
 
             </div>
+
         </div>
 
-    </div>
+        <br />
 
 
+        <div class="container mt-2">
+            <hr />
 
-</form>
+            <div class="row">
+
+                <div class="col-md-5">
+
+                    <h4 class="mb-2 mt-2">Distance-Based Charges</h4>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Distance (km)</th>
+                                <th>Base Delivery Charge (BDT)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>0-5</td>
+                                <td>50</td>
+                            </tr>
+                            <tr>
+                                <td>5-10</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>10-20</td>
+                                <td>150</td>
+                            </tr>
+                            <tr>
+                                <td>20-50</td>
+                                <td>200</td>
+                            </tr>
+                            <tr>
+                                <td>50+</td>
+                                <td>300</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+
+                <div class="col-md-7">
+                    <h4 class="mt-2 mb-2">Product-Based Charges</h4>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Product Type</th>
+                                <th>Quantity Range</th>
+                                <th>Additional Charge (BDT)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Cattle</td>
+                                <td>Per cattle</td>
+                                <td>1000</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="5">Crops</td>
+                                <td>10-50 kg</td>
+                                <td>50</td>
+                            </tr>
+                            <tr>
+                                <td>50-100 kg</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>100-500 kg</td>
+                                <td>200</td>
+                            </tr>
+                            <tr>
+                                <td>500-1000 kg</td>
+                                <td>400</td>
+                            </tr>
+                            <tr>
+                                <td>1000+ kg</td>
+                                <td>600</td>
+                            </tr>
+
+                            <tr>
+                                <td rowspan="5">Liquid</td>
+                                <td>10-50 liters</td>
+                                <td>50</td>
+                            </tr>
+                            <tr>
+                                <td>50-100 liters</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>100-500 liters</td>
+                                <td>300</td>
+                            </tr>
+
+                            <tr>
+                                <td>500-1000 liters</td>
+                                <td>500</td>
+                            </tr>
+                            <tr>
+                                <td>1000+ liters</td>
+                                <td>800</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+
+            </div>
+
+            <a asp-action="Index" class="btn btn-success">Back to List</a>
+
+        </div>
+
+    </form>
+</div>
 
 
 <script>
