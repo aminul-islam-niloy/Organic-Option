@@ -121,130 +121,43 @@
             </div>
         </div>
 
-     @*    <div class="col-md-3 col-lg-3 mt-2" style="background-color: #fafafa; border-radius: 10px; box-shadow: 0px 4px 8px rgba(134, 133, 133, 0.1); padding: 20px;">
-            <div class="text-center">
-                <h5 style="font-weight: bold; margin-bottom: 20px;">Find Local Farmers</h5>
-            </div>
-            <div class="text-center mb-2">
-                <img src="/assets/img/product/location.png" style="width:30%; height:80px;" alt="Location Icon">
-            </div>
-            <div class="text-center ">
-                <a asp-action="AllShop" asp-controller="Farmershop" asp-area="Farmer" class="btn btn-success" style="width: 60%; margin-bottom: 10px;">Nearby Shop</a>
-                <form id="update-location-form" method="post" asp-area="Customer" asp-controller="UserProfile" asp-action="UpdateLocation">
-                    <input type="hidden" id="latitude" name="latitude" />
-                    <input type="hidden" id="longitude" name="longitude" />
-                    <button type="button" class="btn btn-success" onclick="updateLocation()">Update Location</button>
-                </form>
-
-            </div>
-            <div class="text-center mb-3 ">
-                <img src="/assets/img/product/Price.png" class="mt-2" style="border-radius: 5%; width:100%; height:140px;" alt="4 Ps Image">
-            </div>
-            <div class="d-flex justify-content-between">
-                <a href="something" class="btn btn-success">Product Price</a>
-                <a href="something" class="btn btn-success">Delivery Price</a>
-            </div>
-        </div> *@
-    @*     <div class="col-md-3 col-lg-3 mt-2 p-3" style="background-color: #fafafa; border-radius: 10px; box-shadow: 0px 4px 8px rgba(134, 133, 133, 0.1);">
-            <div class=" card-title shdow text-center">
-                <h5 style="font-weight: bold; margin-bottom: 27px;">Find Local Farmers</h5>
-            </div>
-
-            <!-- First row with two cards (Location Icon + Buttons) -->
-            <div class=" row mb-3">
-                <!-- Left card with location icon -->
-                <div class="col-6 d-flex justify-content-center align-items-center">
-                    <img src="/assets/img/product/location.png" style="width:100px; height:100px;" alt="Location Icon">
-                </div>
-
-                <!-- Right card with buttons -->
-                <div class="col-6 d-flex flex-column align-items-center">
-                    <a asp-action="AllShop" asp-controller="Farmershop" asp-area="Farmer" class="btn btn-success mb-2" style="width: 100%;">Nearby Shop</a>
-                    <button type="button" class="btn btn-success" onclick="updateLocation()">Update Location</button>
-                </div>
-            </div>
-
-            <!-- Second row with two clickable images -->
-            <div class="row">
-                <!-- Left clickable image -->
-                <div class="col-6">
-                    <a href="something">
-                        <img src="/assets/img/product/Price.png" class="img-fluid rounded" alt="Product Price Image">
-                    </a>
-                </div>
-
-                <!-- Right clickable image -->
-                <div class="col-6">
-                    <a  href="#Vegetable"  >
-                        <i class="fa-solid fa-carrot"></i>
-                        <h3>Vegetable</h3>
-                    </a>
-                </div>
-            </div>
-            <!-- Second row with two clickable images -->
-            <div class="row">
-                <!-- Left clickable image -->
-                <div class="col-6">
-                    <a href="something">
-                        <img src="/assets/img/product/Price.png" class="img-fluid rounded" alt="Product Price Image">
-                    </a>
-                </div>
-
-                <!-- Right clickable image -->
-                <div class="col-6">
-                    <a href="something">
-                        <i class="fa-solid fa-barcode fa-4x"></i>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Footer with two buttons -->
-            <div class="d-flex justify-content-between mt-3">
-                <a href="something" class="btn btn-success">Product Price</a>
-                <a href="something" class="btn btn-success">Delivery Price</a>
-            </div>
-        </div>
+       <div class="col-md-3 col-lg-3 mt-2" style="background-color: #fafafa; border-radius: 10px; box-shadow: 0px 4px 8px rgba(134, 133, 133, 0.1); padding: 20px;">
 
 
-
-
- *@
-        <div class="col-lg-3 ">
-            <!-- New Project Section -->
-            <h4 class=" text-center" style="font-size:21px; margin:5px; padding:5px ; font-weight:600">Find Nearby Shop</h4>
+            <h4 class="TitleCard text-center" style="font-size:21px;  padding:2px ; font-weight:600">Find Nearby Shop</h4>
    
             <div class="row mt-2 " style="margin-top:5px">
                 <div class="col-6">
-                         <div class="Innercard  text-center" >
+                    <div class="Innercard Innercard-2  text-center">
      
                             <form id="update-location-form" method="post" asp-area="Customer" asp-controller="UserProfile" asp-action="UpdateLocation">
                             
                                 <input type="hidden" id="latitude" name="latitude" />
                                 <input type="hidden" id="longitude" name="longitude" />
-                            <a class="btn" onclick="updateLocation()"><span style="font-size:18px; font-weight:700;" >   <i class="fa-solid fa-location-dot fa-2x"></i>Update Location</span></a>
+                            <a class="btn" onclick="updateLocation()">  <i class="fa-solid fa-location-dot fa-2x"></i><span style="font-size:18px; font-weight:700;">  Update Location</span></a>
                             </form>
                         </div>
                         
                   
                 </div>
                 <div class="col-6">
-                    <a href="something">
-                        <div class="Innercard Innercard-2">
+                    <a asp-area="Admin" asp-controller="ProductPrice" asp-action="TodayPrice">
+                        <div class="Innercard Innercard-3">
                             <img src="/assets/img/product/daily price.png" class="img-fluid rounded " style="height:100px;margin-bottom:7px; width:100px" alt="Product Price Image">
 
                         </div>
                     </a>
                 </div>
                 <div class="col-6">
-                    <a href="something">
+                    <a asp-area="Farmer" asp-controller="FarmerShop" asp-action="AllShop">
                         <div class="Innercard Innercard-1">
-                        <img src="/assets/img/product/rider.png" class="img-fluid rounded " style="height:100px;margin-bottom:7px; width:100px" alt="Product Price Image">
+                        <img src="/assets/img/product/nearby-shop.png" class="img-fluid rounded " style="height:100px;margin-bottom:7px; width:100px" alt="Product Price Image">
 
                 </div>
                     </a>
                 </div>
                 <div class="col-6">
-                    <a href="something">
+                    <a asp-action="Index" asp-controller="Blog" asp-area="Customer">
                         <div class="Innercard Innercard-4">
                             <img src="/assets/img/product/blogs.png" class="img-fluid rounded " style="height:100px;margin-bottom:7px; width:100px" alt="Product Price Image">
 
@@ -257,21 +170,26 @@
             <h4 class="mt-2">Other Services</h4>
             <div class="row other-services mt-2">
                 <div class="col-4">
-                    <div class="Innercard text-center">
+                    <a asp-area="Customer" asp-controller="Feedback" asp-action="Create">
+                    <div class="OtherIncard text-center">
                         <i class="fa-regular fa-comments fa-2x"></i>
                        
                     </div>
+                    </a>
                 </div>
                 <div class="col-4">
-                    <div class="Innercard text-center">
-                        <i class="fa-solid fa-location-dot fa-5x"></i>
+                    <a asp-action="Products" asp-controller="Home" asp-area="Customer">
+                    <div class="OtherIncard text-center">
+                        <img src="/assets/img/product/products.png" class="img-fluid rounded " style="height:40px; width:400px" alt="Product Price Image">
                     </div>
+                    </a>
                 </div>
                 <div class="col-4">
-                    <div class="Innercard text-center">
-                        <i class="fa-solid fa-location-dot fa-5x"></i>
+                    <div class="OtherIncard text-center">
+                        <i class="fa-solid fa-fan fa-2x"></i>
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -301,12 +219,38 @@
         font-weight: bold;
     }
 
+    .OtherIncard {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 5px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .TitleCard {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 40px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 5px;
+        font-size: 15px;
+        font-weight: bold;
+    }
+
     .Innercard-1 {
-        background-color: #e3f2fd;
+        background-color: #71e9e7;
     }
 
     .Innercard-2 {
-        background-color: #ffe0b2;
+        background-color: #dac4e2;
     }
 
     .Innercard-3 {
@@ -318,7 +262,7 @@
     }
 
     .other-services .cInnercardard {
-        height: 80px;
+        height: 40px;
     }
 
 </style>
