@@ -310,9 +310,12 @@
             }
 
 
-            @if (User.IsInRole("Admin"))
+            @if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
             {
 
+                @if (User.IsInRole("Admin"))
+                {
+   
                 <div class="col-xl-3 col-md-6 mb-4">
                     <a asp-area="Customer" asp-controller="Order" asp-action="AllOrders" class="card-link">
                         <div class="card border-left-primary shadow h-100 py-2 ">
@@ -332,6 +335,30 @@
                         </div>
                     </a>
                 </div>
+                }
+                @if (User.IsInRole("SuperAdmin"))
+                {
+
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <a asp-area="Admin" asp-controller="Role" asp-action="Index" class="card-link">
+                            <div class="card border-left-primary shadow h-100 py-2 ">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Set UserRole
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">Role User</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fa-solid fa-hammer fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
 
                 <div class="col-xl-3 col-md-6 mb-4">
                     <a asp-action="AdminViewWithdrawals" asp-controller="Wallet" asp-area="Admin" class="card-link">
@@ -454,7 +481,9 @@
                     <i class="fas fa-percentage"></i> Set Discount
                 </a>
             </div>
-
+        }
+        @if (User.IsInRole("Admin"))
+        {
             <div class="col-xl-12 col-lg-12">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -472,9 +501,29 @@
                 </div>
             </div>
 
+            }
+        @if (User.IsInRole("SuperAdmin"))
+        {
+            <div class="col-xl-12 col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Admin Revenue</h6>
+                    </div>
+                    <div class="card-body">
 
-           
+                        <h6>Current Month Revenue: <span id="currentMonthRevenue"></span></h6>
+
+                        <h6>Monthly</h6>
+                        <div class="chart-area">
+                            <canvas id="AdminRevenueChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         }
+           
+       
 
 
         @if (User.IsInRole("Farmer"))
@@ -772,7 +821,7 @@
     }
 }
 
-@if (User.IsInRole("Admin"))
+@if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
 {
     @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 namespace OrganicOption.Areas.User.Controllers
 {
     [Area("User")]
+    [Authorize]
     public class DeshboardController : Controller
     {
 
@@ -242,8 +243,7 @@ namespace OrganicOption.Areas.User.Controllers
             var result = await _userManager.UpdateAsync(userInfo);
             if (result.Succeeded)
             {
-                TempData["lockout"] = "User has been locked out successfully";
-                // Redirect to the dashboard with userId
+               
                 return RedirectToAction("Deshboard", new { id = user.Id });
             }
 
@@ -361,7 +361,7 @@ namespace OrganicOption.Areas.User.Controllers
 
                 return View();
             }
-            if (User.IsInRole("Admin"))
+            if (User.IsInRole("Admin") || User.IsInRole("SuperAdmin"))
             {
                 var totalRevenue = _db.withdrawalHistories
                .Where(w => w.IsConfirmed)

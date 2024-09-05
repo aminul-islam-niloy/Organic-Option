@@ -16,7 +16,7 @@ using Stripe.Climate;
 namespace OrganicOption.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,SuperAdmin")]
     public class WalletController : Controller
     {
         private readonly ApplicationDbContext _db;
