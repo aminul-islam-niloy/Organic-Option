@@ -33,11 +33,6 @@ namespace OrganicOption.Areas.User.Controllers
         }
 
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
 
 
         public async Task<IActionResult> MyAccount(string id)
@@ -301,7 +296,7 @@ namespace OrganicOption.Areas.User.Controllers
 
 
 
-        public async Task<IActionResult> MyDashboard()
+        public async Task<IActionResult> Index()
         {
             
             if (User.IsInRole("Rider"))
@@ -403,7 +398,7 @@ namespace OrganicOption.Areas.User.Controllers
                         ii.Price,
                         d.OrderCondition
                     })
-                .Where(x => x.OrderCondition == OrderCondition.Delivered && x.OrderAcceptTime != null)
+                .Where(x => x.OrderCondition == OrderCondition.Delivered )
                 .ToList();
 
      

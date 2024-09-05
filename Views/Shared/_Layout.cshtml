@@ -323,15 +323,13 @@
                                     @if (SignInManager.IsSignedIn(User))
                                     {
                                         <li>
-                                            <a href="/User/Deshboard/MyDashboard" title="Manage">
+                                            <a asp-action="" asp-area="User" asp-controller="Deshboard" title="Manage">
                                                 <i class="zmdi zmdi-account"></i> Deshboard <i class="zmdi zmdi-caret-down"></i>
                                             </a>
 
                                             <ul class="sub_menu pages">
                                                 
-                                                <li><a href="/Customer/UserProfile/Deshboard/@userId" title="Manage"> <i class="fa-solid fa-user"></i>  @UserManager.GetUserName(User)</a></li>
-                                                <li><a href="/Customer/UserProfile/Deshboard/@userId" title="Manage"> <i class="fa-solid fa-user"></i>  Setting</a></li>
-                                                <li><a href="/Customer/UserProfile/Deshboard/@userId" title="Manage"> <i class="fa-solid fa-user"></i>  Profile</a></li>
+                                                  <li><a href="/User/Deshboard" title="Manage"> <i class="fa-solid fa-user"></i>  Profile</a></li>
                                                 <li>
                                                     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
 
