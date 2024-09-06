@@ -60,7 +60,7 @@
                                 </div>
                                 <p>Onlist</p>
                             </div>
-                           
+
                             <div class="col progress-step">
                                 <div id="icon-quality-@order.OrderNo" class="icon-circle bg-light text-dark mb-2">
                                     <i class="fas fa-check-circle"></i>
@@ -80,8 +80,9 @@
                                 <p>Delivered</p>
                             </div>
                         </div>
-                        @*   <h5>Order Condition: @order.OrderCondition</h5> *@
+                       
                     </div>
+                   
                     <div class="col-md-3 text-center">
 
                         @*     <p><strong>Order No:</strong> @order.OrderNo</p> *@
@@ -110,8 +111,8 @@
                             @if (order.OrderCondition == OrderCondition.Delivered)
                             {
 
-                                // <div class="btn-group mb-2 mt-2">
-                                //     <form method="post" asp-action="DeleteUserOrder" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                    // <div class="btn-group mb-2 mt-2">
+                            //     <form method="post" asp-action="DeleteUserOrder" onsubmit="return confirm('Are you sure you want to delete this item?');">
                                 //         <input type="hidden" name="id" value="@order.OrderNo" />
                                 //         <button type="submit" class="btn btn-danger">Delete Order</button>
                                 //     </form>
@@ -158,39 +159,39 @@
         </div>
 
 
-   
 
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var orderCondition = "@order.OrderCondition"; // Use Razor syntax to get dynamic value from server
-        var progressBar = document.getElementById('progress-bar-@order.OrderNo');
 
-        var steps = {
-            "Onlist": { percentage: 12, icon: "icon-confirmed-@order.OrderNo" },
-            "OrderTaken": { percentage: 38, icon: "icon-quality-@order.OrderNo" },
-            
-            "OnDelivary": { percentage: 64, icon: "icon-dispatched-@order.OrderNo" },
-            "Delivered": { percentage: 100, icon: "icon-delivered-@order.OrderNo" }
-        };
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var orderCondition = "@order.OrderCondition"; // Use Razor syntax to get dynamic value from server
+                var progressBar = document.getElementById('progress-bar-@order.OrderNo');
 
-        if (steps[orderCondition]) {
-            progressBar.style.width = steps[orderCondition].percentage + '%';
-            progressBar.setAttribute('aria-valuenow', steps[orderCondition].percentage);
+                var steps = {
+                    "Onlist": { percentage: 12, icon: "icon-confirmed-@order.OrderNo" },
+                    "OrderTaken": { percentage: 38, icon: "icon-quality-@order.OrderNo" },
 
-            Object.keys(steps).forEach(function (key) {
-                var iconElement = document.getElementById(steps[key].icon);
-                if (steps[key].percentage <= steps[orderCondition].percentage) {
-                    iconElement.classList.remove('bg-light', 'text-dark');
-                    iconElement.classList.add('bg-primary', 'text-white');
-                } else {
-                    iconElement.classList.remove('bg-primary', 'text-white');
-                    iconElement.classList.add('bg-light', 'text-dark');
+                    "OnDelivary": { percentage: 64, icon: "icon-dispatched-@order.OrderNo" },
+                    "Delivered": { percentage: 100, icon: "icon-delivered-@order.OrderNo" }
+                };
+
+                if (steps[orderCondition]) {
+                    progressBar.style.width = steps[orderCondition].percentage + '%';
+                    progressBar.setAttribute('aria-valuenow', steps[orderCondition].percentage);
+
+                    Object.keys(steps).forEach(function (key) {
+                        var iconElement = document.getElementById(steps[key].icon);
+                        if (steps[key].percentage <= steps[orderCondition].percentage) {
+                            iconElement.classList.remove('bg-light', 'text-dark');
+                            iconElement.classList.add('bg-primary', 'text-white');
+                        } else {
+                            iconElement.classList.remove('bg-primary', 'text-white');
+                            iconElement.classList.add('bg-light', 'text-dark');
+                        }
+                    });
                 }
             });
-        }
-    });
-</script>
+        </script>
 
 
     }

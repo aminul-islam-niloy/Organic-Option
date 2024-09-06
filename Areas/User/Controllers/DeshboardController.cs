@@ -581,7 +581,8 @@ namespace OrganicOption.Areas.User.Controllers
                     ShopId=od.Product.FarmerShopId
 
                     
-                }).ToList()
+                }).ToList(),
+                ShopId = order.OrderDetails.FirstOrDefault().Product.FarmerShopId
             };
 
             return View(orderViewModel);
