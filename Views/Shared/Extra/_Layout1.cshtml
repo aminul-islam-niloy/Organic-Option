@@ -97,7 +97,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
       
 
             <li>
@@ -138,6 +138,14 @@
                         <h6 class="collapse-header">Custom Components:</h6>
                         <a class="collapse-item" href="/User/Deshboard/MyAccount/@userId">Profile</a>
                         <a class="collapse-item" asp-area="User" asp-controller="Deshboard" asp-action="Edit" asp-route-id="@userId">Setting</a>
+
+                        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
+                            <button class="collapse-item" type="submit" style="background: none; border: none; width: 100%; text-align: left; padding: 0.75rem 1.25rem; color: #dc3545;">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>Logout
+                            </button>
+                        </form>
+                    
+                    
                     </div>
                 </div>
             </li>
@@ -316,131 +324,12 @@
             <!-- Main Content -->
             <div id="content">
 
-                <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-
-                    <!-- Topbar Search -->
-                  @*   <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                   aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form> *@
-
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        @* <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a>
-                           
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                 aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                               placeholder="Search for..." aria-label="Search"
-                                               aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li> *@
-
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                               onclick="loadNotifications()">
-                                <i class="fas fa-bell fa-fw"></i>
-                                @if (unreadCount > 0)
-                                {
-                                    <span class="badge badge-danger badge-counter">@unreadCount</span>
-                                }
-                            </a>
-
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                 aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header">
-                                    Notification Center
-                                </h6>
-                                <div id="notificationsContainer">
-                                  
-                                </div>
-                                <a class="dropdown-item text-center small text-red-500" asp-area="Customer" asp-controller="Notifications" asp-action="Latest">Show All Alerts</a>
-                            </div>
-                        </li>
-
-
-
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                                <a class="nav-link dropdown-toggle" id="userDropdown" role="button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">@UserManager.GetUserName(User)</span>
-                                <img class="img-profile rounded-circle"
-                                     src="~/desh/img/undraw_profile.svg">
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                 aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" asp-area="User" asp-controller="Deshboard" asp-action="MyAccount" asp-route-id="@userId">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                    <a class="dropdown-item" asp-area="User" asp-controller="Deshboard" asp-action="Edit" asp-route-id="@userId">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                               
-                                <div class="dropdown-divider"></div>
-                                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
-                                        <button class="dropdown-item" type="submit"  data-toggle="modal" data-target="#logoutModal">
-
-
-                                         <i type="submit" class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>Logout
-                                    
-                                </button>
-                                    </form>
-                            </div>
-                        </li>
-
-
-                        }
-
-
-
-
-
-                    </ul>
-
-                </nav>
-                <!-- End of Topbar -->
+            
                 <!-- Begin Page Content -->
-                <div class="container">
+                <div class="container mt-4">
 
 
-                    <div class="row">
+                    <div class="row mt-2">
 
                        
                     </div>
