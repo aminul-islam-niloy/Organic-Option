@@ -218,7 +218,7 @@
             {
 
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <a asp-area="Farmer" asp-controller="Inventory" asp-action="AllOrdersGroupedByDate"  class="card-link">
+                    <a asp-area="Farmer" asp-controller="Inventory" asp-action="AllOrdersGroupedByDate" class="card-link">
                         <div class="card border-left-primary shadow h-100 py-2 ">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
@@ -238,7 +238,7 @@
                 </div>
 
                 <div class="col-xl-3 col-md-6 mb-4">
-                    <a asp-action="Wallet" asp-controller="Inventory"  asp-area="Farmer" class="card-link">
+                    <a asp-action="Wallet" asp-controller="Inventory" asp-area="Farmer" class="card-link">
                         <div class="card border-left-success shadow h-100 py-2 ">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
@@ -277,7 +277,7 @@
                                     </div>
                                     <div class="col-auto">
                                         <i class="fa-solid fa-warehouse fa-2x " style="color: #20c997;"></i>
-                                     
+
                                     </div>
                                 </div>
                             </div>
@@ -299,7 +299,7 @@
                                     </div>
                                     <div class="col-auto">
                                         <i class="fa-solid fa-shop fa-2x text-primary-300"></i>
-                                      
+
                                     </div>
                                 </div>
                             </div>
@@ -315,26 +315,26 @@
 
                 @if (User.IsInRole("Admin"))
                 {
-   
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <a asp-area="Customer" asp-controller="Order" asp-action="AllOrders" class="card-link">
-                        <div class="card border-left-primary shadow h-100 py-2 ">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                            This Month
+
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <a asp-area="Customer" asp-controller="Order" asp-action="AllOrders" class="card-link">
+                            <div class="card border-left-primary shadow h-100 py-2 ">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                This Month
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">৳ @ViewBag.CurrentMonthRevenue </div>
                                         </div>
-                                        <div class="h5 mb-0 font-weight-bold text-gray-800">৳ @ViewBag.CurrentMonthRevenue </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
                 }
                 @if (User.IsInRole("SuperAdmin"))
                 {
@@ -367,7 +367,7 @@
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2">
                                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                           Total Revenue
+                                            Total Revenue
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">৳ @ViewBag.AdminTotalRevenue </div>
                                     </div>
@@ -395,12 +395,12 @@
                                                 <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"></div>
                                             </div>
                                             <div class="h5 mb-0 font-weight-bold " style="color: #20c997;"> Accounts </div>
-                                          
+
                                         </div>
                                     </div>
                                     <div class="col-auto">
                                         <i class="fa-solid fa-file-invoice fa-2x " style="color: #20c997;"></i>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -490,7 +490,7 @@
                         <h6 class="m-0 font-weight-bold text-primary">Admin Revenue</h6>
                     </div>
                     <div class="card-body">
-                       
+
                         <h6>Current Month Revenue: <span id="currentMonthRevenue"></span></h6>
 
                         <h6>Monthly</h6>
@@ -501,7 +501,7 @@
                 </div>
             </div>
 
-            }
+        }
         @if (User.IsInRole("SuperAdmin"))
         {
             <div class="col-xl-12 col-lg-12">
@@ -522,8 +522,8 @@
             </div>
 
         }
-           
-       
+
+
 
 
         @if (User.IsInRole("Farmer"))
@@ -542,7 +542,7 @@
                     <i class="fa-regular fa-clock"></i> Product Time
                 </a>
                 <a asp-area="Farmer" asp-controller="FarmerShop" asp-action="Edit" asp-route-id="@ViewBag.ShopId" class="nav-link btn  btn-secondary">
-                    <i class="fa-solid fa-pen-to-square"></i> Edit Shop 
+                    <i class="fa-solid fa-pen-to-square"></i> Edit Shop
                 </a>
             </div>
 
@@ -566,7 +566,7 @@
                     </div>
                 </div>
             </div>
-            
+
 
         }
 
@@ -611,7 +611,56 @@
 
         }
 
-        
+        @if (User.IsInRole("Customer"))
+        {
+
+            var orders = ViewBag.Orders as List<UserOrdersViewModel>;
+
+
+            @if (orders != null && orders.Any())
+            {
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Order No</th>
+                            <th>Order Date</th>
+                            <th>Total Price</th>
+                            <th>Products info</th>
+                            <th>Condition</th>
+                            <th>Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in orders)
+                        {
+                            <tr>
+                                <td>@order.OrderNo</td>
+                                <td>@order.OrderDate</td>
+                                <td>@order.TotalPrice</td>
+                                <td>
+                                @foreach (var orderDetail in order.OrderDetails)
+                                {
+                                    @orderDetail.ProductName 
+                                
+                                   
+                               
+                                }
+                                </td>
+                                <td>@order.OrderCondition</td>
+                                <td><a asp-action="OrderDetails" asp-area="User" asp-controller="Deshboard" asp-route-id="@order.OrderId">Details</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>No orders found.</p>
+            }
+
+        }
+
 
 
 
@@ -630,19 +679,20 @@
             transition: transform 0.3s ease-in-out;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-.custom-btn {
-    font-size: 1.0em; 
-    padding: 10px 20px; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 100px; 
-}
 
-.custom-btn i {
-    margin-right: 8px; 
-    font-size: 1.4em; 
-}
+    .custom-btn {
+        font-size: 1.0em;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 100px;
+    }
+
+        .custom-btn i {
+            margin-right: 8px;
+            font-size: 1.4em;
+        }
 </style>
 
 @if (User.IsInRole("Rider"))
@@ -732,10 +782,10 @@
     @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Extract labels and data for the Farmer 
+        // Extract labels and data for the Farmer
         var performanceData = @Html.Raw(JsonConvert.SerializeObject((IEnumerable<dynamic>)ViewBag.Performance));
 
-        // Extract labels and data 
+        // Extract labels and data
         var labels = performanceData.map(p => p.MonthName);
         var soldProducts = performanceData.map(p => p.SoldProducts);
         var earnedRevenue = performanceData.map(p => p.EarnedRevenue);
@@ -826,7 +876,7 @@
     @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        
+
         var monthlyRevenue = @Html.Raw(JsonConvert.SerializeObject(ViewBag.MonthlyRevenue));
 
         var labels = Object.keys(monthlyRevenue);

@@ -11,6 +11,7 @@ namespace OnlineShop.Models
         public string UserPhone { get; set; }
 
         // Order information
+        public int OrderId { get; set; }
         public string  OrderNo { get; set; }
         public DateTime OrderDate { get; set; }
         public decimal TotalPrice { get; set; }

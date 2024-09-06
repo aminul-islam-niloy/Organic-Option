@@ -8,6 +8,7 @@ using OnlineShop.Models;
 using OrganicOption.Models;
 using OrganicOption.Models.Farmer_Section;
 using OrganicOption.Models.Rider_Section;
+using Stripe.Climate;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -298,6 +299,12 @@ namespace OrganicOption.Areas.User.Controllers
 
         public async Task<IActionResult> Index()
         {
+            if (User.IsInRole("Customer"))
+            {
+                var myorders = await UserOrders();
+                ViewBag.Orders = myorders;
+                return View();
+            }
             
             if (User.IsInRole("Rider"))
             {
@@ -483,6 +490,115 @@ namespace OrganicOption.Areas.User.Controllers
         }
 
 
+        [Authorize(Roles = "Customer")]
+        public async Task<List<UserOrdersViewModel>> UserOrders()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId);
+
+            var userOrdersWithProducts = await _db.Orders
+                .Include(o => o.User)
+                .Include(o => o.OrderDetails)
+                    .ThenInclude(od => od.Product)
+                .Where(o => o.UserId == userId)
+                .ToListAsync();
+
+            var viewModel = userOrdersWithProducts.Select(order => new UserOrdersViewModel
+            {
+                OrderId = order.Id,
+                OrderNo = order.OrderNo,
+                OrderDate = order.OrderDate,
+                OrderCondition = order.OrderCondition,
+                DeliveryCharge = (double)order.DelivaryCharge,
+                TotalPrice = order.OrderDetails.Sum(od => od.Quantity * od.Price) + order.DelivaryCharge,
+                OrderDetails = order.OrderDetails.Select(od => new OrderDetailsViewModel
+                {
+                    ProductName = od.Product.Name,
+                    ShopId = od.Product.FarmerShopId,
+                    Quantity = od.Quantity,
+                    Price = od.Price,
+                    PaymentMethods = od.PaymentMethods,
+
+                }).ToList(),
+               
+            }).OrderByDescending(g => g.OrderDate).ToList();
+
+            return viewModel;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> OrderDetails(int id)
+        {
+            var order = await _db.Orders
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Product)
+                .FirstOrDefaultAsync(o => o.Id == id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+
+            var delivery = await _db.Deliveries
+                .Include(d => d.Order)
+                .FirstOrDefaultAsync(d => d.OrderId == id);
+
+          
+
+            RiderModel rider = null;
+            if (delivery != null)
+            {
+                rider = await _db.RiderModel
+                    .Include(s => s.RiderAddress)
+                    .FirstOrDefaultAsync(r => r.Id == delivery.RiderId);
+
+                ViewBag.RiderName = rider.Name;
+                ViewBag.RiderPhone = rider.PhoneNumber;
+            }
+            else {
+                ViewBag.RiderName = "Not Assign";
+                ViewBag.RiderPhone = "Not Assign";
+            }
+
+
+
+
+            var orderViewModel = new UserOrdersViewModel
+            {
+                OrderNo = order.OrderNo,
+                OrderCondition = order.OrderCondition,
+                OrderDate = order.OrderDate,
+                DeliveryCharge = (double)order.DelivaryCharge,
+                TotalPrice = order.OrderDetails.Sum(od => od.Quantity * od.Price) + order.DelivaryCharge,
+                OrderDetails = order.OrderDetails.Select(od => new OrderDetailsViewModel
+                {
+                    ProductName = od.Product.Name,
+                    Price = od.Price,
+                    ProductImage = od.Product.Image,
+                    Quantity = od.Quantity,
+                    PaymentMethods = od.PaymentMethods,
+                    ShopId=od.Product.FarmerShopId
+
+                    
+                }).ToList()
+            };
+
+            return View(orderViewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetOrderCondition(int orderNo)
+        {
+            var order = await _db.Orders.FirstOrDefaultAsync(o => o.Id == orderNo);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return Json(new { OrderCondition = order.OrderCondition });
+        }
 
     }
 }

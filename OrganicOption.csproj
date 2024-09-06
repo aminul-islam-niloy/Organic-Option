@@ -64,7 +64,7 @@
   <ItemGroup>
     <Folder Include="Areas\Farmer\Data\" />
     <Folder Include="Areas\Farmer\Models\" />
-    <Folder Include="Areas\Identity\Services\" />
+    <Folder Include="Areas\User\Controllers\Identity\Services\" />
     <Folder Include="Areas\Rider\Data\" />
     <Folder Include="Areas\Rider\Models\" />
     <Folder Include="Areas\User\Data\" />
