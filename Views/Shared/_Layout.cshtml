@@ -300,21 +300,22 @@
 
 
 
-                                    <li class="nav-item" style="margin-left:25px; position: relative;">
+                                    <li class="nav-item" style="margin-left: 25px; position: relative;">
                                         <a class="nav-link" href="#" onclick="loadNotifications()" id="notificationToggle">
-                                            <i class="fa-regular fa-bell" style="font-size: 18px; position: relative;"></i>
+                                            <i class="fa-regular fa-bell" style="font-size: 16px; position: relative;"></i>
                                             @if (unreadCount > 0)
                                             {
-                                                <span class="badge" style="background: red; color: white; position: absolute; top: 12px; left: 30px; font-size: 12px; padding: 2px 5px; border-radius: 50%;" id="notification-count">@unreadCount</span>
+                                                <span class="badge" style="background: red; color: white; position: absolute; top: 12px; left: 25px; font-size: 10px; padding: 2px 4px; border-radius: 50%;" id="notification-count">@unreadCount</span>
                                             }
                                         </a>
-                                        <div class="dropdown-menu shadow animated--grow-in" aria-labelledby="alertsDropdown"
-                                             style="width: 350px; max-height: 600px; overflow-y: auto; padding: 0; border-radius: 0.5rem; margin:10px; padding:10px">
+                                        <div class="dropdown-menu shadow animated--grow-in mt-1" aria-labelledby="alertsDropdown"
+                                             style="width: 400px; max-height: 600px; overflow-y: auto; padding: 0; border-radius: 0.5rem; left: -150px;">
                                             <h6 class="dropdown-header"
-                                                style="font-size: 1.1rem; font-weight: bold; color: #343a40; background-color: #f8f9fa; padding: 0.5rem 1rem; border-bottom: 1px solid #dee2e6;">
+                                                style="font-size: 1.0rem; font-size:18x; font-weight: bold; color: #343a40; background-color: #f8f9fa; padding: 0.5rem 1rem; border-bottom: 1px solid #dee2e6;">
                                                 Notification Center
                                             </h6>
-                                            <div id="notificationsContainer" style="padding: 10px">
+                                            <div id="notificationsContainer" style="padding: 10px;">
+                                                <!-- Notification items will go here -->
                                             </div>
                                             <a class="dropdown-item text-center small"
                                                href="@Url.Action("Latest", "Notifications", new { area = "Customer" })"
@@ -323,7 +324,6 @@
                                             </a>
                                         </div>
                                     </li>
-
 
                                     @if (userRole == "Customer")
                                     {
