@@ -88,8 +88,7 @@
 
                                     @if (userRole == "SuperAdmin")
                                     {
-                                        @*   <li><a asp-area="Admin" asp-controller="Role" asp-action="Index" class="nav-link">Role User</a></li> *@
-
+                                        
                                         <li class="mega_items ">
                                             <a asp-area="Admin" asp-controller="Role" asp-action="Index"><i class="zmdi zmdi-shopping-basket"></i>Manage Roles <i class="zmdi zmdi-account"></i></a>
                                             <div class="mega_menu">
@@ -97,7 +96,7 @@
                                                     <li>
                                                         <a asp-area="Customer" asp-controller="Home" asp-action="Products">Product</a>
                                                         <ul>
-                                                            <li><a href="shop-fullwidth.html">Full Width</a></li>
+                                                            <li><a href="#">Full Width</a></li>
                                                             <li><a href="shop-fullwidth-list.html">Full Width list</a></li>
                                                             <li><a href="shop-right-sidebar.html">Right Sidebar </a></li>
                                                             <li><a href="shop-right-sidebar-list.html"> Right Sidebar list</a></li>
@@ -129,9 +128,7 @@
                                                     <li>
                                                         <a asp-area="Farmer" asp-controller="FarmerShop" asp-action="AllShop">All Shop</a>
                                                         <ul>
-                                                            <li><a href="cart.html">cart</a></li>
-                                                            <li><a href="wishlist.html">Wishlist</a></li>
-                                                            <li><a href="checkout.html">Checkout</a></li>
+                                                            
                                                             <li><a href="my-account.html">my account</a></li>
                                                             <li><a href="404.html">Error 404</a></li>
                                                         </ul>
@@ -160,19 +157,14 @@
                                                     <li>
                                                         <a asp-area="Farmer" asp-controller="FarmerShop" asp-action="AllShop">All Shop</a>
                                                         <ul>
-                                                            <li><a href="cart.html">cart</a></li>
-                                                            <li><a href="wishlist.html">Wishlist</a></li>
-                                                            <li><a href="checkout.html">Checkout</a></li>
-                                                            <li><a href="my-account.html">my account</a></li>
+                                                            <li><a href="cart.html">cart</a></li>     
                                                             <li><a href="404.html">Error 404</a></li>
                                                         </ul>
                                                     </li>
                                                     <li>
                                                         <a href="#">other Pages</a>
                                                         <ul>
-                                                            <li><a href="cart.html">cart</a></li>
-                                                            <li><a href="wishlist.html">Wishlist</a></li>
-                                                            <li><a href="checkout.html">Checkout</a></li>
+
                                                             <li><a href="my-account.html">my account</a></li>
                                                             <li><a href="404.html">Error 404</a></li>
                                                         </ul>
@@ -203,9 +195,6 @@
                                                     <li>
                                                         <a asp-area="Farmer" asp-controller="FarmerShop" asp-action="AllShop">All Shop</a>
                                                         <ul>
-                                                            <li><a href="cart.html">cart</a></li>
-                                                            <li><a href="wishlist.html">Wishlist</a></li>
-                                                            <li><a href="checkout.html">Checkout</a></li>
                                                             <li><a href="my-account.html">my account</a></li>
                                                             <li><a href="404.html">Error 404</a></li>
                                                         </ul>
@@ -213,9 +202,6 @@
                                                     <li>
                                                         <a href="#">other Pages</a>
                                                         <ul>
-                                                            <li><a href="cart.html">cart</a></li>
-                                                            <li><a href="wishlist.html">Wishlist</a></li>
-                                                            <li><a href="checkout.html">Checkout</a></li>
                                                             <li><a href="my-account.html">my account</a></li>
                                                             <li><a href="404.html">Error 404</a></li>
                                                         </ul>
@@ -270,7 +256,7 @@
                                         <a href="blog.html"><i class="zmdi zmdi-collection-music"></i> blog <i class="zmdi zmdi-caret-down"></i></a>
                                         <ul class="sub_menu pages">
                                             <li><a asp-action="Index" asp-controller="Blog" asp-area="Customer">blog details</a></li>
-                                            <li><a href="blog-fullwidth.html">blog fullwidth</a></li>
+                                            <li><a href="/Admin/ProductPrice/TodayPrice">ProductPrice</a></li>
                                             <li><a href="blog-sidebar.html">blog sidebar</a></li>
                                         </ul>
                                     </li>
@@ -309,13 +295,13 @@
                                             }
                                         </a>
                                         <div class="dropdown-menu shadow animated--grow-in mt-1" aria-labelledby="alertsDropdown"
-                                             style="width: 400px; max-height: 600px; overflow-y: auto; padding: 0; border-radius: 0.5rem; left: -150px;">
+                                             style="width: 400px; max-height: 600px; overflow-y: auto; padding: 0; border-radius: 0.5rem; left: -100px;  ">
                                             <h6 class="dropdown-header"
-                                                style="font-size: 1.0rem; font-size:18x; font-weight: bold; color: #343a40; background-color: #f8f9fa; padding: 0.5rem 1rem; border-bottom: 1px solid #dee2e6;">
+                                                style="font-size: 1.0rem; font-size:18px; font-weight: bold; color: #343a40; background-color: #f8f9fa; padding: 0.5rem 1rem; border-bottom: 1px solid #dee2e6;">
                                                 Notification Center
                                             </h6>
                                             <div id="notificationsContainer" style="padding: 10px;">
-                                                <!-- Notification items will go here -->
+                                                
                                             </div>
                                             <a class="dropdown-item text-center small"
                                                href="@Url.Action("Latest", "Notifications", new { area = "Customer" })"
@@ -344,22 +330,24 @@
                                                 <i class="zmdi zmdi-account"></i> Deshboard <i class="zmdi zmdi-caret-down"></i>
                                             </a>
 
+
+                                            
                                             <ul class="sub_menu pages">
                                                 <li>
                                                     <h4 class="text-center"> @UserManager.GetUserName(User)</h4>
                                                     <hr class="dropdown-divider">
                                                 </li>
-                                                
-                                                <li><a class="dropdown-item" href="/User/Deshboard" title="Manage"> <i class="fa-solid fa-user" style="margin-right:7px"></i>My  Profile</a></li>
+
+                                                <li><a class="dropdown-item" href="/User/Deshboard/MyAccount/@userId" title="Manage"> <i class="fa-solid fa-user" style="margin-right:7px"></i>My  Profile</a></li>
                                                 
 
                                                 <li>
-                                                    <a class="dropdown-item" href="#">
+                                                    <a class="dropdown-item" asp-area="User" asp-controller="Deshboard" asp-action="Edit" asp-route-id="@userId">
                                                         <i class="fa-solid fa-gear" style="margin-right:5px"></i> Setting
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a class="dropdown-item" href="#">
+                                                    <a class="dropdown-item" asp-action="" asp-area="User" asp-controller="Deshboard">
                                                         <i class="fa-solid fa-gauge" style="margin-right:7px"></i> My Deshboard
                                                     </a>
                                                 </li>
@@ -392,7 +380,7 @@
     <!--header area end-->
     <!--Offcanvas menu area start-->
     <div class="off_canvars_overlay"></div>
-    <div class="Offcanvas_menu">
+    <div class="Offcanvas_menu mt-2">
         <div class="container">
             <div class="row">
                 <div class="col-12">
@@ -411,24 +399,55 @@
                         </div>
                         <div class="top_right">
                             <ul>
-
+                                <li>
+                                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                                        <img src="/assets/img/logo/online-shoping.png" style="height: 40px; width: auto;" alt="Logo">
+                                    </a>
+                                </li>
+                              
+                          
                                 @if (userId != null)
                                 {
                                     <li class="top_links">
-                                        <a href="/Customer/UserProfile/Deshboard/@userId"><i class="zmdi zmdi-account"></i> My account <i class="zmdi zmdi-caret-down"></i></a>
+                                        
                                         <ul class="dropdown_links">
 
-                                            <li><a href="/Customer/UserProfile/Deshboard/@userId">My Account </a></li>
-                                            <li> <a asp-area="Customer" asp-controller="Home" asp-action="Cart"><i class="fas fa-shopping-cart"></i> (@count) Cart</a></li>
-                                            <li><a href="wishlist.html">Wishlist</a></li>
-                                            <li><a href="wishlist.html">Wishlist</a></li>
+
+                                            <li><a  href="/User/Deshboard/MyAccount/@userId" title="Manage"> <i class="fa-solid fa-user" style="margin-right:7px"></i>My  Profile</a></li>
+
+
+                                            <li>
+                                                <a asp-area="User" asp-controller="Deshboard" asp-action="Edit" asp-route-id="@userId">
+                                                    <i class="fa-solid fa-gear" style="margin-right:5px"></i> Setting
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a  asp-action="" asp-area="User" asp-controller="Deshboard">
+                                                    <i class="fa-solid fa-gauge" style="margin-right:7px"></i> My Deshboard
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
+                                                    <button  type="submit" style="background: none; border: none; width: 100%; font-size:16px; padding: 0.75rem 1.0rem; color: #dc3545;">
+                                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" style="margin-right:7px"></i>Logout
+                                                    </button>
+                                                </form>
+                                            </li>
+                                          
                                         </ul>
                                     </li>
                                 }
                                 else
-                                {
-                                    <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
-                                    <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+                                {<li>
+
+                             
+                                    <div class="btn-group d-flex">
+                                   <a  style="font-size:18px; font-weight:500" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                                            <a style="margin-left:7px; font-size:18px; font-weight:500" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                                    </div>
+                                    </li>
+                                   
                                 }
                             </ul>
                         </div>
@@ -443,31 +462,37 @@
                             </form>
 
                         </div>
-                        <div class="mini_cart_wrapper">
-                            <a asp-area="Customer" asp-controller="Home" asp-action="Cart"><i class="fas fa-shopping-cart"></i> (@count) Cart</a>
-                        </div>
+                        
                         <div id="menu" class="text-left">
                             <ul class="offcanvas_main_menu">
+                                <li class="menu-item-has-children">
+                                 @if (userId != null)
+                                    {
+                                     
+                                      <a class="dropdown-item" href="/User/Deshboard/MyAccount/@userId" title="Manage"> <i class="fa-solid fa-user" style="margin-right:7px"></i>My  Profile</a>
+
+                                        <a class="dropdown-item" asp-area="User" asp-controller="Deshboard" asp-action="Edit" asp-route-id="@userId">
+                                            <i class="fa-solid fa-gear" style="margin-right:5px"></i> Setting
+                                        </a>
+                                    
+                                        <a class="dropdown-item" asp-action="" asp-area="User" asp-controller="Deshboard">
+                                            <i class="fa-solid fa-gauge" style="margin-right:7px"></i> My Deshboard
+                                        </a>
+                                   
+                                        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
+                                            <button class="dropdown-item" type="submit" style="background: none; border: none; width: 100%; font-size:16px; padding: 0.75rem 1.0rem; color: #dc3545;">
+                                                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" style="margin-right:7px"></i>Logout
+                                            </button>
+                                        </form>
+                                  
+                                    }
+                                    </li>
+
                                 <li class="menu-item-has-children">
                                     <a asp-area="" asp-controller="Home" asp-action="Products">Products</a>
                                     <ul class="sub-menu">
 
-                                        @if (userId != null)
-                                        {
-                                            <li class="menu-item-has-children">
-                                                <a href="#">other Pages</a>
-                                                <ul class="sub-menu">
-                                                    <li> <a asp-area="Customer" asp-controller="Home" asp-action="Cart"><i class="fas fa-shopping-cart"></i> (@count) Cart</a></li>
-                                                    <li><a href="wishlist.html">Wishlist</a></li>
-                                                    @if (userId != null)
-                                                    {
-                                                        <li><a href="/Customer/UserProfile/Deshboard/@userId">My Account </a></li>
-
-                                                    }
-                                                    <li><a href="404.html">Error 404</a></li>
-                                                </ul>
-                                            </li>
-                                        }
+                                        
                                         <li class="menu-item-has-children">
                                             <a href="#">Product Types</a>
                                             <ul class="sub-menu">
@@ -510,12 +535,8 @@
                                         <li><a href="404.html">Error 404</a></li>
                                     </ul>
                                 </li>
-                                <li class="menu-item-has-children">
-                                    @if (userId != null)
-                                    {
-                                        <a href="/Customer/UserProfile/Deshboard/@userId">my account</a>
-                                    }
-                                </li>
+                               
+
                                 <li class="menu-item-has-children">
                                     <a href="about.html">about Us</a>
                                 </li>
