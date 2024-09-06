@@ -127,14 +127,14 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
+            <li class="nav-item " >
                 <a class="nav-link collapsed"  asp-area="User" asp-controller="Deshboard" asp-action="MyAccount/@userId" data-toggle="collapse" data-target="#collapseTwo"
                    aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     <span>My Account</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
+                <div id="collapseTwo" class="collapse " aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class=" py-2 collapse-inner rounded" style="background:#f4efef">
                         <h6 class="collapse-header">Custom Components:</h6>
                         <a class="collapse-item" href="/User/Deshboard/MyAccount/@userId">Profile</a>
                         <a class="collapse-item" asp-area="User" asp-controller="Deshboard" asp-action="Edit" asp-route-id="@userId">Setting</a>
