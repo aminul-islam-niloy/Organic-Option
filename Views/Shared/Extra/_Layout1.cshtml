@@ -3,8 +3,6 @@
 @using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Http.Extensions
 @using System.Globalization
-
-
 @inject IHttpContextAccessor HttpContextAccessor
 @{
     var userRole = HttpContextAccessor.HttpContext.Session.GetString("roleName");
@@ -24,9 +22,6 @@
 @{
     string userId = UserManager.GetUserId(User);
 }
-
-
-
 @inject OrganicOption.Service.NotificationService notificationService
 
 @{
@@ -41,8 +36,6 @@
 
 @{
     string UserRole = " ";
-
-
     if (User.IsInRole("Admin"))
     {
         UserRole = "Admin";
@@ -61,18 +54,12 @@
         UserRole = "Farmer";
     }
 
-
     if (User.IsInRole("Rider"))
     {
         UserRole = "Rider";
     }
 
 }
-
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
-
-
 
 
 <!DOCTYPE html>
@@ -93,13 +80,11 @@
 </head>
 <body id="page-top">
 
-    <!-- Page Wrapper -->
+
     <div id="wrapper">
 
-        <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
       
-
             <li>
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
@@ -107,10 +92,8 @@
                 <div class="sidebar-brand-text mx-3"> @UserRole </div>
             </a>
             </li>
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0"/>
+            <li><hr class="dropdown-divider"></li>
 
-            <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
                 <a class="nav-link" asp-action="Index" asp-area="User" asp-controller="Deshboard">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -118,15 +101,10 @@
                 </a>
             </li>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider"/>
+            <li><hr class="dropdown-divider"></li>
 
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Account
-            </div>
+            <div class="sidebar-heading"> Account</div>
 
-            <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item " >
                 <a class="nav-link collapsed"  asp-area="User" asp-controller="Deshboard" asp-action="MyAccount/@userId" data-toggle="collapse" data-target="#collapseTwo"
                    aria-expanded="true" aria-controls="collapseTwo">
@@ -150,7 +128,6 @@
                 </div>
             </li>
 
-            <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link " asp-area="User" asp-controller="Deshboard" asp-action="Edit" asp-route-id="@userId" data-target="#collapseUtilities">
                     <i class="fas fa-fw fa-wrench"></i>
@@ -159,20 +136,13 @@
                
             </li>
 
-    
-            <hr class="sidebar-divider">
 
-         
-
-       
+            <li><hr class="dropdown-divider"></li>
 
              @if (userRole == "Customer")
             {
-                <p class="sidebar-heading">
-                    Shop
-                </p>
-
-      
+                <li> <p class="sidebar-heading"> Shop </p></li>
+               
                 <li class="nav-item">
                     <a class="nav-link" asp-area="Customer"  asp-controller="Order"  asp-action="UserOrders">
                         <i class="fa-solid fa-bag-shopping"></i>
@@ -304,41 +274,22 @@
 
 
             }
-
-
-            <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
-            <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
             </div>
 
-
-
         </ul>
-        <!-- End of Sidebar -->
-        <!-- Content Wrapper -->
+ 
         <div id="content-wrapper" class="d-flex flex-column">
 
             <!-- Main Content -->
             <div id="content">
-
-            
-                <!-- Begin Page Content -->
                 <div class="container mt-4">
-
-
                     <div class="row mt-2">
-
-                       
                     </div>
-                   
-
                 </div>
-                <!-- /.container-fluid -->
-
-       
 
             <partial name="_CookieConsentPartial" />
             <div>
@@ -354,38 +305,24 @@
                     </div>
                 </div>
             </footer>
-            <!-- End of Footer -->
 
         </div>
         <!-- End of Content Wrapper -->
 
-
-       
     </div>
-    <!-- End of Page Wrapper -->
-    <!-- Scroll to Top Button-->
+
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
 
-
-
     <!-- Bootstrap core JavaScript-->
     <script src="@Url.Content("~/desh/vendor/jquery/jquery.min.js")"></script>
     <script src="@Url.Content("~/desh/vendor/bootstrap/js/bootstrap.bundle.min.js")"></script>
-
-
     <script src="@Url.Content("~/desh/vendor/jquery-easing/jquery.easing.min.js")"></script>
-
-
     <script src="@Url.Content("~/desh/js/sb-admin-2.min.js")"></script>
-
     <script src="@Url.Content("~/desh/vendor/chart.js/Chart.min.js")"></script>
-
-    <!-- Page level custom scripts -->
     <script src="@Url.Content("~/desh/js/demo/chart-area-demo.js")"></script>
     <script src="@Url.Content("~/desh/js/demo/chart-pie-demo.js")"></script>
-
 
     <script>
         function loadNotifications() {
@@ -401,9 +338,7 @@
             });
         }
 
-
     </script>
-
 
     @RenderSection("Scripts", required: false)
 </body>

@@ -3,8 +3,6 @@
 @using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Http.Extensions
 @using System.Globalization
-
-
 @inject IHttpContextAccessor HttpContextAccessor
 @{
     var userRole = HttpContextAccessor.HttpContext.Session.GetString("roleName");
@@ -25,35 +23,20 @@
     string userId = UserManager.GetUserId(User);
 }
 
-
-
 @inject OrganicOption.Service.NotificationService notificationService
-
 @{
-
     var unreadCount = 0;
-
     if (userId != null)
     {
         unreadCount = notificationService.GetUnreadNotifications(userId).Count();
     }
 }
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <title>@ViewData["Title"] Organic Option</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    @* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" integrity="sha384-XxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx" crossorigin="anonymous" />
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-
-    <link rel="stylesheet" href="~/css/plugins.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
-
-    <link rel="stylesheet" href="~/lib/leaflet/leaflet.css" />
-    <link rel="stylesheet" href="~/lib/leaflet/leaflet.min.css" /> *@
 
     <link rel="stylesheet" href="/css/cssplugins.css">
     <link rel="stylesheet" href="/css/cssstyle.css">
@@ -64,10 +47,8 @@
 </head>
 <body>
 
-
-    <!--header area start-->
     <header class="header_area">
-        <!--header middel start-->
+
         <div class="header_bottom sticky-header">
             <div class="container">
                 <div class="row align-items-center">
@@ -88,7 +69,6 @@
 
                                     @if (userRole == "SuperAdmin")
                                     {
-                                        
                                         <li class="mega_items ">
                                             <a asp-area="Admin" asp-controller="Role" asp-action="Index"><i class="zmdi zmdi-shopping-basket"></i>Manage Roles <i class="zmdi zmdi-account"></i></a>
                                             <div class="mega_menu">
@@ -107,7 +87,6 @@
                                                 </ul>
                                             </div>
                                         </li>
-
                                     }
                                     @if (userRole == "Admin")
                                     {
@@ -128,7 +107,7 @@
                                                     <li>
                                                         <a asp-area="Farmer" asp-controller="FarmerShop" asp-action="AllShop">All Shop</a>
                                                         <ul>
-                                                            
+
                                                             <li><a href="my-account.html">my account</a></li>
                                                             <li><a href="404.html">Error 404</a></li>
                                                         </ul>
@@ -157,7 +136,7 @@
                                                     <li>
                                                         <a asp-area="Farmer" asp-controller="FarmerShop" asp-action="AllShop">All Shop</a>
                                                         <ul>
-                                                            <li><a href="cart.html">cart</a></li>     
+                                                            <li><a href="cart.html">cart</a></li>
                                                             <li><a href="404.html">Error 404</a></li>
                                                         </ul>
                                                     </li>
@@ -173,9 +152,7 @@
                                                 </ul>
                                             </div>
                                         </li>
-
                                     }
-
                                     @if (userRole == "Rider")
                                     {
                                         <li class="mega_items ">
@@ -206,7 +183,6 @@
                                                             <li><a href="404.html">Error 404</a></li>
                                                         </ul>
                                                     </li>
-
                                                 </ul>
                                             </div>
                                         </li>
@@ -284,8 +260,6 @@
                                         </li>
                                     }
 
-
-
                                     <li class="nav-item" style="margin-left: 25px; position: relative;">
                                         <a class="nav-link" href="#" onclick="loadNotifications()" id="notificationToggle">
                                             <i class="fa-regular fa-bell" style="font-size: 16px; position: relative;"></i>
@@ -301,7 +275,6 @@
                                                 Notification Center
                                             </h6>
                                             <div id="notificationsContainer" style="padding: 10px;">
-                                                
                                             </div>
                                             <a class="dropdown-item text-center small"
                                                href="@Url.Action("Latest", "Notifications", new { area = "Customer" })"
@@ -330,16 +303,12 @@
                                                 <i class="zmdi zmdi-account"></i> Deshboard <i class="zmdi zmdi-caret-down"></i>
                                             </a>
 
-
-                                            
                                             <ul class="sub_menu pages">
                                                 <li>
                                                     <h4 class="text-center"> @UserManager.GetUserName(User)</h4>
                                                     <hr class="dropdown-divider">
                                                 </li>
-
                                                 <li><a class="dropdown-item" href="/User/Deshboard/MyAccount/@userId" title="Manage"> <i class="fa-solid fa-user" style="margin-right:7px"></i>My  Profile</a></li>
-                                                
 
                                                 <li>
                                                     <a class="dropdown-item" asp-area="User" asp-controller="Deshboard" asp-action="Edit" asp-route-id="@userId">
@@ -351,7 +320,6 @@
                                                         <i class="fa-solid fa-gauge" style="margin-right:7px"></i> My Deshboard
                                                     </a>
                                                 </li>
-
                                                 <li>
                                                     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
                                                         <button class="dropdown-item" type="submit" style="background: none; border: none; width: 100%; font-size:16px; padding: 0.75rem 1.0rem; color: #dc3545;">
@@ -361,7 +329,6 @@
                                                 </li>
                                             </ul>
                                         </li>
-
                                     }
                                     else
                                     {
@@ -377,7 +344,7 @@
             </div>
         </div>
     </header>
-    <!--header area end-->
+
     <!--Offcanvas menu area start-->
     <div class="off_canvars_overlay"></div>
     <div class="Offcanvas_menu mt-2">
@@ -404,16 +371,16 @@
                                         <img src="/assets/img/logo/online-shoping.png" style="height: 40px; width: auto;" alt="Logo">
                                     </a>
                                 </li>
-                              
-                          
+
+
                                 @if (userId != null)
                                 {
                                     <li class="top_links">
-                                        
+
                                         <ul class="dropdown_links">
 
 
-                                            <li><a  href="/User/Deshboard/MyAccount/@userId" title="Manage"> <i class="fa-solid fa-user" style="margin-right:7px"></i>My  Profile</a></li>
+                                            <li><a href="/User/Deshboard/MyAccount/@userId" title="Manage"> <i class="fa-solid fa-user" style="margin-right:7px"></i>My  Profile</a></li>
 
 
                                             <li>
@@ -422,32 +389,30 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a  asp-action="" asp-area="User" asp-controller="Deshboard">
+                                                <a asp-action="" asp-area="User" asp-controller="Deshboard">
                                                     <i class="fa-solid fa-gauge" style="margin-right:7px"></i> My Deshboard
                                                 </a>
                                             </li>
 
                                             <li>
                                                 <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
-                                                    <button  type="submit" style="background: none; border: none; width: 100%; font-size:16px; padding: 0.75rem 1.0rem; color: #dc3545;">
+                                                    <button type="submit" style="background: none; border: none; width: 100%; font-size:16px; padding: 0.75rem 1.0rem; color: #dc3545;">
                                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" style="margin-right:7px"></i>Logout
                                                     </button>
                                                 </form>
                                             </li>
-                                          
+
                                         </ul>
                                     </li>
                                 }
                                 else
-                                {<li>
-
-                             
-                                    <div class="btn-group d-flex">
-                                   <a  style="font-size:18px; font-weight:500" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                                {
+                                    <li>
+                                        <div class="btn-group d-flex">
+                                            <a style="font-size:18px; font-weight:500" asp-area="Identity" asp-page="/Account/Register">Register</a>
                                             <a style="margin-left:7px; font-size:18px; font-weight:500" asp-area="Identity" asp-page="/Account/Login">Login</a>
-                                    </div>
+                                        </div>
                                     </li>
-                                   
                                 }
                             </ul>
                         </div>
@@ -460,39 +425,36 @@
                                     <button type="submit"><i class="zmdi zmdi-search"></i></button>
                                 </div>
                             </form>
-
                         </div>
-                        
+
                         <div id="menu" class="text-left">
                             <ul class="offcanvas_main_menu">
                                 <li class="menu-item-has-children">
-                                 @if (userId != null)
+                                    @if (userId != null)
                                     {
-                                     
-                                      <a class="dropdown-item" href="/User/Deshboard/MyAccount/@userId" title="Manage"> <i class="fa-solid fa-user" style="margin-right:7px"></i>My  Profile</a>
+                                        <a class="dropdown-item" href="/User/Deshboard/MyAccount/@userId" title="Manage"> <i class="fa-solid fa-user" style="margin-right:7px"></i>My  Profile</a>
 
                                         <a class="dropdown-item" asp-area="User" asp-controller="Deshboard" asp-action="Edit" asp-route-id="@userId">
                                             <i class="fa-solid fa-gear" style="margin-right:5px"></i> Setting
                                         </a>
-                                    
+
                                         <a class="dropdown-item" asp-action="" asp-area="User" asp-controller="Deshboard">
                                             <i class="fa-solid fa-gauge" style="margin-right:7px"></i> My Deshboard
                                         </a>
-                                   
+
                                         <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
                                             <button class="dropdown-item" type="submit" style="background: none; border: none; width: 100%; font-size:16px; padding: 0.75rem 1.0rem; color: #dc3545;">
                                                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" style="margin-right:7px"></i>Logout
                                             </button>
                                         </form>
-                                  
                                     }
-                                    </li>
+                                </li>
 
                                 <li class="menu-item-has-children">
                                     <a asp-area="" asp-controller="Home" asp-action="Products">Products</a>
                                     <ul class="sub-menu">
 
-                                        
+
                                         <li class="menu-item-has-children">
                                             <a href="#">Product Types</a>
                                             <ul class="sub-menu">
@@ -535,7 +497,6 @@
                                         <li><a href="404.html">Error 404</a></li>
                                     </ul>
                                 </li>
-                               
 
                                 <li class="menu-item-has-children">
                                     <a href="about.html">about Us</a>
@@ -552,19 +513,11 @@
     </div>
     <!--Offcanvas menu area end-->
 
-
-
-
-
-
     <partial name="_CookieConsentPartial" />
 
     <div>
         @RenderBody()
         <hr />
-
-
-
 
     </div>
 
@@ -637,7 +590,6 @@
                                             <li><a href="#">Portfolio</a></li>
                                             <li><a href="#">Conditions</a></li>
                                             <li><a asp-area="Customer" asp-controller="Feedback" asp-action="Create"> Feedback</a></li>
-
                                         </ul>
                                     </div>
 
@@ -732,9 +684,6 @@
     </footer>
     <!--footer area end-->
 
-
-
-
     <script>
         function updateLocation() {
             if (navigator.geolocation) {
@@ -742,11 +691,9 @@
                     var latitude = position.coords.latitude;
                     var longitude = position.coords.longitude;
 
-                    // Update the form fields with the current location
                     document.getElementById('latitude').value = latitude;
                     document.getElementById('longitude').value = longitude;
 
-                    // Submit the form
                     document.getElementById('update-location-form').submit();
                 }, function (error) {
                     console.error('Error getting location:', error);
@@ -757,7 +704,6 @@
             }
         }
     </script>
-
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -781,9 +727,6 @@
             });
         });
 
-
-
-
         $(document).on('click', '.remove-from-favorites', function () {
             var shopId = $(this).data('shop-id');
             console.log(shopId);
@@ -800,20 +743,17 @@
                 }
             });
         });
-                });
+                                });
     </script>
-
-
 
     <script>
         $(document).ready(function () {
             $('#notificationToggle').on('click', function (e) {
                 e.preventDefault();
                 loadNotifications();
-                $('.dropdown-menu').toggle(); // Toggle the notification dropdown
+                $('.dropdown-menu').toggle();
             });
 
-            // Close the dropdown if clicked outside
             $(document).on('click', function (e) {
                 if (!$(e.target).closest('#notificationToggle').length) {
                     $('.dropdown-menu').hide();
@@ -836,19 +776,15 @@
         }
 
 
-
     </script>
 
-    <!-- Add jQuery CDN -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRZFGZ97RXs49Jj7jk5DqE0I66rF1q+hmP9zSm4z" crossorigin="anonymous"></script>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRZFGZ97RXs49Jj7jk5DqE0I66rF1q+hmP9zSm4z" crossorigin="anonymous"></script>
     <!-- Plugins JS -->
     <script src="/js/jsplugins.js"></script>
 
     <!-- Main JS -->
     <script src="/js/jsmain.js"></script>
-
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
