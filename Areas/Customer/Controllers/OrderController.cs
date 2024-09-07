@@ -602,7 +602,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             }
         },
                 Mode = "payment",
-                SuccessUrl = "https://localhost:44343/Customer/Order/UserOrders",
+                SuccessUrl = "https://localhost:44343/User/Deshboard/Index",
                 CancelUrl = "https://localhost:44343/Customer/Order/PaymentPage"
             };
 
