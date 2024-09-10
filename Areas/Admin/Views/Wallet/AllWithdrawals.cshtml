@@ -2,16 +2,17 @@
 <br />
 <div class="container">
     <!-- Admin Total Revenue -->
-    <h3 class="text-center">Admin Total Revenue: @ViewBag.TotalRevenue ৳</h3>
-    <br />
-    <!-- Confirmed Withdrawals -->
-    <h4 class="text-center">Confirmed Withdrawals in @DateTime.Now.ToString("MMMM yyyy")</h4>
+    <h3 class="text-center mb-2">Admin Total Revenue: @ViewBag.TotalRevenue ৳</h3>
+
+    <h5 class="text-center">Confirmed Withdrawals in @DateTime.Now.ToString("MMMM yyyy")</h5>
     <br />
 
     <!-- Button aligned to the right -->
     <div class="d-flex justify-content-end mb-3">
         <a href="@Url.Action("AdminViewWithdrawals", "Wallet")" class="btn btn-primary">Manage Withdraw</a>
+        <a style="margin-left:7px" asp-area="Customer" asp-controller="Order" asp-action="CardOrders" class="btn btn-info">Manage Card Orders</a>
     </div>
+
 
     <!-- Conditional Content -->
     @if (!Model.Any())

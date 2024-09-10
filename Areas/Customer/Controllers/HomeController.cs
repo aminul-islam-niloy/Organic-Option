@@ -467,7 +467,7 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Detail", new { id = id });
         }
 
         [Authorize(Roles = "Customer")]
@@ -494,7 +494,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                     _db.SaveChanges(); // Save changes to the database
                 }
             }
-            return RedirectToAction(nameof(Cart));
+            return RedirectToAction("Detail", new { id = id });
         }
 
         [HttpPost]

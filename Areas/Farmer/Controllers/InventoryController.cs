@@ -166,7 +166,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
                 .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
 
             var ordersToday = await _context.OrderDetails
-                .Include(od => od.Order).ThenInclude(o => o.User).Where(od => od.Product.FarmerShopId == farmerShop.Id && od.Order.OrderDate.Date == DateTime.Today).ToListAsync();
+                .Include(od => od.Order).ThenInclude(o => o.User).Where(od => od.Product.FarmerShopId == farmerShop.Id ).ToListAsync();
 
             // Extract information about each sold product along with customer details
             var soldProductsToday = ordersToday

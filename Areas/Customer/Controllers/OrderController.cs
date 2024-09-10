@@ -461,6 +461,25 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
 
+        [Authorize(Roles = "Admin")]
+        public IActionResult CardOrders()
+        {
+
+            var cardOrders = _db.OrderDetails
+                .Include(od => od.Product)
+                .Include(od => od.Order)
+                .Where(od => od.PaymentMethods == PaymentMethods.Card)
+                .ToList();
+
+            if (cardOrders == null)
+            {
+                return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
+            }
+
+            return View(cardOrders);
+        }
+
+
 
 
         [Authorize(Roles = "Admin")]

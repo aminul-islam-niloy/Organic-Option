@@ -2,14 +2,14 @@
 <br />
 
 <div class="container">
-    <a href="javascript:history.back()" class="btn btn-secondary mb-3"><i class="fa fa-arrow-left"></i> Back</a>
+    <a href="javascript:history.back()" class="btn btn-secondary mb-1"><i class="fa fa-arrow-left"></i> Back</a>
 
-<h4>Products Sold Today</h4>
+<h3 class="text-center mb-2"> Sold Products </h3>
 
 
 @if (ViewBag.SoldProductsToday != null && ViewBag.SoldProductsToday.Count > 0)
 {
-    <table class="table-responsive">
+    <table class="table table-bordered table-responsive">
         <thead>
             <tr>
                 <th>Product ID</th>
