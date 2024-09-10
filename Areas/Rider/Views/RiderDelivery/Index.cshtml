@@ -1,20 +1,48 @@
 ﻿@model IEnumerable<OrganicOption.Models.Rider_Section.Delivery>
 
 
-<div class="container">
+<div class="container mt-2">
+    <a href="javascript:history.back()" class="btn btn-secondary ">
+        <i class="fa fa-arrow-left"></i> Back
+    </a>
 
-    <h4>Delivery Details</h4>
+    <h3 class="mb-3" style="margin:5px; font-size:25px; padding:5px; text-align:center">My Delivery </h3>
 
+    <div class="row">
+        <div class="col-md-3 col-sm-6 ">
+            <a asp-area="Rider" asp-controller="Rider" asp-action="Index" class="card text-center shadow-sm p-3 mb-5 bg-white rounded">
+                <div class="card-body">
+                    <i class="fa fa-truck fa-2x text-info"></i>
+                    <h6 class="mt-2">New Delivery</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 col-sm-6 ">
+            <a asp-area="Rider" asp-controller="RiderDelivery" asp-action="RunningDeliveries"  class="card text-center shadow-sm p-3 mb-5 bg-white rounded">
+                <div class="card-body">
+                    <i class="fa fa-spinner fa-2x text-secondary"></i>
+                    <h6 class="mt-2">Running Delivery</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 col-sm-6 ">
+            <a asp-area="Rider" asp-controller="Rider" asp-action="RiderDashboard" class="card text-center shadow-sm p-3 mb-5 bg-white rounded">
+                <div class="card-body">
+                    <i class="fa fa-wallet fa-2x text-success"></i>
+                    <h6 class="mt-2">My Wallet</h6>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3 col-sm-6 ">
+            <a asp-area="Rider" asp-controller="RiderDelivery" asp-action="DeliveredOrders" asp-route-period="daily" class="card text-center shadow-sm p-3 mb-5 bg-white rounded">
+                <div class="card-body">
+                    <i class="fa fa-history fa-2x text-warning"></i>
+                    <h6 class="mt-2">Delivery History</h6>
+                </div>
+            </a>
+        </div>
+    </div>
 
-    <a class="btn btn-info" asp-area="Rider" asp-controller="Rider" asp-action="Index"> Go For New Delivary</a>
-    <a class="btn btn-secondary" asp-area="Rider" asp-controller="RiderDelivery" asp-action="RunningDeliveries"> Running Delivary</a>
-
-    <a class="btn btn-success" asp-area="Rider" asp-controller="Rider" asp-action="RiderDashboard"> My Wallet</a>
-
-    <a class="btn btn-warning" asp-area="Rider" asp-controller="RiderDelivery" asp-action="DeliveredOrders" asp-route-period="daily">Daily Delivery History</a>
-
-    <br />
-    <br />
 
     <table class="table">
         <thead>
@@ -51,9 +79,9 @@
 
 <style>
     .card {
-        margin-bottom: 20px;
+        margin-bottom: 7px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        padding: 15px;
+        padding: 7px;
         border-radius: 8px;
         background: white;
     }
@@ -71,7 +99,7 @@
         }
 
     .card h4 {
-        margin: 10px;
+        margin: 5px;
         padding: 5px;
         text-align: center;
         background-color: gray;
@@ -80,7 +108,7 @@
     }
 
     .details {
-        margin-bottom: 20px;
+        margin-bottom: 5px;
     }
 
 </style>

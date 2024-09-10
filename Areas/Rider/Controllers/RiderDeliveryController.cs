@@ -122,7 +122,8 @@ namespace OrganicOption.Areas.Rider.Controllers
             switch (period.ToLower())
             {
                 case "daily":
-                    query = query.Where(d => d.OrderDeliveredDate.Date == DateTime.Now);
+                    var today = DateTime.Now.Date;
+                    query = query.Where(d => d.OrderDeliveredDate.Date == today);
                     break;
                 case "weekly":
                     var startOfWeek = DateTime.Now.AddDays(-(int)DateTime.Now.DayOfWeek);
