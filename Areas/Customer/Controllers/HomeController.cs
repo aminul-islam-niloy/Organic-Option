@@ -45,7 +45,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                 products = await _db.Products
                     .Include(p => p.ProductTypes)
                     .Include(p => p.SpecialTag)
-                    .ToListAsync();
+                     .OrderByDescending(g => g.Id).ToListAsync();
 
                 // Cache the data for 5 minutes
                 _cache.Set("products", products, TimeSpan.FromMinutes(5));
@@ -82,7 +82,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                     .Where(p => p.ProductTypes.ProductType == category)
                     .Include(p => p.ProductTypes)
                     .Include(p => p.SpecialTag)
-                    .ToList();
+                    .OrderByDescending(g => g.Id).ToList();
 
                 // Cache the data for 5 minutes
                 _cache.Set(category, cachedProducts, TimeSpan.FromMinutes(5));
