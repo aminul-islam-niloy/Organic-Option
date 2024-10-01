@@ -41,7 +41,7 @@
                                 <p class="mb-0 text-muted">Shop is  @(shop.IsShopOpen ? "Open" : "Closed")</p>
                             </div>
                             <div class="text-right">
-                                <p class="mb-1"><strong>Rating:</strong> @shop.OverallRating</p>
+                                <p class="mb-1"><strong>Rating:</strong> @shop.OverallRating.ToString("F2")</p>
                                 <div class="rating-stars">
                                     @{
                                         double rating = shop.OverallRating;

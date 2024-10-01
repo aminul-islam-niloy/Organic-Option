@@ -601,5 +601,23 @@ namespace OrganicOption.Areas.User.Controllers
             return Json(new { OrderCondition = order.OrderCondition });
         }
 
+
+        public async Task<IActionResult> Riders()
+        {
+
+            // Retrieve all Rider
+            var riders = await _db.RiderModel.Include(f => f.RiderAddress).ToListAsync();
+
+            return View(riders);
+        }
+
+        public async Task<IActionResult> Farmers()
+        {
+            var farmers = await _db.FarmerShop.Include(f => f.ShopAddress).ToListAsync();
+            return View(farmers);
+        }
+
+
+
     }
 }

@@ -1,0 +1,49 @@
+﻿@model List<OrganicOption.Models.FarmerShop>
+
+<div class="container mt-3">
+    <h4 class="text-center mt-10 ">All Farmer Shop</h4>
+
+    <table class="table mt-10 ">
+
+        <thead>
+
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>ContractInfo </th>
+                <th>NID</th>
+                <th>Revenue</th>
+                <th>Status</th>
+                <th>Address</th>
+                <th>UserId</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var farmer in Model)
+            {
+                <tr>
+                    <td>@farmer.Id</td>
+                    <td>@farmer.ShopName</td>
+                    <td>@farmer.ContractInfo</td>
+                    <td>@farmer.NID</td>
+                    <td>@farmer.ShopRevenue</td>
+                    <td>@(farmer.IsShopOpen ? "Open" : "Closed ")</td>
+                    <td>
+                        @if (farmer.ShopAddress != null)
+                        {
+                            @Html.DisplayFor(modelItem => farmer.ShopAddress.Thana)
+                            @Html.DisplayFor(modelItem => farmer.ShopAddress.District)
+
+                        }
+
+                        else
+                        {
+                            <text>No address available</text>
+                        }
+                    </td>
+                    <td> <a  href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId = farmer.Id })">Visit Shop</a> </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
