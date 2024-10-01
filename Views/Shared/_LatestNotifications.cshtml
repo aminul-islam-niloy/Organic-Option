@@ -50,10 +50,18 @@
     {
         <a class="dropdown-item d-flex align-items-center" href="@roleLink"
            style="display: flex; align-items:start; text-decoration: none;">
-           
-            <div style="flex: 1">
-                <div class="small text-gray-400" style="font-size: 0.8rem; color: #6c757d;">@notification.DateCreated.ToString("MMMM dd, yyyy")</div>
-                <span class="font-weight-bold" style="font-size: 0.8rem; word-wrap: break-word;">@notification.Message</span>
+
+            <div class="notification-container" style="display: flex; flex-direction: row; align-items: center; margin-bottom: 5px; padding: 5px;  border-radius: 5px;">
+                <!-- Circle with icon -->
+                <div style="flex-shrink: 0; width: 30px; height: 30px;  color: white; background:green; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 10px;">
+                    <i class="fas fa-bell"></i>
+                </div>
+
+                <!-- Notification text -->
+                <div style="flex: 1;  border-radius: 5px;">
+                    <div class="small text-gray-400" style="font-size: 0.8rem; ">@notification.DateCreated.ToString("MMMM dd, yyyy")</div>
+                    <span class="font-weight-bold" style="font-size: 0.8rem; word-wrap: break-word;">@notification.Message</span>
+                </div>
             </div>
         </a>
     }

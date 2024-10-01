@@ -41,9 +41,13 @@ namespace OrganicOption.Areas.Customer.Controllers
         public IActionResult GetLatest()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var notifications = _notificationService.GetUnreadNotifications(userId);
+            var notifications = _notificationService.GetAllNotifications(userId).OrderByDescending(n=>n.Id).ToList();
+          
+            foreach (var notification in notifications)
+            {
+                _notificationService.MarkAsRead(notification.Id);
+            }
 
-            // Return the notifications as a partial view
             return PartialView("_LatestNotifications", notifications);
         }
 
