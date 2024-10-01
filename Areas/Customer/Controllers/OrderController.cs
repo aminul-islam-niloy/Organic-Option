@@ -469,7 +469,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                 .Include(od => od.Product)
                 .Include(od => od.Order)
                 .Where(od => od.PaymentMethods == PaymentMethods.Card)
-                .ToList();
+                   .OrderByDescending(od => od.Id).ToList();
 
             if (cardOrders == null)
             {
@@ -477,6 +477,25 @@ namespace OnlineShop.Areas.Customer.Controllers
             }
 
             return View(cardOrders);
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult CashOrders()
+        {
+
+            var cashOrders = _db.OrderDetails
+                .Include(od => od.Product)
+                .Include(od => od.Order)
+                .Where(od => od.PaymentMethods == PaymentMethods.CashOnDelivery)
+                 .OrderByDescending(od => od.Id).ToList();
+
+            if (cashOrders == null)
+            {
+                return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
+            }
+
+            return View(cashOrders);
         }
 
 
