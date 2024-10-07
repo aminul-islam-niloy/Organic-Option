@@ -22,7 +22,7 @@ namespace OnlineShop.Areas.Customer.Controllers
     [Area("Customer")]
     public class HomeController : Controller
     {
-        private ApplicationDbContext _db;
+        private readonly ApplicationDbContext _db;
         private readonly IEmailService _emailService;
         private readonly IMemoryCache _cache;
         UserManager<IdentityUser> _userManager;
