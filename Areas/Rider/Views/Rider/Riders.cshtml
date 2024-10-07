@@ -1,11 +1,8 @@
 ﻿@model IEnumerable<OrganicOption.Models.Rider_Section.RiderModel>
 
 <p class="text-center mt-10 ">All Riders</p>
-
-<table class="table mt-10 ">
-           
+<table class="table mt-10 ">        
     <thead>
-
         <tr>
             <th>Name</th>
             <th>Age</th>
@@ -30,10 +27,8 @@
                     @if (rider.RiderAddress != null)
                     {
                         @Html.DisplayFor(modelItem => rider.RiderAddress.Thana) 
-                        @Html.DisplayFor(modelItem => rider.RiderAddress.District)
-                       
+                        @Html.DisplayFor(modelItem => rider.RiderAddress.District) 
                     }
-
                     else
                     {
                         <text>No address available</text>
