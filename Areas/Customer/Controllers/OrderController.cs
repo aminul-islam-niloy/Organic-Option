@@ -615,7 +615,9 @@ namespace OnlineShop.Areas.Customer.Controllers
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var totalAmount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
+            var Amount = order.OrderDetails.Sum(od => od.Price * od.Quantity);
+            var DelivaryAmount = order.DelivaryCharge;
+            var totalAmount = Amount + DelivaryAmount;
 
             StripeConfiguration.ApiKey = _stripeSettings.SecretKey;
             // Create the Stripe session
