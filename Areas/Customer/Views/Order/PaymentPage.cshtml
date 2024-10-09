@@ -38,11 +38,9 @@
 
 
 <style>
-    /* Custom CSS */
     .wide-input {
         width: 100%;
     }
-    /* Custom CSS */
     .wide-button {
         width: 100%;
     }
@@ -76,8 +74,8 @@
                                     <select id="paymentMethod" class="form-control" onchange="handlePaymentMethodChange()">
                                         <option value="CashOnDelivery" selected>Cash on Delivery</option>
                                         <option value="Card">Card</option>
-                                        <option value="MobileBanking">Mobile Banking</option>
-                                        <option value="MobileBanking"> Banking</option>
+                                       @*  <option value="MobileBanking">Mobile Banking</option>
+                                        <option value="MobileBanking"> Banking</option> *@
                                     </select>
                                 </div>
                             </div>
@@ -109,8 +107,8 @@
                     <div class="text-center mt-4">
                         <h4>Use Other service </h4>
                         <div class="mt-4">
-                            <a href="#" class="btn btn-danger mb-3"> Paypal</a>
-                            <a href="#" class="btn btn-primary mb-3"> SLL Ecommarz </a>
+                           @*  <a href="#" class="btn btn-danger mb-3"> Paypal</a>
+                            <a href="#" class="btn btn-primary mb-3"> SLL Ecommarz </a> *@
                         </div>
                     </div>
                 </div>
@@ -126,7 +124,7 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
-        // JavaScript function to handle changes in payment method
+  
         function handlePaymentMethodChange() {
             var paymentMethod = document.getElementById("paymentMethod").value;
             var paymentFields = document.getElementById("paymentFields");
@@ -144,10 +142,8 @@
             }
         }
 
-        // Call the function initially to ensure proper display
         handlePaymentMethodChange();
 
-        // Function to handle confirm cash on delivery
         function confirmCashOnDelivery() {
             document.getElementById("paymentForm").submit();
         }
