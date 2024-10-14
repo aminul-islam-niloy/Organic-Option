@@ -42,46 +42,6 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
 
-        public static double CalculateBaseCharge(double distance)
-        {
-            if (distance <= 5) return 50;
-            if (distance <= 10) return 100;
-            if (distance <= 20) return 150;
-            if (distance <= 50) return 200;
-            return 300;
-        }
-
-
-        //GET Checkout actioin method
-
-        //[Authorize(Roles = "Customer")]
-        //[HttpGet]
-        //public IActionResult Checkout()
-        //{
-        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //    var userInfo = _db.ApplicationUser.FirstOrDefault(c => c.Id == userId);
-
-        //    List<Products> products = HttpContext.Session.Get<List<Products>>("products");
-        //    double totalDeliveryCharge = 0;
-
-        //    if (products != null)
-        //    {
-        //        foreach (var product in products)
-        //        {
-        //            var farmerShop = _db.FarmerShop.FirstOrDefault(f => f.Id == product.FarmerShopId);
-        //            if (farmerShop != null)
-        //            {
-        //                double distance = CalculateDistance(userInfo.Latitude, userInfo.Longitude, farmerShop.Latitude, farmerShop.Longitude);
-        //                double baseCharge = CalculateBaseCharge(distance);
-        //                double additionalCharge = CalculateAdditionalCharge(product);
-        //                totalDeliveryCharge += baseCharge + additionalCharge;
-        //            }
-        //        }
-        //    }
-
-        //    ViewBag.TotalDeliveryCharge = totalDeliveryCharge;
-        //    return View();
-        //}
 
 
         [Authorize(Roles = "Customer")]
@@ -136,7 +96,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             {
                 additionalCharge = product.QuantityInCart * 1000;
             }
-            else if ( product.QuantityType == QuantityType.Item)
+            else if (product.QuantityType == QuantityType.Item)
             {
                 if (product.QuantityInCart <= 5) additionalCharge = 0;
                 else if (product.QuantityInCart <= 40) additionalCharge = 50;
@@ -155,7 +115,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                 else if (product.QuantityInCart <= 1000) additionalCharge = 400;
                 else additionalCharge = 600;
             }
-            else if ( product.QuantityType == QuantityType.Kg)
+            else if (product.QuantityType == QuantityType.Kg)
             {
                 if (product.QuantityInCart <= 5) additionalCharge = 0;
                 else if (product.QuantityInCart <= 40) additionalCharge = 50;
@@ -177,6 +137,18 @@ namespace OnlineShop.Areas.Customer.Controllers
             return additionalCharge;
         }
 
+
+        public static double CalculateBaseCharge(double distance)
+        {
+            if (distance <= 5) return 50;
+            if (distance <= 10) return 100;
+            if (distance <= 20) return 150;
+            if (distance <= 50) return 200;
+            return 300;
+        }
+
+
+
         public static double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
         {
             const double R = 6371; // Radius of the Earth in kilometers
@@ -190,80 +162,11 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
         private static double ToRadians(double angle)
-            {
-                return angle * (Math.PI / 180);
-            }
+        {
+            return angle * (Math.PI / 180);
+        }
 
 
-        //[Authorize(Roles = "Customer")]
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Checkout(Order anOrder)
-        //{
-        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //    var user = await _userManager.FindByIdAsync(userId);
-        //    var userInfo = _db.ApplicationUser.FirstOrDefault(c => c.Id == user.Id);
-
-        //    anOrder.Latitude = userInfo.Latitude;
-        //    anOrder.Longitude = userInfo.Longitude;
-        //    anOrder.UserId = userId;
-        //    anOrder.OrderDate = DateTime.Now;
-
-        //    List<Products> products = HttpContext.Session.Get<List<Products>>("products");
-        //    double totalDeliveryCharge = 0;
-
-        //    if (products != null)
-        //    {
-        //        foreach (var product in products)
-        //        {
-
-
-        //            var farmerShop = _db.FarmerShop.FirstOrDefault(f => f.Id == product.FarmerShopId);
-        //            if (farmerShop != null)
-        //            {
-        //                double distance = CalculateDistance(userInfo.Latitude, userInfo.Longitude, farmerShop.Latitude, farmerShop.Longitude);
-        //                double baseCharge = CalculateBaseCharge(distance);
-        //                double additionalCharge = CalculateAdditionalCharge(product);
-        //                totalDeliveryCharge += baseCharge + additionalCharge;
-        //            }
-
-        //            var orderDetails = new OrderDetails
-        //            {
-        //                PorductId = product.Id,
-        //                Price = product.Price + (product.Discount > 0 ? product.DiscountPrice : 0),
-        //                Quantity = product.QuantityInCart,
-        //                TotalDelivaryCharge = (decimal)totalDeliveryCharge,
-        //                DiscountedPrice=product.Discount
-        //            };
-        //            anOrder.OrderDetails.Add(orderDetails);
-        //        }
-        //    }
-
-        //    anOrder.DelivaryCharge = (decimal)totalDeliveryCharge;
-
-        //    anOrder.OrderNo = GetOrderNo();
-        //    _db.Orders.Add(anOrder);
-        //    await _db.SaveChangesAsync();
-
-        //    if (products != null)
-        //    {
-        //        foreach (var product in products)
-        //        {
-        //            UpdateFarmerStore(product.Id, product.QuantityInCart, product.Price, anOrder.Id, product.FarmerShopId);
-
-        //            var farmerShop = _db.FarmerShop.Include(f => f.FarmerUser)
-        //                                            .FirstOrDefault(f => f.Id == product.FarmerShopId);
-        //            if (farmerShop != null)
-        //            {
-        //                string farmerUserId = farmerShop.FarmerUserId;
-        //                _notificationService.AddNotification(farmerUserId, $"{anOrder.OrderNo} that '{product.Name}' has been ordered from your Shop.", product.Id);
-        //            }
-        //        }
-        //    }
-
-        //    HttpContext.Session.Set("products", new List<Products>());
-        //    return RedirectToAction("PaymentPage", new { orderId = anOrder.Id });
-        //}
 
 
 
@@ -291,7 +194,7 @@ namespace OnlineShop.Areas.Customer.Controllers
 
                 foreach (var shopProducts in groupedProducts)
                 {
-                    // Find the farmer shop
+
                     var farmerShop = _db.FarmerShop.FirstOrDefault(f => f.Id == shopProducts.Key);
                     if (farmerShop != null)
                     {
@@ -303,7 +206,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                             double baseCharge = CalculateBaseCharge(distance);
                             double additionalCharge = CalculateAdditionalCharge(product);
 
-                            // Calculate the maximum charge for products from this shop
+                            // Calculate the maximum charge for products from same shop
                             maxChargeForShop = Math.Max(maxChargeForShop, baseCharge + additionalCharge);
 
                             var orderDetails = new OrderDetails
@@ -355,7 +258,6 @@ namespace OnlineShop.Areas.Customer.Controllers
 
         private void UpdateFarmerStore(int id, int quantitySold, decimal price, int orderId, int FarmerShopId)
         {
-            // Retrieve the product and update its sold quantity and last sold date
             var product = _db.Products.FirstOrDefault(p => p.Id == id);
             if (product != null)
             {
@@ -363,12 +265,10 @@ namespace OnlineShop.Areas.Customer.Controllers
                 product.LastSoldDate = DateTime.Now;
             }
 
-            // Retrieve the farmer store associated with the product
             FarmerShop farmerStore = _db.FarmerShop
-                            .Include(fs => fs.Inventory) // Include Inventory to access inventory items
+                            .Include(fs => fs.Inventory) 
                             .FirstOrDefault(fs => fs.Id == product.FarmerShopId);
 
-            // Update the sold quantity and last sold date for the product in the farmer's store
             if (farmerStore != null)
             {
                 farmerStore.SoldQuantity += quantitySold;
@@ -378,14 +278,12 @@ namespace OnlineShop.Areas.Customer.Controllers
                 farmerStore.Inventory.Add(new InventoryItem
                 {
                     ProductId = id,
-                    Quantity = quantitySold, // Negative quantity indicates sold
+                    Quantity = quantitySold, 
                     LastSoldDate = DateTime.Now,
                     Price = price,
-                    OrderId = orderId // Set the OrderId for the inventory item
+                    OrderId = orderId 
                 });
             }
-
-            // Save changes to the database
             _db.SaveChanges();
         }
 
@@ -458,7 +356,6 @@ namespace OnlineShop.Areas.Customer.Controllers
             // Get the current date
             DateTime currentDate = DateTime.Now;
 
-            // Determine the start and end dates for filtering
             DateTime startDate;
             DateTime endDate;
 
@@ -476,12 +373,12 @@ namespace OnlineShop.Areas.Customer.Controllers
             }
             else
             {
-                // Current month (default)
+                // Current month
                 startDate = new DateTime(currentDate.Year, currentDate.Month, 1);
                 endDate = startDate.AddMonths(1).AddDays(-1);
             }
 
-            // Fetch orders within the specified date range
+            //   specified date range
             var orders = _db.OrderDetails
                 .Include(od => od.Product)
                 .Include(od => od.Order)
@@ -544,9 +441,9 @@ namespace OnlineShop.Areas.Customer.Controllers
                     CustomerAddress = od.Order.Address,
                     CustomerPhone = od.Order.PhoneNo,
                     CustomerEmail = od.Order.Email,
-                    ShopId = od.Product.FarmerShopId, 
+                    ShopId = od.Product.FarmerShopId,
                     //RiderId= Rider.
-                    CardInfo=od.StripeSessionId,
+                    CardInfo = od.StripeSessionId,
                     OrderDate = od.Order.OrderDate,
                     UserId = od.Order.UserId,
                     UserName = od.Order.User.UserName,
@@ -568,26 +465,27 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             if (order == null)
             {
-                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
+                return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
 
-            // Fetch the Rider information related to this order
+            //   Rider information related  order
             var rider = (from d in _db.Deliveries
                          join r in _db.RiderModel on d.RiderId equals r.Id
                          where d.OrderId == id
                          select new
-                         {   Id = r.Id, 
+                         {
+                             Id = r.Id,
                              RiderName = r.Name,
                              RiderPhone = r.PhoneNumber
-                           
+
                          }).FirstOrDefault();
 
-           
-            ViewBag.RiderId= rider?.Id;
+
+            ViewBag.RiderId = rider?.Id;
             ViewBag.RiderName = rider?.RiderName;
             ViewBag.RiderPhone = rider?.RiderPhone;
-          
+
 
             return View(order);
         }
@@ -641,13 +539,13 @@ namespace OnlineShop.Areas.Customer.Controllers
             var order = await _db.OrderDetails.FindAsync(id);
             if (order == null)
             {
-                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
+                return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             _db.OrderDetails.Remove(order);
             await _db.SaveChangesAsync();
 
-            return RedirectToAction("AllOrders"); 
+            return RedirectToAction("AllOrders");
         }
 
 
@@ -655,13 +553,9 @@ namespace OnlineShop.Areas.Customer.Controllers
         [Authorize(Roles = "Customer")]
         public async Task<IActionResult> UserOrders()
         {
-            // Retrieve the user ID of the current authenticated user
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Retrieve user details
             var user = await _userManager.FindByIdAsync(userId);
-
-            // Retrieve orders associated with the user's ID including order details and products
             var userOrdersWithProducts = await _db.Orders
                 .Include(o => o.User)
                 .Include(o => o.OrderDetails)
@@ -677,8 +571,8 @@ namespace OnlineShop.Areas.Customer.Controllers
                 OrderNo = order.OrderNo,
                 OrderDate = order.OrderDate,
                 OrderCondition = order.OrderCondition,
-                DeliveryCharge= (double)order.DelivaryCharge,
-                TotalPrice = order.OrderDetails.Sum(od => od.Quantity * od.Price)+order.DelivaryCharge,
+                DeliveryCharge = (double)order.DelivaryCharge,
+                TotalPrice = order.OrderDetails.Sum(od => od.Quantity * od.Price) + order.DelivaryCharge,
                 OrderDetails = order.OrderDetails.Select(od => new OrderDetailsViewModel
                 {
                     ProductId = od.PorductId,
@@ -703,9 +597,6 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
 
-
-
-
         [Authorize(Roles = "Customer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -715,14 +606,13 @@ namespace OnlineShop.Areas.Customer.Controllers
             int orderId;
             if (!int.TryParse(id, out orderId))
             {
-                // Handle invalid id format
                 return BadRequest();
             }
 
             var order = await _db.Orders.FirstOrDefaultAsync(o => o.OrderNo == id);
             if (order == null)
             {
-                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
+                return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
             _db.Orders.Remove(order);
@@ -737,13 +627,12 @@ namespace OnlineShop.Areas.Customer.Controllers
         [HttpPost]
         public IActionResult CreatePayment(int orderId)
         {
-            // Retrieve the order from the database
             var order = _db.Orders.Include(o => o.OrderDetails)
                                   .FirstOrDefault(o => o.Id == orderId);
 
             if (order == null)
             {
-                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
+                return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 

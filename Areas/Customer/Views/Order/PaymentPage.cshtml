@@ -31,107 +31,82 @@
 @{
     var userRole = HttpContextAccessor.HttpContext.Session.GetString("roleName");
     int count = 0;
-    
+
     count = products.Count();
 
 }
 
 
-<style>
-    .wide-input {
-        width: 100%;
-    }
-    .wide-button {
-        width: 100%;
-    }
+<div class="container d-flex justify-content-center align-items-center mt-5">
+    <div class="card p-4 shadow-sm" style="width: 800px; border-radius: 5px;">
+
+        <div class="row">
+            <h3 class="text-center  mb-4">Select Payment Method</h3>
+            <div class="col-md-6">
 
 
-    .wide-button {
-        width: 100%;
-    }
-</style>
-<div class="container-fluid">
-    <div class="card text-black m-5" style="border-radius: 20px;">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-lg-6 col-md-10  order-2 order-lg-1 d-flex flex-column align-items-center">
+                <div class="card-body">
+                 
 
                     <form id="paymentForm" method="post" action="CreatePayment">
-                        <p class="text-center h3 fw-bold mb-5 mx-1 mx-md-4  mt-4">Select Payment Method </p>
-
                         <input type="hidden" name="orderId" value="@ViewBag.orderId" />
 
-                        <div class="row">
-                            <div >
-                                <label for="paymentMethod"><h4>Payment Method </h4></label>
-                            </div>
+                        <!-- Payment Method Options -->
+                        <div class="form-check mb-4 card" style="width:350px; height:100px">
+                            <input class="form-check-input" type="radio" style="width:20px;height:20px" name="paymentMethod" id="cashOnDelivery" value="CashOnDelivery" checked onchange="handlePaymentMethodChange()">
+                            <label class="form-check-label d-flex align-items-center" for="cashOnDelivery">
+                                <img src="https://support.sitegiant.com/wp-content/uploads/2022/08/cash-on-delivery-banner.png" alt="Cash on Delivery" style="width: 200px; height: 100px;" class="me-2" />
+                                <span style="font-size:20px"> Cash on Delivery</span>
+                            </label>
+                        </div>
 
-                            <br />
-                            <br />
-
-                            <div >
-                                <div class="form-select mt-10 mb-10">
-                                    <select id="paymentMethod" class="form-control" onchange="handlePaymentMethodChange()">
-                                        <option value="CashOnDelivery" selected>Cash on Delivery</option>
-                                        <option value="Card">Card</option>
-                                       @*  <option value="MobileBanking">Mobile Banking</option>
-                                        <option value="MobileBanking"> Banking</option> *@
-                                    </select>
-                                </div>
-                            </div>
+                        <div class="form-check mb-4 card" style="width:350px; height:100px">
+                            <input class="form-check-input" type="radio" name="paymentMethod" id="cardPayment" value="Card" onchange="handlePaymentMethodChange()">
+                            <label class="form-check-label d-flex align-items-center" for="cardPayment">
+                                <img src="https://www.mastercard.co.in/content/dam/public/mastercardcom/sg/en/consumers/find-a-card/images/world-mastercard-card_1280x720.jpg" alt="Card Payment" style="width: 200px; height: 100px;" class="me-2" />
+                                <span style="font-size:20px"> Card Payment</span>
+                            </label>
                         </div>
 
                         <div class="row mt-3" id="paymentFields" style="display: none;">
-                       
+
                         </div>
-                        <br />
-                        <br />
 
-
-                        <div>
-                            <div >
-                                <button id="paymentButton" type="submit" class="btn btn-success wide-button">Payment with Stripe</button>
-                            </div>
-                            <div >
-                                <a asp-area="User" id="confirmButton" onclick="confirmCashOnDelivery()" asp-controller="Deshboard" asp-action="Index" class="btn btn-success wide-button">Confirm Order</a>
-                            </div>
+                        <div class="d-flex justify-content-between">
+                            
+                            <a asp-area="User" id="confirmButton" onclick="confirmCashOnDelivery()" asp-controller="Deshboard" asp-action="Index" class="btn btn-success w-100">Cash on Delivery</a>
+                            <button id="paymentButton" type="submit" class="btn btn-success w-100">Pay With Stripe</button>
                         </div>
                     </form>
 
+
                 </div>
 
-                <div class="col-lg-6 col-md-10 order-1 order-lg-2">
-                    <div class="text-center">
-                        <figure><img src="https://www.bucketlistgrouptravel.com/wp-content/uploads/2020/01/paypal-stripe.jpg" alt="payment" style="height:200px; width:100%"></figure>
-                    </div>
-                    <div class="text-center mt-4">
-                        <h4>Use Other service </h4>
-                        <div class="mt-4">
-                           @*  <a href="#" class="btn btn-danger mb-3"> Paypal</a>
-                            <a href="#" class="btn btn-primary mb-3"> SLL Ecommarz </a> *@
-                        </div>
+            </div>
+
+            <div class="col-md-6 justify-content-end ">
+
+
+                <div class="row justify-content-end ">
+                    <div class="text-right  ml-4">
+                        <img src="https://img.freepik.com/free-vector/hand-holding-phone-with-credit-card-screen-man-making-purchase-shopping-paying-online-using-banking-app-flat-vector-illustration-transaction-e-commerce-concept_74855-26014.jpg?semt=ais_hybrid" alt="Payment" style="width: 700px; height: 300px;">
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 </div>
 
-
-
-@section Scripts{
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+@section Scripts {
     <script>
-  
         function handlePaymentMethodChange() {
-            var paymentMethod = document.getElementById("paymentMethod").value;
+            var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
             var paymentFields = document.getElementById("paymentFields");
             var paymentButton = document.getElementById("paymentButton");
             var confirmButton = document.getElementById("confirmButton");
 
-            if (paymentMethod === "Card" || paymentMethod === "MobileBanking") {
+            if (paymentMethod === "Card") {
                 paymentFields.style.display = "block";
                 paymentButton.style.display = "block";
                 confirmButton.style.display = "none";
@@ -142,10 +117,10 @@
             }
         }
 
-        handlePaymentMethodChange();
-
         function confirmCashOnDelivery() {
             document.getElementById("paymentForm").submit();
         }
+
+        document.addEventListener('DOMContentLoaded', handlePaymentMethodChange);
     </script>
 }
