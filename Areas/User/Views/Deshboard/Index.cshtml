@@ -438,53 +438,65 @@
         @if (User.IsInRole("Admin"))
         {
             <div class="row mb-2 text-right justify-content-end" style="gap: 10px; margin-right:10px">
+                <div class="card-container">
+                    <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="card custom-card soft-bg">
+                        <i class="fas fa-boxes"></i>
+                        <span>Products</span>
+                    </a>
 
-                <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="btn custom-btn btn-success">
-                    <i class="fas fa-boxes"></i>  Products
-                </a>
+                    <a asp-area="Admin" asp-controller="ProductTypes" asp-action="Index" class="card custom-card soft-bg">
+                        <i class="fas fa-list"></i>
+                        <span>Category</span>
+                    </a>
 
-                <a asp-area="Admin" asp-controller="ProductTypes" asp-action="Index" class="btn custom-btn btn-danger">
-                    <i class="fas fa-list"></i>  Category
-                </a>
+                    <a asp-area="Admin" asp-controller="SpecialTag" asp-action="Index" class="card custom-card soft-bg">
+                        <i class="fas fa-tags"></i>
+                        <span>Sub Category</span>
+                    </a>
 
-                <a asp-area="Admin" asp-controller="SpecialTag" asp-action="Index" class="btn custom-btn btn-warning">
-                    <i class="fas fa-tags"></i> Sub Category
-                </a>
+                    <a asp-area="Customer" asp-controller="Order" asp-action="AllOrders" class="card custom-card soft-bg">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        <span>All Orders</span>
+                    </a>
 
-                <a asp-area="Customer" asp-controller="Order" asp-action="AllOrders" class="btn custom-btn btn-primary">
-                    <i class="fa-solid fa-bag-shopping"></i>All  Orders
-                </a>
+                    <a asp-area="Customer" asp-controller="User" asp-action="Index" class="card custom-card soft-bg">
+                        <i class="fas fa-users"></i>
+                        <span>All User</span>
+                    </a>
 
-                <a asp-area="Customer" asp-controller="User" asp-action="Index" class="btn custom-btn btn-info">
-                    <i class="fas fa-users"></i> All User
-                </a>
+                    <a asp-area="Customer" asp-controller="Blog" asp-action="BlogManager" class="card custom-card soft-bg">
+                        <i class="fas fa-blog"></i>
+                        <span>Blog Manage</span>
+                    </a>
 
-                <a asp-area="Customer" asp-controller="Blog" asp-action="BlogManager" class="btn custom-btn btn-dark">
-                    <i class="fas fa-blog"></i> Blog Manage
-                </a>
+                    <a asp-area="Admin" asp-controller="ProductPrice" asp-action="Index" class="card custom-card soft-bg">
+                        <i class="fas fa-dollar-sign"></i>
+                        <span>Product Price</span>
+                    </a>
 
-                <a asp-area="Admin" asp-controller="ProductPrice" asp-action="Index" class="btn custom-btn btn-success" style="background:#d54b81">
-                    <i class="fas fa-dollar-sign"></i> Product Price
-                </a>
+                    <a asp-action="Index" asp-area="Customer" asp-controller="Feedback" class="card custom-card soft-bg">
+                        <i class="fas fa-comments"></i>
+                        <span>Feedback</span>
+                    </a>
 
-                <a asp-action="Index" asp-area="Customer" asp-controller="Feedback" class="btn custom-btn btn-info" style="background:#4bd5c2">
-                    <i class="fas fa-comments"></i> Feedback
-                </a>
+                    <a asp-action="SetDiscount" asp-area="Admin" asp-controller="Products" class="card custom-card soft-bg">
+                        <i class="fas fa-percentage"></i>
+                        <span>Set Discount</span>
+                    </a>
 
-                <a asp-action="SetDiscount" asp-area="Admin" asp-controller="Products" class="btn custom-btn btn-danger" style="background:#936435">
-                    <i class="fas fa-percentage"></i> Set Discount
-                </a>
+                    <a asp-action="Riders" asp-area="User" asp-controller="Deshboard" class="card custom-card soft-bg">
+                        <i class="fa-solid fa-motorcycle"></i>
+                        <span>All Riders</span>
+                    </a>
 
-                <a asp-action="Riders" asp-area="User" asp-controller="Deshboard" class="btn custom-btn btn-danger" style="background:#2a8b6e">
-                    <i class="fa-solid fa-motorcycle"></i> All Riders
-                </a>
-
-                <a asp-action="Farmers" asp-area="User" asp-controller="Deshboard" class="btn custom-btn btn-danger" style="background:#5b8285">
-                    <i class="fa-solid fa-hat-cowboy"></i> All Farmers
-                </a>
-
+                    <a asp-action="Farmers" asp-area="User" asp-controller="Deshboard" class="card custom-card soft-bg">
+                        <i class="fa-solid fa-hat-cowboy"></i>
+                        <span>All Farmers</span>
+                    </a>
+                </div>
             </div>
         }
+
         @if (User.IsInRole("Admin"))
         {
             <div class="col-xl-12 col-lg-12">
@@ -696,6 +708,90 @@
             margin-right: 8px;
             font-size: 1.4em;
         }
+
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-left:20px;
+    }
+
+    .custom-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        width: 160px; 
+        height: 90px;
+        text-decoration: none;
+        color: #333;
+        transition: all 0.3s ease;
+        flex-shrink: 0; 
+    }
+
+        .custom-card i {
+            font-size: 1.5em;
+        }
+
+        .custom-card:hover {
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .custom-card span {
+            font-size: 1em;
+            font-weight: 600;
+        }
+
+    .soft-bg:nth-child(1) {
+        background-color: #e0f7fa; /* Soft cyan */
+    }
+
+    .soft-bg:nth-child(2) {
+        background-color: #fce4ec; /* Soft pink */
+    }
+
+    .soft-bg:nth-child(3) {
+        background-color: #e8f5e9; /* Soft green */
+    }
+
+    .soft-bg:nth-child(4) {
+        background-color: #fff3e0; /* Soft orange */
+    }
+
+    .soft-bg:nth-child(5) {
+        background-color: #ede7f6; /* Soft purple */
+    }
+
+    .soft-bg:nth-child(6) {
+        background-color: #f3e5f5; /* Soft lavender */
+    }
+
+    .soft-bg:nth-child(7) {
+        background-color: #ffebee; /* Soft red */
+    }
+
+    .soft-bg:nth-child(8) {
+        background-color: #e3f2fd; /* Soft blue */
+    }
+
+    .soft-bg:nth-child(9) {
+        background-color: #ffecb3; /* Soft yellow */
+    }
+
+    .soft-bg:nth-child(10) {
+        background-color: #dcedc8; /* Soft light green */
+    }
+
+    .soft-bg:nth-child(11) {
+        background-color: #f9fbe7; /* Soft pale yellow-green */
+    }
+
+   
+
 </style>
 
 @if (User.IsInRole("Rider"))

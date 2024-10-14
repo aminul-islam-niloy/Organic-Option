@@ -167,7 +167,7 @@ namespace OrganicOption.Areas.Rider.Controllers
             double Longitude = user.Longitude;
 
             var riders = await _db.RiderModel
-                .Where(r => r.RiderStatus && !r.OnDeliaryByOffer)
+                .Where(r => r.RiderStatus == true)
                 .ToListAsync();
 
             foreach (var rider in riders)
@@ -444,7 +444,7 @@ namespace OrganicOption.Areas.Rider.Controllers
 
                     var rider = _db.RiderModel.SingleOrDefault(r => r.RiderUserId == riderId);
                     order.IsOfferedToRider = true;
-                    rider.OnDeliaryByOffer = true;  
+                  //  rider.OnDeliaryByOffer = true;  
                     order.OrderCondition = OrderCondition.OrderTaken;
                     //delivery.ShopCurrentAddress = offer.ShopAddress;
                     //delivery.CustomerCurrentAddress = offer.CutomerCurrentAddress;

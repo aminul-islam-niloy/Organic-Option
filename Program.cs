@@ -74,18 +74,18 @@ builder.Services.AddScoped<RiderRepository>();
 // Localization configuration
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-builder.Services.Configure<RequestLocalizationOptions>(options =>
-{
-    var supportedCultures = new List<CultureInfo>
-    {
-        new CultureInfo("en"),
-        new CultureInfo("bn")
-    };
+//builder.Services.Configure<RequestLocalizationOptions>(options =>
+//{
+//    var supportedCultures = new List<CultureInfo>
+//    {
+//        new CultureInfo("en"),
+//        new CultureInfo("bn")
+//    };
 
-    options.DefaultRequestCulture = new RequestCulture("en");
-    options.SupportedCultures = supportedCultures;
-    options.SupportedUICultures = supportedCultures;
-});
+//    options.DefaultRequestCulture = new RequestCulture("en");
+//    options.SupportedCultures = supportedCultures;
+//    options.SupportedUICultures = supportedCultures;
+//});
 
 var app = builder.Build();
 

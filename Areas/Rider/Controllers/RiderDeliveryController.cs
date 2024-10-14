@@ -95,7 +95,7 @@ namespace OrganicOption.Areas.Rider.Controllers
             }
 
             var deliveries = await _dbContext.Deliveries
-                .Where(d => d.RiderId == riderId && d.OrderCondition == OrderCondition.OnDelivary)
+                .Where(d => d.RiderId == riderId && d.OrderCondition == OrderCondition.OnDelivary )
                 .ToListAsync();
 
             return View(deliveries);
