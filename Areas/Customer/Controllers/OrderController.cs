@@ -54,6 +54,36 @@ namespace OnlineShop.Areas.Customer.Controllers
 
         //GET Checkout actioin method
 
+        //[Authorize(Roles = "Customer")]
+        //[HttpGet]
+        //public IActionResult Checkout()
+        //{
+        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    var userInfo = _db.ApplicationUser.FirstOrDefault(c => c.Id == userId);
+
+        //    List<Products> products = HttpContext.Session.Get<List<Products>>("products");
+        //    double totalDeliveryCharge = 0;
+
+        //    if (products != null)
+        //    {
+        //        foreach (var product in products)
+        //        {
+        //            var farmerShop = _db.FarmerShop.FirstOrDefault(f => f.Id == product.FarmerShopId);
+        //            if (farmerShop != null)
+        //            {
+        //                double distance = CalculateDistance(userInfo.Latitude, userInfo.Longitude, farmerShop.Latitude, farmerShop.Longitude);
+        //                double baseCharge = CalculateBaseCharge(distance);
+        //                double additionalCharge = CalculateAdditionalCharge(product);
+        //                totalDeliveryCharge += baseCharge + additionalCharge;
+        //            }
+        //        }
+        //    }
+
+        //    ViewBag.TotalDeliveryCharge = totalDeliveryCharge;
+        //    return View();
+        //}
+
+
         [Authorize(Roles = "Customer")]
         [HttpGet]
         public IActionResult Checkout()
@@ -66,15 +96,29 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             if (products != null)
             {
-                foreach (var product in products)
+                // Group products by FarmerShopId
+                var groupedProducts = products.GroupBy(p => p.FarmerShopId);
+
+                foreach (var shopProducts in groupedProducts)
                 {
-                    var farmerShop = _db.FarmerShop.FirstOrDefault(f => f.Id == product.FarmerShopId);
+                    // Find the farmer shop
+                    var farmerShop = _db.FarmerShop.FirstOrDefault(f => f.Id == shopProducts.Key);
                     if (farmerShop != null)
                     {
-                        double distance = CalculateDistance(userInfo.Latitude, userInfo.Longitude, farmerShop.Latitude, farmerShop.Longitude);
-                        double baseCharge = CalculateBaseCharge(distance);
-                        double additionalCharge = CalculateAdditionalCharge(product);
-                        totalDeliveryCharge += baseCharge + additionalCharge;
+                        double maxChargeForShop = 0;
+
+                        foreach (var product in shopProducts)
+                        {
+                            double distance = CalculateDistance(userInfo.Latitude, userInfo.Longitude, farmerShop.Latitude, farmerShop.Longitude);
+                            double baseCharge = CalculateBaseCharge(distance);
+                            double additionalCharge = CalculateAdditionalCharge(product);
+
+                            // Calculate the maximum charge for products from this shop
+                            maxChargeForShop = Math.Max(maxChargeForShop, baseCharge + additionalCharge);
+                        }
+
+                        // Add the highest charge for this shop to the total delivery charge
+                        totalDeliveryCharge += maxChargeForShop;
                     }
                 }
             }
@@ -82,6 +126,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             ViewBag.TotalDeliveryCharge = totalDeliveryCharge;
             return View();
         }
+
 
         private double CalculateAdditionalCharge(Products product)
         {
@@ -150,6 +195,78 @@ namespace OnlineShop.Areas.Customer.Controllers
             }
 
 
+        //[Authorize(Roles = "Customer")]
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Checkout(Order anOrder)
+        //{
+        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    var user = await _userManager.FindByIdAsync(userId);
+        //    var userInfo = _db.ApplicationUser.FirstOrDefault(c => c.Id == user.Id);
+
+        //    anOrder.Latitude = userInfo.Latitude;
+        //    anOrder.Longitude = userInfo.Longitude;
+        //    anOrder.UserId = userId;
+        //    anOrder.OrderDate = DateTime.Now;
+
+        //    List<Products> products = HttpContext.Session.Get<List<Products>>("products");
+        //    double totalDeliveryCharge = 0;
+
+        //    if (products != null)
+        //    {
+        //        foreach (var product in products)
+        //        {
+
+
+        //            var farmerShop = _db.FarmerShop.FirstOrDefault(f => f.Id == product.FarmerShopId);
+        //            if (farmerShop != null)
+        //            {
+        //                double distance = CalculateDistance(userInfo.Latitude, userInfo.Longitude, farmerShop.Latitude, farmerShop.Longitude);
+        //                double baseCharge = CalculateBaseCharge(distance);
+        //                double additionalCharge = CalculateAdditionalCharge(product);
+        //                totalDeliveryCharge += baseCharge + additionalCharge;
+        //            }
+
+        //            var orderDetails = new OrderDetails
+        //            {
+        //                PorductId = product.Id,
+        //                Price = product.Price + (product.Discount > 0 ? product.DiscountPrice : 0),
+        //                Quantity = product.QuantityInCart,
+        //                TotalDelivaryCharge = (decimal)totalDeliveryCharge,
+        //                DiscountedPrice=product.Discount
+        //            };
+        //            anOrder.OrderDetails.Add(orderDetails);
+        //        }
+        //    }
+
+        //    anOrder.DelivaryCharge = (decimal)totalDeliveryCharge;
+
+        //    anOrder.OrderNo = GetOrderNo();
+        //    _db.Orders.Add(anOrder);
+        //    await _db.SaveChangesAsync();
+
+        //    if (products != null)
+        //    {
+        //        foreach (var product in products)
+        //        {
+        //            UpdateFarmerStore(product.Id, product.QuantityInCart, product.Price, anOrder.Id, product.FarmerShopId);
+
+        //            var farmerShop = _db.FarmerShop.Include(f => f.FarmerUser)
+        //                                            .FirstOrDefault(f => f.Id == product.FarmerShopId);
+        //            if (farmerShop != null)
+        //            {
+        //                string farmerUserId = farmerShop.FarmerUserId;
+        //                _notificationService.AddNotification(farmerUserId, $"{anOrder.OrderNo} that '{product.Name}' has been ordered from your Shop.", product.Id);
+        //            }
+        //        }
+        //    }
+
+        //    HttpContext.Session.Set("products", new List<Products>());
+        //    return RedirectToAction("PaymentPage", new { orderId = anOrder.Id });
+        //}
+
+
+
         [Authorize(Roles = "Customer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -169,37 +286,51 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             if (products != null)
             {
-                foreach (var product in products)
-                {
-                  
+                // Group products by FarmerShopId
+                var groupedProducts = products.GroupBy(p => p.FarmerShopId);
 
-                    var farmerShop = _db.FarmerShop.FirstOrDefault(f => f.Id == product.FarmerShopId);
+                foreach (var shopProducts in groupedProducts)
+                {
+                    // Find the farmer shop
+                    var farmerShop = _db.FarmerShop.FirstOrDefault(f => f.Id == shopProducts.Key);
                     if (farmerShop != null)
                     {
-                        double distance = CalculateDistance(userInfo.Latitude, userInfo.Longitude, farmerShop.Latitude, farmerShop.Longitude);
-                        double baseCharge = CalculateBaseCharge(distance);
-                        double additionalCharge = CalculateAdditionalCharge(product);
-                        totalDeliveryCharge += baseCharge + additionalCharge;
-                    }
+                        double maxChargeForShop = 0;
 
-                    var orderDetails = new OrderDetails
-                    {
-                        PorductId = product.Id,
-                        Price = product.Price + (product.Discount > 0 ? product.DiscountPrice : 0),
-                        Quantity = product.QuantityInCart,
-                        TotalDelivaryCharge = (decimal)totalDeliveryCharge,
-                        DiscountedPrice=product.Discount
-                    };
-                    anOrder.OrderDetails.Add(orderDetails);
+                        foreach (var product in shopProducts)
+                        {
+                            double distance = CalculateDistance(userInfo.Latitude, userInfo.Longitude, farmerShop.Latitude, farmerShop.Longitude);
+                            double baseCharge = CalculateBaseCharge(distance);
+                            double additionalCharge = CalculateAdditionalCharge(product);
+
+                            // Calculate the maximum charge for products from this shop
+                            maxChargeForShop = Math.Max(maxChargeForShop, baseCharge + additionalCharge);
+
+                            var orderDetails = new OrderDetails
+                            {
+                                PorductId = product.Id,
+                                Price = product.Price + (product.Discount > 0 ? product.DiscountPrice : 0),
+                                Quantity = product.QuantityInCart,
+                                TotalDelivaryCharge = (decimal)(baseCharge + additionalCharge),
+                                DiscountedPrice = product.Discount
+                            };
+                            anOrder.OrderDetails.Add(orderDetails);
+                        }
+
+                        // Add the highest charge for this shop to the total delivery charge
+                        totalDeliveryCharge += maxChargeForShop;
+                    }
                 }
             }
 
+            // Assign the total delivery charge (maximum charge from different shops)
             anOrder.DelivaryCharge = (decimal)totalDeliveryCharge;
 
             anOrder.OrderNo = GetOrderNo();
             _db.Orders.Add(anOrder);
             await _db.SaveChangesAsync();
 
+            // Notify farmers
             if (products != null)
             {
                 foreach (var product in products)
@@ -207,7 +338,7 @@ namespace OnlineShop.Areas.Customer.Controllers
                     UpdateFarmerStore(product.Id, product.QuantityInCart, product.Price, anOrder.Id, product.FarmerShopId);
 
                     var farmerShop = _db.FarmerShop.Include(f => f.FarmerUser)
-                                                    .FirstOrDefault(f => f.Id == product.FarmerShopId);
+                                                   .FirstOrDefault(f => f.Id == product.FarmerShopId);
                     if (farmerShop != null)
                     {
                         string farmerUserId = farmerShop.FarmerUserId;
@@ -219,6 +350,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             HttpContext.Session.Set("products", new List<Products>());
             return RedirectToAction("PaymentPage", new { orderId = anOrder.Id });
         }
+
 
 
         private void UpdateFarmerStore(int id, int quantitySold, decimal price, int orderId, int FarmerShopId)
