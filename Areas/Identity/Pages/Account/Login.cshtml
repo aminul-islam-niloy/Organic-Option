@@ -47,6 +47,7 @@
                             <img src="/img/logo/online-shoping.png" alt="Sign In" style="height:90px; justify-content:center; margin-left:40px; width:auto" class="img-fluid">
                         </figure>
 
+
                         <div class="mb-3">
                             <input asp-for="Input.Email" class="form-control" placeholder="Your Email">
                             <span asp-validation-for="Input.Email" class="text-danger"></span>
@@ -60,6 +61,16 @@
                             </div>
                             <span asp-validation-for="Input.Password" class="text-danger"></span>
                         </div>
+
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div class="text-danger">
+                                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                {
+                                    <h4 style="margin-bottom:3px; font-size:14px">@error.ErrorMessage  or Invalid Password / Email</h4>
+                                }
+                            </div>
+                        }
 
                         <div class="form-group">
                             <div class="checkbox">
@@ -83,12 +94,10 @@
                         @{
                             if ((Model.ExternalLogins?.Count ?? 0) == 0)
                             {
-                                <div>
-                                    <p>
-                                        There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
-                                            article about setting up this ASP.NET application to support logging in via external services
-                                        </a>.
-                                    </p>
+                                <div class="mt-4 external-login-buttons">
+
+                                    <a href="#" style="margin-left:7px" class="btn btn-primary"><i class="fa-brands fa-facebook"></i> Facebook</a>
+
                                 </div>
                             }
                             else
