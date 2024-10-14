@@ -394,7 +394,8 @@ namespace OrganicOption.Areas.Farmer.Controllers
                 }).ToList(),
                 TotalPrice = o.OrderDetails.Sum(od => od.Quantity * od.Product.Price),
                 OrderCondition = allDeliveries.FirstOrDefault(d => d.OrderId == o.Id)?.OrderCondition ?? OrderCondition.Onlist // Get the OrderCondition from Delivery
-            }).ToList();
+            }).OrderByDescending(o => o.OrderTme).
+            ToList();
 
             // Group dailyOrderInfo by date
             var groupedOrders = dailyOrderInfo.GroupBy(o => o.OrderTme.Date).ToList();
@@ -644,6 +645,62 @@ namespace OrganicOption.Areas.Farmer.Controllers
         }
 
 
+        public async Task<IActionResult> AllOrdersWithOrderTakenCondition()
+        {
+            // Retrieve the current user
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
+            {
+                return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
+            }
+
+            // Retrieve the farmer shop for the current user
+            var farmerShop = await _context.FarmerShop
+                .Include(fs => fs.Products)
+                .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
+
+            if (farmerShop == null)
+            {
+                return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
+            }
+
+            // Retrieve all orders related to the farmer's shop
+            var allOrders = await _context.Orders
+                .Include(o => o.OrderDetails.Where(od => od.Product.FarmerShopId == farmerShop.Id))
+                .ThenInclude(od => od.Product)
+                .Where(o => o.OrderDetails.Any(od => od.Product.FarmerShopId == farmerShop.Id))
+                .ToListAsync();
+
+            // Retrieve deliveries for the specified orders and filter by the `OrderTaken` condition
+            var allDeliveries = await _context.Deliveries
+                .Where(d => allOrders.Select(o => o.Id).Contains(d.OrderId)
+                        && d.OrderCondition == OrderCondition.OrderTaken)
+                .OrderByDescending(d => d.OrderAcceptTime) // Sort by descending order
+                .ToListAsync();
+
+            // Convert orders to DailyOrderInfoViewModel and map deliveries
+            var dailyOrderInfo = allOrders
+                .Where(o => allDeliveries.Any(d => d.OrderId == o.Id)) // Only include orders with 'OrderTaken' condition
+                .Select(o => new DailyOrderInfoViewModel
+                {
+                    OrderId = o.Id,
+                    CustomerName = o.Name,
+                    Address = o.Address,
+                    Phone = o.PhoneNo,
+                    Products = o.OrderDetails.Select(od => new ProductInfo
+                    {
+                        Name = od.Product.Name,
+                        Quantity = od.Quantity,
+                        Price = od.Product.Price
+                    }).ToList(),
+                    TotalPrice = o.OrderDetails.Sum(od => od.Quantity * od.Product.Price),
+                    OrderCondition = allDeliveries.FirstOrDefault(d => d.OrderId == o.Id)?.OrderCondition ?? OrderCondition.Onlist
+                })
+                .OrderByDescending(o => o.OrderId) // Sort the orders in descending order by OrderId or another property
+                .ToList();
+
+            return View(dailyOrderInfo); // Return the list of orders with OrderTaken condition
+        }
 
 
 

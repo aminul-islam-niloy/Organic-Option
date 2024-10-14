@@ -1,0 +1,55 @@
+﻿@model List<OrganicOption.Models.Farmer_Section.DailyOrderInfoViewModel>
+
+@{
+    ViewData["Title"] = "Rider Orders";
+}
+<div class="container mt-3">
+    <a href="javascript:history.back()" class="btn btn-secondary mb-3"><i class="fa fa-arrow-left"></i> Back</a>
+<h3 class="text-center">All Orders with Rider Order</h3>
+
+@if (Model.Count == 0)
+{
+    <p>No orders  were found.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped mt-3">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Products</th>
+                <th>Total Price</th>
+                <th>Order Condition</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.OrderId</td>
+                    
+                    <td>
+                        <ul>
+                            @foreach (var product in order.Products)
+                            {
+                                <li>@product.Name - @product.Quantity x @product.Price</li>
+                            }
+                        </ul>
+                    </td>
+                    <td>@order.TotalPrice</td>
+                    <td>@order.OrderCondition</td>
+                    <td>
+                        <form asp-action="ReleaseOrder" method="post">
+                            <input type="hidden" name="orderId" value="@order.OrderId" />
+                                <button type="submit" class="btn btn-success">Release</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+</div>

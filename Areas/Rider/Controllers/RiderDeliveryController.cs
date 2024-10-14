@@ -39,6 +39,7 @@ namespace OrganicOption.Areas.Rider.Controllers
 
             var deliveries = await _dbContext.Deliveries
                 .Where(d => d.RiderId == rider.Id)
+                .OrderByDescending(d => d.OrderDeliveredDate)
                 .ToListAsync();
 
             return View(deliveries);

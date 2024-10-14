@@ -4,10 +4,10 @@
     <a href="javascript:history.back()" class="btn btn-secondary mb-3"><i class="fa fa-arrow-left"></i> Back</a>
     <div class="row mb-4">
         <div class="col-md-3">
-            <a asp-action="MyDailyOrders" asp-area="Farmer" asp-controller="Inventory" class="btn btn-info w-100 mb-2">Daily Order</a>
+            <a asp-action="MyDailyOrders" asp-area="Farmer" asp-controller="Inventory" class="btn btn-success w-100 mb-2">Daily Order</a>
         </div>
         <div class="col-md-3">
-            <a asp-action="WeeklyOrders" asp-area="Farmer" asp-controller="Inventory" class="btn btn-info w-100">Weekly Order</a>
+            <a asp-action="WeeklyOrders" asp-area="Farmer" asp-controller="Inventory" class="btn btn-success w-100">Weekly Order</a>
         </div>
     </div>
 
@@ -47,14 +47,14 @@
                                     </td> *@
                                     <td>@orderInfo.TotalPrice</td>
                                     <td>@orderInfo.OrderCondition</td>
-                                    <td> <a asp-action="OrderDetails" asp-controller="Inventory" asp-route-orderId="@orderInfo.OrderId" class="btn btn-info">View Details</a></td>
+                                    <td> <a asp-action="OrderDetails" asp-controller="Inventory" asp-route-orderId="@orderInfo.OrderId" class="btn btn-success">View Details</a></td>
                                     <td>
                                         @if (orderInfo.OrderCondition == OrderCondition.OrderTaken)
                                         {
                                            
                                             <form asp-action="ReleaseOrder" method="post">
                                                 <input type="hidden" name="orderId" value="@orderInfo.OrderId" />
-                                                <button type="submit" class="btn btn-info">Release</button>
+                                                <button type="submit" class="btn btn-success">Release</button>
                                             </form>
                                         }
                                         else
