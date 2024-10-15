@@ -541,7 +541,7 @@
 <hr />
 
 <div class="container">
-<h4>Shop Review and Rating</h4>
+    <h4 style="font-size:18px">Shop Review and Rating</h4>
 
 @if (Model.ShopReviews != null && Model.ShopReviews.Any())
 {
@@ -549,11 +549,11 @@
     {
         <div class="review">
             <div class="review-header">
-                <div class="profile-photo">
-                    @review.UserName
+                <div class="profile-photo" >
+                        <img src="https://st3.depositphotos.com/9998432/13335/v/450/depositphotos_133352062-stock-illustration-default-placeholder-profile-icon.jpg" style="height: 60px; width: 80px;" />
                 </div>
                 <div class="review-info">
-                    <h4 style="margin:5px">@review.UserName</h4>
+                        <h3 style="margin-left:5px; font-size:18px">@review.UserName</h3>
                     <span>@review.ReviewDate.ToString()</span>
                 </div>
             </div>
@@ -566,8 +566,9 @@
                 {
                     <label style="color: #ccc;">&#9733;</label>
                 }
+                    <p style="margin-left:10px; font-size:18px">@review.Comment</p>
             </div>
-            <p>@review.Comment</p>
+            
         </div>
     }
 }
@@ -590,7 +591,7 @@ else
     .review-header {
         display: flex;
         align-items: center;
-        margin-left:15px;
+        margin-left:5px;
     }
 
     .profile-photo {
@@ -600,7 +601,7 @@ else
         background-color: #1ec354;
         color: #000;
         display: flex;
-        justify-content: center;
+        justify-content: left;
         align-items: center;
         font-size: 1.0em;
 
@@ -625,7 +626,7 @@ else
     .stars {
         display: flex;
          margin: 10px 0; 
-        margin-left:20px;
+        margin-left:10px;
     }
 
         .stars label {
