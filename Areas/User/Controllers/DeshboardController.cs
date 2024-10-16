@@ -339,7 +339,7 @@ namespace OrganicOption.Areas.User.Controllers
             {
 
                 var farmerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var farmer = _db.FarmerShop.SingleOrDefault(f => f.FarmerUserId == farmerId);
+                var farmer = _db.FarmerShop.FirstOrDefault(f => f.FarmerUserId == farmerId);
 
                if (farmer == null)
                 {
