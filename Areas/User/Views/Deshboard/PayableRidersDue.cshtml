@@ -1,0 +1,51 @@
+﻿@model IEnumerable<OrganicOption.Models.Rider_Section.RiderModel>
+
+<div class="container mt-3">
+    <h4 class="text-center mt-10 ">Due Riders</h4>
+
+    <table class="table mt-10 ">
+
+        <thead>
+
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Total Due</th>
+                <th>Status</th>
+                <th>Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rider in Model)
+            {
+                <tr>
+                    <td>@rider.Id</td>
+                    <td>@rider.Name</td>
+                    <td>@rider.PhoneNumber</td>
+                    <td>@rider.RiderDue</td>
+                    <td>@(rider.RiderStatus ? "Active" : "InActive ")</td>
+                    <td>
+                        @if (rider.RiderAddress != null)
+                        {
+                            @Html.DisplayFor(modelItem => rider.RiderAddress.Thana)
+                            <span> ,</span>
+                            @Html.DisplayFor(modelItem => rider.RiderAddress.District)
+
+                        }
+
+                        else
+                        {
+                            <text>No address available</text>
+                        }
+                    </td>
+                    <td><a class="btn btn-info">Request to Pay</a></td>
+                </tr>
+            }
+            
+        </tbody>
+    </table>
+
+    <hr />
+    <h4>Total Due: @ViewBag.TotalRiderDue  Tk</h4>
+</div>

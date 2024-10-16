@@ -97,7 +97,17 @@
                                     <img src="~/@orderDetail.ProductImage" alt="Product Image" class="img-thumbnail" style="max-width: 70px; max-height: 70px;" />
                                 </td>
                                 <td>@orderDetail.Quantity</td>
-                                <td>@orderDetail.PaymentMethods</td>
+                                <td>
+                                    @orderDetail.PaymentMethods   @{
+                                        var cardInfo = orderDetail.CardInfo != null && orderDetail.CardInfo.Length >= 15
+                                            ? orderDetail.CardInfo.Substring(orderDetail.CardInfo.Length - 15)
+                                            : orderDetail.CardInfo;
+                                        
+
+                                    } 
+                                    <br />
+                                    @cardInfo
+                                </td>
                                 <td><a class="btn btn-primary" style="width:200px" href="@Url.Action("Shop", "FarmerShop", new { area = "Farmer", shopId =@orderDetail.ShopId })">Visit Shop</a></td>
                             </tr>
 
@@ -150,7 +160,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var orderCondition = "@Model.OrderCondition"; // Use Razor syntax to get dynamic value from server
+        var orderCondition = "@Model.OrderCondition"; 
         var progressBar = document.getElementById('progress-bar-@Model.OrderNo');
 
         var steps = {

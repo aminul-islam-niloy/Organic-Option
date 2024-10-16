@@ -341,6 +341,11 @@ namespace OrganicOption.Areas.User.Controllers
                 var farmerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var farmer = _db.FarmerShop.SingleOrDefault(f => f.FarmerUserId == farmerId);
 
+               if (farmer == null)
+                {
+                    return RedirectToAction("CreateShop", "FarmerShop", new { area = "Farmer" });
+                }
+                
                 var farmerShop = await _db.FarmerShop
                      .Include(f => f.ShopAddress)
                      .FirstOrDefaultAsync(m => m.Id == farmer.Id);
@@ -578,6 +583,7 @@ namespace OrganicOption.Areas.User.Controllers
                     ProductImage = od.Product.Image,
                     Quantity = od.Quantity,
                     PaymentMethods = od.PaymentMethods,
+                    CardInfo=od.StripeSessionId,
                     ShopId=od.Product.FarmerShopId
 
                     
@@ -608,6 +614,15 @@ namespace OrganicOption.Areas.User.Controllers
             // Retrieve all Rider
             var riders = await _db.RiderModel.Include(f => f.RiderAddress).ToListAsync();
 
+            return View(riders);
+        }
+
+        public async Task<IActionResult> PayableRidersDue()
+        {
+
+            var riders = await _db.RiderModel.Include(f => f.RiderAddress).ToListAsync();
+            var totalRiderDue = riders.Sum(r => r.RiderDue); 
+            ViewBag.TotalRiderDue = totalRiderDue;
             return View(riders);
         }
 
