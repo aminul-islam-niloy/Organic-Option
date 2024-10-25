@@ -305,12 +305,17 @@ namespace OrganicOption.Areas.User.Controllers
                 ViewBag.Orders = myorders;
                 return View();
             }
-            
+           
             if (User.IsInRole("Rider"))
             {
                 var user = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
                 var rider = _db.RiderModel.Include(r => r.RiderAddress).SingleOrDefault(r => r.RiderUserId == user);
+
+                if (rider == null)
+                {
+                    return RedirectToAction("CreateRider", "Rider", new { area = "Rider" });
+                }
                 var monthlyRevenue = _riderRepository.GetMonthlyRevenue(rider.Id);
                 var totalRevenue = _riderRepository.GetTotalRevenue(rider.Id);
                 var performance = _riderRepository.GetRiderPerformance(rider.Id);
