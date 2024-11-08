@@ -43,7 +43,5 @@ namespace OnlineShop.Data
         public DbSet<ProductPrice> ProductPrices { get; set; }
         public DbSet<BlogPost> BlogPosts { get; set; }
 
-
-
     }
 }

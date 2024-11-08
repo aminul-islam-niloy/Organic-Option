@@ -7,5 +7,3 @@
     }
 }
 
-//"PublishableKey": 
-//    "SecretKey":

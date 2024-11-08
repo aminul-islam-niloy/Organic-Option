@@ -23,9 +23,9 @@ namespace OrganicOption.Models.Rider_Section
         [Required]
         [DisplayName("Rider NID")]
         public string NID { get; set; }
-        public string RiderUserId { get; set; } // Foreign key to the ApplicationUser
+        public string RiderUserId { get; set; }
         public ApplicationUser RiderUser { get; set; }
-        public int RiderAddressId { get; set; } // Foreign key to RiderAddress
+        public int RiderAddressId { get; set; } 
         public Address RiderAddress { get; set; }
        
         [Required]

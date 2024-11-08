@@ -25,7 +25,5 @@ namespace OrganicOption.Models.Rider_Section
         public string ShopName { get; set; } 
         public string ShopContract { get; set; } 
 
-
-
     }
 }
