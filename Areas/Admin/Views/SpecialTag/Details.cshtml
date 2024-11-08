@@ -8,39 +8,40 @@
     </button>
 
     <div class="container ProductCategory-container">
-<h4 class="text-info">Tag Details</h4>
+        <h4 class="text-info">Tag Details</h4>
 
-<form asp-action="Details" method="post">
-    <div class="p-4 rounded border">
-        <div asp-validation-summary="ModelOnly" class="text-danger">
-
-        </div>
- 
-
-        <dl class="row">
-            <dt class="col-sm-6">
-                @Html.DisplayNameFor(model => model.Name)
-            </dt>
-            <dd class="col-sm-6">
-                @Html.DisplayFor(model => model.Name)
-            </dd>
-
-        </dl>
+        <form asp-action="Details" method="post">
+            <div class="p-4 rounded border">
+                <div asp-validation-summary="ModelOnly" class="text-danger">
+                </div>
 
 
+                <dl class="row">
+                    <dt class="col-sm-6">
+                        @Html.DisplayNameFor(model => model.Name)
+                    </dt>
+                    <dd class="col-sm-6">
+                        @Html.DisplayFor(model => model.Name)
+                    </dd>
 
-        <div class="form-group mt-3">
+                </dl>
 
-            <a asp-action="Index" class="btn btn-success">Back to List</a>
 
-        </div>
+
+                <div class="form-group mt-3">
+
+                    <a asp-action="Index" class="btn btn-success">Back to List</a>
+
+                </div>
+            </div>
+        </form>
+
     </div>
-</form>
-
 </div>
-</div>
-@section Scripts{
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
 
 

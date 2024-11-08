@@ -8,39 +8,39 @@
         <i class="fa-solid fa-arrow-left"></i> Back
     </button>
 
-<div class="container ProductCategory-container">
-    <div class="row align-items-center mb-4">
-        <div class="col-md-6">
-            <h4 class="text-info" style="font-size:25px">Sub Category List</h4>
+    <div class="container ProductCategory-container">
+        <div class="row align-items-center mb-4">
+            <div class="col-md-6">
+                <h4 class="text-info" style="font-size:25px">Sub Category List</h4>
+            </div>
+            <div class="col-md-6 text-md-right text-center">
+                <a asp-action="Create" class="btn btn-info mt-3 mt-md-0"><i class="fas fa-plus"></i> Add New Tag</a>
+            </div>
         </div>
-        <div class="col-md-6 text-md-right text-center">
-            <a asp-action="Create" class="btn btn-info mt-3 mt-md-0"><i class="fas fa-plus"></i> Add New Tag</a>
-        </div>
-    </div>
 
-    <div class="table-responsive">
-        <table class="table table-striped border">
-            <thead class="table-info">
-                <tr>
-                    <th>@Html.DisplayNameFor(c => c.Name)</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+        <div class="table-responsive">
+            <table class="table table-striped border">
+                <thead class="table-info">
                     <tr>
-                        <td>@item.Name</td>
-                        <td>
-                            <partial name="_ButtonTag" model="@item.Id" />
-                        </td>
+                        <th>@Html.DisplayNameFor(c => c.Name)</th>
+                        <th></th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>
+                                <partial name="_ButtonTag" model="@item.Id" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
 
 </div>
 

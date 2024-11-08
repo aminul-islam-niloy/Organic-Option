@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Areas\Admin\Views\Products\MyProduct.cshtml" />
     <Content Remove="Areas\Admin\Views\Wallet\CardOrders.cshtml" />
     <Content Remove="Views\Shared\_DashboardLayout.cshtml" />
     <Content Remove="Views\Shared\_Layout1.cshtml" />
@@ -74,18 +73,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Areas\Admin\Views\Products\MyProduct.cshtml" />
     <None Include="Areas\Admin\Views\Wallet\CardOrders.cshtml" />
     <None Include="Views\Shared\Extra\_Layout1.cshtml" />
     <None Include="wwwroot\leaf.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Areas\Admin\Views\Products\MyProduct.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Areas\Admin\Views\Products\MyProduct.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\Admin\Views\Wallet\CardOrders.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Shared\_Layout1.cshtml" />
   </ItemGroup>
