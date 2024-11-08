@@ -1,7 +1,5 @@
 ﻿@model OrganicOption.Models.ShopViewModel
 
-
-
 <div class="container mt-4">
     <div class= "  row" >
         @if (Model.FarmerShop.CoverPhoto != null)
@@ -16,9 +14,6 @@
             <h3>@Model.FarmerShop.ShopName</h3>
             <h4> Phone: @Model.FarmerShop.ContractInfo</h4>
             <p><strong>Shop is :</strong> @(Model.FarmerShop.IsShopOpen ? "Open" : "Closed")</p>
-
-          
-           
 
         </div>
 
@@ -84,9 +79,6 @@
     </div>
 </div>
 
-
-
-<!--deals product section area start-->
 <section class="deals_product_section mb-30">
     <div class="container">
         <div class="row">

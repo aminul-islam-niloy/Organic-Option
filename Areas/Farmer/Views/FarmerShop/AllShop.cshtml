@@ -106,7 +106,6 @@
     $(document).ready(function () {
         $(document).on('click', '.add-to-favorites', function () {
             var shopId = $(this).data('shop-id');
-            // console.log("Shop ID: " + shopId);
 
             $.ajax({
                 url: '@Url.Action("AddToFavorites", "Favorites", new { area = "Customer" })',
