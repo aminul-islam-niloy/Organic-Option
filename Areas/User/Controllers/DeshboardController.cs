@@ -5,10 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data;
 using OnlineShop.Models;
-using OrganicOption.Models;
 using OrganicOption.Models.Farmer_Section;
 using OrganicOption.Models.Rider_Section;
-using Stripe.Climate;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,9 +30,6 @@ namespace OrganicOption.Areas.User.Controllers
             _db = db;
             _riderRepository = riderRepository;
         }
-
-
-
 
         public async Task<IActionResult> MyAccount(string id)
         {
@@ -102,7 +97,6 @@ namespace OrganicOption.Areas.User.Controllers
             userInfo.Address = user.Address;
             userInfo.DateOfBirth = user.DateOfBirth;
 
-            // Handle profile picture upload
             if (profilePicture != null && profilePicture.Length > 0)
             {
                 using (var memoryStream = new MemoryStream())
@@ -117,14 +111,11 @@ namespace OrganicOption.Areas.User.Controllers
             if (result.Succeeded)
             {
                 TempData["save"] = "User has been updated successfully";
-                // Redirect to the dashboard with userId
                 return RedirectToAction("MyAccount", new { id = user.Id });
             }
             return View(userInfo);
 
         }
-
-
 
         [AllowAnonymous]
         [HttpPost]
@@ -139,7 +130,6 @@ namespace OrganicOption.Areas.User.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-
 
             var userInfo = _db.ApplicationUser.FirstOrDefault(c => c.Id == user.Id);
             if (userInfo == null)
@@ -287,7 +277,6 @@ namespace OrganicOption.Areas.User.Controllers
             if (result.Succeeded)
             {
                 TempData["lockout"] = "User has been Active successfully";
-                // Redirect to the dashboard with userId
                 return RedirectToAction("Deshboard", new { id = user.Id });
             }
 
@@ -331,8 +320,6 @@ namespace OrganicOption.Areas.User.Controllers
 
                 ViewBag.TotalRevenue = rider.Revenue.ToString();
 
-              
-
                 ViewBag.MonthlyRevenue = monthlyRevenue;
                 ViewBag.TotalRevenue = totalRevenue;
                 ViewBag.Performance = performance;
@@ -362,8 +349,6 @@ namespace OrganicOption.Areas.User.Controllers
 
                 // Get Performance Data
                 var performanceData = GetFarmerShopPerformance(farmerShop.Id);
-
-                // Pass the data to the view
                 ViewBag.MonthlyRevenue = monthlyRevenue;
                 ViewBag.Performance = performanceData;
 
@@ -395,12 +380,10 @@ namespace OrganicOption.Areas.User.Controllers
             }
 
 
-
-
             return View(); 
         }
 
-        //FarmerShop Performance and Revenue
+
 
         public Dictionary<int, decimal> GetMonthlyRevenue(int farmerShopId)
         {
@@ -418,9 +401,6 @@ namespace OrganicOption.Areas.User.Controllers
                 .Where(x => x.OrderCondition == OrderCondition.Delivered )
                 .ToList();
 
-     
-
-            // Group by month and sum up the prices
             var monthlyRevenue = inventoryItems
                 .GroupBy(ii => ii.OrderAcceptTime.Month)
                 .ToDictionary(
@@ -430,8 +410,6 @@ namespace OrganicOption.Areas.User.Controllers
 
             return monthlyRevenue;
         }
-
-
 
         public List<FarmerShopPerformance> GetFarmerShopPerformance(int farmerShopId)
         {
@@ -454,8 +432,6 @@ namespace OrganicOption.Areas.User.Controllers
         }
 
 
-
-
         public decimal GetCurrentMonthRevenue(int farmerShopId)
         {
             var monthlyRevenue = GetMonthlyRevenue(farmerShopId);
@@ -467,7 +443,6 @@ namespace OrganicOption.Areas.User.Controllers
 
             return currentMonthRevenue;
         }
-
 
         public Dictionary<string, decimal> GetMonthlyRevenue()
         {
@@ -615,8 +590,6 @@ namespace OrganicOption.Areas.User.Controllers
 
         public async Task<IActionResult> Riders()
         {
-
-            // Retrieve all Rider
             var riders = await _db.RiderModel.Include(f => f.RiderAddress).ToListAsync();
 
             return View(riders);
@@ -636,8 +609,5 @@ namespace OrganicOption.Areas.User.Controllers
             var farmers = await _db.FarmerShop.Include(f => f.ShopAddress).ToListAsync();
             return View(farmers);
         }
-
-
-
     }
 }
