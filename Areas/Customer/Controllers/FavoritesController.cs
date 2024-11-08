@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using OnlineShop.Areas.Customer.Controllers;
 using OnlineShop.Data;
 using OrganicOption.Models;
 using System.Linq;
@@ -20,7 +18,8 @@ namespace OrganicOption.Areas.Customer.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IMemoryCache _cache;
 
-        public FavoritesController(ILogger<FavoritesController> logger, ApplicationDbContext context, IMemoryCache cache)
+        public FavoritesController(ILogger<FavoritesController> 
+            logger, ApplicationDbContext context, IMemoryCache cache)
         {
             _logger = logger;
             _context = context;

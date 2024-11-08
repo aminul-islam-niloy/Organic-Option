@@ -71,6 +71,7 @@ namespace OrganicOption.Areas.Customer.Controllers
             _notificationService.ClearAllNotifications(userId);
             return RedirectToAction("Index");
         }
+
         //[HttpGet]
         //public IActionResult GetPopLatest()
         //{

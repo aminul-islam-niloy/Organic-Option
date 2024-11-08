@@ -23,17 +23,13 @@ namespace OrganicOption.Areas.Customer.Controllers
           
             Console.WriteLine($"Incoming returnUrl: {returnUrl}");
 
-            // Check if the returnUrl is local
             if (!Url.IsLocalUrl(returnUrl))
             {
-                // Log if the returnUrl is not local
-                Console.WriteLine($"ReturnUrl is not local. Redirecting to Home/Index.");
 
-                // Set returnUrl to a default local URL
+                Console.WriteLine($"ReturnUrl is not local. Redirecting to Home/Index.");
                 returnUrl = Url.Action("Index", "Home");
             }
-            
-            // Log the final returnUrl before redirecting
+      
             Console.WriteLine($"Final returnUrl: {returnUrl}");
 
             // Set the culture cookie

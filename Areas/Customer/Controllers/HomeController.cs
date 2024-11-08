@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,7 +10,6 @@ using OnlineShop.Service;
 using OnlineShop.Session;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using X.PagedList;
@@ -37,8 +35,6 @@ namespace OnlineShop.Areas.Customer.Controllers
 
         public async Task<IActionResult> Index(int? page)
         {
-
-
             if (!_cache.TryGetValue("products", out IEnumerable<Products> products))
             {
                 // Data is not in cache, so retrieve it from the database
@@ -73,7 +69,7 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
         // retrieve cached products by category
-        private IEnumerable<Products> GetCachedProductsByCategory(string category)
+         private IEnumerable<Products> GetCachedProductsByCategory(string category)
         {
             if (!_cache.TryGetValue(category, out IEnumerable<Products> cachedProducts))
             {
@@ -92,7 +88,6 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
 
-
         //public IActionResult Index(int? page)
         //{
 
@@ -102,7 +97,6 @@ namespace OnlineShop.Areas.Customer.Controllers
         //}
 
 
-
         [HttpPost]
         public IActionResult Index(string searchString, int? page)
         {
@@ -110,23 +104,22 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                // Filter products based on search string
+              
                 products = products.Where(p => p.Name.Contains(searchString)).ToList();
             }
 
-            // Convert the filtered products to a paged list using the current page number
             var pagedProducts = products.ToPagedList(page ?? 1, 100);
 
             return View(pagedProducts);
         }
 
-      //  Code without Local Shop
+      //  without Local Shop
 
        //  GET: Customer/Home/Products
         public IActionResult Products(int? page)
         {
             ViewData["productTypeSearchId"] = new SelectList(_db.ProductTypes.ToList(), "Id", "ProductType");
-            // Check if products are already cached
+            //  if products are already cached
             if (!_cache.TryGetValue("AllProducts", out IPagedList<Products> cachedProducts))
             {
                 // Products not found in cache, retrieve them from the database
@@ -143,11 +136,9 @@ namespace OnlineShop.Areas.Customer.Controllers
                 return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
-            // Products found in cache, return them
+            // Products found in cache, return 
             return View(cachedProducts);
         }
-
-       
 
 
         // POST: Filter products based on search criteria
@@ -350,17 +341,12 @@ namespace OnlineShop.Areas.Customer.Controllers
             return View("ProductCategory", products);
         }
 
-
-
-
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
 
             return View();
         }
-
-
 
         public ActionResult Detail(int? id)
         {
@@ -388,13 +374,11 @@ namespace OnlineShop.Areas.Customer.Controllers
                    return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
-    
-           
 
             // Query related products ( products of the same category)
             var relatedProducts = _db.Products
                 .Where(p => p.ProductTypeId == specificProduct.ProductTypeId && p.Id != specificProduct.Id)
-                .Take(12) // Assuming  want to display 12 related products
+                .Take(12) 
                 .ToList();
 
             var viewModel = new ProductDetailViewModelHome
@@ -408,8 +392,6 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             return View(viewModel);
         }
-
-
 
 
 
@@ -431,14 +413,12 @@ namespace OnlineShop.Areas.Customer.Controllers
                    return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
-            // Check if the requested quantity can be added to the cart
+            // requested quantity can be added to the cart
             if (product.Quantity >= quantityInCart)
             {
-                // Update the database quantity
                 product.Quantity -= quantityInCart;
-                _db.SaveChanges(); // Save changes to the database
+                _db.SaveChanges(); 
 
-                // Update the session cart
                 List<Products> products = HttpContext.Session.Get<List<Products>>("products");
                 if (products == null)
                 {
@@ -453,12 +433,10 @@ namespace OnlineShop.Areas.Customer.Controllers
                 }
                 else
                 {
-                    // Add the product to the cart
+
                     product.QuantityInCart = quantityInCart;
                     products.Add(product);
                 }
-
-                // Update the session
                 HttpContext.Session.Set("products", products);
             }
             else
@@ -479,27 +457,23 @@ namespace OnlineShop.Areas.Customer.Controllers
                 var productToRemove = products.FirstOrDefault(p => p.Id == id);
                 if (productToRemove != null)
                 {
-                    // Update the database quantity
                     var productInDb = _db.Products.FirstOrDefault(p => p.Id == id);
                     if (productInDb != null)
                     {
                         productInDb.Quantity += productToRemove.QuantityInCart;
                     }
 
-                    // Remove the product from the cart
                     products.Remove(productToRemove);
 
-                    // Update the session
                     HttpContext.Session.Set("products", products);
-                    _db.SaveChanges(); // Save changes to the database
+                    _db.SaveChanges(); 
                 }
             }
             return RedirectToAction("Detail", new { id = id });
         }
 
+
         [HttpPost]
-
-
         [Authorize(Roles = "Customer")]
         public IActionResult Remove(int? id)
         {
@@ -517,9 +491,6 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
 
-
-
-
         //GET product Cart action method
 
         [Authorize(Roles = "Customer")]
@@ -535,8 +506,6 @@ namespace OnlineShop.Areas.Customer.Controllers
             }
             return View(products);
         }
-
-
 
 
         public IActionResult Contact()
@@ -564,7 +533,6 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             return View(order);
         }
-
 
         public IActionResult ErrorPage()
         {

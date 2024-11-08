@@ -193,9 +193,6 @@ namespace OrganicOption.Areas.Customer.Controllers
         {
             return _context.BlogPosts.Any(e => e.Id == id);
         }
-
-
-      
        
     }
 }

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using OnlineShop.Data;
 using OnlineShop.Models;
 using System;
@@ -26,7 +25,6 @@ namespace OnlineShop.Areas.Customer.Controllers
             _db = db;
         }
 
-
         public async Task<IActionResult> Details(string id)
         {
             var currentUser = await _userManager.GetUserAsync(User);
@@ -41,7 +39,6 @@ namespace OnlineShop.Areas.Customer.Controllers
                    return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
-            // Check if the current user is authorized to view the details
             if (currentUser.Id != user.Id)
             {
                 return Forbid(); 
@@ -93,7 +90,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             userInfo.Address = user.Address;
             userInfo.DateOfBirth = user.DateOfBirth;
 
-            // Handle profile picture upload
+            //  profile picture upload
             if (profilePicture != null && profilePicture.Length > 0)
             {
                 using (var memoryStream = new MemoryStream())

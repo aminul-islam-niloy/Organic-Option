@@ -42,8 +42,6 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
 
-
-
         [Authorize(Roles = "Customer")]
         [HttpGet]
         public IActionResult Checkout()
@@ -56,7 +54,6 @@ namespace OnlineShop.Areas.Customer.Controllers
 
             if (products != null)
             {
-                // Group products by FarmerShopId
                 var groupedProducts = products.GroupBy(p => p.FarmerShopId);
 
                 foreach (var shopProducts in groupedProducts)
@@ -167,9 +164,6 @@ namespace OnlineShop.Areas.Customer.Controllers
         }
 
 
-
-
-
         [Authorize(Roles = "Customer")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -206,7 +200,6 @@ namespace OnlineShop.Areas.Customer.Controllers
                             double baseCharge = CalculateBaseCharge(distance);
                             double additionalCharge = CalculateAdditionalCharge(product);
 
-                            // Calculate the maximum charge for products from same shop
                             maxChargeForShop = Math.Max(maxChargeForShop, baseCharge + additionalCharge);
 
                             var orderDetails = new OrderDetails
@@ -219,14 +212,11 @@ namespace OnlineShop.Areas.Customer.Controllers
                             };
                             anOrder.OrderDetails.Add(orderDetails);
                         }
-
-                        // Add the highest charge for this shop to the total delivery charge
                         totalDeliveryCharge += maxChargeForShop;
                     }
                 }
             }
 
-            // Assign the total delivery charge (maximum charge from different shops)
             anOrder.DelivaryCharge = (decimal)totalDeliveryCharge;
 
             anOrder.OrderNo = GetOrderNo();
@@ -266,7 +256,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             }
 
             FarmerShop farmerStore = _db.FarmerShop
-                            .Include(fs => fs.Inventory) 
+                            .Include(fs => fs.Inventory)
                             .FirstOrDefault(fs => fs.Id == product.FarmerShopId);
 
             if (farmerStore != null)
@@ -278,10 +268,10 @@ namespace OnlineShop.Areas.Customer.Controllers
                 farmerStore.Inventory.Add(new InventoryItem
                 {
                     ProductId = id,
-                    Quantity = quantitySold, 
+                    Quantity = quantitySold,
                     LastSoldDate = DateTime.Now,
                     Price = price,
-                    OrderId = orderId 
+                    OrderId = orderId
                 });
             }
             _db.SaveChanges();
@@ -712,5 +702,6 @@ namespace OnlineShop.Areas.Customer.Controllers
     }
 
 }
+
 
 

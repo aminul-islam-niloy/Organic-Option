@@ -21,8 +21,6 @@ namespace OnlineShop.Areas.Customer.Controllers
             _userManager = userManager;
         }
 
-
-
         [HttpGet("confirm-email")]
         public async Task<IActionResult> ConfirmEmail(string uid, string token)
         {
@@ -42,11 +40,7 @@ namespace OnlineShop.Areas.Customer.Controllers
             }
 
             return View();
-
-
-            // return RedirectToAction("SuccessRegistration", "Account"); 
         }
-
 
         public IActionResult Index()
         {
