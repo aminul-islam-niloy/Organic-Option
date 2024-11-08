@@ -1,27 +1,25 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Options;
 using OnlineShop.Data;
 using OnlineShop.Models;
 using OnlineShop.Payment;
 using OnlineShop.Service;
+using OrganicOption.Models.Rider_Section;
 using OrganicOption.Service;
 using Stripe;
 using System;
-using System.Globalization;
-using System.Configuration;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
-using OrganicOption.Models.Rider_Section;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -74,18 +72,18 @@ builder.Services.AddScoped<RiderRepository>();
 // Localization configuration
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-//builder.Services.Configure<RequestLocalizationOptions>(options =>
-//{
-//    var supportedCultures = new List<CultureInfo>
-//    {
-//        new CultureInfo("en"),
-//        new CultureInfo("bn")
-//    };
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new List<CultureInfo>
+    {
+        new CultureInfo("en"),
+        new CultureInfo("bn")
+    };
 
-//    options.DefaultRequestCulture = new RequestCulture("en");
-//    options.SupportedCultures = supportedCultures;
-//    options.SupportedUICultures = supportedCultures;
-//});
+    options.DefaultRequestCulture = new RequestCulture("en");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
 
 var app = builder.Build();
 
