@@ -54,7 +54,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
        .Select(group => new
        {
            ProductId = group.Key,
-           TotalItemsSold = group.Count(), // Count each ID even if it appears multiple times
+           TotalItemsSold = group.Count(),
            TotalQuantitySold = group.Sum(item => item.Quantity),
            TotalPriceSold = group.Sum(item => item.Price * item.Quantity)
        })
@@ -66,14 +66,12 @@ namespace OrganicOption.Areas.Farmer.Controllers
             ViewBag.TotalSumPriceSold = totalSumPriceSold;
 
 
-            // Retrieve the shop for the current user
             var farmerShop = await _context.FarmerShop
                 .Include(fs => fs.Products)
                 .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
 
             if (farmerShop != null)
             {
-                // Find the unsold products for the farmer
                 var TotalsoldProducts = farmerShop.Products
                     .Where(p => _context.InventoryItem.Any(item => item.ProductId == p.Id))
                     .ToList();
@@ -84,7 +82,6 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             if (farmerShop != null)
             {
-                // Find the unsold products for the farmer
                 var unsoldProducts = farmerShop.Products
                     .Where(p => !_context.InventoryItem.Any(item => item.ProductId == p.Id))
                     .ToList();
@@ -92,19 +89,12 @@ namespace OrganicOption.Areas.Farmer.Controllers
                
             }
 
-
-
-
-
-
             return View();
         }
 
 
 
         //Inventory
-
-        //  all products in the shop
         public async Task<IActionResult> ShowAllProducts()
         {
             ViewData["productTypeId"] = new SelectList(_context.ProductTypes.ToList(), "Id", "ProductType");
@@ -116,11 +106,9 @@ namespace OrganicOption.Areas.Farmer.Controllers
                    return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
-            // Retrieve the shop for the current user
             var farmerShop = await _context.FarmerShop
                 .Include(fs => fs.Products)
                 .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
-
 
             return View(farmerShop);
 
@@ -143,16 +131,12 @@ namespace OrganicOption.Areas.Farmer.Controllers
                    return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
-            // Sort the products based on expiration time
             var sortedProducts = farmerShop.Products.OrderBy(p => p.ExpirationTime);
 
             return View(sortedProducts);
         }
 
 
-
-
-        // Action method to show sold products
         public async Task<IActionResult> ShowSoldProducts()
         {
             var currentUser = await _userManager.GetUserAsync(User);
@@ -160,7 +144,6 @@ namespace OrganicOption.Areas.Farmer.Controllers
             {
                    return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
-            // Retrieve the shop for the current user
             var farmerShop = await _context.FarmerShop
                 .Include(fs => fs.Products)
                 .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
@@ -168,7 +151,6 @@ namespace OrganicOption.Areas.Farmer.Controllers
             var ordersToday = await _context.OrderDetails
                 .Include(od => od.Order).ThenInclude(o => o.User).Where(od => od.Product.FarmerShopId == farmerShop.Id ).ToListAsync();
 
-            // Extract information about each sold product along with customer details
             var soldProductsToday = ordersToday
                 .Select(od => new
                 {
@@ -192,24 +174,20 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
         public async Task<IActionResult> MyDailyOrders()
         {
-            // Retrieve the current user
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
                    return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
-            // Retrieve the farmer shop for the current user
             var farmerShop = await _context.FarmerShop
                 .Include(fs => fs.Products)
                 .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
 
             if (farmerShop == null)
             {
-                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" }); // Handle if farmer shop not found
+                   return RedirectToAction("ErrorPage", "Home", new { area = "Customer" }); 
             }
-
-  
 
             var orders = await _context.Orders
                        .Include(o => o.OrderDetails.Where(od => od.Product.FarmerShopId == farmerShop.Id))
@@ -242,14 +220,11 @@ namespace OrganicOption.Areas.Farmer.Controllers
  
         public async Task<IActionResult> WeeklyOrders()
         {
-            // Retrieve the current user
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
                    return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
-
-            // Retrieve the farmer shop for the current user
             var farmerShop = await _context.FarmerShop
                 .Include(fs => fs.Products)
                 .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
@@ -301,7 +276,6 @@ namespace OrganicOption.Areas.Farmer.Controllers
                    return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
-            // Retrieve the farmer shop for the current user
             var farmerShop = await _context.FarmerShop
                 .Include(fs => fs.Products)
                 .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
@@ -340,19 +314,14 @@ namespace OrganicOption.Areas.Farmer.Controllers
         }
 
 
-
-
-
         public async Task<IActionResult> AllOrdersGroupedByDate()
         {
-            // Retrieve the current user
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser == null)
             {
                    return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
-            // Retrieve the farmer shop for the current user
             var farmerShop = await _context.FarmerShop
                 .Include(fs => fs.Products)
                 .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
@@ -566,15 +535,10 @@ namespace OrganicOption.Areas.Farmer.Controllers
         }
 
 
-
-        
         public IActionResult ShowMostSoldProduct()
         {
             return View();
         }
-
-        
-    
 
 
         public IActionResult CashoutRevenue()
@@ -654,7 +618,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
                 return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
-            // Retrieve the farmer shop for the current user
+            //  the farmer shop for the current user
             var farmerShop = await _context.FarmerShop
                 .Include(fs => fs.Products)
                 .FirstOrDefaultAsync(fs => fs.FarmerUserId == currentUser.Id);
@@ -664,14 +628,14 @@ namespace OrganicOption.Areas.Farmer.Controllers
                 return RedirectToAction("ErrorPage", "Home", new { area = "Customer" });
             }
 
-            // Retrieve all orders related to the farmer's shop
+            //  all orders related to the farmer's shop
             var allOrders = await _context.Orders
                 .Include(o => o.OrderDetails.Where(od => od.Product.FarmerShopId == farmerShop.Id))
                 .ThenInclude(od => od.Product)
                 .Where(o => o.OrderDetails.Any(od => od.Product.FarmerShopId == farmerShop.Id))
                 .ToListAsync();
 
-            // Retrieve deliveries for the specified orders and filter by the `OrderTaken` condition
+            //  deliveries for the specified orders and filter by the `OrderTaken` condition
             var allDeliveries = await _context.Deliveries
                 .Where(d => allOrders.Select(o => o.Id).Contains(d.OrderId)
                         && d.OrderCondition == OrderCondition.OrderTaken)
@@ -680,7 +644,7 @@ namespace OrganicOption.Areas.Farmer.Controllers
 
             // Convert orders to DailyOrderInfoViewModel and map deliveries
             var dailyOrderInfo = allOrders
-                .Where(o => allDeliveries.Any(d => d.OrderId == o.Id)) // Only include orders with 'OrderTaken' condition
+                .Where(o => allDeliveries.Any(d => d.OrderId == o.Id)) 
                 .Select(o => new DailyOrderInfoViewModel
                 {
                     OrderId = o.Id,
@@ -696,15 +660,11 @@ namespace OrganicOption.Areas.Farmer.Controllers
                     TotalPrice = o.OrderDetails.Sum(od => od.Quantity * od.Product.Price),
                     OrderCondition = allDeliveries.FirstOrDefault(d => d.OrderId == o.Id)?.OrderCondition ?? OrderCondition.Onlist
                 })
-                .OrderByDescending(o => o.OrderId) // Sort the orders in descending order by OrderId or another property
+                .OrderByDescending(o => o.OrderId) 
                 .ToList();
 
-            return View(dailyOrderInfo); // Return the list of orders with OrderTaken condition
+            return View(dailyOrderInfo); 
         }
-
-
-
-
 
 
     }
