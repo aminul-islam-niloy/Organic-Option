@@ -21,7 +21,6 @@
 
 - [.NET 6 SDK](https://dotnet.microsoft.com/download/dotnet/6.0)
 - [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
-- [Node.js](https://nodejs.org/) (for managing frontend dependencies)
 - [Visual Studio 2022](https://visualstudio.microsoft.com/vs/) (recommended IDE)
 
 ### Installation
@@ -64,7 +63,7 @@
 ## Project Structure
 
 - **Models**: Contains the data models for the application, such as `Farmer`, `Customer`, `Rider`, `Admin`, `Product`, `Order`, etc.
-- **Area**: Handles incoming HTTP requests and returns responses, managing the application’s logic for different user roles.
+- **Area**: Handles incoming HTTP requests and returns responses, managing the applicationâ€™s logic for different user roles.
 - **Views**: Contains Razor views for rendering the UI.
 - **Services**: Custom services for handling business logic, such as payment processing, notification sending, etc.
 - **Data**: Contains the DbContext and migration files for database management.
