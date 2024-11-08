@@ -85,8 +85,7 @@ namespace OrganicOption.Areas.Rider.Controllers
         }
 
 
-
-        // Action to display currently running deliveries
+        // currently running deliveries
         public async Task<IActionResult> RunningDeliveries()
         {
             var riderId = GetCurrentRiderId();
@@ -102,7 +101,7 @@ namespace OrganicOption.Areas.Rider.Controllers
             return View(deliveries);
         }
 
-        //  Action to display delivered orders grouped by daily, weekly, and monthly
+        //  delivered orders grouped by daily, weekly, and monthly
         //https://localhost:44343/Rider/RiderDelivery/DeliveredOrders/?period=weekly
         public async Task<IActionResult> DeliveredOrders(string period)
         {
@@ -142,8 +141,6 @@ namespace OrganicOption.Areas.Rider.Controllers
             ViewBag.Period = period;
             return View(deliveries);
         }
-
-        // Helper method to get the current rider's ID
         private int? GetCurrentRiderId()
         {
             var riderUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -152,8 +149,6 @@ namespace OrganicOption.Areas.Rider.Controllers
         }
 
         
-
-        // Action to calculate and display rider revenue and due amounts
         public async Task<IActionResult> RiderRevenue()
         {
             var riderId = GetCurrentRiderId();
@@ -195,7 +190,6 @@ namespace OrganicOption.Areas.Rider.Controllers
                 return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
             }
 
-            // Find the delivery and related order by deliveryId and riderId
             var delivery = await _dbContext.Deliveries
                 .FirstOrDefaultAsync(d => d.Id == deliveryId && d.RiderId == rider.Id);
 
@@ -222,7 +216,6 @@ namespace OrganicOption.Areas.Rider.Controllers
             rider.OnDeliaryByOffer = false;
             delivery.OrderDeliveredDate = DateTime.Now; 
 
-            // Save changes
             await _dbContext.SaveChangesAsync();
 
             return RedirectToAction("RunningDeliveries");

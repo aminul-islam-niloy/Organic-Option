@@ -1,42 +1,11 @@
 ﻿@model OrganicOption.Models.Rider_Section.RiderOfferViewModel
 
 
-@* <div class="top-bar text-dark p-2 text-center justify-content-center">
-    <ul class="nav text-center justify-content-center">
-        <li class="nav-item">
-            <a class="nav-link text-light" href="#">
-                <i class="fas fa-home"></i> Dashboard
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-light" href="#">
-                <i class="fas fa-list"></i> My Orders
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-light" href="#">
-                <i class="fas fa-chart-bar"></i> Performance
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-light" href="#">
-                <i class="fas fa-wallet"></i> Wallet
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-light" href="#">
-                <i class="fas fa-cog"></i> Settings
-            </a>
-        </li>
-    </ul>
-</div> *@
-
 @if (Model != null)
 {
     <div class="container">
         <div class="row justify-content-center">
             <div class="card p-4 col-lg-8 col-md-10 col-sm-12 ">
-            @*     style="width: 50%; max-width: 600px; *@
                 <h4 class="text-center mb-2">Offer Details</h4>
 
 
@@ -178,14 +147,13 @@ else
 
             if (--timer < 0) {
                 clearInterval(interval);
-                document.getElementById('time-remaining').textContent = "00:00"; // Timer ends at 00:00
+                document.getElementById('time-remaining').textContent = "00:00"; 
             }
         }, 1000);
     }
 
-    // Start the countdown with the remaining seconds
     window.onload = function () {
-        var timeRemaining = @Model.TimeRemaining.TotalSeconds; // Total seconds remaining
+        var timeRemaining = @Model.TimeRemaining.TotalSeconds; 
         startCountdown(timeRemaining);
     };
 </script>

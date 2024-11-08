@@ -1,19 +1,19 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Models;
-using OrganicOption.Models.Rider_Section;
-using OrganicOption.Service;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using OnlineShop.Data;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+using OnlineShop.Models;
 using OnlineShop.Session;
 using OrganicOption.Models;
+using OrganicOption.Models.Rider_Section;
+using OrganicOption.Service;
+using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace OrganicOption.Areas.Rider.Controllers
 {
@@ -130,7 +130,7 @@ namespace OrganicOption.Areas.Rider.Controllers
                                 OrderId = order.Id,
                                 CustomerName = order.Name,
                                 CustomerAddress = order.Address,
-                                CutomerCurrentAddress = order.CustomerAddress, //address address
+                                CutomerCurrentAddress = order.CustomerAddress, 
                                 DeliveryTime = EstimateDeliveryTime(distance),
                                 Revenue = order.DelivaryCharge,
                                 letetude = shopLocation.Latitude,
@@ -205,25 +205,6 @@ namespace OrganicOption.Areas.Rider.Controllers
         {
             return angle * (Math.PI / 180);
         }
-
-
-
-        //private double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
-        //{
-        //    const double R = 6371e3; // Earth's radius in meters
-        //    var φ1 = lat1 * Math.PI / 180; // φ, λ in radians
-        //    var φ2 = lat2 * Math.PI / 180;
-        //    var Δφ = (lat2 - lat1) * Math.PI / 180;
-        //    var Δλ = (lon2 - lon1) * Math.PI / 180;
-
-        //    var a = Math.Sin(Δφ / 2) * Math.Sin(Δφ / 2) +
-        //            Math.Cos(φ1) * Math.Cos(φ2) *
-        //            Math.Sin(Δλ / 2) * Math.Sin(Δλ / 2);
-        //    var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-
-        //    var distance = R * c; //  meters
-        //    return distance / 1000; //  km
-        //}
 
 
         private TimeSpan EstimateDeliveryTime(double distanceKm)
