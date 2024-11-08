@@ -12,12 +12,10 @@ namespace OnlineShop.Areas.Admin.Controllers
     public class SpecialTagController : Controller
     {
         private ApplicationDbContext _db;
-
         public SpecialTagController(ApplicationDbContext db)
         {
             _db = db;   
         }
-
 
         public IActionResult Index()
         {
@@ -78,7 +76,6 @@ namespace OnlineShop.Areas.Admin.Controllers
         }
 
         //GET Details Action Method
-
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -95,7 +92,6 @@ namespace OnlineShop.Areas.Admin.Controllers
         }
 
         //POST Edit Action Method
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Details(Models.SpecialTag specialTag)
@@ -104,10 +100,7 @@ namespace OnlineShop.Areas.Admin.Controllers
 
         }
 
-
-
         //GET Delete Action Method
-
         public ActionResult Delete(int? id)
         {
             if (id == null)

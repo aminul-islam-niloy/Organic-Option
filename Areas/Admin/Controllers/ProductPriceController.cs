@@ -109,12 +109,10 @@ namespace OrganicOption.Areas.Admin.Controllers
         // GET: ProductPrice
         public async Task<IActionResult> Index()
         {
-            // Retrieve the data from the database
             var productPrices = await _context.ProductPrices
                 .Include(p => p.ProductType)
                 .ToListAsync();
 
-            // Perform the grouping in memory
             var groupedProductPrices = productPrices
                 .GroupBy(p => p.ProductType.ProductType)
                 .ToList();
@@ -125,12 +123,10 @@ namespace OrganicOption.Areas.Admin.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> TodayPrice()
         {
-            // Retrieve the data from the database
             var productPrices = await _context.ProductPrices
                 .Include(p => p.ProductType)
                 .ToListAsync();
 
-            // Perform the grouping in memory
             var groupedProductPrices = productPrices
                 .GroupBy(p => p.ProductType.ProductType)
                 .ToList();
