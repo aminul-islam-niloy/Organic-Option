@@ -90,14 +90,13 @@
 <script>
     $(document).on('click', '.remove-from-favorites', function () {
         var shopId = $(this).data('shop-id');
-        // console.log(shopId);  
 
         $.ajax({
             url: '@Url.Action("RemoveFromFavorites", "Favorites", new { area = "Customer" })',
             type: 'POST',
             data: { shopId: shopId },
             success: function () {
-                // alert('Shop removed from favorites.');
+   ;
                 location.reload(); 
             },
             error: function () {

@@ -26,10 +26,6 @@
 
 }
 
-@{
-    // Convert the discount percentage to a decimal value
-    // decimal discountPercentage = 0.95m;
-}
 
 <!--shop  area start-->
 <div class="shop_area shop_reverse mt-50 mb-50">
@@ -89,8 +85,6 @@
 
                         <div class="recent_product_container">
 
-                            @* style="height:270px; width:270px; margin:10px; border:5px" *@
-
                             @foreach (var product in Model)
                             {
 
@@ -118,10 +112,6 @@
                 <!--sidebar widget end-->
             </div>
             <div class="col-lg-9 col-md-12">
-
-
-                <!--shop wrapper start-->
-                <!--shop toolbar start-->
 
                 <div class="shop_toolbar_wrapper">
                     <div class="shop_toolbar_btn">
@@ -153,9 +143,6 @@
                       
                     </div>
                 </div>
-
-               
-                <!--shop toolbar end-->
 
                 <div class="row no-gutters shop_wrapper">
 
@@ -217,21 +204,11 @@
 
                 </div>
 
-           @*      <div class="shop_toolbar t_bottom">
-                    <div class="pagination">
-
-                        @Html.PagedListPager(Model, page => Url.Action("Products", new { page, foo1Param = "1", foo2Param = "2"}))
-
-                    </div>
-                </div> *@
-                <!--shop toolbar end-->
-
-              
             </div>
         </div>
     </div>
 </div>
-<!--shop  area end-->
+
 
 
 
