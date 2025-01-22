@@ -173,7 +173,7 @@ namespace OrganicOption.Areas.Rider.Controllers
             foreach (var rider in riders)
             {
                 var distance = CalculateDistance(shopLat, shopLon, Latitude, Longitude);
-                if (distance <= 150)
+                if (distance <= 15000)
                 {
                     return rider;
                 }
